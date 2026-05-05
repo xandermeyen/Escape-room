@@ -1,0 +1,314 @@
+:root {
+  --k-bg:          #111a14;
+  --k-bg-dark:     #0a110c;
+  --k-bg-panel:    #0d150f;
+  --k-rand:        #1a2e1c;
+  --k-rand-mid:    #1e3022;
+  --k-accent:      #3a7a48;
+  --k-accent-licht:#5aaa6a;
+  --k-tekst:       #c8e0c0;
+  --k-tekst-mid:   #7aaa80;
+  --k-tekst-grijs: #3a6040;
+  --k-tekst-donker:#2e5035;
+  --font:          'Courier New', 'Special Elite', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--k-bg);
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 28px,
+    rgba(58,122,72,0.03) 28px, rgba(58,122,72,0.03) 29px
+  );
+  font-family: var(--font);
+  color: var(--k-tekst);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Systeembalk ── */
+.systeembalk {
+  background: var(--k-bg-dark);
+  border-bottom: 1px solid var(--k-rand);
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.sys-logo {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--k-accent-licht);
+  text-transform: uppercase;
+}
+.sys-sep { color: var(--k-rand-mid); margin: 0 10px; }
+.sys-case {
+  font-size: 10px;
+  color: var(--k-tekst-donker);
+  letter-spacing: 0.08em;
+}
+.sys-rechts { display: flex; align-items: center; gap: 14px; }
+.sys-speler {
+  font-size: 10px;
+  color: var(--k-tekst-grijs);
+  letter-spacing: 0.08em;
+}
+.sys-badge {
+  font-size: 9px;
+  padding: 3px 8px;
+  border: 1px solid var(--k-accent);
+  color: var(--k-accent-licht);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+/* ── Dossier header ── */
+.dossier-header {
+  padding: 14px 20px 0;
+  border-bottom: 1px solid var(--k-rand);
+  flex-shrink: 0;
+}
+.dossier-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.dossier-naam {
+  font-size: 17px;
+  color: var(--k-tekst);
+  letter-spacing: 0.06em;
+}
+.dossier-sub {
+  font-size: 10px;
+  color: var(--k-tekst-grijs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.stempel {
+  font-size: 9px;
+  color: var(--k-accent);
+  border: 1.5px solid var(--k-accent);
+  padding: 4px 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+  display: inline-block;
+  opacity: 0.7;
+}
+.voortgang {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding-bottom: 12px;
+}
+.vp-label {
+  font-size: 9px;
+  color: var(--k-tekst-donker);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+.vp-stap {
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  transition: background 0.4s;
+}
+.vp-klaar  { background: var(--k-accent); }
+.vp-bezig  { background: var(--k-accent-licht); }
+.vp-open   { background: var(--k-rand); }
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--k-rand);
+  padding: 0 20px;
+  background: var(--k-bg-panel);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.tab {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  color: var(--k-tekst-donker);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s;
+  user-select: none;
+}
+.tab:hover:not(.slot) { color: var(--k-tekst-grijs); }
+.tab.actief {
+  color: var(--k-accent-licht);
+  border-bottom-color: var(--k-accent);
+  background: var(--k-bg);
+}
+.tab.slot { color: var(--k-rand-mid); cursor: default; }
+.tab.nieuw-doc::after {
+  content: ' ●';
+  font-size: 7px;
+  color: var(--k-accent-licht);
+}
+
+/* ── Content ── */
+.content-wrapper { flex: 1; overflow-y: auto; }
+.tab-panel { display: none; padding: 18px 20px; }
+.tab-panel.actief { display: block; }
+
+.doc-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--k-tekst-donker);
+  margin-bottom: 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--k-rand);
+}
+.doc-tekst {
+  font-size: 11.5px;
+  color: var(--k-tekst-mid);
+  line-height: 1.85;
+}
+
+/* Rooster / tabel */
+.rooster {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0;
+}
+.rooster td {
+  font-size: 11.5px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--k-rand);
+  color: var(--k-tekst-mid);
+}
+.rooster td:first-child {
+  color: var(--k-tekst-grijs);
+  width: 120px;
+}
+
+/* Notitie blok */
+.notitie {
+  border-left: 3px solid var(--k-accent);
+  padding: 10px 14px;
+  background: rgba(58,122,72,0.05);
+  margin: 10px 0;
+  font-size: 11px;
+  color: var(--k-tekst-mid);
+  line-height: 1.8;
+}
+.notitie-datum {
+  font-size: 9px;
+  color: var(--k-tekst-grijs);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+/* Melding */
+.melding {
+  background: rgba(58,122,72,0.07);
+  border: 1px solid rgba(58,122,72,0.2);
+  border-left: 3px solid var(--k-accent);
+  padding: 10px 14px;
+  margin-top: 14px;
+  font-size: 10px;
+  color: var(--k-accent-licht);
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+}
+
+/* Slot-paneel */
+.slot-paneel {
+  text-align: center;
+  padding: 40px 20px;
+}
+.slot-icoon {
+  font-size: 24px;
+  color: var(--k-rand-mid);
+  margin-bottom: 12px;
+}
+.slot-tekst {
+  font-size: 10px;
+  color: var(--k-tekst-donker);
+  letter-spacing: 0.1em;
+  line-height: 1.9;
+}
+.slot-vereiste {
+  font-size: 9px;
+  color: var(--k-accent);
+  margin-top: 10px;
+  letter-spacing: 0.08em;
+}
+
+/* Puzzel */
+.puzzel-blok {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--k-rand);
+}
+.puzzel-vraag {
+  font-size: 10px;
+  color: var(--k-tekst-grijs);
+  letter-spacing: 0.07em;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.puzzel-invoer-rij {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.puzzel-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--k-accent);
+  color: var(--k-tekst);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 4px 0;
+  letter-spacing: 0.1em;
+  outline: none;
+  width: 180px;
+  transition: border-color 0.2s;
+}
+.puzzel-input:focus { border-bottom-color: var(--k-accent-licht); }
+.puzzel-input.fout { border-bottom-color: #7a3030; }
+.puzzel-btn {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--k-accent);
+  color: var(--k-accent-licht);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.2s, color 0.2s;
+}
+.puzzel-btn:hover { background: var(--k-accent); color: var(--k-bg); }
+.puzzel-btn:disabled { opacity: 0.4; cursor: default; }
+.puzzel-feedback {
+  font-size: 10px;
+  margin-top: 8px;
+  letter-spacing: 0.07em;
+}
+.puzzel-feedback.correct { color: var(--k-accent-licht); }
+.puzzel-feedback.fout    { color: #7a4040; }
+.puzzel-voltooid {
+  font-size: 10px;
+  color: var(--k-accent-licht);
+  letter-spacing: 0.1em;
+  margin-top: 10px;
+  padding: 6px 12px;
+  border: 1px solid var(--k-accent);
+  display: inline-block;
+}

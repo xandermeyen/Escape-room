@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kamer 14 — OPZ-dossier</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/kamer14.css" />
+</head>
+<body>
+
+  <!-- Systeembalk -->
+  <div class="systeembalk">
+    <div style="display:flex;align-items:center;">
+      <span class="sys-logo">Bureau X</span>
+      <span class="sys-sep">|</span>
+      <span class="sys-case" id="sys-case">Intern dossier · laden…</span>
+    </div>
+    <div class="sys-rechts">
+      <span class="sys-speler">Speler A - OPZ-dossier</span>
+      <span class="sys-badge">Actief onderzoek</span>
+    </div>
+  </div>
+
+  <!-- Dossier header -->
+  <div class="dossier-header">
+    <div class="dossier-meta">
+      <div>
+        <div class="dossier-naam">Bogaert, Lena M.</div>
+        <div class="dossier-sub">Kostgangster · Gastgezin Martens · Geel · Ref. OPZ-2026-0506</div>
+      </div>
+      <div class="stempel">Intern · Vertrouwelijk</div>
+    </div>
+    <div class="voortgang">
+      <span class="vp-label">Dossier</span>
+      <div class="vp-stap" id="vp1"></div>
+      <div class="vp-stap" id="vp2"></div>
+      <div class="vp-stap" id="vp3"></div>
+      <div class="vp-stap" id="vp4"></div>
+      <div class="vp-stap" id="vp5"></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab actief" data-tab="rooster">Weekrooster</div>
+    <div class="tab" data-tab="notities">Dossiernotities</div>
+    <div class="tab slot" data-tab="atelier" id="tab-atelier">🔒 Atelier</div>
+    <div class="tab slot" data-tab="intakefiche" id="tab-intakefiche">🔒 Intakefiche</div>
+    <div class="tab slot" data-tab="bijlage" id="tab-bijlage">🔒 Bijlage D</div>
+  </div>
+
+  <!-- Tab content -->
+  <div class="content-wrapper">
+
+    <!-- PANEL 1: Weekrooster (altijd zichtbaar) -->
+    <div class="tab-panel actief" id="panel-rooster">
+      <div class="doc-label">Weekrooster kostganger opgesteld door OPZ Geel, afdeling gezinsverpleging</div>
+      <table class="rooster">
+        <tr><td>Maandag</td><td>Bakker, Gasthuisstraat — retour voor 10u00</td></tr>
+        <tr><td>Dinsdag</td><td>Wandeling langs het kanaal — retour voor 11u00</td></tr>
+        <tr><td>Woensdag</td><td>Atelier OPZ, afdeling tekenen — retour voor 15u00</td></tr>
+        <tr><td>Donderdag</td><td>Bakker, Gasthuisstraat — retour voor 10u30</td></tr>
+        <tr><td>Vrijdag</td><td>Vrij — geen verwachte retour</td></tr>
+      </table>
+
+      <div class="melding">
+        <i class="bi bi-info-circle me-1"></i>
+        Vergelijk de verwachte retourtijden hierboven met de <strong>werkelijke tijdstippen</strong> in het huishoudlogboek van Speler B.<br>
+        Wanneer begon de afwijking? En hoe lang duurde die telkens?
+      </div>
+
+      <div class="puzzel-blok" id="puzzel-1">
+        <div class="puzzel-vraag">
+          Overleg met Speler B. Op welke twee dagen keerde Lena de laatste weken consequent later terug,
+          en wat is de bestemming die daarmee samenhangt?
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p1" placeholder="twee woorden…" maxlength="30" />
+          <button class="puzzel-btn" id="btn-p1">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p1"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 2: Dossiernotities (altijd zichtbaar, bevat P3 aanwijzing) -->
+    <div class="tab-panel" id="panel-notities">
+      <div class="doc-label">Dossiernotities — An Vermeersch, maatschappelijk werkster OPZ Geel</div>
+
+      <div class="notitie">
+        <div class="notitie-datum">1 februari</div>
+        Op vraag van Lena akkoord gegaan om leefgeld voortaan wekelijks zelf te bewaren. Bedrag: <strong>€35 per week</strong>. Ze beheert het netjes. Goede stap in zelfstandigheid.
+      </div>
+
+      <div class="notitie">
+        <div class="notitie-datum">12 maart</div>
+        Atelier vandaag. Lena werkte aan een tekening van een stadsplein. Ze zei: <em>"Ik ben er ooit geweest."</em> Welke stad vroeg ik. Ze glimlachte maar zei niets.
+      </div>
+
+      <div class="notitie">
+        <div class="notitie-datum">28 april</div>
+        Lena vroeg of ze mij iets mocht vragen. Ze vroeg hoe je iemand kunt opzoeken van wie je het adres niet meer hebt. Ik heb uitgelegd dat ze naar het gemeentehuis kan gaan of via via kan navragen. Ze bedankte me en veranderde van onderwerp.
+      </div>
+
+      <div class="melding">
+        <i class="bi bi-info-circle me-1"></i>
+        Vergelijk het wekelijks leefgeld (€35) met de kaskolom van Speler B.<br>
+        Hoeveel weken spaarde Lena, en hoe heeft ze dat geld gebruikt?
+      </div>
+
+      <div class="puzzel-blok" id="puzzel-3">
+        <div class="puzzel-vraag">
+          Overleg met Speler B. Hoeveel weken spaarde Lena bewust haar bijdrage aan het gastgezin niet?
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p3" placeholder="aantal weken…" maxlength="10" />
+          <button class="puzzel-btn" id="btn-p3">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p3"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 3: Atelier (vrijgegeven na P1) -->
+    <div class="tab-panel" id="panel-atelier">
+      <div class="doc-label">Atelierverslag — afdeling tekenen, OPZ Geel</div>
+
+      <div class="doc-tekst">
+        Tijdens het woensdagse atelier werkte Lena Bogaert de afgelopen weken consequent aan één tekening.
+        Het betreft een stadsplein met een opvallende gotische kerktoren een lichte, achtzijdige spits
+        boven een vierkante toren. De tekening is technisch precies: de verhoudingen kloppen, de arcering
+        geeft diepte. In de rechterhoek, in klein handschrift: <em>"Zo zag ik het vroeger."</em>
+      </div>
+
+      <div class="notitie" style="margin-top:14px;">
+        <div class="notitie-datum">Bijlage — Vrijetijdsmateriaal voor kostgangers (uittreksel)</div>
+        <div class="doc-tekst" style="margin-top:6px;">
+          Uitstaplocaties in de regio:<br>
+          — Turnhout: Begijnhof (UNESCO)<br>
+          — <strong>Diest: Grote Markt met Sint-Sulpitiuskerk</strong> een van de grootste gotische kerken van België.
+          De kerk heeft een karakteristiek silhouet: een achtzijdige spits boven een vierkante westertoren.<br>
+          — Hasselt: Jenevermuseum
+        </div>
+      </div>
+
+      <div class="melding">
+        <i class="bi bi-info-circle me-1"></i>
+        Vergelijk de beschrijving van de kerktoren in Lena's tekening met de foto's in de toeristische folder.
+        Vraag Speler B ook wat Lena op 27 april vroeg aan tafel.
+      </div>
+
+      <div class="puzzel-blok" id="puzzel-2">
+        <div class="puzzel-vraag">
+          Welke stad heeft Lena getekend?
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p2" placeholder="stadsnaam…" maxlength="20" />
+          <button class="puzzel-btn" id="btn-p2">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p2"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 4: Intakefiche (vrijgegeven na P2 + P3) -->
+    <div class="tab-panel" id="panel-intakefiche">
+      <div class="doc-label">Intakefiche kostganger — bij aanvang plaatsing, OPZ Geel</div>
+
+      <table class="rooster">
+        <tr><td>Naam</td><td>Bogaert, Lena Maria</td></tr>
+        <tr><td>Geboortedatum</td><td>14 maart 1992 · Turnhout</td></tr>
+        <tr><td>Startdatum plaatsing</td><td>3 april 2023</td></tr>
+        <tr><td>Gastgezin</td><td>Martens-Peeters, Geel (Gasthuisstraat 44)</td></tr>
+        <tr><td>Begeleider</td><td>An Vermeersch, maatschappelijk werkster</td></tr>
+      </table>
+
+      <div class="notitie" style="margin-top:14px;">
+        <div class="notitie-datum">Vertrouwenspersonen bij aanvang plaatsing</div>
+        <div class="doc-tekst" style="margin-top:4px;">
+          — Familie Bogaert, Turnhout (ouders) · tel. 014/xx.xx.xx<br>
+          — <strong>Marie Stas, Turnhout — vriendin. Huidig adres: onbekend.</strong>
+        </div>
+      </div>
+
+      <div class="melding">
+        <i class="bi bi-info-circle me-1"></i>
+        Combineer deze naam met wat Speler B gevonden heeft in Lena's kamer.
+        Wie zocht Lena, en wat weet Speler B over waar die persoon nu woont?
+      </div>
+
+      <div class="puzzel-blok" id="puzzel-4">
+        <div class="puzzel-vraag">
+          Wie ging Lena opzoeken in Diest?
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p4" placeholder="voor- en achternaam…" maxlength="30" />
+          <button class="puzzel-btn" id="btn-p4">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p4"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 5: Bijlage D (vrijgegeven na P4) -->
+    <div class="tab-panel" id="panel-bijlage">
+      <div class="doc-label">Bijlage D — Praktische verplaatsingen voor kostgangers · De Lijn, lijn 19</div>
+
+      <div class="doc-tekst">Dienstregeling Geel → Diest (werkdagen)</div>
+      <table class="rooster" style="margin-top:8px;">
+        <tr><td>Geel Markt</td><td>05:58</td><td>→</td><td>Diest Grote Markt</td><td>06:44</td></tr>
+        <tr style="color:var(--k-accent-licht)"><td>Geel Markt</td><td><strong>07:35</strong></td><td>→</td><td>Diest Grote Markt</td><td><strong>08:20</strong></td></tr>
+        <tr><td>Geel Markt</td><td>09:12</td><td>→</td><td>Diest Grote Markt</td><td>09:58</td></tr>
+        <tr><td>Geel Markt</td><td>11:35</td><td>→</td><td>Diest Grote Markt</td><td>12:21</td></tr>
+      </table>
+
+      <div class="notitie" style="margin-top:14px;">
+        <div class="notitie-datum">Retour Diest → Geel (werkdagen, selectie)</div>
+        <div class="doc-tekst" style="margin-top:4px;">
+          17:05 — 17:51 &nbsp;|&nbsp; 18:32 — 19:18 &nbsp;|&nbsp; 19:55 — 20:41
+        </div>
+      </div>
+
+      <div class="melding">
+        <i class="bi bi-info-circle me-1"></i>
+        Vraag Speler B: hoe laat belde het gastgezin naar OPZ op dinsdagochtend?
+        Lena was toen al weg. Welke bus past precies bij dit tijdstip?
+      </div>
+
+      <div class="puzzel-blok" id="puzzel-5">
+        <div class="puzzel-vraag">
+          Welke bus nam Lena op dinsdagochtend 6 mei? Geef het vertrektijdstip.
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p5" placeholder="uu:mm" maxlength="10" />
+          <button class="puzzel-btn" id="btn-p5">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p5"></div>
+      </div>
+    </div>
+
+  </div><!-- /content-wrapper -->
+
+  <script type="module" src="js/speler-a.js"></script>
+</body>
+</html>
