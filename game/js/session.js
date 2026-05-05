@@ -33,6 +33,7 @@ export async function maakSessie(sessieCode) {
 export async function valideerSessie(sessieCode) {
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   const snapshot  = await get(sessieRef);
+  
   if (!snapshot.exists()) return false;
   return snapshot.val().actief === true;
 }
@@ -68,3 +69,4 @@ export function luisterNaarRapport(sessieCode, callback) {
     callback(snapshot.val() || {});
   });
 }
+
