@@ -1,0 +1,304 @@
+/* =========================================================
+   BUREAU X — Landingspagina stijl
+   Sfeer: archief, documentair, warm maar professioneel
+   ========================================================= */
+
+:root {
+  --kleur-perkament:   #f5f0e8;
+  --kleur-donker:      #1c1a17;
+  --kleur-middel:      #2e2b26;
+  --kleur-accent:      #8b6914;
+  --kleur-accent-licht:#c49a2a;
+  --kleur-rand:        #c8b99a;
+  --kleur-grijs:       #888070;
+  --kleur-wit:         #fdf9f2;
+  --font-archief:      'Special Elite', 'Courier New', monospace;
+  --font-body:         'Georgia', serif;
+}
+
+/* ── Algemeen ── */
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--kleur-donker);
+  color: var(--kleur-perkament);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.font-archief { font-family: var(--font-archief); }
+
+/* ── Achtergronden ── */
+.sectie-licht  { background-color: var(--kleur-perkament); color: var(--kleur-donker); }
+.sectie-donker { background-color: var(--kleur-middel);    color: var(--kleur-perkament); }
+
+/* ── Navbar ── */
+.bg-dark-archief {
+  background-color: #111009 !important;
+  border-bottom: 2px solid var(--kleur-accent);
+}
+.nav-link {
+  font-family: var(--font-archief);
+  letter-spacing: 0.05em;
+  color: var(--kleur-rand) !important;
+  transition: color .2s;
+}
+.nav-link:hover { color: var(--kleur-accent-licht) !important; }
+.btn-reserveer {
+  border: 1px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 4px 14px !important;
+  color: var(--kleur-accent-licht) !important;
+}
+.btn-reserveer:hover {
+  background-color: var(--kleur-accent);
+  color: var(--kleur-donker) !important;
+}
+
+/* ── Hero ── */
+.hero-section {
+  background-color: var(--kleur-donker);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(200,185,154,0.04) 28px,
+    rgba(200,185,154,0.04) 29px
+  );
+  padding: 90px 0 100px;
+  border-bottom: 2px solid var(--kleur-accent);
+}
+.hero-label {
+  font-family: var(--font-archief);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+  margin-bottom: 1rem;
+}
+.hero-titel {
+  font-family: var(--font-archief);
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  letter-spacing: 0.12em;
+  color: var(--kleur-perkament);
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.hero-subtitel {
+  font-family: var(--font-archief);
+  font-size: 1.25rem;
+  color: var(--kleur-accent-licht);
+  margin-bottom: 0.6rem;
+}
+.hero-intro {
+  font-size: 1rem;
+  color: var(--kleur-grijs);
+}
+
+/* ── Knoppen ── */
+.btn-archief {
+  font-family: var(--font-archief);
+  letter-spacing: 0.08em;
+  background-color: transparent;
+  color: var(--kleur-accent-licht);
+  border: 2px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 10px 28px;
+  transition: background-color .25s, color .25s;
+}
+.btn-archief:hover,
+.btn-archief:focus {
+  background-color: var(--kleur-accent);
+  color: var(--kleur-donker);
+  border-color: var(--kleur-accent);
+}
+
+/* ── Sectietitels ── */
+.sectie-titel {
+  font-family: var(--font-archief);
+  letter-spacing: 0.06em;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.sectie-titel::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--kleur-accent);
+  margin: 8px auto 0;
+}
+
+/* ── Experience kaart ── */
+.experience-kaart {
+  background: var(--kleur-wit);
+  border: 1px solid var(--kleur-rand);
+  border-left: 5px solid var(--kleur-accent);
+  border-radius: 2px;
+  color: var(--kleur-donker);
+}
+.experience-kaart-locked {
+  background: #ece8e0;
+  border: 1px dashed var(--kleur-rand);
+  border-radius: 2px;
+  color: var(--kleur-donker);
+}
+.dossier-nummer {
+  font-family: var(--font-archief);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--kleur-accent);
+  border: 2px solid var(--kleur-rand);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+.experience-label {
+  font-family: var(--font-archief);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+}
+.experience-titel {
+  font-family: var(--font-archief);
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  color: var(--kleur-donker);
+}
+.spec-item {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  color: var(--kleur-accent);
+  border: 1px solid var(--kleur-rand);
+  border-radius: 2px;
+  padding: 6px 10px;
+  background: var(--kleur-perkament);
+}
+.badge-archief {
+  font-family: var(--font-archief);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  background-color: var(--kleur-accent);
+  color: var(--kleur-donker);
+  border-radius: 2px;
+  padding: 5px 10px;
+  vertical-align: middle;
+  font-weight: normal;
+}
+
+/* ── Stappen (Hoe het werkt) ── */
+.stap-nummer {
+  width: 52px;
+  height: 52px;
+  line-height: 50px;
+  border: 2px solid var(--kleur-accent);
+  border-radius: 50%;
+  font-family: var(--font-archief);
+  font-size: 1.4rem;
+  color: var(--kleur-accent-licht);
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ── Over Bureau X ── */
+.link-accent {
+  color: var(--kleur-accent);
+  text-decoration: underline;
+}
+.link-accent:hover { color: var(--kleur-accent-licht); }
+
+/* ── Tekst helpers ── */
+.tekst-grijs { color: var(--kleur-grijs); }
+
+/* ── Formulier ── */
+.formulier-archief {
+  background: var(--kleur-perkament);
+  border: 1px solid var(--kleur-rand);
+  border-radius: 2px;
+  color: var(--kleur-donker);
+}
+.formulier-archief .form-label {
+  font-family: var(--font-archief);
+  letter-spacing: 0.05em;
+  font-size: 0.82rem;
+  color: var(--kleur-accent);
+  text-transform: uppercase;
+}
+.archief-input {
+  background-color: var(--kleur-wit) !important;
+  border: 1px solid var(--kleur-rand) !important;
+  border-radius: 2px !important;
+  font-family: var(--font-archief);
+  color: var(--kleur-donker) !important;
+  transition: border-color .2s;
+}
+.archief-input:focus {
+  border-color: var(--kleur-accent) !important;
+  box-shadow: 0 0 0 3px rgba(139,105,20,0.15) !important;
+}
+.archief-input::placeholder { color: var(--kleur-grijs) !important; }
+
+/* ── Footer ── */
+.footer-archief {
+  background-color: #111009;
+  border-top: 2px solid var(--kleur-accent);
+  font-family: var(--font-archief);
+}
+.footer-link {
+  color: var(--kleur-accent-licht);
+  text-decoration: none;
+}
+.footer-link:hover { text-decoration: underline; color: var(--kleur-rand); }
+
+/* ── Responsief ── */
+@media (max-width: 576px) {
+  .hero-section { padding: 55px 0 65px; }
+  .hero-subtitel { font-size: 1rem; }
+  .dossier-nummer { width: 60px; height: 60px; font-size: 2.5rem; }
+}
+
+/* ── Scroll-animaties ── */
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.fade-in-element.zichtbaar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Actieve nav-link ── */
+.nav-link-actief {
+  color: var(--kleur-accent-licht) !important;
+}
+
+/* ── Reserveer Modal ── */
+.modal-archief {
+  background-color: var(--kleur-perkament);
+  border: 1px solid var(--kleur-accent);
+  border-radius: 2px;
+  color: var(--kleur-donker);
+}
+.modal-header-archief {
+  background-color: var(--kleur-middel);
+  border-bottom: 2px solid var(--kleur-accent);
+  font-family: var(--font-archief);
+  letter-spacing: 0.05em;
+  color: var(--kleur-perkament);
+}
+.modal-archief .form-label {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--kleur-accent);
+}
