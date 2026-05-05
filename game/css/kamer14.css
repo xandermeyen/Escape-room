@@ -33,33 +33,33 @@ body {
 .systeembalk {
   background: var(--k-bg-dark);
   border-bottom: 1px solid var(--k-rand);
-  padding: 8px 20px;
+  padding: 10px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
 }
 .sys-logo {
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.22em;
   color: var(--k-accent-licht);
   text-transform: uppercase;
 }
 .sys-sep { color: var(--k-rand-mid); margin: 0 10px; }
 .sys-case {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--k-tekst-donker);
   letter-spacing: 0.08em;
 }
 .sys-rechts { display: flex; align-items: center; gap: 14px; }
 .sys-speler {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--k-tekst-grijs);
   letter-spacing: 0.08em;
 }
 .sys-badge {
-  font-size: 9px;
-  padding: 3px 8px;
+  font-size: 11px;
+  padding: 4px 10px;
   border: 1px solid var(--k-accent);
   color: var(--k-accent-licht);
   letter-spacing: 0.1em;
@@ -69,7 +69,7 @@ body {
 
 /* ── Dossier header ── */
 .dossier-header {
-  padding: 14px 20px 0;
+  padding: 18px 24px 0;
   border-bottom: 1px solid var(--k-rand);
   flex-shrink: 0;
 }
@@ -80,22 +80,22 @@ body {
   margin-bottom: 12px;
 }
 .dossier-naam {
-  font-size: 17px;
+  font-size: 22px;
   color: var(--k-tekst);
   letter-spacing: 0.06em;
 }
 .dossier-sub {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--k-tekst-grijs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-top: 4px;
 }
 .stempel {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--k-accent);
   border: 1.5px solid var(--k-accent);
-  padding: 4px 10px;
+  padding: 5px 12px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   transform: rotate(-2deg);
@@ -106,18 +106,18 @@ body {
   display: flex;
   gap: 5px;
   align-items: center;
-  padding-bottom: 12px;
+  padding-bottom: 14px;
 }
 .vp-label {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--k-tekst-donker);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-right: 6px;
 }
 .vp-stap {
-  width: 26px;
-  height: 3px;
+  width: 32px;
+  height: 4px;
   border-radius: 2px;
   transition: background 0.4s;
 }
@@ -129,16 +129,16 @@ body {
 .tabs {
   display: flex;
   border-bottom: 1px solid var(--k-rand);
-  padding: 0 20px;
+  padding: 0 24px;
   background: var(--k-bg-panel);
   flex-shrink: 0;
   overflow-x: auto;
 }
 .tab {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 9px 14px;
+  padding: 10px 16px;
   color: var(--k-tekst-donker);
   border-bottom: 2px solid transparent;
   cursor: pointer;
@@ -155,26 +155,26 @@ body {
 .tab.slot { color: var(--k-rand-mid); cursor: default; }
 .tab.nieuw-doc::after {
   content: ' ●';
-  font-size: 7px;
+  font-size: 8px;
   color: var(--k-accent-licht);
 }
 
 /* ── Content ── */
 .content-wrapper { flex: 1; overflow-y: auto; }
-.tab-panel { display: none; padding: 18px 20px; }
+.tab-panel { display: none; padding: 22px 24px; }
 .tab-panel.actief { display: block; }
 
 .doc-label {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--k-tekst-donker);
-  margin-bottom: 10px;
-  padding-bottom: 7px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--k-rand);
 }
 .doc-tekst {
-  font-size: 11.5px;
+  font-size: 14px;
   color: var(--k-tekst-mid);
   line-height: 1.85;
 }
@@ -186,31 +186,31 @@ body {
   margin: 8px 0;
 }
 .rooster td {
-  font-size: 11.5px;
-  padding: 6px 10px;
+  font-size: 14px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--k-rand);
   color: var(--k-tekst-mid);
 }
 .rooster td:first-child {
   color: var(--k-tekst-grijs);
-  width: 120px;
+  width: 130px;
 }
 
 /* Notitie blok */
 .notitie {
   border-left: 3px solid var(--k-accent);
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: rgba(58,122,72,0.05);
-  margin: 10px 0;
-  font-size: 11px;
+  margin: 12px 0;
+  font-size: 13px;
   color: var(--k-tekst-mid);
   line-height: 1.8;
 }
 .notitie-datum {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--k-tekst-grijs);
   letter-spacing: 0.1em;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 /* Melding */
@@ -218,9 +218,9 @@ body {
   background: rgba(58,122,72,0.07);
   border: 1px solid rgba(58,122,72,0.2);
   border-left: 3px solid var(--k-accent);
-  padding: 10px 14px;
-  margin-top: 14px;
-  font-size: 10px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 12px;
   color: var(--k-accent-licht);
   letter-spacing: 0.04em;
   line-height: 1.7;
@@ -232,18 +232,18 @@ body {
   padding: 40px 20px;
 }
 .slot-icoon {
-  font-size: 24px;
+  font-size: 28px;
   color: var(--k-rand-mid);
   margin-bottom: 12px;
 }
 .slot-tekst {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--k-tekst-donker);
   letter-spacing: 0.1em;
   line-height: 1.9;
 }
 .slot-vereiste {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--k-accent);
   margin-top: 10px;
   letter-spacing: 0.08em;
@@ -251,20 +251,20 @@ body {
 
 /* Puzzel */
 .puzzel-blok {
-  margin-top: 16px;
-  padding-top: 14px;
+  margin-top: 18px;
+  padding-top: 16px;
   border-top: 1px dashed var(--k-rand);
 }
 .puzzel-vraag {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--k-tekst-grijs);
   letter-spacing: 0.07em;
   line-height: 1.7;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .puzzel-invoer-rij {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 .puzzel-input {
@@ -273,23 +273,23 @@ body {
   border-bottom: 1px solid var(--k-accent);
   color: var(--k-tekst);
   font-family: var(--font);
-  font-size: 13px;
-  padding: 4px 0;
+  font-size: 15px;
+  padding: 5px 0;
   letter-spacing: 0.1em;
   outline: none;
-  width: 180px;
+  width: 220px;
   transition: border-color 0.2s;
 }
 .puzzel-input:focus { border-bottom-color: var(--k-accent-licht); }
 .puzzel-input.fout { border-bottom-color: #7a3030; }
 .puzzel-btn {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   background: transparent;
   border: 1px solid var(--k-accent);
   color: var(--k-accent-licht);
-  padding: 6px 14px;
+  padding: 7px 16px;
   cursor: pointer;
   font-family: var(--font);
   transition: background 0.2s, color 0.2s;
@@ -297,18 +297,155 @@ body {
 .puzzel-btn:hover { background: var(--k-accent); color: var(--k-bg); }
 .puzzel-btn:disabled { opacity: 0.4; cursor: default; }
 .puzzel-feedback {
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 8px;
   letter-spacing: 0.07em;
 }
 .puzzel-feedback.correct { color: var(--k-accent-licht); }
 .puzzel-feedback.fout    { color: #7a4040; }
 .puzzel-voltooid {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--k-accent-licht);
   letter-spacing: 0.1em;
   margin-top: 10px;
-  padding: 6px 12px;
+  padding: 7px 14px;
   border: 1px solid var(--k-accent);
   display: inline-block;
+}
+
+/* ── Utility ── */
+.verborgen { display: none !important; }
+
+/* ── Progressieve hints ── */
+.hint-blok {
+  margin-top: 16px;
+}
+.hint-knop {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px dashed var(--k-tekst-donker);
+  color: var(--k-tekst-grijs);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: border-color 0.2s, color 0.2s;
+}
+.hint-knop:hover {
+  border-color: var(--k-accent);
+  color: var(--k-accent-licht);
+}
+.hint-stap {
+  margin-top: 10px;
+  border-left: 2px dashed var(--k-tekst-donker);
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--k-tekst-grijs);
+  line-height: 1.8;
+}
+.hint-nr {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--k-tekst-donker);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.hint-verder {
+  margin-top: 8px;
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--k-tekst-donker);
+  color: var(--k-tekst-donker);
+  padding: 3px 0;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: color 0.2s, border-color 0.2s;
+}
+.hint-verder:hover {
+  color: var(--k-accent-licht);
+  border-color: var(--k-accent);
+}
+
+/* ── Prikbord (Speler B — Kamerinspectie) ── */
+.prikbord {
+  background: #6b4f1a;
+  background-image:
+    radial-gradient(ellipse at 25% 30%, rgba(255,220,120,0.08) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 10px);
+  border: 5px solid #3e2c08;
+  border-radius: 3px;
+  padding: 28px 24px;
+  min-height: 160px;
+}
+.brief-kaart {
+  background: #f4edda;
+  color: #1a1a0a;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  padding: 16px 20px;
+  max-width: 260px;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+  transform: rotate(-2.5deg);
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.2s;
+  position: relative;
+}
+.brief-kaart:hover { transform: rotate(-1deg) scale(1.02); box-shadow: 6px 6px 14px rgba(0,0,0,0.55); }
+.brief-kaart.omgedraaid { transform: rotate(1.5deg); }
+.brief-kaart::before {
+  content: '●';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #b03020;
+  font-size: 16px;
+}
+.brief-voorkant,
+.brief-achterkant { font-size: 13px; line-height: 1.85; color: #2a2010; }
+.brief-achterkant { display: none; }
+.brief-kaart.omgedraaid .brief-voorkant  { display: none; }
+.brief-kaart.omgedraaid .brief-achterkant { display: block; }
+.brief-instructie {
+  font-size: 10px;
+  color: rgba(0,0,0,0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 10px;
+  text-align: right;
+}
+
+/* ── Dagpas / ticket ── */
+.dagpas {
+  position: relative;
+  border: 1.5px dashed var(--k-tekst-donker);
+  padding: 14px 18px 12px;
+  margin: 16px 0;
+  font-size: 12px;
+  color: var(--k-tekst-grijs);
+  letter-spacing: 0.07em;
+  line-height: 1.95;
+  background: rgba(58,122,72,0.03);
+}
+.dagpas::before {
+  content: 'BON / TICKET';
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  background: var(--k-bg-panel);
+  font-size: 9px;
+  padding: 0 6px;
+  letter-spacing: 0.2em;
+  color: var(--k-tekst-donker);
+}
+.dagpas-nr {
+  font-size: 10px;
+  color: var(--k-tekst-donker);
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
 }

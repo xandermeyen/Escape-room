@@ -1,4 +1,5 @@
 import { luisterNaarStatus, puzzelVoltooid } from './session.js';
+import { volgendHint } from './utils.js';
 
 // Sessie ophalen uit URL
 const params  = new URLSearchParams(window.location.search);
