@@ -1,0 +1,208 @@
+:root {
+  --kleur-perkament:    #f5f0e8;
+  --kleur-donker:       #1c1a17;
+  --kleur-middel:       #2e2b26;
+  --kleur-accent:       #8b6914;
+  --kleur-accent-licht: #c49a2a;
+  --kleur-rand:         #c8b99a;
+  --kleur-grijs:        #888070;
+  --kleur-wit:          #fdf9f2;
+  --font-archief:       'Special Elite', 'Courier New', monospace;
+  --font-body:          'Georgia', serif;
+}
+
+/* ── Reset & body ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--kleur-donker);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(200,185,154,0.04) 28px,
+    rgba(200,185,154,0.04) 29px
+  );
+  font-family: var(--font-body);
+  color: var(--kleur-perkament);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+/* ── Schermen ── */
+.scherm {
+  display: none;
+  width: 100%;
+  animation: fadeIn 0.4s ease;
+}
+.scherm.actief {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Container ── */
+.container-smal {
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+/* ── Labels & titels ── */
+.dossier-label {
+  font-family: var(--font-archief);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+}
+.game-titel {
+  font-family: var(--font-archief);
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  letter-spacing: 0.08em;
+  color: var(--kleur-perkament);
+  margin-bottom: 0;
+}
+.game-subtitel {
+  font-family: var(--font-archief);
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+  color: var(--kleur-perkament);
+}
+.tekst-grijs { color: var(--kleur-grijs); }
+
+/* ── Inleiding blok ── */
+.inleiding-blok {
+  background: rgba(200,185,154,0.06);
+  border: 1px solid rgba(200,185,154,0.2);
+  border-left: 4px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 24px 28px;
+  font-size: 0.97rem;
+  line-height: 1.8;
+  color: var(--kleur-rand);
+}
+
+/* ── Sessiecode invoer ── */
+.code-invoer-wrapper {
+  text-align: center;
+}
+.code-invoer {
+  width: 100%;
+  max-width: 340px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--kleur-accent);
+  border-radius: 0;
+  font-family: var(--font-archief);
+  font-size: 1.5rem;
+  letter-spacing: 0.15em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--kleur-perkament);
+  padding: 10px 0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.code-invoer::placeholder {
+  color: var(--kleur-grijs);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+.code-invoer:focus {
+  border-bottom-color: var(--kleur-accent-licht);
+}
+.code-fout {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  color: #c0392b;
+  margin-top: 10px;
+}
+.verborgen { display: none; }
+
+/* ── Rol kaarten ── */
+.rol-kaart {
+  background: rgba(200,185,154,0.05);
+  border: 1px solid rgba(200,185,154,0.2);
+  border-radius: 2px;
+  padding: 24px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  height: 100%;
+}
+.rol-kaart:hover {
+  background: rgba(200,185,154,0.1);
+  border-color: var(--kleur-accent);
+  transform: translateY(-2px);
+}
+.rol-label {
+  font-family: var(--font-archief);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+  margin-bottom: 6px;
+}
+.rol-titel {
+  font-family: var(--font-archief);
+  font-size: 1.2rem;
+  color: var(--kleur-accent-licht);
+  margin-bottom: 12px;
+}
+.rol-beschrijving {
+  font-size: 0.88rem;
+  color: var(--kleur-rand);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.rol-knop {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: var(--kleur-accent-licht);
+  border: 1px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 8px 16px;
+  display: inline-block;
+  transition: background 0.2s, color 0.2s;
+}
+.rol-kaart:hover .rol-knop {
+  background: var(--kleur-accent);
+  color: var(--kleur-donker);
+}
+
+/* ── Knoppen ── */
+.btn-game {
+  font-family: var(--font-archief);
+  letter-spacing: 0.08em;
+  background-color: transparent;
+  color: var(--kleur-accent-licht);
+  border: 2px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 10px 32px;
+  transition: background-color 0.25s, color 0.25s;
+}
+.btn-game:hover,
+.btn-game:focus {
+  background-color: var(--kleur-accent);
+  color: var(--kleur-donker);
+  border-color: var(--kleur-accent);
+}
+.btn-terug {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  background: none;
+  border: none;
+  color: var(--kleur-grijs);
+  cursor: pointer;
+  padding: 6px 0;
+  transition: color 0.2s;
+}
+.btn-terug:hover { color: var(--kleur-rand); }
