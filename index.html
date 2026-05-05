@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bureau X - Escape Rooms</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark-archief sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="38" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#experiences">Experiences</a></li>
+          <li class="nav-item"><a class="nav-link" href="#over-bureau-x">Over ons</a></li>
+          <li class="nav-item">
+            <a class="nav-link btn-reserveer ms-2" href="#"
+               data-bs-toggle="modal" data-bs-target="#reserveerModal">
+              Boek een sessie
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="container text-center">
+      <p class="hero-label">Online escape room experiences</p>
+      <h1 class="hero-titel">Bureau X</h1>
+      <p class="hero-subtitel">Verhalen die je oplost. Samen, vanuit huis.</p>
+      <p class="hero-intro">
+        Bureau X maakt online escape rooms gebaseerd op echte plaatsen, echte tradities<br />en verhalen die de moeite waard zijn om te vertellen.
+      </p>
+      <a href="#experiences" class="btn btn-archief btn-lg mt-3">
+        <i class="bi bi-folder2-open me-2"></i>Bekijk onze experiences
+      </a>
+    </div>
+  </section>
+
+  <!-- EXPERIENCES -->
+  <section id="experiences" class="py-5 sectie-licht">
+    <div class="container">
+      <h2 class="sectie-titel text-center mb-2">Onze experiences</h2>
+      <p class="text-center tekst-grijs mb-5">Elke Bureau X experience is verankerd in een echte plek of traditie.</p>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="experience-kaart p-4 p-md-5">
+            <div class="d-flex align-items-start gap-4 flex-wrap">
+              <div class="dossier-nummer">14</div>
+              <div class="flex-grow-1">
+                <p class="experience-label mb-1">Online escape room &mdash; Geel, België</p>
+                <h3 class="experience-titel mb-3">Kamer 14</h3>
+                <p class="mb-3">
+                  Een dinsdagochtend in mei. Lena Bogaert is niet aan het ontbijt verschenen bij het gastgezin Martens. Haar bed is opgemaakt, haar jas is weg. Geen briefje.
+                </p>
+                <p class="mb-4">
+                  Samen doorzoeken jullie twee dossiers: het officiële OPZ-dossier en het buurtdossier van het gastgezin. Is ze vrijwillig gegaan en waar is ze nu?
+                </p>
+                <div class="row g-3 mb-4">
+                  <div class="col-sm-4">
+                    <div class="spec-item"><i class="bi bi-clock-history me-2"></i>±45 minuten</div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="spec-item"><i class="bi bi-people me-2"></i>Solo of duo</div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="spec-item"><i class="bi bi-laptop me-2"></i>100% online</div>
+                  </div>
+                </div>
+                <a href="#" class="btn btn-archief"
+                   data-bs-toggle="modal" data-bs-target="#reserveerModal">
+                  <i class="bi bi-calendar-check me-2"></i>Boek Kamer 14
+                </a>
+                <span class="badge badge-archief ms-3">Nu beschikbaar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-lg-8">
+          <div class="experience-kaart-locked p-4 text-center">
+            <i class="bi bi-lock fs-4 mb-2 d-block tekst-grijs"></i>
+            <p class="mb-0 tekst-grijs">
+              <span class="font-archief">Volgende experience in ontwikkeling</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOE HET WERKT -->
+  <section id="hoe-het-werkt" class="py-5 sectie-donker">
+    <div class="container">
+      <h2 class="sectie-titel text-center mb-5">Hoe het werkt</h2>
+      <div class="row g-4 justify-content-center align-items-start">
+        <div class="col-md-4 text-center">
+          <div class="stap-nummer">1</div>
+          <h5 class="mt-3">Boek een sessie</h5>
+          <p>Vul het formulier in. Je ontvangt een bevestigingsmail met jullie persoonlijke spellink.</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="stap-nummer">2</div>
+          <h5 class="mt-3">Ontvang de link</h5>
+          <p>Stuur de link naar je medespeler. Elke speler opent zijn eigen dossier in de browser geen download nodig.</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="stap-nummer">3</div>
+          <h5 class="mt-3">Speel samen</h5>
+          <p>Bel of chat met je medespeler. De oplossing zit in allebei de dossiers samen kom je eruit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVER BUREAU X -->
+  <section id="over-bureau-x" class="py-5 sectie-licht">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+          <h2 class="sectie-titel mb-4">Over Bureau X</h2>
+          <p class="mb-3">
+            Bureau X maakt online escape rooms die geworteld zijn in echte verhalen. Geen generieke thrillers of willekeurige puzzels — elke experience is gebouwd rond een echte plek, een echte traditie of een thema dat de moeite waard is om te onderzoeken.
+          </p>
+          <p class="mb-0">
+            Onze eerste experience <strong>Kamer 14</strong> is gebaseerd op de unieke Geelse traditie van gezinsverpleging, een traditie die al meer dan zeven eeuwen bestaat en vandaag nog steeds levend wordt gehouden door het <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="link-accent">OPZ Geel</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-4 footer-archief">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+          <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="32" />
+        </div>
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+          <p class="mb-1 small tekst-grijs">
+            Kamer 14 is gebaseerd op de echte traditie van gezinsverpleging in Geel.
+          </p>
+          <p class="mb-0 small tekst-grijs">
+            <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="footer-link">OPZ Geel</a>
+            &middot;
+            <a href="https://www.sint-dymphna.be" target="_blank" rel="noopener" class="footer-link">Sint-Dymphna</a>
+          </p>
+        </div>
+        <div class="col-md-4 text-center text-md-end">
+          <p class="mb-0 small">
+            <a href="mailto:info@bureaux.be" class="footer-link">info@bureaux.be</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- RESERVEER MODAL -->
+  <div class="modal fade" id="reserveerModal" tabindex="-1" aria-labelledby="reserveerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-archief">
+
+        <div class="modal-header modal-header-archief">
+          <h5 class="modal-title" id="reserveerModalLabel">
+            <i class="bi bi-folder2-open me-2"></i>Boek een sessie - Kamer 14
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Sluiten"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <form id="reserveerForm" action="https://formspree.io/f/xvzlanbj" method="POST">
+            <div class="mb-3">
+              <label for="naam" class="form-label">Naam</label>
+              <input type="text" class="form-control archief-input" id="naam" name="naam" placeholder="Jouw naam" required />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mailadres</label>
+              <input type="email" class="form-control archief-input" id="email" name="email" placeholder="jouw@email.be" required />
+            </div>
+            <div class="mb-3">
+              <label for="datum" class="form-label">Gewenste datum</label>
+              <input type="date" class="form-control archief-input" id="datum" name="datum" required />
+            </div>
+            <div class="mb-4">
+              <label for="spelers" class="form-label">Aantal spelers</label>
+              <select class="form-select archief-input" id="spelers" name="spelers">
+                <option value="solo">Solo (1 speler)</option>
+                <option value="duo" selected>Duo (2 spelers)</option>
+              </select>
+            </div>
+            <input type="hidden" name="experience" value="Kamer 14" />
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+            <div class="d-grid">
+              <button type="submit" class="btn btn-archief btn-lg">
+                <i class="bi bi-send me-2"></i>Verstuur reservering
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>
