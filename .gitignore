@@ -1,0 +1,74 @@
+# ─── Besturingssysteem ───────────────────────────────────────────────────────
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encdata
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ─── Editors & IDEs ──────────────────────────────────────────────────────────
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (WebStorm, IntelliJ …)
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Emacs tijdelijke bestanden
+*.swp
+*.swo
+*.bak
+*~
+
+# ─── Gevoelige configuratie ──────────────────────────────────────────────────
+
+# Omgevingsvariabelen — gebruik dit als je ooit lokale secrets opslaat
+.env
+.env.local
+.env.*.local
+
+# Lokale Firebase-overschrijving (als je ooit een aparte lokale config aanmaakt)
+# LET OP: game/js/firebase-config.js staat WEL in Git omdat GitHub Pages
+# hem rechtstreeks naar de browser stuurt. Beveilig toegang via Firebase Rules.
+firebase-config.local.js
+
+# ─── Tijdelijke & lokale bestanden ───────────────────────────────────────────
+
+# Lokale aantekeningen / scratchpads
+notes.md
+notes.txt
+todo.txt
+scratch/
+tmp/
+
+# Logs
+*.log
+
+# ─── Node / npm / pnpm ───────────────────────────────────────────────────────
+
+node_modules/
+
+# npm
+npm-debug.log*
+package-lock.json
+
+# pnpm
+pnpm-debug.log*
+pnpm-lock.yaml
+.pnpm-store/
