@@ -60,6 +60,15 @@ function updateTabs(p) {
     });
   }
 
+  // Puzzels vrijgeven op basis van voortgang
+  if (p.p1) {
+    document.getElementById('puzzel-2')?.classList.remove('verborgen');
+    document.getElementById('puzzel-3')?.classList.remove('verborgen');
+  }
+  if (p.p4) {
+    document.getElementById('puzzel-5')?.classList.remove('verborgen');
+  }
+
   // Voltooide puzzels markeren
   ['p1','p2','p3','p4','p5'].forEach((nr, i) => {
     if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
@@ -69,9 +78,7 @@ function updateTabs(p) {
 function markeerVoltooid(id) {
   const blok = document.getElementById(id);
   if (!blok) return;
-  blok.innerHTML = `<div class="puzzel-voltooid">
-    <i class="bi bi-check2-circle me-1"></i>Bevestigd — opgenomen in dossier
-  </div>`;
+  blok.classList.add('verborgen');
 }
 
 

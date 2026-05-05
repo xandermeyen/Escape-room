@@ -103,9 +103,7 @@ function updateTabs(p) {
 function markeerVoltooid(id) {
   const blok = document.getElementById(id);
   if (!blok) return;
-  blok.innerHTML = `<div class="puzzel-voltooid">
-    <i class="bi bi-check2-circle me-1"></i>Bevestigd — opgenomen in dossier
-  </div>`;
+  blok.classList.add('verborgen');
 }
 
 
