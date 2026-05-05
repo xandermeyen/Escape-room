@@ -241,66 +241,138 @@
 
     <!-- PANEL 3: Kamerinspectie (vrijgegeven na P2 + P3) -->
     <div class="tab-panel" id="panel-kamer">
-      <div class="doc-label">Kamerinspectie — kamer Lena Bogaert, 6 mei 2026 · 09u15</div>
+  <div class="doc-label">Kamerinspectie — kamer Lena Bogaert, 6 mei 2026 · 09u15</div>
 
-      <div class="doc-tekst">
-        Bed opgemaakt. Kledingkast half leeg reiskleding ontbreekt.
-        Op het prikbord één envelop vastgespeld met een punaise.
-        Geen andere persoonlijke bezittingen achtergelaten.
-        Geen briefje gericht aan gastgezin of OPZ.
-      </div>
+  <div class="doc-tekst" style="margin-bottom:16px;">
+    Inspectie uitgevoerd door An Vermeersch, OPZ Geel. Zes zones gecontroleerd.
+    Geen sporen van geforceerde ingang. Vertrek lijkt vrijwillig en voorbereid.
+  </div>
 
-      <div class="prikbord">
-        <div class="brief-kaart" id="brief-kaart" onclick="draaiOm()">
-          <div class="brief-voorkant">
-            <div style="font-size:13px;letter-spacing:0.06em;">Envelop · vastgespeld</div>
-            <div style="font-size:11px;color:rgba(0,0,0,0.45);margin-top:5px;">Afzender: Diest, 3 april 2026</div>
-            <div class="brief-instructie">↺ klik om te lezen</div>
-          </div>
-          <div class="brief-achterkant">
-            <div style="font-family:'Special Elite','Courier New',monospace;font-size:13px;line-height:2;color:#2a2010;">
-              Lena,<br><br>
-              Wat fijn dat je me hebt<br>
-              weten te vinden!<br><br>
-              Ik woon hier al drie jaar:<br>
-              <strong>Stationsstraat 7, Diest.</strong><br><br>
-              Kom gerust langs.<br><br>
-              — Marie
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="inspectie-board">
 
-      <!-- Puzzel 4 -->
-      <div class="puzzel-blok" id="puzzel-4">
-        <div class="puzzel-vraag">
-          Overleg met Speler A. Wie ging Lena opzoeken in Diest? Geef de volledige naam.
-        </div>
-        <div class="puzzel-invoer-rij">
-          <input class="puzzel-input" id="input-p4" placeholder="voor- en achternaam…" maxlength="30" />
-          <button class="puzzel-btn" id="btn-p4">Bevestig</button>
-        </div>
-        <div class="puzzel-feedback" id="feedback-p4"></div>
-        <div class="hint-blok" id="hint-p4-b">
-          <button class="hint-knop" onclick="volgendHint('hint-p4-b')">
-            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
-          </button>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 1 / 3</span>
-            De brief is ondertekend met een voornaam. Vraag Speler A wie er staat vermeld als vertrouwenspersoon op de intakefiche.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 2 / 3</span>
-            Speler A ziet op de intakefiche een vriendin van Lena met "huidig adres: onbekend". Combineer die achternaam met de handtekening op de brief.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 3 / 3</span>
-            De brief is ondertekend door "Marie". De intakefiche vermeldt "Marie Stas, vriendin". Dat is de volledige naam.
-          </div>
-          <button class="hint-verder verborgen" onclick="volgendHint('hint-p4-b')">Volgende aanwijzing →</button>
-        </div>
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-moon-stars"></i></div>
+      <div class="polaroid-label">Bed</div>
+      <div class="polaroid-detail">Opgemaakt. Lakens strak. Geen briefje onder kussen aangetroffen.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-door-closed"></i></div>
+      <div class="polaroid-label">Kledingkast</div>
+      <div class="polaroid-detail">Half leeg. Zomerjurk en reisjas ontbreken. Overige kleding aanwezig.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-journal-text"></i></div>
+      <div class="polaroid-label">Nachtkastje</div>
+      <div class="polaroid-detail">OPZ-dagboek aanwezig. Laatste bladzijde ontbreekt. Pen. Één ongebruikte postzegel.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-inbox"></i></div>
+      <div class="polaroid-label">Onder bed</div>
+      <div class="polaroid-detail">Lege koekjesdoos aangetroffen. Mogelijk gebruikt als bewaarplaats.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-window"></i></div>
+      <div class="polaroid-label">Raam</div>
+      <div class="polaroid-detail">Gesloten en op slot. Geen sporen van geforceerde ingang.</div>
+    </div>
+
+    <div class="polaroid polaroid-uitgelicht">
+      <div class="polaroid-foto"><i class="bi bi-pin-angle-fill"></i></div>
+      <div class="polaroid-label">Prikbord</div>
+      <div class="polaroid-detail">Één envelop vastgespeld met rode punaise. Afzender: Diest, 3 april 2026.</div>
+    </div>
+
+  </div>
+
+  <div class="doc-tekst" style="margin: 0 0 8px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--k-tekst-donker);">
+    Prikbord — envelop (detail)
+  </div>
+
+  <div class="prikbord">
+
+  <!-- Brief van Marie (sleutelclue) -->
+  <div class="brief-kaart" id="brief-kaart" onclick="draaiOm()" style="transform:rotate(-2.5deg);">
+    <div class="brief-voorkant">
+      <div style="font-size:13px;letter-spacing:0.06em;">Envelop · vastgespeld</div>
+      <div style="font-size:11px;color:rgba(0,0,0,0.45);margin-top:5px;">Afzender: Diest, 3 april 2026</div>
+      <div class="brief-instructie">↺ klik om te lezen</div>
+    </div>
+    <div class="brief-achterkant">
+      <div style="font-family:'Special Elite','Courier New',monospace;font-size:13px;line-height:2;color:#2a2010;">
+        Lena,<br><br>
+        Wat fijn dat je me hebt<br>
+        weten te vinden!<br><br>
+        Ik woon hier al drie jaar:<br>
+        <strong>Stationsstraat 7, Diest.</strong><br><br>
+        Kom gerust langs.<br><br>
+        — Marie
       </div>
     </div>
+  </div>
+
+  <!-- OPZ herinneringskaartje (afleidingsmanoeuvre) -->
+  <div class="brief-klein" style="transform:rotate(2deg);">
+    <div style="font-size:9px;letter-spacing:0.15em;color:#5a4030;margin-bottom:5px;">OPZ GEEL</div>
+    Herinnering:<br>
+    Wo 14 mei · 10u00<br>
+    Kamer 4<br>
+    <span style="font-size:10px;color:#7a6050;">An Vermeersch</span>
+  </div>
+
+  <!-- De Lijn bon (atmosfeer) -->
+  <div class="bon-kaart" style="transform:rotate(-1deg);">
+    <div style="text-align:center;font-size:9px;letter-spacing:0.12em;border-bottom:1px dashed #ccc;padding-bottom:5px;margin-bottom:6px;">DE LIJN</div>
+    Geel Markt<br>
+    17/03/2026 · 07:28<br>
+    Dagticket<br>
+    <div style="border-top:1px dashed #ccc;margin-top:6px;padding-top:5px;text-align:right;">€ 6,00</div>
+  </div>
+
+  <!-- Gescheurd briefje (afleidingsmanoeuvre) -->
+  <div class="brief-klein" style="transform:rotate(1.5deg);background:#ede0c8;max-width:110px;">
+    <div style="font-size:10px;color:#7a5a40;margin-bottom:4px;">nota</div>
+    gemeentehuis<br>
+    Diest geopend<br>
+    ma t/m vr<br>
+    <span style="font-size:10px;color:#9a7a60;">09u–12u</span>
+  </div>
+
+</div>
+
+  <!-- Puzzel 4 -->
+  <div class="puzzel-blok verborgen" id="puzzel-4">
+    <div class="puzzel-vraag">
+      Overleg met Speler A. Wie ging Lena opzoeken in Diest? Geef de volledige naam.
+    </div>
+    <div class="puzzel-invoer-rij">
+      <input class="puzzel-input" id="input-p4" placeholder="voor- en achternaam…" maxlength="30" />
+      <button class="puzzel-btn" id="btn-p4">Bevestig</button>
+    </div>
+    <div class="puzzel-feedback" id="feedback-p4"></div>
+    <div class="hint-blok" id="hint-p4-b">
+      <button class="hint-knop" onclick="volgendHint('hint-p4-b')">
+        <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
+      </button>
+      <div class="hint-stap verborgen">
+        <span class="hint-nr">Aanwijzing 1 / 3</span>
+        De brief is ondertekend met een voornaam. Vraag Speler A wie er staat vermeld als vertrouwenspersoon op de intakefiche.
+      </div>
+      <div class="hint-stap verborgen">
+        <span class="hint-nr">Aanwijzing 2 / 3</span>
+        Speler A ziet op de intakefiche een vriendin van Lena met "huidig adres: onbekend". Combineer die achternaam met de handtekening op de brief.
+      </div>
+      <div class="hint-stap verborgen">
+        <span class="hint-nr">Aanwijzing 3 / 3</span>
+        De brief is ondertekend door "Marie". De intakefiche vermeldt "Marie Stas, vriendin". Dat is de volledige naam.
+      </div>
+      <button class="hint-verder verborgen" onclick="volgendHint('hint-p4-b')">Volgende aanwijzing →</button>
+    </div>
+  </div>
+</div>
 
   </div><!-- /content-wrapper -->
 
