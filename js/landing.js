@@ -50,6 +50,12 @@ secties.forEach(sectie => navObserver.observe(sectie));
 
 /* ── 3. FORMSPREE AJAX FORMULIER ── */
 
+// Datum minimum = vandaag
+const datumInput = document.getElementById('datum');
+if (datumInput) {
+  datumInput.min = new Date().toISOString().split('T')[0];
+}
+
 const form = document.getElementById('reserveerForm');
 
 if (form) {
