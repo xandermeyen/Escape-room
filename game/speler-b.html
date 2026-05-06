@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kamer 14 — Buurtdossier</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/kamer14.css" />
+</head>
+<body>
+
+  <!-- Systeembalk -->
+  <div class="systeembalk">
+    <div style="display:flex;align-items:center;">
+      <span class="sys-logo">Bureau X</span>
+      <span class="sys-sep">|</span>
+      <span class="sys-case" id="sys-case">Buurtdossier · laden…</span>
+    </div>
+    <div class="sys-rechts">
+      <span class="sys-speler">Speler B — Buurtdossier</span>
+      <span class="sys-badge">Actief onderzoek</span>
+    </div>
+  </div>
+
+  <!-- Dossier header -->
+  <div class="dossier-header">
+    <div class="dossier-meta">
+      <div>
+        <div class="dossier-naam">Bogaert, Lena M.</div>
+        <div class="dossier-sub">Kostgangster · Gastgezin Martens · Geel · Ref. OPZ-2026-0506</div>
+      </div>
+      <div class="stempel">Intern · Vertrouwelijk</div>
+    </div>
+    <div class="voortgang">
+      <span class="vp-label">Dossier</span>
+      <div class="vp-stap" id="vp1"></div>
+      <div class="vp-stap" id="vp2"></div>
+      <div class="vp-stap" id="vp3"></div>
+      <div class="vp-stap" id="vp4"></div>
+      <div class="vp-stap" id="vp5"></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab actief" data-tab="logboek">Huishoudlogboek</div>
+    <div class="tab" data-tab="kas">Kas &amp; Bonnen</div>
+    <div class="tab slot" data-tab="kamer" id="tab-kamer">🔒 Kamerinspectie</div>
+  </div>
+
+  <!-- Tab content -->
+  <div class="content-wrapper">
+
+    <!-- PANEL 1: Huishoudlogboek (altijd zichtbaar) -->
+    <div class="tab-panel actief" id="panel-logboek">
+      <div class="doc-label">Huishoudlogboek — gastgezin Martens-Peeters, Gasthuisstraat 44, Geel</div>
+
+      <div class="notitie">
+        <div class="notitie-datum">Week 14–18 april</div>
+        <div class="doc-tekst">
+          Di 15 apr · wandeling kanaal · verwacht terug 11u00 · <strong>teruggekeerd 14u15</strong><br>
+          Do 17 apr · bakkerij Gasthuisstraat · verwacht terug 10u30 · <strong>teruggekeerd 13u10</strong>
+        </div>
+      </div>
+
+      <div class="notitie">
+        <div class="notitie-datum">Week 21–25 april</div>
+        <div class="doc-tekst">
+          Di 22 apr · wandeling kanaal · verwacht 11u00 · <strong>teruggekeerd 13u50</strong><br>
+          Do 24 apr · bakkerij · verwacht 10u30 · <strong>teruggekeerd 12u55</strong>
+        </div>
+      </div>
+
+      <div class="notitie">
+        <div class="notitie-datum">Week 28 april – 2 mei</div>
+        <div class="doc-tekst">
+          Di 29 apr · wandeling · verwacht 11u00 · <strong>teruggekeerd 14u05</strong> · leek vermoeid maar gelukkig<br>
+          Do 1 mei · bakkerij · verwacht 10u30 · <strong>teruggekeerd 13u15</strong>
+        </div>
+      </div>
+
+      <div class="notitie" style="border-left-color:#7a3030;">
+        <div class="notitie-datum" style="color:#7a4040;">Week 5–9 mei · Afwijkend incident</div>
+        <div class="doc-tekst">
+          Di 6 mei · Lena aanwezig bij ontbijt (07u00) · kamer leeg vastgesteld om 07u45<br>
+          <strong>OPZ Geel gebeld om 08u30.</strong> Deur niet op slot. Kledij mee. Geen briefje achtergelaten.
+        </div>
+      </div>
+
+      <!-- Puzzel 1 -->
+      <div class="puzzel-blok" id="puzzel-1">
+        <div class="puzzel-vraag">
+          Overleg met Speler A. Op welke twee dagen keerde Lena de laatste weken consequent later terug?
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p1" placeholder="twee woorden…" maxlength="30" />
+          <button class="puzzel-btn" id="btn-p1">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p1"></div>
+        <div class="hint-blok" id="hint-p1-b">
+          <button class="hint-knop" onclick="volgendHint('hint-p1-b')">
+            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
+          </button>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 1 / 3</span>
+            Vergelijk de verwachte retourtijden per dag met de werkelijke tijdstippen in dit logboek. Niet elke dag vertoont een patroon.
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 2 / 3</span>
+            Op welke twee weekdagen is het verschil tussen verwachte en werkelijke retourtijd consistent groot, week na week?
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 3 / 3</span>
+            Het patroon zit op dinsdag (wandeling) en donderdag (bakkerij). Speler A ziet in het rooster wanneer die afwijkingen begonnen.
+          </div>
+          <button class="hint-verder verborgen" onclick="volgendHint('hint-p1-b')">Volgende aanwijzing →</button>
+        </div>
+      </div>
+
+      <!-- Puzzel 2 -->
+      <div class="puzzel-blok verborgen" id="puzzel-2">
+        <div class="puzzel-vraag">
+          Overleg met Speler A. Welke stad bezocht Lena op haar uitstappen?
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p2" placeholder="stadsnaam…" maxlength="20" />
+          <button class="puzzel-btn" id="btn-p2">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p2"></div>
+        <div class="hint-blok" id="hint-p2-b">
+          <button class="hint-knop" onclick="volgendHint('hint-p2-b')">
+            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
+          </button>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 1 / 3</span>
+            De stad staat niet letterlijk in dit logboek. Vraag Speler A wat Lena tekende in het atelier en welke uitstaplocaties er vermeld staan.
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 2 / 3</span>
+            Speler A beschikt over een beschrijving van een specifieke kerktoren die Lena natekende. Vergelijk die met de uitstaplijst.
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 3 / 3</span>
+            De stad is Diest. De Sint-Sulpitiuskerk heeft een achtzijdige spits boven een vierkante toren — precies wat Lena tekende.
+          </div>
+          <button class="hint-verder verborgen" onclick="volgendHint('hint-p2-b')">Volgende aanwijzing →</button>
+        </div>
+      </div>
+
+      <!-- Puzzel 5 -->
+      <div class="puzzel-blok verborgen" id="puzzel-5">
+        <div class="puzzel-vraag">
+          Overleg met Speler A. Welke bus nam Lena op dinsdagochtend 6 mei? Geef het vertrektijdstip.
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p5" placeholder="uu:mm" maxlength="10" />
+          <button class="puzzel-btn" id="btn-p5">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p5"></div>
+        <div class="hint-blok" id="hint-p5-b">
+          <button class="hint-knop" onclick="volgendHint('hint-p5-b')">
+            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
+          </button>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 1 / 3</span>
+            Lena was weg vóór haar kamer leeg werd vastgesteld om 07u45. Vraag Speler A de busdienstregeling Geel → Diest.
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 2 / 3</span>
+            Er zijn meerdere bussen. Welke vertrekt vóór 07u45 en is realistisch gegeven dat Lena nog aan het ontbijt zat om 07u00?
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 3 / 3</span>
+            De bus van 07:35 past precies: Lena kon na het ontbijt snel vertrekken en die bus nog halen aan de Geel Markt.
+          </div>
+          <button class="hint-verder verborgen" onclick="volgendHint('hint-p5-b')">Volgende aanwijzing →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2: Kas & Bonnen (altijd zichtbaar) -->
+    <div class="tab-panel" id="panel-kas">
+      <div class="doc-label">Kasoverzicht leefgeld — wekelijkse bijdrage gastgezin Martens-Peeters</div>
+
+      <table class="rooster">
+  <tr><td>3 feb</td><td>€35</td><td style="font-size:11px;color:var(--k-tekst-donker);">— normaal</td></tr>
+  <tr><td>10 feb</td><td>€35</td><td style="font-size:11px;color:var(--k-tekst-donker);">— normaal</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>17 feb</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+  <tr><td>24 feb</td><td>€35</td><td style="font-size:11px;color:var(--k-tekst-donker);">— normaal</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>3 mrt</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>10 mrt</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+  <tr><td>17 mrt</td><td>€35</td><td style="font-size:11px;color:var(--k-tekst-donker);">— normaal</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>24 mrt</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+  <tr><td>31 mrt</td><td>€35</td><td style="font-size:11px;color:var(--k-tekst-donker);">— normaal</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>7 apr</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+  <tr><td>14 apr</td><td>€35</td><td style="font-size:11px;color:var(--k-tekst-donker);">— normaal</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>21 apr</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>28 apr</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+  <tr><td>5 mei</td><td>€35</td><td style="font-size:11px;color:var(--k-tekst-donker);">— normaal</td></tr>
+  <tr style="color:var(--k-accent-licht)"><td>12 mei</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
+</table>
+
+      <div class="dagpas">
+        <div class="dagpas-nr">BON #2026-0317 · Persoonlijk vervoer kostganger</div>
+        De Lijn — Dagticket (app-aankoop)<br>
+        Traject: Geel Markt → Diest Grote Markt<br>
+        Datum: 17 maart 2026<br>
+        Bedrag: €6,00
+      </div>
+
+      <!-- Puzzel 3 -->
+      <div class="puzzel-blok verborgen" id="puzzel-3">
+        <div class="puzzel-vraag">
+          Overleg met Speler A. Hoeveel weken spaarde Lena bewust haar bijdrage aan het gastgezin niet?
+        </div>
+        <div class="puzzel-invoer-rij">
+          <input class="puzzel-input" id="input-p3" placeholder="aantal weken…" maxlength="10" />
+          <button class="puzzel-btn" id="btn-p3">Bevestig</button>
+        </div>
+        <div class="puzzel-feedback" id="feedback-p3"></div>
+       <div class="hint-blok" id="hint-p3-b">
+  <button class="hint-knop" onclick="volgendHint('hint-p3-b')">💡 Aanwijzing</button>
+  <div class="hint-stap verborgen">
+    <span class="hint-nr">Aanwijzing 1 / 3</span>
+    Doorzoek het kasoverzicht rij per rij. Tel elke week waarbij de bijdrage €0 was.
+  </div>
+  <div class="hint-stap verborgen">
+    <span class="hint-nr">Aanwijzing 2 / 3</span>
+    Zoek alle groene rijen met "⚠ niet betaald" in de tabel — ze staan niet allemaal achter elkaar.
+  </div>
+  <div class="hint-stap verborgen">
+    <span class="hint-nr">Aanwijzing 3 / 3</span>
+    Er zijn 8 weken verspreid door de tabel waarbij de bijdrage op €0 staat. Het antwoord is 8.
+  </div>
+  <button class="hint-verder verborgen" onclick="volgendHint('hint-p3-b')">Volgende aanwijzing →</button>
+</div>
+      </div>
+    </div>
+
+    <!-- PANEL 3: Kamerinspectie (vrijgegeven na P2 + P3) -->
+    <div class="tab-panel" id="panel-kamer">
+  <div class="doc-label">Kamerinspectie — kamer Lena Bogaert, 6 mei 2026 · 09u15</div>
+
+  <div class="doc-tekst" style="margin-bottom:16px;">
+    Inspectie uitgevoerd door An Vermeersch, OPZ Geel. Zes zones gecontroleerd.
+    Geen sporen van geforceerde ingang. Vertrek lijkt vrijwillig en voorbereid.
+  </div>
+
+  <div class="inspectie-board">
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-moon-stars"></i></div>
+      <div class="polaroid-label">Bed</div>
+      <div class="polaroid-detail">Opgemaakt. Lakens strak. Geen briefje onder kussen aangetroffen.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-door-closed"></i></div>
+      <div class="polaroid-label">Kledingkast</div>
+      <div class="polaroid-detail">Half leeg. Zomerjurk en reisjas ontbreken. Overige kleding aanwezig.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-journal-text"></i></div>
+      <div class="polaroid-label">Nachtkastje</div>
+      <div class="polaroid-detail">OPZ-dagboek aanwezig. Laatste bladzijde ontbreekt. Pen. Één ongebruikte postzegel.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-inbox"></i></div>
+      <div class="polaroid-label">Onder bed</div>
+      <div class="polaroid-detail">Lege koekjesdoos aangetroffen. Mogelijk gebruikt als bewaarplaats.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-foto"><i class="bi bi-window"></i></div>
+      <div class="polaroid-label">Raam</div>
+      <div class="polaroid-detail">Gesloten en op slot. Geen sporen van geforceerde ingang.</div>
+    </div>
+
+    <div class="polaroid polaroid-uitgelicht">
+      <div class="polaroid-foto"><i class="bi bi-pin-angle-fill"></i></div>
+      <div class="polaroid-label">Prikbord</div>
+      <div class="polaroid-detail">Één envelop vastgespeld met rode punaise. Afzender: Diest, 3 april 2026.</div>
+    </div>
+
+  </div>
+
+  <div class="doc-tekst" style="margin: 0 0 8px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--k-tekst-donker);">
+    Prikbord — envelop (detail)
+  </div>
+
+  <div class="prikbord">
+
+  <!-- Brief van Marie (sleutelclue) -->
+  <div class="brief-kaart" id="brief-kaart" onclick="draaiOm()" style="transform:rotate(-2.5deg);">
+    <div class="brief-voorkant">
+      <div style="font-size:13px;letter-spacing:0.06em;">Envelop · vastgespeld</div>
+      <div style="font-size:11px;color:rgba(0,0,0,0.45);margin-top:5px;">Afzender: Diest, 3 april 2026</div>
+      <div class="brief-instructie">↺ klik om te lezen</div>
+    </div>
+    <div class="brief-achterkant">
+      <div style="font-family:'Special Elite','Courier New',monospace;font-size:13px;line-height:2;color:#2a2010;">
+        Lena,<br><br>
+        Wat fijn dat je me hebt<br>
+        weten te vinden!<br><br>
+        Ik woon hier al drie jaar:<br>
+        <strong>Stationsstraat 7, Diest.</strong><br><br>
+        Kom gerust langs.<br><br>
+        — Marie
+      </div>
+    </div>
+  </div>
+
+  <!-- OPZ herinneringskaartje (afleidingsmanoeuvre) -->
+  <div class="brief-klein" style="transform:rotate(2deg);">
+    <div style="font-size:9px;letter-spacing:0.15em;color:#5a4030;margin-bottom:5px;">OPZ GEEL</div>
+    Herinnering:<br>
+    Wo 14 mei · 10u00<br>
+    Kamer 4<br>
+    <span style="font-size:10px;color:#7a6050;">An Vermeersch</span>
+  </div>
+
+  <!-- De Lijn bon (atmosfeer) -->
+  <div class="bon-kaart" style="transform:rotate(-1deg);">
+    <div style="text-align:center;font-size:9px;letter-spacing:0.12em;border-bottom:1px dashed #ccc;padding-bottom:5px;margin-bottom:6px;">DE LIJN</div>
+    Geel Markt<br>
+    17/03/2026 · 07:28<br>
+    Dagticket<br>
+    <div style="border-top:1px dashed #ccc;margin-top:6px;padding-top:5px;text-align:right;">€ 6,00</div>
+  </div>
+
+  <!-- Gescheurd briefje (afleidingsmanoeuvre) -->
+  <div class="brief-klein" style="transform:rotate(1.5deg);background:#ede0c8;max-width:110px;">
+    <div style="font-size:10px;color:#7a5a40;margin-bottom:4px;">nota</div>
+    gemeentehuis<br>
+    Diest geopend<br>
+    ma t/m vr<br>
+    <span style="font-size:10px;color:#9a7a60;">09u–12u</span>
+  </div>
+
+</div>
+
+  <!-- Puzzel 4 -->
+  <div class="puzzel-blok verborgen" id="puzzel-4">
+    <div class="puzzel-vraag">
+      Overleg met Speler A. Wie ging Lena opzoeken in Diest? Geef de volledige naam.
+    </div>
+    <div class="puzzel-invoer-rij">
+      <input class="puzzel-input" id="input-p4" placeholder="voor- en achternaam…" maxlength="30" />
+      <button class="puzzel-btn" id="btn-p4">Bevestig</button>
+    </div>
+    <div class="puzzel-feedback" id="feedback-p4"></div>
+    <div class="hint-blok" id="hint-p4-b">
+      <button class="hint-knop" onclick="volgendHint('hint-p4-b')">
+        <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
+      </button>
+      <div class="hint-stap verborgen">
+        <span class="hint-nr">Aanwijzing 1 / 3</span>
+        De brief is ondertekend met een voornaam. Vraag Speler A wie er staat vermeld als vertrouwenspersoon op de intakefiche.
+      </div>
+      <div class="hint-stap verborgen">
+        <span class="hint-nr">Aanwijzing 2 / 3</span>
+        Speler A ziet op de intakefiche een vriendin van Lena met "huidig adres: onbekend". Combineer die achternaam met de handtekening op de brief.
+      </div>
+      <div class="hint-stap verborgen">
+        <span class="hint-nr">Aanwijzing 3 / 3</span>
+        De brief is ondertekend door "Marie". De intakefiche vermeldt "Marie Stas, vriendin". Dat is de volledige naam.
+      </div>
+      <button class="hint-verder verborgen" onclick="volgendHint('hint-p4-b')">Volgende aanwijzing →</button>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /content-wrapper -->
+
+  <script type="module" src="js/speler-b.js"></script>
+</body>
+</html>

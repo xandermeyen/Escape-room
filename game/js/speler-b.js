@@ -6,12 +6,12 @@ let _audioGestart = false;
 function zorgVoorAudio() {
   if (_audioGestart) return;
   _audioGestart = true;
-  startAchtergrond('a');
+  startAchtergrond('b');
 }
 
 // Sessie ophalen uit URL
-const params  = new URLSearchParams(window.location.search);
-const sessie  = params.get('sessie');
+const params = new URLSearchParams(window.location.search);
+const sessie = params.get('sessie');
 
 if (!sessie) {
   window.location.href = 'index.html';
@@ -19,7 +19,7 @@ if (!sessie) {
 
 // Casenummer tonen in systeembalk
 document.getElementById('sys-case').textContent =
-  `Intern dossier · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
+  `Buurtdossier · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
 
 
 // ── Tabnavigatie ──────────────────────────────────────────
@@ -44,74 +44,45 @@ function updateVoortgang(p) {
     const el = document.getElementById(id);
     if (!el) return;
     el.className = 'vp-stap';
-    if (voltooid[i]) {
-      el.classList.add('vp-klaar');
-    } else if (i === aantalKlaar) {
-      el.classList.add('vp-bezig');
-    } else {
-      el.classList.add('vp-open');
-    }
+    if (voltooid[i])            el.classList.add('vp-klaar');
+    else if (i === aantalKlaar) el.classList.add('vp-bezig');
+    else                        el.classList.add('vp-open');
   });
 }
 
 
-// ── Tabs vrijgeven op basis van Firebase status ───────────
+// ── Tab vrijgeven op basis van Firebase status ────────────
 function updateTabs(p) {
-  const tabAtelier    = document.getElementById('tab-atelier');
-  const tabIntakefiche = document.getElementById('tab-intakefiche');
-  const tabBijlage    = document.getElementById('tab-bijlage');
+  const tabKamer = document.getElementById('tab-kamer');
 
-  // Atelier: vrijgegeven na P1
- if (p.p1 && tabAtelier.classList.contains('slot')) {
+  // Kamerinspectie: vrijgegeven na P2 én P3
+  if (p.p2 && p.p3 && tabKamer.classList.contains('slot')) {
     zorgVoorAudio();
     speelUnlock();
-    tabAtelier.classList.remove('slot');
-    tabAtelier.textContent = 'Atelier';
-    tabAtelier.classList.add('nieuw-doc');
-    tabAtelier.addEventListener('click', () => {
+    tabKamer.classList.remove('slot');
+    tabKamer.textContent = 'Kamerinspectie';
+    tabKamer.classList.add('nieuw-doc');
+    tabKamer.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabAtelier.classList.add('actief');
-      document.getElementById('panel-atelier').classList.add('actief');
+      tabKamer.classList.add('actief');
+      document.getElementById('panel-kamer').classList.add('actief');
     });
   }
 
-  // Intakefiche: vrijgegeven na P2 én P3
-  if (p.p2 && p.p3 && tabIntakefiche.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabIntakefiche.classList.remove('slot');
-    tabIntakefiche.textContent = 'Intakefiche';
-    tabIntakefiche.classList.add('nieuw-doc');
-    tabIntakefiche.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabIntakefiche.classList.add('actief');
-      document.getElementById('panel-intakefiche').classList.add('actief');
-    });
+  // Puzzels vrijgeven op basis van voortgang
+  if (p.p1) {
+    document.getElementById('puzzel-2')?.classList.remove('verborgen');
+    document.getElementById('puzzel-3')?.classList.remove('verborgen');
   }
-
-  // Bijlage D: vrijgegeven na P4
-  if (p.p4 && tabBijlage.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabBijlage.classList.remove('slot');
-    tabBijlage.textContent = 'Bijlage D';
-    tabBijlage.classList.add('nieuw-doc');
-    tabBijlage.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabBijlage.classList.add('actief');
-      document.getElementById('panel-bijlage').classList.add('actief');
-    });
+  if (p.p4) {
+    document.getElementById('puzzel-5')?.classList.remove('verborgen');
   }
 
   // Voltooide puzzels markeren
-  if (p.p1) markeerVoltooid('puzzel-1');
-  if (p.p2) markeerVoltooid('puzzel-2');
-  if (p.p3) markeerVoltooid('puzzel-3');
-  if (p.p4) markeerVoltooid('puzzel-4');
-  if (p.p5) markeerVoltooid('puzzel-5');
+  ['p1','p2','p3','p4','p5'].forEach((nr, i) => {
+    if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
+  });
 
   if (p.p5 && !document.getElementById('einde-link')) {
   const balk = document.createElement('a');
@@ -128,6 +99,13 @@ function markeerVoltooid(id) {
   if (!blok) return;
   blok.classList.add('verborgen');
 }
+
+
+// ── Prikbord: brief omdraaien ─────────────────────────────
+function draaiOm() {
+  document.getElementById('brief-kaart')?.classList.toggle('omgedraaid');
+}
+window.draaiOm = draaiOm;
 
 
 // ── Puzzel-antwoorden controleren ─────────────────────────
@@ -156,27 +134,20 @@ function controleerAntwoord(puzzelNr, inputId, feedbackId, btnId) {
   } else {
     input.classList.add('fout');
     feedback.className = 'puzzel-feedback fout';
-    feedback.textContent = 'Niet correct. Overleg opnieuw met Speler B.';
+    feedback.textContent = 'Niet correct. Overleg opnieuw met Speler A.';
     setTimeout(() => input.classList.remove('fout'), 1500);
   }
 }
 
-document.getElementById('btn-p1').addEventListener('click', () =>
-  controleerAntwoord('p1', 'input-p1', 'feedback-p1', 'btn-p1'));
-document.getElementById('btn-p2').addEventListener('click', () =>
-  controleerAntwoord('p2', 'input-p2', 'feedback-p2', 'btn-p2'));
-document.getElementById('btn-p3').addEventListener('click', () =>
-  controleerAntwoord('p3', 'input-p3', 'feedback-p3', 'btn-p3'));
-document.getElementById('btn-p4').addEventListener('click', () =>
-  controleerAntwoord('p4', 'input-p4', 'feedback-p4', 'btn-p4'));
-document.getElementById('btn-p5').addEventListener('click', () =>
-  controleerAntwoord('p5', 'input-p5', 'feedback-p5', 'btn-p5'));
-
-// Enter werkt ook op alle inputvelden
 ['p1','p2','p3','p4','p5'].forEach(nr => {
-  document.getElementById(`input-${nr}`)?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById(`btn-${nr}`).click();
-  });
+  document.getElementById(`btn-${nr}`)
+    ?.addEventListener('click', () =>
+      controleerAntwoord(nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`));
+
+  document.getElementById(`input-${nr}`)
+    ?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
+    });
 });
 
 

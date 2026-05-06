@@ -381,7 +381,58 @@ body {
   border: 5px solid #3e2c08;
   border-radius: 3px;
   padding: 28px 24px;
-  min-height: 160px;
+  max-width: 480px;
+  min-height: 320px;        /* meer hoogte */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+/* Klein vastgespeld briefje */
+.brief-klein {
+  background: #f9f5e8;
+  padding: 10px 12px;
+  max-width: 130px;
+  box-shadow: 2px 3px 7px rgba(0,0,0,0.45);
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 11px;
+  color: #2a2010;
+  line-height: 1.75;
+  position: relative;
+}
+.brief-klein::before {
+  content: '●';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #b03020;
+  font-size: 13px;
+}
+
+/* Kassabon / factuur stijl */
+.bon-kaart {
+  background: #fffef8;
+  border: 1px solid #ddd8c0;
+  padding: 10px 12px;
+  max-width: 130px;
+  box-shadow: 2px 3px 7px rgba(0,0,0,0.4);
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: #2a2010;
+  line-height: 1.85;
+  letter-spacing: 0.03em;
+  position: relative;
+}
+.bon-kaart::before {
+  content: '●';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #607060;
+  font-size: 13px;
 }
 .brief-kaart {
   background: #f4edda;
@@ -448,4 +499,84 @@ body {
   color: var(--k-tekst-donker);
   letter-spacing: 0.15em;
   margin-bottom: 6px;
+}
+
+/* ── Inspectie polaroid board ── */
+.inspectie-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  background: #0e1510;
+  padding: 28px 24px;
+  margin: 16px 0 24px;
+  border: 1px solid var(--k-rand);
+}
+.polaroid {
+  background: #ede8d8;
+  padding: 10px 10px 32px;
+  box-shadow: 4px 5px 12px rgba(0,0,0,0.65);
+  width: 148px;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.25s, box-shadow 0.25s;
+  z-index: 1;
+}
+.polaroid:nth-child(1) { transform: rotate(-2.5deg); }
+.polaroid:nth-child(2) { transform: rotate(1.8deg);  }
+.polaroid:nth-child(3) { transform: rotate(-1deg);   }
+.polaroid:nth-child(4) { transform: rotate(2.5deg);  }
+.polaroid:nth-child(5) { transform: rotate(-1.5deg); }
+.polaroid:nth-child(6) { transform: rotate(1deg);    }
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.07);
+  box-shadow: 6px 8px 20px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+.polaroid-foto {
+  background: #b8b0a0;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  color: #6a5a4a;
+  margin-bottom: 8px;
+}
+.polaroid-label {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 11px;
+  color: #1a1008;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.polaroid-detail {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: #5a4a38;
+  line-height: 1.6;
+}
+.polaroid-uitgelicht .polaroid-foto {
+  background: #8b6914;
+  color: #f5e8c0;
+}
+
+/* ── Einde-link balk (verschijnt na p5) ── */
+.einde-link-balk {
+  display: block;
+  background: rgba(58,122,72,0.08);
+  border-bottom: 1px solid var(--k-accent);
+  padding: 11px 24px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--k-accent-licht);
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+  animation: fadeIn 0.5s ease;
+  flex-shrink: 0;
+}
+.einde-link-balk:hover {
+  background: rgba(58,122,72,0.18);
+  color: var(--k-tekst);
 }

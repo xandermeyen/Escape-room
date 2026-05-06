@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kamer 14 — Intern Rapport</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/kamer14.css" />
+  <style>
+
+    /* ══════════════════════════════════════════
+       PALET-OVERRIDE — warm perkament
+       Vervangt het donkergroene terminal-thema
+       van kamer14.css volledig voor einde.html
+    ══════════════════════════════════════════ */
+    :root {
+      --k-bg:           #f5efe0;
+      --k-bg-dark:      #1e1408;   /* systeembalk blijft donker */
+      --k-bg-panel:     #f0e8d5;
+      --k-rand:         #c8aa7a;
+      --k-rand-mid:     #d8c090;
+      --k-accent:       #8b5e1a;
+      --k-accent-licht: #c49a2a;
+      --k-tekst:        #1e1408;
+      --k-tekst-mid:    #3d2e14;
+      --k-tekst-grijs:  #7a6040;
+      --k-tekst-donker: #b09070;
+      --font:           'Special Elite', Georgia, serif;
+    }
+
+    body {
+      background-color: var(--k-bg);
+      background-image: none;     /* geen groene lijntjes */
+      color: var(--k-tekst);
+    }
+
+    /* Systeembalk: donker warm bruin */
+    .systeembalk {
+      background: var(--k-bg-dark);
+      border-bottom-color: #5a4030;
+    }
+    .sys-logo  { color: var(--k-accent-licht); }
+    .sys-sep   { color: #5a4030; }
+    .sys-case  { color: #7a6040; }
+    .sys-badge {
+      color:        var(--k-accent-licht);
+      border-color: var(--k-accent);
+    }
+
+    /* Postkaart voorkant: donker zodat hij contrasteert met de warme achtergrond */
+    .postkaart-voorkant {
+      background: #2a1f10;
+      border-color: var(--k-rand);
+    }
+    .postkaart-stad      { color: #f5efe0; }
+    .postkaart-ondertitel { color: #9a8060; }
+
+    /* Slotscherm: iets lichter dan de rest */
+    #scherm-slot { background: #faf6ee; }
+
+    /* ── Schermen ── */
+    .einde-scherm {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+      animation: fadeIn 0.5s ease;
+    }
+    .einde-scherm.actief { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Rapport form ── */
+    .rapport-wrapper {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 24px 40px;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .rapport-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--k-accent);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .rapport-org {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--k-tekst-donker);
+      line-height: 2;
+    }
+    .rapport-titel {
+      font-size: 17px;
+      color: var(--k-tekst);
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+    .rapport-stempel {
+      font-size: 10px;
+      color: var(--k-accent);
+      border: 1.5px solid var(--k-accent);
+      padding: 6px 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transform: rotate(3deg);
+      display: inline-block;
+      opacity: 0.7;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .rapport-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px 24px;
+      margin-bottom: 28px;
+      font-size: 12px;
+      color: var(--k-tekst-donker);
+      letter-spacing: 0.07em;
+    }
+    .rapport-meta span { color: var(--k-tekst-mid); }
+    .rapport-sectie-titel {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--k-tekst-donker);
+      border-bottom: 1px dashed var(--k-rand);
+      padding-bottom: 7px;
+      margin-bottom: 20px;
+    }
+    .rapport-veld {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .rapport-veld-nr {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--k-tekst-donker);
+      padding-top: 6px;
+      min-width: 22px;
+    }
+    .rapport-veld-inner { flex: 1; }
+    .rapport-veld-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--k-tekst-grijs);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .rapport-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--k-accent);
+      color: var(--k-tekst);
+      font-family: var(--font);
+      font-size: 15px;
+      padding: 4px 0;
+      letter-spacing: 0.08em;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .rapport-input:focus { border-bottom-color: var(--k-accent-licht); }
+    .rapport-input.fout  { border-bottom-color: #7a3030; }
+    .rapport-veld-fout {
+      font-size: 11px;
+      color: #7a4040;
+      margin-top: 5px;
+      letter-spacing: 0.05em;
+      display: none;
+    }
+    .rapport-actie {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-top: 1px solid var(--k-rand);
+      padding-top: 20px;
+      margin-top: 8px;
+    }
+    .rapport-validatie-bericht {
+      flex: 1;
+      font-size: 11px;
+      color: #7a4040;
+      letter-spacing: 0.06em;
+      display: none;
+    }
+    .rapport-btn {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--k-accent);
+      color: var(--k-accent-licht);
+      padding: 10px 24px;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .rapport-btn:hover:not(:disabled) { background: var(--k-accent); color: var(--k-bg); }
+    .rapport-btn:disabled { opacity: 0.4; cursor: default; }
+
+    /* ── Briefkaart scherm ── */
+    .briefkaart-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+    .briefkaart-melding {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--k-tekst-donker);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .briefkaart-melding-sub {
+      font-size: 13px;
+      color: var(--k-tekst-grijs);
+      letter-spacing: 0.06em;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    /* Flip card */
+    .postkaart-scene {
+      perspective: 900px;
+      margin-bottom: 28px;
+    }
+    .postkaart {
+      width: 360px;
+      height: 240px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s ease;
+      cursor: pointer;
+    }
+    @media (max-width: 420px) {
+      .postkaart { width: 300px; height: 200px; }
+    }
+    .postkaart.omgedraaid { transform: rotateY(180deg); }
+    .postkaart-zijde {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 2px;
+    }
+
+    /* Voorkant */
+    .postkaart-voorkant {
+      background: var(--k-bg-panel);
+      border: 1px solid var(--k-accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+    .postkaart-icoon { font-size: 32px; margin-bottom: 10px; }
+    .postkaart-stad {
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 22px;
+      color: var(--k-tekst);
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+    .postkaart-ondertitel {
+      font-size: 10px;
+      color: var(--k-tekst-donker);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .postkaart-poststempel {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      font-size: 9px;
+      border: 1px solid var(--k-accent);
+      color: var(--k-accent);
+      padding: 3px 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transform: rotate(7deg);
+      opacity: 0.55;
+    }
+
+    /* Achterkant */
+    .postkaart-achterkant {
+      background: #f4edda;
+      transform: rotateY(180deg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .postkaart-scheidslijn {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 38%;
+      width: 1px;
+      background: rgba(0,0,0,0.1);
+    }
+    .postkaart-tekst {
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 11.5px;
+      color: #2a2010;
+      line-height: 1.85;
+      padding-right: 42%;
+    }
+    .postkaart-handtekening {
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 12px;
+      color: #2a2010;
+      text-align: right;
+      padding-right: 42%;
+      margin-top: 6px;
+    }
+
+    .briefkaart-hint {
+      font-size: 10px;
+      color: var(--k-tekst-donker);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 24px;
+      transition: opacity 0.3s;
+    }
+    .briefkaart-verder-btn {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--k-accent);
+      color: var(--k-accent-licht);
+      padding: 10px 24px;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background 0.2s, color 0.2s;
+      display: none;
+    }
+    .briefkaart-verder-btn:hover { background: var(--k-accent); color: var(--k-bg); }
+
+    /* ── Slotscherm ── */
+    .slot-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      width: 100%;
+    }
+    .slot-logo { margin-bottom: 32px; opacity: 0.55; }
+    .slot-divider {
+      width: 36px;
+      height: 1px;
+      background: var(--k-accent);
+      margin: 20px auto;
+    }
+    .slot-hoofdtekst {
+      font-size: 14px;
+      color: var(--k-tekst-mid);
+      line-height: 1.95;
+      margin-bottom: 4px;
+    }
+    .slot-credit {
+      font-size: 12px;
+      color: var(--k-tekst-grijs);
+      letter-spacing: 0.06em;
+      line-height: 1.85;
+    }
+    .slot-link {
+      color: var(--k-accent-licht);
+      text-decoration: none;
+      border-bottom: 1px solid var(--k-accent);
+      padding-bottom: 1px;
+      transition: color 0.2s;
+    }
+    .slot-link:hover { color: var(--k-tekst); }
+    .slot-bureau {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--k-tekst-donker);
+      margin-top: 40px;
+    }
+    .slot-terug-btn {
+      margin-top: 16px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--k-tekst-donker);
+      color: var(--k-tekst-donker);
+      padding: 3px 0;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .slot-terug-btn:hover { color: var(--k-accent-licht); border-color: var(--k-accent); }
+
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       SCHERM 1 — RAPPORT INDIENEN
+  ══════════════════════════════════════════ -->
+  <div id="scherm-rapport" class="einde-scherm actief">
+
+    <div class="systeembalk">
+      <div style="display:flex;align-items:center;">
+        <span class="sys-logo">Bureau X</span>
+        <span class="sys-sep">|</span>
+        <span class="sys-case" id="sys-case-rapport">Intern rapport · laden…</span>
+      </div>
+      <div class="sys-rechts">
+        <span class="sys-badge">Rapport</span>
+      </div>
+    </div>
+
+    <div class="rapport-wrapper">
+
+      <div class="rapport-header">
+        <div>
+          <div class="rapport-org">
+            OPZ Geel — Afdeling gezinsverpleging<br>
+            Intern onderzoeksrapport · Ref. OPZ-2026-0506-LB
+          </div>
+          <div class="rapport-titel">Locatiebepaling kostganger</div>
+        </div>
+        <div class="rapport-stempel">Vertrouwelijk</div>
+      </div>
+
+      <div class="rapport-meta">
+        <div>Dossierhouder:&nbsp;<span>Bogaert, Lena M.</span></div>
+        <div>Datum verdwijning:&nbsp;<span>di. 6 mei 2026</span></div>
+        <div>Gastgezin:&nbsp;<span>Martens-Peeters, Geel</span></div>
+        <div>Sessie:&nbsp;<span id="rapport-sessie-label">—</span></div>
+      </div>
+
+      <div class="rapport-sectie-titel">Bevindingen onderzoekers</div>
+
+      <!-- Veld 01 -->
+      <div class="rapport-veld">
+        <div class="rapport-veld-nr">01</div>
+        <div class="rapport-veld-inner">
+          <div class="rapport-veld-label">Bestemming van de kostganger</div>
+          <input class="rapport-input" id="r-bestemming"
+            placeholder="stad of locatie…" maxlength="40" autocomplete="off" />
+          <div class="rapport-veld-fout" id="fout-bestemming">
+            Kijk naar de tekening en het vrijetijdsmateriaal — welke stad herkende je?
+          </div>
+        </div>
+      </div>
+
+      <!-- Veld 02 -->
+      <div class="rapport-veld">
+        <div class="rapport-veld-nr">02</div>
+        <div class="rapport-veld-inner">
+          <div class="rapport-veld-label">Persoon die ze opzocht</div>
+          <input class="rapport-input" id="r-wie"
+            placeholder="voor- en achternaam…" maxlength="40" autocomplete="off" />
+          <div class="rapport-veld-fout" id="fout-wie">
+            Combineer de intakefiche (Speler A) met de onafgemaakte brief (Speler B).
+          </div>
+        </div>
+      </div>
+
+      <!-- Veld 03 -->
+      <div class="rapport-veld">
+        <div class="rapport-veld-nr">03</div>
+        <div class="rapport-veld-inner">
+          <div class="rapport-veld-label">Vervoermiddel</div>
+          <input class="rapport-input" id="r-vervoer"
+            placeholder="wijze van verplaatsing…" maxlength="60" autocomplete="off" />
+          <div class="rapport-veld-fout" id="fout-vervoer">
+            Vul het vervoermiddel in (hint: prullenmand kamer Speler B).
+          </div>
+        </div>
+      </div>
+
+      <!-- Veld 04 -->
+      <div class="rapport-veld">
+        <div class="rapport-veld-nr">04</div>
+        <div class="rapport-veld-inner">
+          <div class="rapport-veld-label">Vertrektijdstip (uu:mm)</div>
+          <input class="rapport-input" id="r-tijdstip"
+            placeholder="07:35" maxlength="10" autocomplete="off" />
+          <div class="rapport-veld-fout" id="fout-tijdstip">
+            Vergelijk de dienstregeling lijn 19 (Speler A) met het logboekmoment van Speler B.
+          </div>
+        </div>
+      </div>
+
+      <div class="rapport-actie">
+        <div class="rapport-validatie-bericht" id="rapport-validatie-bericht">
+          <i class="bi bi-exclamation-triangle me-1"></i>Controleer de gemarkeerde velden.
+        </div>
+        <button class="rapport-btn" id="btn-indienen">
+          <i class="bi bi-check2-square me-2"></i>Rapport indienen
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       SCHERM 2 — BRIEFKAART REVEAL
+  ══════════════════════════════════════════ -->
+  <div id="scherm-briefkaart" class="einde-scherm">
+
+    <div class="systeembalk">
+      <div style="display:flex;align-items:center;">
+        <span class="sys-logo">Bureau X</span>
+        <span class="sys-sep">|</span>
+        <span class="sys-case">Ref. OPZ-2026-0506-LB · Rapport ingediend</span>
+      </div>
+      <div class="sys-rechts">
+        <span class="sys-badge" style="color:var(--k-accent-licht);border-color:var(--k-accent);">Dossier gesloten</span>
+      </div>
+    </div>
+
+    <div class="briefkaart-wrapper">
+      <div class="briefkaart-melding">Donderdag 8 mei 2026</div>
+      <div class="briefkaart-melding-sub">
+        Een briefkaart is gearriveerd bij het gastgezin Martens.
+      </div>
+
+      <div class="postkaart-scene">
+        <div class="postkaart" id="postkaart">
+
+          <!-- Voorkant -->
+          <div class="postkaart-zijde postkaart-voorkant">
+            <div class="postkaart-icoon">⛪</div>
+            <div class="postkaart-stad">Diest</div>
+            <div class="postkaart-ondertitel">Grote Markt · Sint-Sulpitiuskerk</div>
+            <div class="postkaart-poststempel">Di. 6 mei</div>
+          </div>
+
+          <!-- Achterkant -->
+          <div class="postkaart-zijde postkaart-achterkant">
+            <div class="postkaart-scheidslijn"></div>
+            <div class="postkaart-tekst">
+              Lieve Katrijn en kinderen,<br><br>
+              Ik heb Marie gevonden. Ze woont boven een bloemenzaak. We hebben thee gedronken en ze huilde een beetje. Ik ook.<br><br>
+              Ik kom donderdag terug voor het ontbijt. Ik heb de sleutel bij mij.
+            </div>
+            <div class="postkaart-handtekening">— Lena</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="briefkaart-hint" id="briefkaart-hint">
+        Klik op de briefkaart om ze om te draaien
+      </div>
+
+      <button class="briefkaart-verder-btn" id="btn-sluit-dossier">
+        <i class="bi bi-archive me-2"></i>Sluit het dossier
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       SCHERM 3 — SLOTSCHERM & CREDITS
+  ══════════════════════════════════════════ -->
+  <div id="scherm-slot" class="einde-scherm">
+
+    <div class="systeembalk" style="justify-content:center;">
+      <span class="sys-logo">Bureau X · Kamer 14</span>
+    </div>
+
+    <div class="slot-wrapper">
+      <img src="../assets/img/bureau_x_logo.svg" alt="Bureau X" height="34" class="slot-logo" />
+
+      <div class="slot-divider"></div>
+
+      <p class="slot-hoofdtekst">
+        De gezinsverpleging van Geel bestaat al meer dan zeven eeuwen
+        en is uniek in de wereld. Vandaag wonen nog steeds ongeveer
+        tweehonderd mensen als volwaardig gezinslid bij Geelse families,
+        begeleid door het OPZ Geel.
+      </p>
+
+      <p class="slot-credit">
+        Lena Bogaert is een fictief personage.<br>
+        De traditie, de stad, het OPZ en De Lijn zijn echt.
+      </p>
+
+      <div class="slot-divider"></div>
+
+      <p class="slot-credit" style="margin-top:16px;">
+        Meer informatie:<br>
+        <a href="https://www.opzgeel.be" target="_blank" class="slot-link">opzgeel.be</a>
+        &nbsp;·&nbsp;
+        <a href="https://www.delijn.be" target="_blank" class="slot-link">delijn.be</a>
+        &nbsp;·&nbsp;
+        <a href="https://www.sint-dymphna.be" target="_blank" class="slot-link">sint-dymphna.be</a>
+      </p>
+
+      <div class="slot-bureau">Een Bureau X–experience</div>
+
+      <button class="slot-terug-btn" id="btn-terug-lobby">
+        ← Terug naar de website
+      </button>
+    </div>
+
+  </div>
+
+
+  <script type="module" src="js/einde.js"></script>
+</body>
+</html>
