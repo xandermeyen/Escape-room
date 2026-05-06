@@ -1,8 +1,11 @@
 import { luisterNaarStatus, puzzelVoltooid } from './session.js';
 import { volgendHint } from './utils.js';
-import { startAchtergrond, speelUnlock } from './audio.js';
+import { startAchtergrond, speelUnlock, speelStem } from './audio.js';
 
-let _audioGestart = false;
+let _audioGestart     = false;
+let _notitiesGespeeld = false;
+let _atelierGespeeld  = false;
+
 function zorgVoorAudio() {
   if (_audioGestart) return;
   _audioGestart = true;
@@ -30,6 +33,13 @@ document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('actief'));
     tab.classList.add('actief');
     document.getElementById(`panel-${doel}`)?.classList.add('actief');
+
+    // Voice line: Dossiernotities — speelt één keer bij eerste opening
+    if (doel === 'notities' && !_notitiesGespeeld) {
+      _notitiesGespeeld = true;
+      zorgVoorAudio();
+      speelStem('an-vermeersch', 'notitie-1');
+    }
   });
 });
 
@@ -73,6 +83,13 @@ function updateTabs(p) {
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
       tabAtelier.classList.add('actief');
       document.getElementById('panel-atelier').classList.add('actief');
+
+      // Voice lines: Atelier — notitie-2 gevolgd door notitie-3
+      if (!_atelierGespeeld) {
+        _atelierGespeeld = true;
+        const a2 = speelStem('an-vermeersch', 'notitie-2');
+        a2.addEventListener('ended', () => speelStem('an-vermeersch', 'notitie-3'));
+      }
     });
   }
 

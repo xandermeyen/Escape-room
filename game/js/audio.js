@@ -190,7 +190,7 @@ export function stopAchtergrond() {
  * Geeft het HTMLAudioElement terug zodat je .pause() kunt aanroepen.
  */
 export function speelStem(karakter, fragment) {
-  const audio = new Audio(`../audio/stemmen/${karakter}/${fragment}.mp3`);
+  const audio = new Audio(`audio/stemmen/${karakter}/${fragment}.mp3`);
   audio.volume = 0.85;
   audio.play().catch(() => {});
   return audio;

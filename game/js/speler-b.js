@@ -1,8 +1,10 @@
 import { luisterNaarStatus, puzzelVoltooid } from './session.js';
 import { volgendHint } from './utils.js';
-import { startAchtergrond, speelUnlock } from './audio.js';
+import { startAchtergrond, speelUnlock, speelStem } from './audio.js';
 
-let _audioGestart = false;
+let _audioGestart    = false;
+let _logboekGespeeld = false;
+
 function zorgVoorAudio() {
   if (_audioGestart) return;
   _audioGestart = true;
@@ -30,6 +32,14 @@ document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('actief'));
     tab.classList.add('actief');
     document.getElementById(`panel-${doel}`)?.classList.add('actief');
+
+    // Voice lines: Logboek — logboek-1 gevolgd door logboek-2
+    if (doel === 'logboek' && !_logboekGespeeld) {
+      _logboekGespeeld = true;
+      zorgVoorAudio();
+      const a1 = speelStem('katrijn', 'logboek-1');
+      a1.addEventListener('ended', () => speelStem('katrijn', 'logboek-2'));
+    }
   });
 });
 
