@@ -60,11 +60,6 @@ tmp/
 # Logs
 *.log
 
-# ─── Audio & media ───────────────────────────────────────────────────────────
-
-game/audio/stemmen/an-vermeersch/
-game/audio/stemmen/katrijn/
-game/audio/stemmen/lena/
 
 # ─── Node / npm / pnpm ───────────────────────────────────────────────────────
 
