@@ -560,3 +560,23 @@ body {
   background: #8b6914;
   color: #f5e8c0;
 }
+
+/* ── Einde-link balk (verschijnt na p5) ── */
+.einde-link-balk {
+  display: block;
+  background: rgba(58,122,72,0.08);
+  border-bottom: 1px solid var(--k-accent);
+  padding: 11px 24px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--k-accent-licht);
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+  animation: fadeIn 0.5s ease;
+  flex-shrink: 0;
+}
+.einde-link-balk:hover {
+  background: rgba(58,122,72,0.18);
+  color: var(--k-tekst);
+}

@@ -1,5 +1,13 @@
 import { luisterNaarStatus, puzzelVoltooid } from './session.js';
 import { volgendHint } from './utils.js';
+import { startAchtergrond, speelUnlock } from './audio.js';
+
+let _audioGestart = false;
+function zorgVoorAudio() {
+  if (_audioGestart) return;
+  _audioGestart = true;
+  startAchtergrond('a');
+}
 
 // Sessie ophalen uit URL
 const params  = new URLSearchParams(window.location.search);
@@ -54,7 +62,9 @@ function updateTabs(p) {
   const tabBijlage    = document.getElementById('tab-bijlage');
 
   // Atelier: vrijgegeven na P1
-  if (p.p1 && tabAtelier.classList.contains('slot')) {
+ if (p.p1 && tabAtelier.classList.contains('slot')) {
+    zorgVoorAudio();
+    speelUnlock();
     tabAtelier.classList.remove('slot');
     tabAtelier.textContent = 'Atelier';
     tabAtelier.classList.add('nieuw-doc');
@@ -68,6 +78,8 @@ function updateTabs(p) {
 
   // Intakefiche: vrijgegeven na P2 én P3
   if (p.p2 && p.p3 && tabIntakefiche.classList.contains('slot')) {
+    zorgVoorAudio();
+    speelUnlock();
     tabIntakefiche.classList.remove('slot');
     tabIntakefiche.textContent = 'Intakefiche';
     tabIntakefiche.classList.add('nieuw-doc');
@@ -81,6 +93,8 @@ function updateTabs(p) {
 
   // Bijlage D: vrijgegeven na P4
   if (p.p4 && tabBijlage.classList.contains('slot')) {
+    zorgVoorAudio();
+    speelUnlock();
     tabBijlage.classList.remove('slot');
     tabBijlage.textContent = 'Bijlage D';
     tabBijlage.classList.add('nieuw-doc');
@@ -98,6 +112,15 @@ function updateTabs(p) {
   if (p.p3) markeerVoltooid('puzzel-3');
   if (p.p4) markeerVoltooid('puzzel-4');
   if (p.p5) markeerVoltooid('puzzel-5');
+
+  if (p.p5 && !document.getElementById('einde-link')) {
+  const balk = document.createElement('a');
+  balk.id        = 'einde-link';
+  balk.href      = `einde.html?sessie=${sessie}`;
+  balk.className = 'einde-link-balk';
+  balk.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
+  document.querySelector('.tabs').insertAdjacentElement('afterend', balk);
+}
 }
 
 function markeerVoltooid(id) {

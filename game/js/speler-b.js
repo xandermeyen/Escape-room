@@ -1,5 +1,13 @@
 import { luisterNaarStatus, puzzelVoltooid } from './session.js';
 import { volgendHint } from './utils.js';
+import { startAchtergrond, speelUnlock } from './audio.js';
+
+let _audioGestart = false;
+function zorgVoorAudio() {
+  if (_audioGestart) return;
+  _audioGestart = true;
+  startAchtergrond('b');
+}
 
 // Sessie ophalen uit URL
 const params = new URLSearchParams(window.location.search);
@@ -49,6 +57,8 @@ function updateTabs(p) {
 
   // Kamerinspectie: vrijgegeven na P2 én P3
   if (p.p2 && p.p3 && tabKamer.classList.contains('slot')) {
+    zorgVoorAudio();
+    speelUnlock();
     tabKamer.classList.remove('slot');
     tabKamer.textContent = 'Kamerinspectie';
     tabKamer.classList.add('nieuw-doc');
@@ -73,6 +83,15 @@ function updateTabs(p) {
   ['p1','p2','p3','p4','p5'].forEach((nr, i) => {
     if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
   });
+
+  if (p.p5 && !document.getElementById('einde-link')) {
+  const balk = document.createElement('a');
+  balk.id        = 'einde-link';
+  balk.href      = `einde.html?sessie=${sessie}`;
+  balk.className = 'einde-link-balk';
+  balk.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
+  document.querySelector('.tabs').insertAdjacentElement('afterend', balk);
+}
 }
 
 function markeerVoltooid(id) {
