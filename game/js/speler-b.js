@@ -3,8 +3,6 @@ import { volgendHint } from './utils.js';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelBriefkaartStem } from './audio.js';
 import { initialiseerTimer } from './timer.js';
 
-initialiseerTimer(sessieCode);
-
 let _audioGestart = false;
 
 // Bijhouden welke puzzels al een fragment getriggerd hebben
@@ -28,6 +26,9 @@ const sessie = params.get('sessie');
 if (!sessie) {
   window.location.href = 'index.html';
 }
+
+// Timer starten (na sessie-definitie)
+initialiseerTimer(sessie);
 
 // Casenummer tonen in systeembalk
 document.getElementById('sys-case').textContent =
