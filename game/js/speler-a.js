@@ -1,10 +1,16 @@
 import { luisterNaarStatus, puzzelVoltooid } from './session.js';
 import { volgendHint } from './utils.js';
-import { startAchtergrond, speelUnlock, speelStem } from './audio.js';
+import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.js';
 
-let _audioGestart     = false;
-let _notitiesGespeeld = false;
-let _atelierGespeeld  = false;
+let _audioGestart = false;
+
+// Bijhouden welke puzzels al een fragment getriggerd hebben
+const _fragmentenAfgespeeld = new Set();
+
+// Fragmenten alleen spelen voor puzzels die tijdens DEZE sessie opgelost worden,
+// niet voor puzzels die al opgelost waren vóór het laden van de pagina.
+const _paginaLaadtijd = Date.now();
+const WACHT_NA_LADEN  = 4000; // ms — Firebase-initiële snapshot duurt doorgaans < 2 s
 
 function zorgVoorAudio() {
   if (_audioGestart) return;
@@ -13,8 +19,8 @@ function zorgVoorAudio() {
 }
 
 // Sessie ophalen uit URL
-const params  = new URLSearchParams(window.location.search);
-const sessie  = params.get('sessie');
+const params = new URLSearchParams(window.location.search);
+const sessie = params.get('sessie');
 
 if (!sessie) {
   window.location.href = 'index.html';
@@ -28,25 +34,19 @@ document.getElementById('sys-case').textContent =
 // ── Tabnavigatie ──────────────────────────────────────────
 document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
   tab.addEventListener('click', () => {
+    zorgVoorAudio();
     const doel = tab.dataset.tab;
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('actief'));
     tab.classList.add('actief');
     document.getElementById(`panel-${doel}`)?.classList.add('actief');
-
-    // Voice line: Dossiernotities — speelt één keer bij eerste opening
-    if (doel === 'notities' && !_notitiesGespeeld) {
-      _notitiesGespeeld = true;
-      zorgVoorAudio();
-      speelStem('an-vermeersch', 'notitie-1');
-    }
   });
 });
 
 
 // ── Voortgangsbalk bijwerken ──────────────────────────────
 function updateVoortgang(p) {
-  const stappen = ['vp1','vp2','vp3','vp4','vp5'];
+  const stappen  = ['vp1','vp2','vp3','vp4','vp5'];
   const voltooid = [p.p1, p.p2, p.p3, p.p4, p.p5];
   const aantalKlaar = voltooid.filter(Boolean).length;
 
@@ -54,42 +54,32 @@ function updateVoortgang(p) {
     const el = document.getElementById(id);
     if (!el) return;
     el.className = 'vp-stap';
-    if (voltooid[i]) {
-      el.classList.add('vp-klaar');
-    } else if (i === aantalKlaar) {
-      el.classList.add('vp-bezig');
-    } else {
-      el.classList.add('vp-open');
-    }
+    if (voltooid[i])            el.classList.add('vp-klaar');
+    else if (i === aantalKlaar) el.classList.add('vp-bezig');
+    else                        el.classList.add('vp-open');
   });
 }
 
 
-// ── Tabs vrijgeven op basis van Firebase status ───────────
+// ── Tabs vrijgeven op basis van Firebase-status ───────────
 function updateTabs(p) {
-  const tabAtelier    = document.getElementById('tab-atelier');
+  const tabAtelier     = document.getElementById('tab-atelier');
   const tabIntakefiche = document.getElementById('tab-intakefiche');
-  const tabBijlage    = document.getElementById('tab-bijlage');
+  const tabBijlage     = document.getElementById('tab-bijlage');
 
   // Atelier: vrijgegeven na P1
- if (p.p1 && tabAtelier.classList.contains('slot')) {
+  if (p.p1 && tabAtelier.classList.contains('slot')) {
     zorgVoorAudio();
     speelUnlock();
     tabAtelier.classList.remove('slot');
     tabAtelier.textContent = 'Atelier';
     tabAtelier.classList.add('nieuw-doc');
     tabAtelier.addEventListener('click', () => {
+      zorgVoorAudio();
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
       tabAtelier.classList.add('actief');
       document.getElementById('panel-atelier').classList.add('actief');
-
-      // Voice lines: Atelier — notitie-2 gevolgd door notitie-3
-      if (!_atelierGespeeld) {
-        _atelierGespeeld = true;
-        const a2 = speelStem('an-vermeersch', 'notitie-2');
-        a2.addEventListener('ended', () => speelStem('an-vermeersch', 'notitie-3'));
-      }
     });
   }
 
@@ -101,6 +91,7 @@ function updateTabs(p) {
     tabIntakefiche.textContent = 'Intakefiche';
     tabIntakefiche.classList.add('nieuw-doc');
     tabIntakefiche.addEventListener('click', () => {
+      zorgVoorAudio();
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
       tabIntakefiche.classList.add('actief');
@@ -116,6 +107,7 @@ function updateTabs(p) {
     tabBijlage.textContent = 'Bijlage D';
     tabBijlage.classList.add('nieuw-doc');
     tabBijlage.addEventListener('click', () => {
+      zorgVoorAudio();
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
       tabBijlage.classList.add('actief');
@@ -123,21 +115,44 @@ function updateTabs(p) {
     });
   }
 
-  // Voltooide puzzels markeren
-  if (p.p1) markeerVoltooid('puzzel-1');
-  if (p.p2) markeerVoltooid('puzzel-2');
-  if (p.p3) markeerVoltooid('puzzel-3');
-  if (p.p4) markeerVoltooid('puzzel-4');
-  if (p.p5) markeerVoltooid('puzzel-5');
+  // ── Verhaalfragmenten na puzzeloplossing ─────────────────
+  // Speelt een random fragment van An Vermeersch na elke nieuw opgeloste puzzel.
+  // Alleen voor puzzels die tijdens DEZE sessie opgelost werden (niet bij pagina laden).
+  ['p1','p2','p3','p4','p5'].forEach(nr => {
+    if (p[nr] && !_fragmentenAfgespeeld.has(nr)) {
+      _fragmentenAfgespeeld.add(nr);
+      if (Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
+        zorgVoorAudio();
+        speelVerhaalFragment('a', nr);
+      }
+    }
+  });
 
+  // Voltooide puzzels markeren als verborgen
+  ['p1','p2','p3','p4','p5'].forEach((nr, i) => {
+    if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
+  });
+
+  // Lena's stem als allerlaatste afsluiter — speelt na het verhaal-p5 fragment
+  if (p.p5 && !_fragmentenAfgespeeld.has('lena-slot') && Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
+    _fragmentenAfgespeeld.add('lena-slot');
+    setTimeout(() => {
+      zorgVoorAudio();
+      const audio = new Audio('audio/lena/briefkaart.mp3');
+      audio.volume = 0.88;
+      audio.play().catch(() => {});
+    }, 6000); // wacht tot verhaal-p5 uitgespeeld is
+  }
+
+  // Eindelink tonen als alle puzzels opgelost zijn
   if (p.p5 && !document.getElementById('einde-link')) {
-  const balk = document.createElement('a');
-  balk.id        = 'einde-link';
-  balk.href      = `einde.html?sessie=${sessie}`;
-  balk.className = 'einde-link-balk';
-  balk.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
-  document.querySelector('.tabs').insertAdjacentElement('afterend', balk);
-}
+    const balk     = document.createElement('a');
+    balk.id        = 'einde-link';
+    balk.href      = `einde.html?sessie=${sessie}`;
+    balk.className = 'einde-link-balk';
+    balk.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
+    document.querySelector('.tabs').insertAdjacentElement('afterend', balk);
+  }
 }
 
 function markeerVoltooid(id) {
@@ -166,33 +181,24 @@ function controleerAntwoord(puzzelNr, inputId, feedbackId, btnId) {
 
   if (antwoorden[puzzelNr].includes(waarde)) {
     input.classList.remove('fout');
-    feedback.className = 'puzzel-feedback correct';
+    feedback.className   = 'puzzel-feedback correct';
     feedback.textContent = 'Correct — Firebase wordt bijgewerkt…';
     btn.disabled = true;
     puzzelVoltooid(sessie, parseInt(puzzelNr.replace('p', '')));
   } else {
     input.classList.add('fout');
-    feedback.className = 'puzzel-feedback fout';
+    feedback.className   = 'puzzel-feedback fout';
     feedback.textContent = 'Niet correct. Overleg opnieuw met Speler B.';
     setTimeout(() => input.classList.remove('fout'), 1500);
   }
 }
 
-document.getElementById('btn-p1').addEventListener('click', () =>
-  controleerAntwoord('p1', 'input-p1', 'feedback-p1', 'btn-p1'));
-document.getElementById('btn-p2').addEventListener('click', () =>
-  controleerAntwoord('p2', 'input-p2', 'feedback-p2', 'btn-p2'));
-document.getElementById('btn-p3').addEventListener('click', () =>
-  controleerAntwoord('p3', 'input-p3', 'feedback-p3', 'btn-p3'));
-document.getElementById('btn-p4').addEventListener('click', () =>
-  controleerAntwoord('p4', 'input-p4', 'feedback-p4', 'btn-p4'));
-document.getElementById('btn-p5').addEventListener('click', () =>
-  controleerAntwoord('p5', 'input-p5', 'feedback-p5', 'btn-p5'));
-
-// Enter werkt ook op alle inputvelden
 ['p1','p2','p3','p4','p5'].forEach(nr => {
+  document.getElementById(`btn-${nr}`)?.addEventListener('click', () =>
+    controleerAntwoord(nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`));
+
   document.getElementById(`input-${nr}`)?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById(`btn-${nr}`).click();
+    if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
   });
 });
 
