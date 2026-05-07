@@ -1,7 +1,4 @@
 <div align="center">
-
-<img src="./assets/banner.svg" alt="Bureau X Escape Rooms Banner" width="100%" />
-
 <br />
 <br />
 
