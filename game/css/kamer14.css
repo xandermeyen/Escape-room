@@ -473,32 +473,9 @@ body {
 
 /* ── Dagpas / ticket ── */
 .dagpas {
-  position: relative;
-  border: 1.5px dashed var(--k-tekst-donker);
-  padding: 14px 18px 12px;
   margin: 16px 0;
-  font-size: 12px;
-  color: var(--k-tekst-grijs);
-  letter-spacing: 0.07em;
-  line-height: 1.95;
-  background: rgba(58,122,72,0.03);
-}
-.dagpas::before {
-  content: 'BON / TICKET';
-  position: absolute;
-  top: -8px;
-  left: 14px;
-  background: var(--k-bg-panel);
-  font-size: 9px;
-  padding: 0 6px;
-  letter-spacing: 0.2em;
-  color: var(--k-tekst-donker);
-}
-.dagpas-nr {
-  font-size: 10px;
-  color: var(--k-tekst-donker);
-  letter-spacing: 0.15em;
-  margin-bottom: 6px;
+  display: flex;
+  justify-content: center;
 }
 
 /* ── Inspectie polaroid board ── */

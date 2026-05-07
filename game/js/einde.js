@@ -1,5 +1,5 @@
 import { luisterNaarRapport, diendRapportIn } from './session.js';
-import { speelBriefkaart, speelStem } from './audio.js';
+import { speelStem } from './audio.js';
 
 // ── Sessie ophalen ────────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
@@ -112,8 +112,6 @@ document.getElementById('postkaart').addEventListener('click', () => {
   document.getElementById('postkaart').classList.toggle('omgedraaid', omgedraaid);
 
   if (omgedraaid) {
-    speelBriefkaart();
-    // Optioneel: Lena leest de briefkaart voor (zodra het bestand bestaat)
     speelStem('lena', 'briefkaart');
   }
 

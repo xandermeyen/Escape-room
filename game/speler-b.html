@@ -8,6 +8,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="../assets/img/bureau_x_favicon.svg" />
   <link rel="stylesheet" href="css/kamer14.css" />
+  <style>
+    /* Buurtdossier — warm huiselijk palet, overschrijft het klinische groen van het OPZ-dossier */
+    :root {
+      --k-bg:           #1c1510;
+      --k-bg-dark:      #120e09;
+      --k-bg-panel:     #201912;
+      --k-rand:         #3d2a18;
+      --k-rand-mid:     #4e3822;
+      --k-accent:       #8c6535;
+      --k-accent-licht: #c49040;
+      --k-tekst:        #e5d4b0;
+      --k-tekst-mid:    #b09060;
+      --k-tekst-grijs:  #7a5830;
+      --k-tekst-donker: #5a3e20;
+    }
+    body {
+      background-image: repeating-linear-gradient(
+        0deg, transparent, transparent 28px,
+        rgba(160,100,30,0.04) 28px, rgba(160,100,30,0.04) 29px
+      );
+    }
+  </style>
 </head>
 <body>
 
@@ -202,12 +224,122 @@
   <tr style="color:var(--k-accent-licht)"><td>12 mei</td><td>€0</td><td style="font-size:11px;">⚠ niet betaald</td></tr>
 </table>
 
-      <div class="dagpas">
-        <div class="dagpas-nr">BON #2026-0317 · Persoonlijk vervoer kostganger</div>
-        De Lijn — Dagticket (app-aankoop)<br>
-        Traject: Geel Markt → Diest Grote Markt<br>
-        Datum: 17 maart 2026<br>
-        Bedrag: €6,00
+      <div style="margin:20px 0;padding:16px 14px 20px;border:1px dashed var(--k-rand-mid);background:rgba(160,100,30,0.05);">
+        <div style="font-size:9px;color:var(--k-tekst-grijs);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">
+          <i class="bi bi-trash3" style="font-size:10px;margin-right:5px;"></i>Aangetroffen in prullenmand — kamer Lena Bogaert · kamerinspectie 6 mei 2026
+        </div>
+        <div style="display:flex;justify-content:center;">
+          <div style="transform:rotate(-4deg);display:inline-block;">
+        <svg viewBox="0 0 260 430" width="220" style="display:block;filter:drop-shadow(2px 3px 8px rgba(0,0,0,0.28));">
+          <!-- Paper background -->
+          <rect x="0" y="0" width="260" height="430" rx="5" fill="#f9f7f1"/>
+          <!-- Red header -->
+          <rect x="0" y="0" width="260" height="72" rx="5" fill="#E3001B"/>
+          <rect x="0" y="58" width="260" height="14" fill="#E3001B"/>
+          <!-- De Lijn branding -->
+          <text x="16" y="33" fill="white" font-family="'Arial Black',Arial,sans-serif" font-size="22" font-weight="900">De Lijn</text>
+          <text x="16" y="52" fill="rgba(255,255,255,0.75)" font-family="Arial,sans-serif" font-size="9.5" letter-spacing="0.3">Openbaar vervoer Vlaanderen</text>
+          <!-- DAGPAS chip -->
+          <rect x="184" y="12" width="60" height="20" rx="3" fill="rgba(255,255,255,0.22)"/>
+          <text x="214" y="25.5" fill="white" font-family="Arial,sans-serif" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="1.2">DAGPAS</text>
+          <!-- Perforation holes + line -->
+          <circle cx="0" cy="72" r="8" fill="#f9f7f1"/>
+          <circle cx="260" cy="72" r="8" fill="#f9f7f1"/>
+          <line x1="8" y1="72" x2="252" y2="72" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+          <!-- DAGPAS title in body -->
+          <text x="130" y="108" fill="#1a1a1a" font-family="'Arial Black',Arial,sans-serif" font-size="24" font-weight="900" text-anchor="middle" letter-spacing="3">DAGPAS</text>
+          <text x="130" y="124" fill="#888" font-family="Arial,sans-serif" font-size="9.5" text-anchor="middle" letter-spacing="0.3">Onbeperkt reizen · 1 dag · Heel Vlaanderen</text>
+          <!-- Divider 1 -->
+          <line x1="16" y1="136" x2="244" y2="136" stroke="#e0ddd6" stroke-width="0.7" stroke-dasharray="3,2"/>
+          <!-- Date -->
+          <text x="16" y="155" fill="#aaa" font-family="Arial,sans-serif" font-size="8" letter-spacing="0.8">GELDIG OP</text>
+          <text x="16" y="173" fill="#1a1a1a" font-family="Arial,sans-serif" font-size="15" font-weight="700">di 6 mei 2026</text>
+          <!-- Price -->
+          <text x="244" y="155" fill="#aaa" font-family="Arial,sans-serif" font-size="8" text-anchor="end" letter-spacing="0.8">BEDRAG</text>
+          <text x="244" y="173" fill="#E3001B" font-family="'Arial Black',Arial,sans-serif" font-size="18" font-weight="900" text-anchor="end">€ 9,00</text>
+          <!-- Divider 2 -->
+          <line x1="16" y1="185" x2="244" y2="185" stroke="#e0ddd6" stroke-width="0.7" stroke-dasharray="3,2"/>
+          <!-- Network + purchase -->
+          <text x="16" y="202" fill="#aaa" font-family="Arial,sans-serif" font-size="8" letter-spacing="0.8">GELDIG OP</text>
+          <text x="16" y="217" fill="#1a1a1a" font-family="Arial,sans-serif" font-size="12">Alle De Lijn-voertuigen</text>
+          <text x="244" y="202" fill="#aaa" font-family="Arial,sans-serif" font-size="8" text-anchor="end" letter-spacing="0.8">GEKOCHT VIA</text>
+          <text x="244" y="217" fill="#1a1a1a" font-family="Arial,sans-serif" font-size="11" text-anchor="end">App De Lijn</text>
+          <text x="244" y="231" fill="#888" font-family="Arial,sans-serif" font-size="9" text-anchor="end">05:47 · 6 mei 2026</text>
+          <!-- Divider before barcode -->
+          <line x1="16" y1="248" x2="244" y2="248" stroke="#e0ddd6" stroke-width="0.7"/>
+          <text x="130" y="264" fill="#bbb" font-family="Arial,sans-serif" font-size="8" text-anchor="middle" letter-spacing="0.5">VERIFICATIECODE</text>
+          <!-- Barcode bars -->
+          <rect x="20" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="24" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="27" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="31" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="36" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="39" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="42" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="46" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="49" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="54" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="57" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="61" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="64" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="67" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="72" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="76" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="79" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="82" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="87" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="90" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="94" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="97" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="100" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="105" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="109" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="112" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="115" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="119" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="122" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="127" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="130" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="134" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="139" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="142" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="145" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="149" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="152" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="157" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="161" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="164" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="167" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="171" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="174" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="179" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="182" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="186" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="189" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="192" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="197" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="200" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="204" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="207" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="212" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="215" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="219" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="222" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="225" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <rect x="229" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="232" y="270" width="3" height="55" fill="#1a1a1a"/>
+          <rect x="237" y="270" width="1" height="55" fill="#1a1a1a"/>
+          <rect x="240" y="270" width="2" height="55" fill="#1a1a1a"/>
+          <!-- Barcode number -->
+          <text x="130" y="342" fill="#888" font-family="'Courier New',monospace" font-size="9" text-anchor="middle" letter-spacing="3">4892 0506 8834 2291</text>
+          <!-- Footer -->
+          <line x1="16" y1="356" x2="244" y2="356" stroke="#e0ddd6" stroke-width="0.7"/>
+          <text x="130" y="372" fill="#bbb" font-family="Arial,sans-serif" font-size="8" text-anchor="middle">Bewaar dit ticket tijdens de rit</text>
+          <text x="130" y="385" fill="#bbb" font-family="Arial,sans-serif" font-size="8" text-anchor="middle">delijn.be · T 070 220 200</text>
+          <text x="130" y="410" fill="#ccc" font-family="'Courier New',monospace" font-size="7.5" text-anchor="middle" letter-spacing="1">DL-2026-05-06-489206</text>
+        </svg>
+          </div>
+        </div>
       </div>
 
       <!-- Puzzel 3 -->

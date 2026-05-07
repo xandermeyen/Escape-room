@@ -133,17 +133,6 @@ function updateTabs(p) {
     if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
   });
 
-  // Lena's stem als allerlaatste afsluiter — speelt na het verhaal-p5 fragment
-  if (p.p5 && !_fragmentenAfgespeeld.has('lena-slot') && Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
-    _fragmentenAfgespeeld.add('lena-slot');
-    setTimeout(() => {
-      zorgVoorAudio();
-      const audio = new Audio('audio/lena/briefkaart.mp3');
-      audio.volume = 0.88;
-      audio.play().catch(() => {});
-    }, 6000); // wacht tot verhaal-p5 uitgespeeld is
-  }
-
   // Eindelink tonen als alle puzzels opgelost zijn
   if (p.p5 && !document.getElementById('einde-link')) {
     const balk     = document.createElement('a');
