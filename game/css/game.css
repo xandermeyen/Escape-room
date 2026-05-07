@@ -206,3 +206,330 @@ body {
   transition: color 0.2s;
 }
 .btn-terug:hover { color: var(--kleur-rand); }
+
+/* ══════════════════════════════════════════════
+   TIMER UI
+══════════════════════════════════════════════ */
+
+/* ── Klokknop (rechtsonder, altijd zichtbaar in het spel) ── */
+.timer-klok-knop {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  background: rgba(28, 26, 23, 0.92);
+  border: 1px solid var(--kleur-accent);
+  border-radius: 50%;
+  color: var(--kleur-accent-licht);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  backdrop-filter: blur(4px);
+}
+.timer-klok-knop:hover {
+  background: var(--kleur-accent);
+  color: var(--kleur-donker);
+}
+
+/* ── Tijdpopup ── */
+.timer-popup {
+  position: fixed;
+  bottom: 76px;
+  right: 24px;
+  width: 210px;
+  background: var(--kleur-donker);
+  border: 1px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 14px 16px;
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+.timer-popup.verborgen { display: none; }
+
+.timer-popup-kop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.timer-popup-label {
+  font-family: var(--font-archief);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+}
+.timer-popup-sluit {
+  background: none;
+  border: none;
+  color: var(--kleur-grijs);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.timer-popup-sluit:hover { color: var(--kleur-rand); }
+
+.timer-tijd-display {
+  font-family: var(--font-archief);
+  font-size: 2rem;
+  letter-spacing: 0.12em;
+  color: var(--kleur-perkament);
+  text-align: center;
+  margin: 4px 0 8px;
+}
+.timer-popup-sub {
+  font-size: 0.74rem;
+  color: var(--kleur-grijs);
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Waarschuwingsbalken ── */
+.timer-waarschuwing {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(520px, 92vw);
+  background: rgba(28, 26, 23, 0.97);
+  border: 1px solid var(--kleur-accent);
+  border-left: 4px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 14px 16px 14px 20px;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: schuifIn 0.4s ease;
+}
+.timer-waarschuwing-urgent {
+  border-color: #c0392b;
+  border-left-color: #c0392b;
+}
+.timer-waarschuwing-verdwijnen {
+  animation: schuifUit 0.5s ease forwards;
+}
+@keyframes schuifIn {
+  from { opacity: 0; top: 4px; }
+  to   { opacity: 1; top: 20px; }
+}
+@keyframes schuifUit {
+  from { opacity: 1; top: 20px; }
+  to   { opacity: 0; top: 4px; }
+}
+.timer-waarschuwing-inhoud { flex: 1; }
+.timer-waarschuwing-titel {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  letter-spacing: 0.07em;
+  color: var(--kleur-accent-licht);
+  margin-bottom: 4px;
+}
+.timer-waarschuwing-urgent .timer-waarschuwing-titel {
+  color: #e74c3c;
+}
+.timer-waarschuwing-tekst {
+  font-size: 0.83rem;
+  color: var(--kleur-rand);
+  line-height: 1.55;
+}
+.timer-waarschuwing-sluit {
+  background: none;
+  border: none;
+  color: var(--kleur-grijs);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.timer-waarschuwing-sluit:hover { color: var(--kleur-rand); }
+
+/* ══════════════════════════════════════════════
+   TIJD VOORBIJ — ALTERNATIEF EINDE
+══════════════════════════════════════════════ */
+
+/* Gesloten-stempel blok */
+.gesloten-blok {
+  position: relative;
+  background: rgba(200,185,154,0.04);
+  border: 1px solid rgba(200,185,154,0.2);
+  border-radius: 2px;
+  padding: 32px 36px;
+  margin: 24px 0;
+}
+.gesloten-stempel {
+  font-family: var(--font-archief);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  letter-spacing: 0.25em;
+  color: #c0392b;
+  border: 3px solid #c0392b;
+  border-radius: 3px;
+  padding: 6px 20px;
+  display: inline-block;
+  transform: rotate(-4deg);
+  opacity: 0.82;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+.gesloten-tekst {
+  font-size: 0.93rem;
+  color: var(--kleur-rand);
+  line-height: 1.8;
+}
+.gesloten-ref {
+  font-family: var(--font-archief);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+  margin-bottom: 16px;
+}
+.gesloten-ondertekening {
+  margin-top: 20px;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--kleur-grijs);
+  border-top: 1px solid rgba(200,185,154,0.15);
+  padding-top: 14px;
+}
+
+/* Nieuwe post notificatie */
+.nieuwe-post-notif {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(200,185,154,0.07);
+  border: 1px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  animation: schuifIn 0.5s ease;
+  margin: 20px 0;
+}
+.nieuwe-post-notif:hover {
+  background: rgba(200,185,154,0.12);
+  border-color: var(--kleur-accent-licht);
+}
+.nieuwe-post-icoon {
+  font-size: 1.4rem;
+  color: var(--kleur-accent-licht);
+  flex-shrink: 0;
+}
+.nieuwe-post-inhoud { flex: 1; }
+.nieuwe-post-titel {
+  font-family: var(--font-archief);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: var(--kleur-perkament);
+  margin-bottom: 2px;
+}
+.nieuwe-post-sub {
+  font-size: 0.78rem;
+  color: var(--kleur-grijs);
+}
+.nieuwe-post-open {
+  font-family: var(--font-archief);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--kleur-accent-licht);
+  flex-shrink: 0;
+}
+
+/* Briefkaart */
+.briefkaart-blok {
+  animation: fadeIn 0.6s ease;
+  margin-top: 8px;
+}
+.briefkaart-blok.verborgen { display: none; }
+
+.briefkaart {
+  background: #f5f0e8;
+  color: #1c1a17;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+  margin-bottom: 24px;
+}
+.briefkaart-voorkant {
+  background: linear-gradient(135deg, #d4c9b4 0%, #b8a98c 100%);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.briefkaart-locatienaam {
+  font-family: var(--font-archief);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5a4f3c;
+}
+.briefkaart-kerk-beschrijving {
+  font-size: 0.8rem;
+  color: #7a6f5a;
+  margin-top: 4px;
+  font-style: italic;
+}
+.briefkaart-poststempel {
+  font-family: var(--font-archief);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-align: center;
+  border: 1px solid rgba(90,79,60,0.4);
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  color: #5a4f3c;
+  opacity: 0.75;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+.briefkaart-achterkant {
+  padding: 28px 32px;
+  font-family: 'Georgia', serif;
+  font-size: 0.93rem;
+  line-height: 1.85;
+  color: #2a2520;
+}
+.briefkaart-achterkant p { margin-bottom: 0.6em; }
+.briefkaart-ondertekening {
+  margin-top: 12px;
+  font-style: italic;
+  font-size: 1.05rem;
+}
+
+/* Eindmelding */
+.eindmelding {
+  text-align: center;
+  padding: 20px 0 4px;
+}
+.eindmelding-hoofd {
+  font-family: var(--font-archief);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  color: var(--kleur-grijs);
+  margin-bottom: 4px;
+}
+.eindmelding-sub {
+  font-family: var(--font-archief);
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: var(--kleur-accent-licht);
+}

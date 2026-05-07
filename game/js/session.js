@@ -25,6 +25,7 @@ export async function maakSessie(sessieCode) {
       ingediend: false,
       inhoud: {},
     },
+    timerGestart: null, // Wordt gezet door timer.js zodra de eerste speler de game laadt
   });
   return sessieCode;
 }

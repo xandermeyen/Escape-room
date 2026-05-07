@@ -1,6 +1,9 @@
 import { luisterNaarStatus, puzzelVoltooid } from './session.js';
 import { volgendHint } from './utils.js';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.js';
+import { initialiseerTimer } from './timer.js';
+
+initialiseerTimer(sessieCode);
 
 let _audioGestart = false;
 
