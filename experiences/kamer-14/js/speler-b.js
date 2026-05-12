@@ -1,7 +1,7 @@
-import { luisterNaarStatus, puzzelVoltooid } from './session.js';
-import { volgendHint } from './utils.js';
-import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.js';
-import { initialiseerTimer } from './timer.js';
+import { luisterNaarStatus, puzzelVoltooid } from '../../../shared/js/session.js';
+import { volgendHint } from '../../../shared/js/utils.js';
+import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelBriefkaartStem } from './audio.js';
+import { initialiseerTimer } from '../../../shared/js/timer.js';
 
 let _audioGestart = false;
 
@@ -11,12 +11,12 @@ const _fragmentenAfgespeeld = new Set();
 // Fragmenten alleen spelen voor puzzels die tijdens DEZE sessie opgelost worden,
 // niet voor puzzels die al opgelost waren vóór het laden van de pagina.
 const _paginaLaadtijd = Date.now();
-const WACHT_NA_LADEN  = 4000; // ms — Firebase-initiële snapshot duurt doorgaans < 2 s
+const WACHT_NA_LADEN  = 4000; // ms
 
 function zorgVoorAudio() {
   if (_audioGestart) return;
   _audioGestart = true;
-  startAchtergrond('a');
+  startAchtergrond('b');
 }
 
 // Sessie ophalen uit URL
@@ -27,12 +27,29 @@ if (!sessie) {
   window.location.href = 'index.html';
 }
 
+// ── Browsernavigatie blokkeren ────────────────────────────
+// Voorkomt dat spelers per ongeluk de game verlaten via
+// terugknop, muisknop of meerdere stappen terug.
+// Wordt uitgeschakeld zodra ze bewust naar einde.html gaan.
+let _gameBeschermd = true;
+
+history.pushState({ scherm: 'game' }, '');
+window.addEventListener('popstate', () => {
+  if (_gameBeschermd) history.pushState({ scherm: 'game' }, '');
+});
+window.addEventListener('beforeunload', (e) => {
+  if (_gameBeschermd) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
 // Timer starten (na sessie-definitie)
 initialiseerTimer(sessie);
 
 // Casenummer tonen in systeembalk
 document.getElementById('sys-case').textContent =
-  `Intern dossier · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
+  `Buurtdossier · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
 
 
 // ── Tabnavigatie ──────────────────────────────────────────
@@ -65,69 +82,42 @@ function updateVoortgang(p) {
 }
 
 
-// ── Tabs vrijgeven op basis van Firebase-status ───────────
+// ── Tab vrijgeven op basis van Firebase-status ────────────
 function updateTabs(p) {
-  const tabAtelier     = document.getElementById('tab-atelier');
-  const tabIntakefiche = document.getElementById('tab-intakefiche');
-  const tabBijlage     = document.getElementById('tab-bijlage');
+  const tabKamer = document.getElementById('tab-kamer');
 
-  // Atelier: vrijgegeven na P1
-  if (p.p1 && tabAtelier.classList.contains('slot')) {
+  // Kamerinspectie: vrijgegeven na P2 én P3
+  if (p.p2 && p.p3 && tabKamer.classList.contains('slot')) {
     zorgVoorAudio();
     speelUnlock();
-    tabAtelier.classList.remove('slot');
-    tabAtelier.textContent = 'Atelier';
-    tabAtelier.classList.add('nieuw-doc');
-    tabAtelier.addEventListener('click', () => {
+    tabKamer.classList.remove('slot');
+    tabKamer.textContent = 'Kamerinspectie';
+    tabKamer.classList.add('nieuw-doc');
+    tabKamer.addEventListener('click', () => {
       zorgVoorAudio();
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabAtelier.classList.add('actief');
-      document.getElementById('panel-atelier').classList.add('actief');
+      tabKamer.classList.add('actief');
+      document.getElementById('panel-kamer').classList.add('actief');
     });
   }
 
-  // Intakefiche: vrijgegeven na P2 én P3
-  if (p.p2 && p.p3 && tabIntakefiche.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabIntakefiche.classList.remove('slot');
-    tabIntakefiche.textContent = 'Intakefiche';
-    tabIntakefiche.classList.add('nieuw-doc');
-    tabIntakefiche.addEventListener('click', () => {
-      zorgVoorAudio();
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabIntakefiche.classList.add('actief');
-      document.getElementById('panel-intakefiche').classList.add('actief');
-    });
+  // Puzzels vrijgeven op basis van voortgang
+  if (p.p1) {
+    document.getElementById('puzzel-2')?.classList.remove('verborgen');
+    document.getElementById('puzzel-3')?.classList.remove('verborgen');
   }
-
-  // Bijlage D: vrijgegeven na P4
-  if (p.p4 && tabBijlage.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabBijlage.classList.remove('slot');
-    tabBijlage.textContent = 'Bijlage D';
-    tabBijlage.classList.add('nieuw-doc');
-    tabBijlage.addEventListener('click', () => {
-      zorgVoorAudio();
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabBijlage.classList.add('actief');
-      document.getElementById('panel-bijlage').classList.add('actief');
-    });
+  if (p.p4) {
+    document.getElementById('puzzel-5')?.classList.remove('verborgen');
   }
 
   // ── Verhaalfragmenten na puzzeloplossing ─────────────────
-  // Speelt een random fragment van An Vermeersch na elke nieuw opgeloste puzzel.
-  // Alleen voor puzzels die tijdens DEZE sessie opgelost werden (niet bij pagina laden).
   ['p1','p2','p3','p4','p5'].forEach(nr => {
     if (p[nr] && !_fragmentenAfgespeeld.has(nr)) {
       _fragmentenAfgespeeld.add(nr);
       if (Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
         zorgVoorAudio();
-        speelVerhaalFragment('a', nr);
+        speelVerhaalFragment('b', nr);
       }
     }
   });
@@ -144,6 +134,7 @@ function updateTabs(p) {
     balk.href      = `einde.html?sessie=${sessie}`;
     balk.className = 'einde-link-balk';
     balk.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
+    balk.addEventListener('click', () => { _gameBeschermd = false; });
     document.querySelector('.tabs').insertAdjacentElement('afterend', balk);
   }
 }
@@ -153,6 +144,15 @@ function markeerVoltooid(id) {
   if (!blok) return;
   blok.classList.add('verborgen');
 }
+
+
+// ── Prikbord: brief omdraaien ─────────────────────────────
+function draaiOm() {
+  const kaart = document.getElementById('brief-kaart');
+  if (!kaart) return;
+  kaart.classList.toggle('omgedraaid');
+}
+window.draaiOm = draaiOm;
 
 
 // ── Puzzel-antwoorden controleren ─────────────────────────
@@ -181,7 +181,7 @@ function controleerAntwoord(puzzelNr, inputId, feedbackId, btnId) {
   } else {
     input.classList.add('fout');
     feedback.className   = 'puzzel-feedback fout';
-    feedback.textContent = 'Niet correct. Overleg opnieuw met Speler B.';
+    feedback.textContent = 'Niet correct. Overleg opnieuw met Speler A.';
     setTimeout(() => input.classList.remove('fout'), 1500);
   }
 }

@@ -190,9 +190,8 @@ export function stopAchtergrond() {
 
 /**
  * Laadt en speelt een opgenomen voice line.
- * Pad: game/audio/<karakter>/<fragment>.mp3
+ * Pad: audio/<karakter>/<fragment>.mp3 (relatief aan de HTML-pagina)
  * Faalt stil als het bestand ontbreekt.
- * Geeft het HTMLAudioElement terug (voor chaining via .addEventListener('ended')).
  */
 export function speelStem(karakter, fragment) {
   const audio = new Audio(`audio/${karakter}/${fragment}.mp3`);
@@ -212,19 +211,8 @@ export function speelBriefkaartStem() {
 
 // ── Verhaalfragmenten na puzzeloplossing ──────────────────
 /**
- * Na elke puzzeloplossing speelt automatisch een random, nog niet gehoord
- * fragment van het karakter dat bij die speler hoort.
- *
- * Pool Speler A : an-vermeersch — notitie-1, notitie-2, notitie-3
- * Pool Speler B : katrijn       — logboek-1, logboek-2, logboek-3
- *
- * Om later fragmenten toe te voegen: voeg simpelweg een string toe aan de pool.
- * Bestandsnaamconventie: game/audio/<karakter>/<fragment>.mp3
- */
-// ── Verhaalfragmenten per puzzel ──────────────────────────
-/**
  * Elk fragment is specifiek gekoppeld aan de puzzel die net opgelost werd.
- * Bestandsnaamconventie: game/audio/<karakter>/<fragment>.mp3
+ * Bestandsnaamconventie: audio/<karakter>/<fragment>.mp3
  *
  * Om een fragment toe te voegen: neem het op, zet het in de juiste map,
  * en vervang null door de bestandsnaam (zonder .mp3).

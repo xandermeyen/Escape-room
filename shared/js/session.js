@@ -6,6 +6,7 @@ import {
   update,
   onValue,
   serverTimestamp,
+  runTransaction,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 // Sessie aanmaken (gastheer)
@@ -34,7 +35,7 @@ export async function maakSessie(sessieCode) {
 export async function valideerSessie(sessieCode) {
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   const snapshot  = await get(sessieRef);
-  
+
   if (!snapshot.exists()) return false;
   return snapshot.val().actief === true;
 }
@@ -71,3 +72,22 @@ export function luisterNaarRapport(sessieCode, callback) {
   });
 }
 
+// Rol atomisch claimen — voorkomt dat twee spelers dezelfde rol kiezen
+// Geeft true terug als claimen gelukt is, false als de rol al bezet was
+export async function claimRol(sessieCode, rol) {
+  const rolRef = ref(db, `sessions/${sessieCode}/spelers/${rol}`);
+  const result = await runTransaction(rolRef, (huidig) => {
+    if (huidig !== null) return; // undefined = transaction afgebroken
+    return 'bezet';
+  });
+  return result.committed;
+}
+
+// Live luisteren naar welke rollen bezet zijn
+// Geeft de unsubscribe-functie terug
+export function luisterNaarRollen(sessieCode, callback) {
+  const spelersRef = ref(db, `sessions/${sessieCode}/spelers`);
+  return onValue(spelersRef, (snapshot) => {
+    callback(snapshot.val() || {});
+  });
+}
