@@ -1,4 +1,4 @@
-import { luisterNaarRapport, diendRapportIn } from './session.js';
+import { luisterNaarRapport, diendRapportIn } from '../../../shared/js/session.js';
 import { speelStem } from './audio.js';
 
 // ── Sessie ophalen ────────────────────────────────────────
@@ -131,13 +131,11 @@ document.getElementById('btn-sluit-dossier').addEventListener('click', () => {
 });
 
 document.getElementById('btn-terug-lobby').addEventListener('click', () => {
-  window.location.href = '../index.html';
+  window.location.href = '../../index.html';
 });
 
 
 // ── Firebase: luisteren naar rapport-status ───────────────
-// Vuurt ook direct af bij laden — als rapport al ingediend is
-// (bv. de andere speler deed het al), slaat het formulier over.
 luisterNaarRapport(sessie, (rapport) => {
   if (rapport?.ingediend) {
     toonScherm('scherm-briefkaart');

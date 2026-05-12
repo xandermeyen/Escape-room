@@ -1,8 +1,8 @@
 /**
- * timer.js — Kamer 14
+ * timer.js — Shared timer module
  * 60 minuten aftellen. Verborgen tenzij opgevraagd.
  * Waarschuwingen op 30 en 10 minuten.
- * Bij tijdoverschrijding → tijd-voorbij.html
+ * Bij tijdoverschrijding → tijd-voorbij.html (relatief aan de pagina)
  */
 
 import { db } from './firebase-config.js';

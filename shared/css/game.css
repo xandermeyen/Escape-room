@@ -124,7 +124,7 @@ body {
   color: #c0392b;
   margin-top: 10px;
 }
-.verborgen { display: none; }
+.verborgen { display: none !important; }
 
 /* ── Rol kaarten ── */
 .rol-kaart {
@@ -175,6 +175,42 @@ body {
 .rol-kaart:hover .rol-knop {
   background: var(--kleur-accent);
   color: var(--kleur-donker);
+}
+
+/* Rol al bezet */
+.rol-bezet {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.rol-bezet:hover {
+  background: rgba(200,185,154,0.05) !important;
+  border-color: rgba(200,185,154,0.2) !important;
+  transform: none !important;
+}
+.rol-bezet-label {
+  font-family: var(--font-archief);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+  border: 1px solid rgba(200,185,154,0.25);
+  border-radius: 2px;
+  padding: 4px 10px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* Rol wordt geladen (bezig met claimen) */
+.rol-laden {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Foutmelding onder de rolkaarten */
+.rol-fout {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  color: #c0392b;
 }
 
 /* ── Knoppen ── */
