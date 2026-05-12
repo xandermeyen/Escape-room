@@ -1,24 +1,24 @@
 <div align="center">
 <br />
+
+<img src="./assets/img/bureau_x_logo.svg" alt="Bureau X" height="48" />
+
+<br />
 <br />
 
-<h1>Bureau X — Online Escape Experiences</h1>
-
 <p>
-Immersive browser-based escape room experiences designed as a digital alternative to traditional physical escape rooms.
+Browser-based escape room experiences built around storytelling, atmosphere, and collaborative puzzle-solving.
 </p>
 
 <p>
 <a href="https://bureau-x.be">
-<img src="https://img.shields.io/badge/LIVE%20EXPERIENCE-ONLINE-black?style=for-the-badge" alt="Live Experience" />
+<img src="https://img.shields.io/badge/LIVE-bureau--x.be-black?style=for-the-badge" alt="Live" />
 </a>
-
-<a href="https://github.com/xandermeyen/Escape-room">
-<img src="https://img.shields.io/github/stars/xandermeyen/Escape-room?style=for-the-badge" alt="GitHub Stars" />
-</a>
-
 <a href="https://github.com/xandermeyen/Escape-room/blob/main/LICENSE">
 <img src="https://img.shields.io/badge/LICENSE-MIT-black?style=for-the-badge" alt="License" />
+</a>
+<a href="https://github.com/xandermeyen/Escape-room">
+<img src="https://img.shields.io/github/stars/xandermeyen/Escape-room?style=for-the-badge" alt="Stars" />
 </a>
 </p>
 
@@ -26,229 +26,128 @@ Immersive browser-based escape room experiences designed as a digital alternativ
 
 ---
 
-# Overview
+## Overview
 
-Bureau X is an online escape room platform focused on immersive digital experiences that can be played directly in the browser.
+Bureau X is an online escape room platform where two players work together to solve a case — each with their own dossier, their own clues, and a shared session.
 
-The project was created as an alternative to physical escape rooms, which often require large investments in construction, space, technology, and maintenance. By moving the experience online, Bureau X explores how atmosphere, storytelling, puzzles, and tension can still create a memorable escape room experience without physical limitations.
-
-Each experience is designed around its own unique setting, narrative, mechanics, and puzzle structure.
-
-The first online experience is currently live, while future experiences will introduce completely new themes, stories, and interactions.
+The first experience, **Kamer 14**, is set in the OPZ Geel, Belgium, and explores the world of the *kostgangers* — people who live with local families as part of a centuries-old care tradition. Players investigate the disappearance of Lena Bogaert through documents, case files, and neighbourhood records.
 
 ---
 
-# Concept
+## How It Works
+
+1. A host creates a session and sends a unique session code to both players
+2. Each player enters the code and picks a role — **Speler A** (OPZ dossier) or **Speler B** (neighbourhood dossier)
+3. Roles are locked in real-time via Firebase — no two players can claim the same role
+4. Players explore their own documents, exchange clues, and solve puzzles together
+5. Progress is synced live across both screens — solved puzzles unlock new content for both players
+6. Once all puzzles are solved, players submit a final report
+
+---
+
+## Features
+
+- Two-player collaborative gameplay with separate roles and dossiers
+- Real-time session sync via Firebase Realtime Database
+- Atomic role claiming — prevents both players from selecting the same role
+- Story-driven puzzle progression with live document unlocking
+- Atmospheric UI with period-appropriate design language
+- Session timer with warnings
+- Host panel for session management
+- Navigation protection — players can't accidentally leave the experience mid-game
+
+---
+
+## Tech Stack
 
 <div align="center">
 
-| Traditional Escape Rooms | Bureau X Online Experiences |
+| Layer | Technology |
 |---|---|
-| Physical construction required | Fully browser-based |
-| High production and maintenance cost | Flexible and scalable |
-| Limited by location | Accessible from anywhere |
-| Difficult to rapidly iterate | Fast development and experimentation |
-| One physical theme per room | Multiple digital experiences possible |
+| Frontend | HTML5, CSS3, JavaScript (ES Modules) |
+| Realtime Backend | Firebase Realtime Database |
+| Styling | Bootstrap 5, Bootstrap Icons, Google Fonts |
+| Hosting | GitHub Pages + Custom Domain |
 
 </div>
 
 ---
 
-# Features
+## Project Structure
 
-- Browser-based escape room experiences
-- Story-driven progression
-- Interactive puzzle systems
-- Atmospheric UI and visual design
-- Responsive experience for desktop devices
-- Easily expandable platform for future experiences
-- Modular structure for new themes and mechanics
-- Fast deployment through GitHub Pages and custom hosting
-
----
-
-# Vision
-
-Bureau X is not intended to replace physical escape rooms.
-
-Instead, the goal is to explore a different form of immersion:
-a digital experience where storytelling, interaction, pacing, and mystery remain central while removing many of the physical limitations traditional escape rooms face.
-
-This allows for:
-- Faster experimentation with concepts
-- Easier accessibility for players
-- Lower production costs
-- Continuous iteration and expansion
-- Multiple unique experiences under one platform
-
----
-
-# Current Experience
-
-<div align="center">
-
-## Live Experience
-
-### https://bureau-x.be
-
-</div>
-
----
-
-# Future Experiences
-
-The platform is designed to support multiple independent escape experiences.
-
-Future projects will feature:
-- New narratives
-- Different puzzle mechanics
-- Unique visual identities
-- Alternative atmospheres and pacing
-- Experimental interaction systems
-
-Each experience will stand on its own while remaining part of the Bureau X platform.
-
----
-
-# Tech Stack
-
-<div align="center">
-
-| Frontend | Styling | Hosting |
-|---|---|---|
-| HTML5 | CSS3 | GitHub Pages |
-| JavaScript | Responsive Design | Custom Domain |
-
-</div>
-
----
-
-# Preview
-
-<div align="center">
-
-<img src="./assets/img/preview-1.png" width="85%" alt="Experience Preview 1" />
-<br /><br />
-<img src="./assets/img/preview-2.png" width="85%" alt="Experience Preview 2" />
-
-</div>
-
----
-
-# Project Structure
-
-```bash
+```
 Escape-room/
 │
 ├── assets/
-│   ├── banner.svg
-│   ├── preview-1.png
-│   └── preview-2.png
+│   └── img/                   # Logos and favicons
 │
-├── css/
-├── js/
-├── audio/
-├── images/
+├── shared/
+│   ├── css/
+│   │   └── game.css           # Shared design system
+│   └── js/
+│       ├── firebase-config.js # Firebase initialisation
+│       ├── session.js         # Session logic (create, validate, roles, puzzles)
+│       ├── timer.js           # Shared game timer
+│       └── utils.js           # Shared helpers
 │
-├── index.html
+├── experiences/
+│   └── kamer-14/
+│       ├── index.html         # Lobby (code entry + role selection)
+│       ├── speler-a.html      # Player A experience
+│       ├── speler-b.html      # Player B experience
+│       ├── einde.html         # Ending + report submission
+│       ├── host-panel.html    # Host session management
+│       ├── tijd-voorbij.html  # Time-expired screen
+│       └── js/
+│           ├── lobby.js
+│           ├── speler-a.js
+│           ├── speler-b.js
+│           ├── einde.js
+│           └── audio.js
+│
+├── index.html                 # Landing page
 └── README.md
 ```
 
 ---
 
-# Local Development
-
-Clone the repository:
+## Local Development
 
 ```bash
 git clone https://github.com/xandermeyen/Escape-room.git
-```
-
-Open the project:
-
-```bash
 cd Escape-room
 ```
 
-Run locally using Live Server or open:
+Open with [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) or any local dev server — direct `file://` won't work due to ES module imports and Firebase.
 
-```bash
-index.html
-```
+> Firebase is already configured and connected to the live database. No additional setup required for read access during local testing.
 
 ---
 
-# Design Philosophy
+## Contributing
 
-The focus of Bureau X is immersion through simplicity.
-
-The experiences are designed around:
-- Curiosity and discovery
-- Environmental storytelling
-- Controlled pacing
-- Psychological tension
-- Clean interaction design
-- Narrative-driven puzzle progression
-
-Rather than creating a traditional game structure, the goal is to simulate the feeling of participating in a real escape experience through the browser.
+This is a personal project. Issues and feedback are welcome, but the codebase is not open for external contributions.
 
 ---
 
-# Roadmap
-
-- Additional escape experiences
-- Expanded narrative systems
-- Improved progression tracking
-- Optional hint systems
-- Enhanced audio design
-- Session timing systems
-- Better mobile support
-- Community feedback integration
-
----
-
-# Contributing
-
-Feedback, ideas, and suggestions are welcome.
-
-```bash
-# Fork the repository
-
-# Create a new branch
-git checkout -b feature/new-experience
-
-# Commit changes
-git commit -m "Add new experience feature"
-
-# Push changes
-git push origin feature/new-experience
-```
-
-Then open a Pull Request.
-
----
-
-# Author
+## Author
 
 <div align="center">
 
-### Xander Meyen
+**Xander Meyen**
 
-<a href="https://bureau-x.be">Website</a> •
-<a href="https://github.com/xandermeyen">GitHub</a>
+<a href="https://bureau-x.be">bureau-x.be</a> · <a href="https://github.com/xandermeyen">GitHub</a>
 
 </div>
 
 ---
 
-# License
+## License
 
 Distributed under the MIT License.
 
 ---
 
 <div align="center">
-
-## Immersion does not require physical walls.
-
+<sub>Immersion does not require physical walls.</sub>
 </div>
