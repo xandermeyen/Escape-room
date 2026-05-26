@@ -85,7 +85,12 @@
               Boek een sessie
             </a>
           </li>
-          <!-- Host nav item removed from HTML — access via Ctrl+Shift+H -->
+          <li class="nav-item">
+            <a class="nav-link" href="experiences/kamer-14/host-panel.html"
+               style="opacity:0.45;font-size:0.8em;letter-spacing:0.05em;">
+              Host
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -278,51 +283,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/landing.js"></script>
 
-  <!--
-    HOST PANEL ACCESS — Ctrl + Shift + H
-    ─────────────────────────────────────────────────────────────────────────────
-    The host panel URL is not in the HTML. Access is via keyboard shortcut only.
-
-    HOW TO SET YOUR PASSWORD:
-    1. Open any page in Chrome/Firefox DevTools → Console.
-    2. Run this one-liner (replace 'jouw-wachtwoord' with your chosen password):
-
-       crypto.subtle.digest('SHA-256', new TextEncoder().encode('jouw-wachtwoord'))
-         .then(b => console.log(
-           Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join('')
-         ));
-
-    3. Copy the 64-character hex string that appears.
-    4. Paste it as the value of HOST_HASH below, replacing the placeholder.
-    ─────────────────────────────────────────────────────────────────────────────
-  -->
-  <script>
-    (function () {
-      // SHA-256 hash of your host password — see instructions above to generate
-      var HOST_HASH = 'VERVANG_DIT_DOOR_JE_SHA256_HASH';
-      var HOST_URL  = 'experiences/kamer-14/host-panel.html';
-
-      document.addEventListener('keydown', function (e) {
-        if (e.ctrlKey && e.shiftKey && e.key === 'H') {
-          e.preventDefault();
-          var pw = window.prompt('Hostcode:');
-          if (!pw) return;
-
-          crypto.subtle
-            .digest('SHA-256', new TextEncoder().encode(pw))
-            .then(function (buf) {
-              var hex = Array.from(new Uint8Array(buf))
-                .map(function (b) { return b.toString(16).padStart(2, '0'); })
-                .join('');
-              if (hex === HOST_HASH) {
-                window.location.href = HOST_URL;
-              } else {
-                window.alert('Ongeldige toegangscode.');
-              }
-            });
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
