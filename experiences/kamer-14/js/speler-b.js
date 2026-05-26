@@ -1,6 +1,6 @@
 import { luisterNaarStatus, puzzelVoltooid } from '../../../shared/js/session.js';
-import { volgendHint } from '../../../shared/js/utils.js';
-import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelBriefkaartStem } from './audio.js';
+import { volgendHint, controleerAntwoordHash } from '../../../shared/js/utils.js';
+import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelEnvelopGeluid } from './audio.js';
 import { initialiseerTimer } from '../../../shared/js/timer.js';
 
 let _audioGestart = false;
@@ -150,46 +150,50 @@ function markeerVoltooid(id) {
 function draaiOm() {
   const kaart = document.getElementById('brief-kaart');
   if (!kaart) return;
+  zorgVoorAudio();
+  speelEnvelopGeluid();
   kaart.classList.toggle('omgedraaid');
 }
 window.draaiOm = draaiOm;
 
 
-// ── Puzzel-antwoorden controleren ─────────────────────────
-const antwoorden = {
-  p1: ['dinsdag donderdag', 'dinsdag en donderdag'],
-  p2: ['diest'],
-  p3: ['8', 'acht', '8 weken', 'acht weken'],
-  p4: ['marie stas', 'marie'],
-  p5: ['07:35', '7:35'],
+// ── Puzzel-antwoorden (SHA-256 gehasht) ───────────────────
+// Plain-text antwoorden staan niet in de broncode.
+// Gebruik de console-snippet in utils.js om hashes te genereren.
+const antwoordHashes = {
+  p1: [
+    '6d95368648b569fb1fe2adced89be071011bb3f9f82abf498daf495cc213116e', // dinsdag donderdag
+    '5443975707db4d27536283ba2581340e52064790e20a31b12f45fcc421618e4d', // dinsdag en donderdag
+  ],
+  p2: [
+    '0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9', // diest
+  ],
+  p3: [
+    '2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3', // 8
+    'fb33ab7105db46d8a43042ad35f9c42eb4f1eb4cb7ae1cf4b1490c4cb2a5d585', // acht
+    '4b40153ffce0d94e69b84b4969edfed019723fe545ecae2cfb4c719aee52c274', // 8 weken
+    'e4522c2a2595d6fa20e90e1fe1265ae20d0dc0f9b35a88d5579bfc0cdef6b6ff', // acht weken
+  ],
+  p4: [
+    '91ada21b3f9f3b21939e6a7c3154c4f7cf002db220306095cb48010c84f4efaa', // marie stas
+    'c6d17a3613b9914e68707fcfac8410f097643bc5840681bb533030d73cbb18f8', // marie
+  ],
+  p5: [
+    '89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82', // 07:35
+    '27d40a0e226fb1e8e4ab8ebac2cb17f8de544c733db677ce556d0c9144a1c82d', // 7:35
+  ],
 };
 
-function controleerAntwoord(puzzelNr, inputId, feedbackId, btnId) {
-  const input    = document.getElementById(inputId);
-  const feedback = document.getElementById(feedbackId);
-  const btn      = document.getElementById(btnId);
-  const waarde   = input.value.trim().toLowerCase();
-
-  if (!waarde) return;
-
-  if (antwoorden[puzzelNr].includes(waarde)) {
-    input.classList.remove('fout');
-    feedback.className   = 'puzzel-feedback correct';
-    feedback.textContent = 'Correct — Firebase wordt bijgewerkt…';
-    btn.disabled = true;
-    puzzelVoltooid(sessie, parseInt(puzzelNr.replace('p', '')));
-  } else {
-    input.classList.add('fout');
-    feedback.className   = 'puzzel-feedback fout';
-    feedback.textContent = 'Niet correct. Overleg opnieuw met Speler A.';
-    setTimeout(() => input.classList.remove('fout'), 1500);
-  }
-}
-
 ['p1','p2','p3','p4','p5'].forEach(nr => {
+  const puzzelNr = parseInt(nr.replace('p', ''));
   document.getElementById(`btn-${nr}`)?.addEventListener('click', () =>
-    controleerAntwoord(nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`));
-
+    controleerAntwoordHash(
+      nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`,
+      antwoordHashes,
+      () => puzzelVoltooid(sessie, puzzelNr),
+      'Niet correct. Overleg opnieuw met Speler A.'
+    )
+  );
   document.getElementById(`input-${nr}`)?.addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
   });

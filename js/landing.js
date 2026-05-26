@@ -50,12 +50,6 @@ secties.forEach(sectie => navObserver.observe(sectie));
 
 /* ── 3. FORMSPREE AJAX FORMULIER ── */
 
-/* ── HOST-KNOP ── */
-if (new URLSearchParams(window.location.search).get('host') === 'true') {
-  const item = document.getElementById('host-nav-item');
-  if (item) item.style.display = '';
-}
-
 // Datum minimum = vandaag
 const datumInput = document.getElementById('datum');
 if (datumInput) {

@@ -202,10 +202,42 @@ export function speelStem(karakter, fragment) {
 
 /**
  * Speelt Lena's briefkaartfragment.
- * Aanroepen wanneer de envelop op het prikbord wordt omgedraaid (Speler B).
+ * Aanroepen op einde.html of als afsluitend moment — niet bij het omdraaien zelf.
  */
 export function speelBriefkaartStem() {
   speelStem('lena', 'briefkaart');
+}
+
+/**
+ * Kort papiergeluid — synthesized, geen bestand nodig.
+ * Aanroepen bij het omdraaien van de envelop op het prikbord.
+ */
+export function speelEnvelopGeluid() {
+  const c = getCtx();
+  const duur = 0.28;
+  const bufferSize = Math.floor(c.sampleRate * duur);
+  const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+  const data   = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+  const source = c.createBufferSource();
+  source.buffer = buffer;
+
+  const filter           = c.createBiquadFilter();
+  filter.type            = 'highpass';
+  filter.frequency.value = 1800;
+
+  const gain = c.createGain();
+  const t    = c.currentTime;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(0.14, t + 0.018);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + duur);
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(c.destination);
+  source.start(t);
+  source.stop(t + duur + 0.05);
 }
 
 
