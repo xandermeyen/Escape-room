@@ -4,12 +4,61 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bureau X - Escape Rooms</title>
+  <meta name="description" content="Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel Kamer 14 — een online escape room voor duo's over de Geelse traditie van gezinsverpleging." />
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="assets/img/bureau_x_favicon.svg" />
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Structured data: LocalBusiness — fill in the PLACEHOLDER fields below -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Bureau X",
+    "url": "https://www.bureau-x.be",
+    "logo": "https://www.bureau-x.be/assets/img/bureau_x_logo_dark.svg",
+    "description": "Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen.",
+    "email": "info@bureau-x.be",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "PLACEHOLDER_STRAATNAAM",
+      "addressLocality": "PLACEHOLDER_STAD",
+      "postalCode": "PLACEHOLDER_POSTCODE",
+      "addressCountry": "BE"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+        "opens": "09:00",
+        "closes": "18:00"
+      }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Escape Room Experiences",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Kamer 14",
+            "description": "Online escape room voor duo's over de Geelse traditie van gezinsverpleging. ±45 minuten.",
+            "url": "https://www.bureau-x.be/#experiences"
+          }
+        }
+      ]
+    },
+    "potentialAction": {
+      "@type": "ReserveAction",
+      "target": "https://www.bureau-x.be/#reserveerModal",
+      "name": "Boek een sessie"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -19,7 +68,10 @@
       <a class="navbar-brand" href="#">
         <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="38" />
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse" data-bs-target="#navMenu"
+              aria-controls="navMenu" aria-expanded="false"
+              aria-label="Navigatiemenu openen of sluiten">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
@@ -28,15 +80,12 @@
           <li class="nav-item"><a class="nav-link" href="#over-bureau-x">Over ons</a></li>
           <li class="nav-item">
             <a class="nav-link btn-reserveer ms-2" href="#"
-               data-bs-toggle="modal" data-bs-target="#reserveerModal">
+               data-bs-toggle="modal" data-bs-target="#reserveerModal"
+               aria-haspopup="dialog">
               Boek een sessie
             </a>
           </li>
-          <li class="nav-item" id="host-nav-item" style="display:none;">
-            <a class="nav-link ms-2" href="experiences/kamer-14/host-panel.html">
-              <i class="bi bi-shield-lock me-1"></i>Host
-            </a>
-          </li>
+          <!-- Host nav item removed from HTML — access via Ctrl+Shift+H -->
         </ul>
       </div>
     </div>
@@ -89,7 +138,8 @@
                   </div>
                 </div>
                 <a href="#" class="btn btn-archief"
-                   data-bs-toggle="modal" data-bs-target="#reserveerModal">
+                   data-bs-toggle="modal" data-bs-target="#reserveerModal"
+                   aria-haspopup="dialog">
                   <i class="bi bi-calendar-check me-2"></i>Boek Kamer 14
                 </a>
                 <span class="badge badge-archief ms-3">Nu beschikbaar</span>
@@ -158,7 +208,7 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
-          <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="32" />
+          <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="32" loading="lazy" />
         </div>
         <div class="col-md-4 text-center mb-3 mb-md-0">
           <p class="mb-1 small tekst-grijs">
@@ -227,5 +277,52 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/landing.js"></script>
+
+  <!--
+    HOST PANEL ACCESS — Ctrl + Shift + H
+    ─────────────────────────────────────────────────────────────────────────────
+    The host panel URL is not in the HTML. Access is via keyboard shortcut only.
+
+    HOW TO SET YOUR PASSWORD:
+    1. Open any page in Chrome/Firefox DevTools → Console.
+    2. Run this one-liner (replace 'jouw-wachtwoord' with your chosen password):
+
+       crypto.subtle.digest('SHA-256', new TextEncoder().encode('jouw-wachtwoord'))
+         .then(b => console.log(
+           Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join('')
+         ));
+
+    3. Copy the 64-character hex string that appears.
+    4. Paste it as the value of HOST_HASH below, replacing the placeholder.
+    ─────────────────────────────────────────────────────────────────────────────
+  -->
+  <script>
+    (function () {
+      // SHA-256 hash of your host password — see instructions above to generate
+      var HOST_HASH = 'VERVANG_DIT_DOOR_JE_SHA256_HASH';
+      var HOST_URL  = 'experiences/kamer-14/host-panel.html';
+
+      document.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'H') {
+          e.preventDefault();
+          var pw = window.prompt('Hostcode:');
+          if (!pw) return;
+
+          crypto.subtle
+            .digest('SHA-256', new TextEncoder().encode(pw))
+            .then(function (buf) {
+              var hex = Array.from(new Uint8Array(buf))
+                .map(function (b) { return b.toString(16).padStart(2, '0'); })
+                .join('');
+              if (hex === HOST_HASH) {
+                window.location.href = HOST_URL;
+              } else {
+                window.alert('Ongeldige toegangscode.');
+              }
+            });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
