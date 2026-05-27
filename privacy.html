@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacybeleid - Bureau X</title>
+  <meta name="description" content="Privacybeleid van Bureau X. Lees hoe wij omgaan met jouw persoonsgegevens." />
+  <meta name="robots" content="noindex, follow" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    .dossier-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 1rem 4rem;
+    }
+
+    .dossier-header {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-bottom: none;
+      padding: 2rem 2.5rem 1.5rem;
+      margin-top: 3rem;
+      position: relative;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .dossier-ref {
+      font-family: 'Special Elite', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      opacity: 0.4;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .dossier-title {
+      font-family: 'Special Elite', serif;
+      font-size: 2rem;
+      line-height: 1.1;
+      margin-bottom: 0;
+    }
+
+    .dossier-stamp {
+      position: absolute;
+      top: 1.6rem;
+      right: 2rem;
+      font-family: 'Special Elite', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(180,140,90,0.6);
+      border: 1.5px solid rgba(180,140,90,0.35);
+      padding: 0.3rem 0.6rem;
+      transform: rotate(2deg);
+      white-space: nowrap;
+    }
+
+    .dossier-meta-bar {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: none;
+      padding: 0.75rem 2.5rem;
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      background: rgba(255,255,255,0.015);
+    }
+
+    .meta-field { display: flex; flex-direction: column; gap: 0.1rem; }
+
+    .meta-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.35;
+      font-family: 'Special Elite', serif;
+    }
+
+    .meta-value {
+      font-size: 0.82rem;
+      opacity: 0.75;
+      font-family: 'Special Elite', serif;
+    }
+
+    .dossier-body {
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 2.5rem;
+      background: rgba(255,255,255,0.015);
+    }
+
+    .artikel {
+      margin-bottom: 2.25rem;
+      padding-bottom: 2.25rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .artikel:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .artikel-nummer {
+      font-family: 'Special Elite', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.35;
+      margin-bottom: 0.25rem;
+    }
+
+    .artikel-titel {
+      font-family: 'Special Elite', serif;
+      font-size: 1.05rem;
+      margin-bottom: 0.9rem;
+      opacity: 0.92;
+    }
+
+    .artikel p, .artikel li {
+      font-size: 0.9rem;
+      line-height: 1.85;
+      opacity: 0.72;
+      margin-bottom: 0.5rem;
+    }
+
+    .artikel ul { padding-left: 1.1rem; }
+    .artikel ul li::marker { content: '— '; opacity: 0.4; }
+    .artikel strong { opacity: 1; color: inherit; }
+
+    .dossier-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .dossier-table th {
+      font-family: 'Special Elite', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      padding: 0.5rem 1rem 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-weight: normal;
+    }
+
+    .dossier-table td {
+      padding: 0.6rem 1rem 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      opacity: 0.72;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .dossier-table tr:last-child td { border-bottom: none; }
+
+    .recht-item {
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem 1.2rem;
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 0.6rem;
+    }
+
+    .recht-naam {
+      font-family: 'Special Elite', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+      opacity: 0.9;
+    }
+
+    .recht-omschrijving {
+      font-size: 0.82rem;
+      opacity: 0.6;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .gba-blok {
+      border-left: 2px solid rgba(180,140,90,0.35);
+      padding: 0.75rem 1.2rem;
+      background: rgba(180,140,90,0.04);
+      font-size: 0.85rem;
+    }
+
+    .gba-blok p { opacity: 0.72; margin: 0; line-height: 1.75; }
+
+    .dossier-footer-note {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.78rem;
+      opacity: 0.38;
+      font-family: 'Special Elite', serif;
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    .link-accent {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 576px) {
+      .dossier-header, .dossier-meta-bar, .dossier-body { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .dossier-stamp { display: none; }
+      .dossier-title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark-archief sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="38" />
+      </a>
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse" data-bs-target="#navMenu"
+              aria-controls="navMenu" aria-expanded="false"
+              aria-label="Navigatiemenu openen of sluiten">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/#experiences">Experiences</a></li>
+          <li class="nav-item"><a class="nav-link" href="/#over-bureau-x">Over ons</a></li>
+          <li class="nav-item">
+            <a class="nav-link btn-reserveer ms-2" href="/">Boek een sessie</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="sectie-donker py-5 min-vh-100">
+    <div class="container">
+      <div class="dossier-wrapper">
+
+        <div class="dossier-header">
+          <div class="dossier-stamp">Vertrouwelijk &mdash; GDPR</div>
+          <div class="dossier-ref">Bureau X &mdash; Intern document &mdash; REF-PRV-01</div>
+          <h1 class="dossier-title">Privacybeleid</h1>
+        </div>
+
+        <div class="dossier-meta-bar">
+          <div class="meta-field">
+            <span class="meta-label">Verantwoordelijke</span>
+            <span class="meta-value">Xander Meyen - Bureau X</span>
+          </div>
+          <div class="meta-field">
+            <span class="meta-label">Contact</span>
+            <span class="meta-value">info@bureau-x.be</span>
+          </div>
+          <div class="meta-field">
+            <span class="meta-label">Laatst bijgewerkt</span>
+            <span class="meta-value">27 mei 2026</span>
+          </div>
+          <div class="meta-field">
+            <span class="meta-label">Rechtsgrond</span>
+            <span class="meta-value">AVG / GDPR - art. 6.1.b</span>
+          </div>
+        </div>
+
+        <div class="dossier-body">
+
+          <div class="artikel">
+            <div class="artikel-nummer">Inleiding</div>
+            <div class="artikel-titel">Over dit document</div>
+            <p>Bureau X hecht belang aan de bescherming van jouw persoonsgegevens. Dit privacybeleid legt uit welke gegevens wij verzamelen wanneer je een sessie boekt, waarom wij die gegevens nodig hebben, hoe lang we ze bewaren en welke rechten je hebt als betrokkene. Bureau X valt onder de Europese Algemene Verordening Gegevensbescherming (AVG / GDPR).</p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 1</div>
+            <div class="artikel-titel">Verwerkingsverantwoordelijke</div>
+            <p>De verwerkingsverantwoordelijke voor jouw persoonsgegevens is:</p>
+            <div class="gba-blok mt-2">
+              <p><strong>Xander Meyen - Bureau X</strong><br />
+              België<br />
+              <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a></p>
+            </div>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 2</div>
+            <div class="artikel-titel">Welke gegevens verzamelen wij?</div>
+            <p>Wij verzamelen uitsluitend de gegevens die je zelf invult bij het boeken van een sessie:</p>
+            <table class="dossier-table mt-2">
+              <thead>
+                <tr>
+                  <th>Gegeven</th>
+                  <th>Reden</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Naam</td><td>Persoonlijke bevestiging van de boeking</td></tr>
+                <tr><td>E-mailadres</td><td>Versturen van de bevestiging en spellinks</td></tr>
+                <tr><td>Gewenste speeldatum</td><td>Inplannen van de sessie</td></tr>
+                <tr><td>Aantal spelers</td><td>Technische voorbereiding van de sessie</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-3">Wij verzamelen geen betaalgegevens, geen wachtwoorden en geen locatiegegevens.</p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 3</div>
+            <div class="artikel-titel">Doeleinden van de verwerking</div>
+            <p>Jouw gegevens worden uitsluitend gebruikt om:</p>
+            <ul>
+              <li>Jouw boeking per e-mail te bevestigen</li>
+              <li>De persoonlijke spellinks naar jou en je medespeler te sturen</li>
+              <li>Vragen over jouw sessie te beantwoorden</li>
+            </ul>
+            <p>Wij gebruiken jouw gegevens <strong>niet</strong> voor marketingdoeleinden, profilering of commercieel delen met derden.</p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 4</div>
+            <div class="artikel-titel">Rechtsgrond</div>
+            <p>De verwerking is gebaseerd op de <strong>uitvoering van een overeenkomst</strong> (art. 6.1.b AVG): je vraagt een sessie aan, en wij verwerken jouw gegevens om die sessie te kunnen organiseren en uitvoeren.</p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 5</div>
+            <div class="artikel-titel">Bewaartermijn</div>
+            <p>Wij bewaren jouw gegevens maximaal <strong>3 maanden</strong> na de geboekte speeldatum. Daarna worden ze verwijderd. Je kan ook op elk moment zelf vragen om jouw gegevens te laten verwijderen, zie artikel 7.</p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 6</div>
+            <div class="artikel-titel">Ontvangers van jouw gegevens</div>
+            <p>Jouw gegevens worden verwerkt via <a href="https://formspree.io" target="_blank" rel="noopener" class="link-accent">Formspree</a>, een externe dienst voor formulierverwerking die handelt in overeenstemming met de GDPR. Buiten Formspree worden jouw gegevens niet gedeeld met andere partijen en niet doorverkocht.</p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 7</div>
+            <div class="artikel-titel">Jouw rechten als betrokkene</div>
+            <p>Onder de AVG beschik je over de volgende rechten. Je kan ze uitoefenen via <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a> wij reageren binnen 30 dagen.</p>
+            <div class="mt-3">
+              <div class="recht-item">
+                <div class="recht-naam"><i class="bi bi-eye me-2" style="opacity:0.5;"></i>Recht op inzage</div>
+                <p class="recht-omschrijving">Je kan opvragen welke persoonsgegevens wij over jou bewaren.</p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam"><i class="bi bi-pencil me-2" style="opacity:0.5;"></i>Recht op correctie</div>
+                <p class="recht-omschrijving">Je kan onjuiste of onvolledige gegevens laten aanpassen.</p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam"><i class="bi bi-trash me-2" style="opacity:0.5;"></i>Recht op verwijdering</div>
+                <p class="recht-omschrijving">Je kan vragen om jouw gegevens volledig te laten wissen.</p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam"><i class="bi bi-slash-circle me-2" style="opacity:0.5;"></i>Recht op bezwaar</div>
+                <p class="recht-omschrijving">Je kan bezwaar maken tegen de verwerking van jouw gegevens.</p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam"><i class="bi bi-box-arrow-right me-2" style="opacity:0.5;"></i>Recht op overdraagbaarheid</div>
+                <p class="recht-omschrijving">Je kan jouw gegevens opvragen in een leesbaar, overdraagbaar formaat.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 8</div>
+            <div class="artikel-titel">Cookies</div>
+            <p>Bureau X gebruikt geen tracking cookies of analytische cookies. De website maakt geen gebruik van Google Analytics of vergelijkbare diensten. Er worden enkel technisch noodzakelijke cookies gebruikt voor de werking van de site.</p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 9</div>
+            <div class="artikel-titel">Klachten</div>
+            <p>Heb je een klacht over hoe wij omgaan met jouw gegevens? Je kan terecht bij de Belgische toezichthoudende autoriteit:</p>
+            <div class="gba-blok mt-2">
+              <p><strong>Gegevensbeschermingsautoriteit (GBA)</strong><br />
+              Drukpersstraat 35, 1000 Brussel<br />
+              <a href="https://www.gegevensbeschermingsautoriteit.be" target="_blank" rel="noopener" class="link-accent">gegevensbeschermingsautoriteit.be</a></p>
+            </div>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer">Artikel 10</div>
+            <div class="artikel-titel">Wijzigingen aan dit beleid</div>
+            <p>Wij behouden het recht dit privacybeleid te wijzigen. De meest recente versie staat altijd op deze pagina, met de datum van de laatste aanpassing vermeld in de metabalk bovenaan.</p>
+          </div>
+
+          <div class="dossier-footer-note">
+            Bureau X &mdash; REF-PRV-01 &mdash; Geldig onder Belgisch en Europees recht
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 footer-archief">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+          <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="32" loading="lazy" />
+        </div>
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+          <p class="mb-1 small tekst-grijs">Kamer 14 is gebaseerd op de echte traditie van gezinsverpleging in Geel.</p>
+          <p class="mb-0 small tekst-grijs">
+            <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="footer-link">OPZ Geel</a>
+            &middot;
+            <a href="https://www.sint-dymphna.be" target="_blank" rel="noopener" class="footer-link">Sint-Dymphna</a>
+          </p>
+        </div>
+        <div class="col-md-4 text-center text-md-end">
+          <p class="mb-1 small"><a href="mailto:info@bureau-x.be" class="footer-link">info@bureau-x.be</a></p>
+          <p class="mb-0 small"><a href="/privacy.html" class="footer-link" style="opacity:0.55;">Privacybeleid</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
