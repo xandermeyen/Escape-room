@@ -26,35 +26,41 @@ Browser-based escape room experiences built around storytelling, atmosphere, and
 
 ---
 
-## Overview
+## About
 
-Bureau X is an online escape room platform where two players work together to solve a case — each with their own dossier, their own clues, and a shared session.
+Bureau X is a browser-based escape room platform built for two. Each player receives a different dossier, follows a different trail, and sees a different side of the story. The only way to crack the case is to work together.
 
-The first experience, **Kamer 14**, is set in the OPZ Geel, Belgium, and explores the world of the *kostgangers* — people who live with local families as part of a centuries-old care tradition. Players investigate the disappearance of Lena Bogaert through documents, case files, and neighbourhood records.
+No app. No downloads. Just a link, a session code, and a story.
+
+### Kamer 14
+
+The first experience is set inside the OPZ Geel psychiatric institution in Belgium, and draws from the real history of the *kostgangers*: people living with local families as part of a centuries-old community care tradition.
+
+One player takes the role of an OPZ staff member reviewing clinical records. The other steps into the neighbourhood, piecing together what the institution never wrote down. Together, they investigate the disappearance of Lena Bogaert.
 
 ---
 
 ## How It Works
 
-1. A host creates a session and sends a unique session code to both players
-2. Each player enters the code and picks a role — **Speler A** (OPZ dossier) or **Speler B** (neighbourhood dossier)
-3. Roles are locked in real-time via Firebase — no two players can claim the same role
-4. Players explore their own documents, exchange clues, and solve puzzles together
-5. Progress is synced live across both screens — solved puzzles unlock new content for both players
-6. Once all puzzles are solved, players submit a final report
+1. A host creates a session and shares a unique code with both players
+2. Each player enters the code and selects a role: **Speler A** (OPZ dossier) or **Speler B** (neighbourhood dossier)
+3. Roles are locked in real time via Firebase. No two players can claim the same role
+4. Players work through their own documents, share discoveries, and solve puzzles together
+5. Progress syncs live across both screens. Solved puzzles unlock new content for both players simultaneously
+6. Once all puzzles are solved, players submit a joint final report
 
 ---
 
 ## Features
 
-- Two-player collaborative gameplay with separate roles and dossiers
+- Two-player collaborative gameplay with asymmetric roles and dossiers
 - Real-time session sync via Firebase Realtime Database
-- Atomic role claiming — prevents both players from selecting the same role
+- Atomic role claiming to prevent duplicate selections
 - Story-driven puzzle progression with live document unlocking
-- Atmospheric UI with period-appropriate design language
+- Atmospheric UI designed around the period and setting
 - Session timer with warnings
 - Host panel for session management
-- Navigation protection — players can't accidentally leave the experience mid-game
+- Navigation protection to prevent players from accidentally leaving mid-game
 
 ---
 
@@ -79,25 +85,46 @@ The first experience, **Kamer 14**, is set in the OPZ Geel, Belgium, and explore
 Escape-room/
 │
 ├── assets/
-│   └── img/                   # Logos and favicons
+│   ├── fonts/
+│   └── img/                        # Logos, favicons and images
+│
+├── css/
+│   └── style.css                   # Landing page styles
 │
 ├── shared/
 │   ├── css/
-│   │   └── game.css           # Shared design system
+│   │   └── game.css                # Shared design system
 │   └── js/
-│       ├── firebase-config.js # Firebase initialisation
-│       ├── session.js         # Session logic (create, validate, roles, puzzles)
-│       ├── timer.js           # Shared game timer
-│       └── utils.js           # Shared helpers
+│       ├── firebase-config.js      # Firebase initialisation
+│       ├── session.js              # Session logic (create, validate, roles, puzzles)
+│       ├── timer.js                # Shared game timer
+│       └── utils.js                # Shared helpers
 │
 ├── experiences/
 │   └── kamer-14/
-│       ├── index.html         # Lobby (code entry + role selection)
-│       ├── speler-a.html      # Player A experience
-│       ├── speler-b.html      # Player B experience
-│       ├── einde.html         # Ending + report submission
-│       ├── host-panel.html    # Host session management
-│       ├── tijd-voorbij.html  # Time-expired screen
+│       ├── audio/
+│       │   ├── an-vermeersch/
+│       │   │   ├── verhaal-p1.mp3
+│       │   │   ├── verhaal-p2.mp3
+│       │   │   ├── verhaal-p3.mp3
+│       │   │   ├── verhaal-p4.mp3
+│       │   │   └── verhaal-p5.mp3
+│       │   ├── katrijn/
+│       │   │   ├── verhaal-p1.mp3
+│       │   │   ├── verhaal-p2.mp3
+│       │   │   ├── verhaal-p3.mp3
+│       │   │   ├── verhaal-p4.mp3
+│       │   │   └── verhaal-p5.mp3
+│       │   └── lena/
+│       │       └── briefkaart.mp3
+│       ├── css/
+│       │   └── kamer14.css         # Kamer 14 specific styles
+│       ├── index.html              # Lobby (code entry + role selection)
+│       ├── speler-a.html           # Player A experience
+│       ├── speler-b.html           # Player B experience
+│       ├── einde.html              # Ending + report submission
+│       ├── host-panel.html         # Host session management
+│       ├── tijd-voorbij.html       # Time-expired screen
 │       └── js/
 │           ├── lobby.js
 │           ├── speler-a.js
@@ -105,7 +132,12 @@ Escape-room/
 │           ├── einde.js
 │           └── audio.js
 │
-├── index.html                 # Landing page
+├── js/
+│   └── landing.js                  # Landing page scripts
+│
+├── index.html                      # Landing page
+├── privacy.html                    # Privacy policy
+├── sitemap.xml
 └── README.md
 ```
 
@@ -118,15 +150,15 @@ git clone https://github.com/xandermeyen/Escape-room.git
 cd Escape-room
 ```
 
-Open with [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) or any local dev server — direct `file://` won't work due to ES module imports and Firebase.
+Open with [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) or any static file server. Direct `file://` access will not work due to ES module imports and Firebase.
 
-> Firebase is already configured and connected to the live database. No additional setup required for read access during local testing.
+> Firebase is already configured and connected to the live database. No additional setup is needed for read access during local testing.
 
 ---
 
 ## Contributing
 
-This is a personal project. Issues and feedback are welcome, but the codebase is not open for external contributions.
+This is a personal project. Issues and feedback are welcome, but the codebase is not open for external contributions at this time.
 
 ---
 
