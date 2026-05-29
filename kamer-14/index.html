@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kamer 14: online escape room voor twee (Geel) | Bureau X</title>
+  <meta name="description" content="Kamer 14 is een online escape room voor twee spelers, thuis te spelen. Onderzoek samen de verdwijning van Lena Bogaert, gebaseerd op de echte Geelse traditie van gezinsverpleging. Ongeveer 45 minuten, 100% online, geen download." />
+  <link rel="canonical" href="https://bureau-x.be/kamer-14/" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192x192.png" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Kamer 14: online escape room voor twee (Geel) | Bureau X" />
+  <meta property="og:description" content="Online escape room voor twee, thuis te spelen. Onderzoek samen de verdwijning van Lena Bogaert. Ongeveer 45 minuten, 100% online, geen download." />
+  <meta property="og:url" content="https://bureau-x.be/kamer-14/" />
+  <meta property="og:image" content="https://bureau-x.be/assets/img/preview-1.png" />
+
+  <!-- Structured data: het aanbod -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Kamer 14",
+    "brand": { "@type": "Brand", "name": "Bureau X" },
+    "description": "Online escape room voor twee spelers over de verdwijning van Lena Bogaert, gebaseerd op de Geelse traditie van gezinsverpleging. Ongeveer 45 minuten, 100% online, geen download.",
+    "url": "https://bureau-x.be/kamer-14/",
+    "image": "https://bureau-x.be/assets/img/preview-1.png",
+    "category": "Online escape room"
+  }
+  </script>
+
+  <!-- Structured data: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Wat heb ik nodig om Kamer 14 te spelen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Een telefoon, tablet of computer met een browser, en een manier om met je medespeler te bellen of chatten. Verder niets. Er is geen download of installatie nodig."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Moeten we op dezelfde plek zijn?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nee. Kamer 14 is gemaakt om vanuit huis te spelen, elk op je eigen scherm. Samen aan tafel kan natuurlijk ook."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Heb ik geluid nodig?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Kamer 14 bevat geluid dat de sfeer versterkt. Met koptelefoon of speakers beleef je het verhaal intenser, maar verplicht is het niet. Alle aanwijzingen zijn ook zonder geluid op te lossen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hoelang duurt een sessie?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Reken op ongeveer 45 minuten. Sommige duo's lossen het sneller op, andere nemen rustig de tijd."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark-archief sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="/assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="38" />
+      </a>
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse" data-bs-target="#navMenu"
+              aria-controls="navMenu" aria-expanded="false"
+              aria-label="Navigatiemenu openen of sluiten">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/#experiences">Experiences</a></li>
+          <li class="nav-item"><a class="nav-link" href="/#over-bureau-x">Over ons</a></li>
+          <li class="nav-item">
+            <a class="nav-link btn-reserveer ms-2" href="#"
+               data-bs-toggle="modal" data-bs-target="#reserveerModal"
+               aria-haspopup="dialog">
+              Boek Kamer 14
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-9 text-center">
+          <p class="hero-label">Dossier 14 &middot; Intern onderzoek OPZ Geel</p>
+          <div class="hero-filebox mx-auto">14</div>
+          <h1 class="hero-titel">Kamer 14</h1>
+          <p class="hero-intro mb-2" style="color: var(--kleur-perkament); font-size: 1.1rem;">
+            <strong>Een dinsdagochtend in mei.</strong> Lena Bogaert is niet aan het ontbijt verschenen bij het gastgezin Martens. Haar bed is opgemaakt, haar jas is weg. Geen briefje.
+          </p>
+          <p class="hero-intro mb-3">
+            Een online escape room voor twee. Jullie krijgen elk een eigen dossier en zoeken samen uit waar ze is.
+          </p>
+          <p><span class="status-stamp">Status: onopgelost</span></p>
+          <div class="d-flex gap-3 justify-content-center flex-wrap mt-2">
+            <a href="#" class="btn btn-archief btn-lg"
+               data-bs-toggle="modal" data-bs-target="#reserveerModal"
+               aria-haspopup="dialog">
+              <i class="bi bi-calendar-check me-2"></i>Boek Kamer 14
+            </a>
+            <a href="#verhaal" class="btn btn-archief-ghost btn-lg">
+              <i class="bi bi-journal-text me-2"></i>Lees het verhaal
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- FEITENBALK + GELUIDSMELDING -->
+  <section class="py-5 sectie-donker">
+    <div class="container">
+      <div class="feiten-balk">
+        <div class="feit">
+          <div class="feit-waarde">±45 min</div>
+          <div class="feit-label">Speelduur</div>
+        </div>
+        <div class="feit">
+          <div class="feit-waarde">2 spelers</div>
+          <div class="feit-label">Duo</div>
+        </div>
+        <div class="feit">
+          <div class="feit-waarde">100%</div>
+          <div class="feit-label">Online</div>
+        </div>
+        <div class="feit">
+          <div class="feit-waarde">Geen</div>
+          <div class="feit-label">Download</div>
+        </div>
+      </div>
+
+      <div class="geluid-melding mt-4">
+        <i class="bi bi-music-note-beamed geluid-ico"></i>
+        <p class="mb-0">
+          <strong>Met geluid speel je het beste.</strong>
+          Kamer 14 bevat geluid dat de sfeer versterkt. Zet je koptelefoon of speakers aan voor de volle beleving. Het is niet verplicht, je kunt de zaak ook prima zonder geluid oplossen.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERHAAL: TWEE DOSSIERS -->
+  <section id="verhaal" class="py-5 sectie-licht">
+    <div class="container">
+      <div class="text-center">
+        <p class="sectie-eyebrow">De zaak</p>
+        <h2 class="sectie-titel mb-4">Twee dossiers, een verdwijning</h2>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <p class="mb-3">
+            Lena Bogaert was kostganger bij het gastgezin Martens in Geel. Op een gewone dinsdagochtend is ze er niet meer. Het officiële onderzoek en de buurt vertellen een ander verhaal, en geen van beide klopt helemaal.
+          </p>
+          <p class="mb-5">
+            De vraag is simpel, het antwoord niet: <em class="tekst-accent">is ze vrijwillig gegaan, en waar is ze nu?</em>
+          </p>
+        </div>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-6 col-lg-5">
+          <div class="dossier-blok h-100">
+            <p class="dossier-rol">Speler A</p>
+            <h3 class="dossier-kop">Het OPZ-dossier</h3>
+            <p class="mb-3">
+              Jij krijgt toegang tot het officiële dossier van Lena bij het OPZ Geel: behandelnotities, atelierverslagen en bijlagen. De papieren waarheid.
+            </p>
+            <span class="dossier-tag">Officieel &middot; vertrouwelijk</span>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-5">
+          <div class="dossier-blok h-100">
+            <p class="dossier-rol">Speler B</p>
+            <h3 class="dossier-kop">Het buurtdossier</h3>
+            <p class="mb-3">
+              Jij krijgt het huishoudlogboek van het gastgezin Martens en de buurtinformatie rond Lena's verdwijning. Wat mensen zagen, en wat ze liever niet zeiden.
+            </p>
+            <span class="dossier-tag">Informeel &middot; ongefilterd</span>
+          </div>
+        </div>
+      </div>
+      <p class="text-center mt-4 dossier-combineer">
+        De oplossing zit in allebei. Alleen samen kom je eruit.
+      </p>
+    </div>
+  </section>
+
+  <!-- ZO WERKT HET -->
+  <section id="hoe" class="py-5 sectie-donker">
+    <div class="container">
+      <div class="text-center">
+        <p class="sectie-eyebrow">Zo werkt het</p>
+        <h2 class="sectie-titel mb-5">Van boeking tot oplossing</h2>
+      </div>
+      <div class="row g-4 justify-content-center align-items-start">
+        <div class="col-md-4 text-center">
+          <div class="stap-nummer">1</div>
+          <h5 class="mt-3">Boek een sessie</h5>
+          <p>Vul het formulier in. Je ontvangt een bevestigingsmail met jullie persoonlijke sessiecode en spellink.</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="stap-nummer">2</div>
+          <h5 class="mt-3">Verdeel de rollen</h5>
+          <p>Stuur de link naar je medespeler. Elk opent zijn eigen dossier in de browser, geen download nodig.</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="stap-nummer">3</div>
+          <h5 class="mt-3">Speel samen</h5>
+          <p>Bel of chat met elkaar. Wissel uit wat je vindt. De aanwijzingen in beide dossiers vullen elkaar aan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ECHTE ACHTERGROND -->
+  <section id="echt" class="py-5 sectie-licht">
+    <div class="container">
+      <div class="text-center">
+        <p class="sectie-eyebrow">Gebaseerd op een echte traditie</p>
+        <h2 class="sectie-titel mb-4">Gezinsverpleging in Geel</h2>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <div class="achtergrond-blok">
+            <p class="mb-3">
+              <strong>Geel, België.</strong> Al meer dan zeven eeuwen wonen mensen die extra zorg nodig hebben bij gewone Geelse gezinnen, als volwaardig lid van het huishouden. Deze traditie van gezinsverpleging, ontstaan bij het pelgrimsoord van de heilige Dymphna, is uniek in de wereld.
+            </p>
+            <p class="mb-3">
+              Vandaag coördineert het OPZ Geel deze zorg nog steeds voor ongeveer tweehonderd mensen. Ze worden <em class="tekst-accent">kostgangers</em> genoemd. Kamer 14 is fictie, maar de wereld eromheen is echt, en de moeite waard om te kennen.
+            </p>
+            <p class="mb-0 small">
+              Meer weten:
+              <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="link-accent">OPZ Geel</a>
+              &middot;
+              <a href="https://www.sint-dymphna.be" target="_blank" rel="noopener" class="link-accent">Sint-Dymphna</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-5 sectie-donker">
+    <div class="container">
+      <div class="text-center">
+        <p class="sectie-eyebrow">Voor je begint</p>
+        <h2 class="sectie-titel mb-5">Veelgestelde vragen</h2>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <details class="faq-item" open>
+            <summary>Wat heb ik nodig om te spelen?</summary>
+            <p>Een telefoon, tablet of computer met een browser, en een manier om met je medespeler te bellen of chatten. Verder niets. Er is geen download of installatie nodig.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Heb ik geluid nodig?</summary>
+            <p>Kamer 14 bevat geluid dat de sfeer versterkt. Met koptelefoon of speakers beleef je het verhaal intenser, maar verplicht is het niet. Alle aanwijzingen zijn ook zonder geluid op te lossen.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Moeten we op dezelfde plek zijn?</summary>
+            <p>Nee. Kamer 14 is gemaakt om vanuit huis te spelen, elk op je eigen scherm. Samen aan tafel kan natuurlijk ook.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Wat als we vastlopen?</summary>
+            <p>De twee dossiers zijn zo opgebouwd dat de oplossing er altijd in zit als je goed combineert. Praat met elkaar, meestal zit het antwoord bij de ander.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Hoelang blijft onze sessie geldig?</summary>
+            <p>Na je reservering ontvang je een sessiecode waarmee jullie op het gekozen moment samen kunnen starten.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLOT-CTA -->
+  <section id="boek-cta" class="py-5 sectie-licht slot-cta">
+    <div class="container text-center">
+      <p class="sectie-eyebrow">Klaar om te beginnen?</p>
+      <h2 class="sectie-titel mb-4">Open dossier 14</h2>
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <p class="mb-4">
+            Lena Bogaert wacht niet. Boek jullie sessie en zoek samen uit wat er die dinsdagochtend echt gebeurde.
+          </p>
+        </div>
+      </div>
+      <a href="#" class="btn btn-archief btn-lg"
+         data-bs-toggle="modal" data-bs-target="#reserveerModal"
+         aria-haspopup="dialog">
+        <i class="bi bi-calendar-check me-2"></i>Boek Kamer 14 voor twee
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-4 footer-archief">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+          <img src="/assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="32" loading="lazy" />
+        </div>
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+          <p class="mb-1 small tekst-grijs">
+            Kamer 14 is gebaseerd op de echte traditie van gezinsverpleging in Geel.
+          </p>
+          <p class="mb-0 small tekst-grijs">
+            <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="footer-link">OPZ Geel</a>
+            &middot;
+            <a href="https://www.sint-dymphna.be" target="_blank" rel="noopener" class="footer-link">Sint-Dymphna</a>
+          </p>
+        </div>
+        <div class="col-md-4 text-center text-md-end">
+          <p class="mb-1 small">
+            <a href="mailto:info@bureau-x.be" class="footer-link">info@bureau-x.be</a>
+          </p>
+          <p class="mb-0 small">
+            <a href="/privacy.html" class="footer-link" style="opacity:0.55;">Privacybeleid</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- RESERVEER MODAL (identiek aan homepage) -->
+  <div class="modal fade" id="reserveerModal" tabindex="-1" aria-labelledby="reserveerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-archief">
+
+        <div class="modal-header modal-header-archief">
+          <h5 class="modal-title" id="reserveerModalLabel">
+            <i class="bi bi-folder2-open me-2"></i>Boek een sessie - Kamer 14
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Sluiten"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <form id="reserveerForm" action="https://formspree.io/f/xvzlanbj" method="POST">
+            <div class="mb-3">
+              <label for="naam" class="form-label">Naam</label>
+              <input type="text" class="form-control archief-input" id="naam" name="naam" placeholder="Jouw naam" required />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mailadres</label>
+              <input type="email" class="form-control archief-input" id="email" name="email" placeholder="jouw@email.be" required />
+            </div>
+            <div class="mb-3">
+              <label for="datum" class="form-label">Gewenste datum (dd/mm)</label>
+              <input type="date" class="form-control archief-input" id="datum" name="datum" required />
+            </div>
+            <div class="mb-4">
+              <label for="spelers" class="form-label">Aantal spelers</label>
+              <select class="form-select archief-input" id="spelers" name="spelers">
+                <option value="duo" selected>Duo (2 spelers)</option>
+              </select>
+            </div>
+            <input type="hidden" name="experience" value="Kamer 14" />
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+            <div class="d-grid">
+              <button type="submit" class="btn btn-archief btn-lg">
+                <i class="bi bi-send me-2"></i>Verstuur reservering
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagina-specifieke stijl, bouwt voort op css/style.css en hergebruikt dezelfde variabelen -->
+  <style>
+    /* Hero aanpassingen voor deze pagina */
+    .hero-section { padding: 70px 0 80px; }
+    .hero-filebox {
+      width: 92px;
+      height: 92px;
+      border: 2px solid var(--kleur-accent);
+      color: var(--kleur-accent-licht);
+      font-family: var(--font-archief);
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      margin-bottom: 1.4rem;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+    }
+    .status-stamp {
+      display: inline-block;
+      font-family: var(--font-archief);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      color: #b04a3a;
+      border: 2px solid #b04a3a;
+      padding: 5px 12px;
+      transform: rotate(-4deg);
+      margin: 0.6rem 0 0.4rem;
+    }
+
+    /* Ghost-knop, in lijn met btn-archief maar terughoudender */
+    .btn-archief-ghost {
+      font-family: var(--font-archief);
+      letter-spacing: 0.08em;
+      background-color: transparent;
+      color: var(--kleur-perkament);
+      border: 2px solid var(--kleur-rand);
+      border-radius: 2px;
+      padding: 10px 28px;
+      transition: border-color .25s, color .25s;
+    }
+    .btn-archief-ghost:hover,
+    .btn-archief-ghost:focus {
+      border-color: var(--kleur-accent);
+      color: var(--kleur-accent-licht);
+    }
+
+    /* Eyebrow boven sectietitels */
+    .sectie-eyebrow {
+      font-family: var(--font-archief);
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--kleur-accent);
+      margin-bottom: 0.5rem;
+    }
+    .tekst-accent { color: var(--kleur-accent-licht); font-style: italic; }
+    .sectie-licht .tekst-accent { color: var(--kleur-accent); }
+
+    /* Feitenbalk */
+    .feiten-balk {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--kleur-accent);
+      border: 1px solid var(--kleur-accent);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .feit {
+      background: var(--kleur-donker);
+      padding: 22px 16px;
+      text-align: center;
+    }
+    .feit-waarde {
+      font-family: var(--font-archief);
+      font-size: 1.25rem;
+      color: var(--kleur-accent-licht);
+      margin-bottom: 4px;
+    }
+    .feit-label {
+      font-family: var(--font-archief);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--kleur-grijs);
+    }
+    @media (max-width: 575px) {
+      .feiten-balk { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Geluidsmelding */
+    .geluid-melding {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(196,154,42,0.08);
+      border: 1px solid var(--kleur-accent);
+      border-left: 4px solid var(--kleur-accent);
+      border-radius: 2px;
+      padding: 18px 22px;
+    }
+    .geluid-ico {
+      font-size: 1.4rem;
+      color: var(--kleur-accent-licht);
+      flex-shrink: 0;
+    }
+    .geluid-melding p { color: var(--kleur-perkament); font-size: 0.95rem; }
+    .geluid-melding strong {
+      font-family: var(--font-archief);
+      letter-spacing: 0.04em;
+      color: var(--kleur-wit);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Dossierblokken */
+    .dossier-blok {
+      background: var(--kleur-wit);
+      border: 1px solid var(--kleur-rand);
+      border-top: 4px solid var(--kleur-accent);
+      border-radius: 2px;
+      color: var(--kleur-donker);
+      padding: 28px 26px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+    .dossier-rol {
+      font-family: var(--font-archief);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #b04a3a;
+      margin-bottom: 6px;
+    }
+    .dossier-kop {
+      font-family: var(--font-archief);
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+      color: var(--kleur-donker);
+      margin-bottom: 12px;
+    }
+    .dossier-tag {
+      display: inline-block;
+      font-family: var(--font-archief);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--kleur-grijs);
+      border: 1px dashed var(--kleur-rand);
+      border-radius: 2px;
+      padding: 4px 10px;
+    }
+    .dossier-combineer {
+      font-family: var(--font-archief);
+      letter-spacing: 0.04em;
+      color: var(--kleur-accent);
+    }
+
+    /* Achtergrondblok */
+    .achtergrond-blok {
+      background: var(--kleur-perkament);
+      border: 1px solid var(--kleur-rand);
+      border-left: 5px solid var(--kleur-accent);
+      border-radius: 2px;
+      color: var(--kleur-donker);
+      padding: 32px 32px;
+    }
+
+    /* FAQ */
+    .faq-item {
+      border-bottom: 1px solid rgba(200,185,154,0.25);
+      padding: 16px 0;
+    }
+    .faq-item summary {
+      font-family: var(--font-archief);
+      font-size: 1.05rem;
+      letter-spacing: 0.03em;
+      color: var(--kleur-perkament);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+";
+      color: var(--kleur-accent-licht);
+      font-family: var(--font-archief);
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+    .faq-item[open] summary::after { content: "\2212"; }
+    .faq-item p {
+      margin: 12px 0 0;
+      color: var(--kleur-grijs);
+      font-size: 0.97rem;
+    }
+
+    /* Slot-CTA achtergrondaccent */
+    .slot-cta {
+      background-image: radial-gradient(circle at 50% 0%, rgba(196,154,42,0.12), transparent 60%);
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/landing.js"></script>
+
+</body>
+</html>

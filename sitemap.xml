@@ -9,12 +9,20 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Kamer 14 experience -->
+  <!-- Kamer 14 verkooppagina -->
+  <url>
+    <loc>https://bureau-x.be/kamer-14/</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Kamer 14 experience (spelpagina) -->
   <url>
     <loc>https://bureau-x.be/experiences/kamer-14/</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
 
 </urlset>
