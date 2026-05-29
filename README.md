@@ -14,9 +14,6 @@ Browser-based escape room experiences built around storytelling, atmosphere, and
 <a href="https://bureau-x.be">
 <img src="https://img.shields.io/badge/LIVE-bureau--x.be-black?style=for-the-badge" alt="Live" />
 </a>
-<a href="https://github.com/xandermeyen/Escape-room/blob/main/LICENSE">
-<img src="https://img.shields.io/badge/LICENSE-MIT-black?style=for-the-badge" alt="License" />
-</a>
 <a href="https://github.com/xandermeyen/Escape-room">
 <img src="https://img.shields.io/github/stars/xandermeyen/Escape-room?style=for-the-badge" alt="Stars" />
 </a>
@@ -135,8 +132,12 @@ Escape-room/
 ├── js/
 │   └── landing.js                  # Landing page scripts
 │
-├── index.html                      # Landing page
+├── kamer-14/
+│   └── index.html                  # Kamer 14 sales / info page
+│
+├── index.html                      # Landing page (homepage)
 ├── privacy.html                    # Privacy policy
+├── CNAME                           # Custom domain (bureau-x.be)
 ├── sitemap.xml
 └── README.md
 ```
@@ -171,12 +172,6 @@ This is a personal project. Issues and feedback are welcome, but the codebase is
 <a href="https://bureau-x.be">bureau-x.be</a> · <a href="https://github.com/xandermeyen">GitHub</a>
 
 </div>
-
----
-
-## License
-
-Distributed under the MIT License.
 
 ---
 
