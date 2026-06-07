@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kamer 14 — Host</title>
+  <title>Kamer 14 - Host</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" integrity="sha256-pdY4ejLKO67E0CM2tbPtq1DJ3VGDVVdqAR6j3ZwdiE4=" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="../../assets/img/bureau_x_favicon.svg" />
   <link rel="stylesheet" href="../../shared/css/game.css" />
@@ -97,63 +97,90 @@
 
     .laden { color: #666; font-size: 0.85rem; }
     .geen-sessies { color: #555; font-size: 0.85rem; text-align: center; padding: 2rem; }
+
+    .terug-link {
+      color: #666; font-size: 0.8rem; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .terug-link:hover { color: #c9b99a; }
   </style>
 </head>
 <body>
 
-  <!-- WACHTWOORDSCHERM -->
-  <div id="wachtwoord-scherm" style="
+  <!-- LOGINSCHERM -->
+  <div id="login-scherm" style="
     position:fixed; inset:0; background:#1a1a1a;
     display:flex; align-items:center; justify-content:center; z-index:9999;">
-    <div style="text-align:center; color:#e8e0d0; font-family:'Special Elite',serif;">
+    <div style="text-align:center; color:#e8e0d0; font-family:'Special Elite',serif; width:280px;">
       <div style="font-size:1.1rem; letter-spacing:0.1em; margin-bottom:1.5rem; color:#c9b99a;">
         Bureau X · Host-toegang
       </div>
+      <input id="email-invoer" type="email" placeholder="E-mailadres"
+        style="background:#252525; border:1px solid #444; color:#e8e0d0;
+               padding:0.6rem 1rem; border-radius:4px; font-size:1rem;
+               outline:none; width:100%; margin-bottom:0.75rem; box-sizing:border-box;"
+        onkeydown="if(event.key==='Enter') login()" />
       <input id="ww-invoer" type="password" placeholder="Wachtwoord"
         style="background:#252525; border:1px solid #444; color:#e8e0d0;
                padding:0.6rem 1rem; border-radius:4px; font-size:1rem;
-               outline:none; width:240px; text-align:center;"
-        onkeydown="if(event.key==='Enter') controleerWW()" />
+               outline:none; width:100%; box-sizing:border-box;"
+        onkeydown="if(event.key==='Enter') login()" />
       <br><br>
-      <button onclick="controleerWW()"
+      <button id="login-knop" onclick="login()"
         style="background:#8b3a3a; color:#fff; border:none;
                padding:0.5rem 1.5rem; border-radius:4px; cursor:pointer;
-               font-family:'Special Elite',serif; font-size:0.9rem; letter-spacing:0.05em;">
-        Toegang
+               font-family:'Special Elite',serif; font-size:0.9rem; letter-spacing:0.05em; width:100%;">
+        Inloggen
       </button>
-      <div id="ww-fout" style="color:#c47d7d; margin-top:1rem; font-size:0.85rem; display:none;">
-        Ongeldig wachtwoord.
+      <div id="login-fout" style="color:#c47d7d; margin-top:1rem; font-size:0.85rem; display:none;">
+        Ongeldig e-mailadres of wachtwoord.
+      </div>
+      <div style="margin-top:1.5rem;">
+        <a href="../../index.html" class="terug-link">
+          <i class="bi bi-arrow-left me-1"></i>Terug naar home
+        </a>
       </div>
     </div>
   </div>
 
-  <script>
-    const WW_HASH = '5f7fb6895fc2fa31ff78702cc08cf13831ade1f1c96867b43607bc523ecd8e8d';
+  <script type="module">
+    import { db } from '../../shared/js/firebase-config.js';
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    async function controleerWW() {
-      const invoer = document.getElementById('ww-invoer').value;
-      const hash   = await crypto.subtle.digest(
-        'SHA-256', new TextEncoder().encode(invoer)
-      );
-      const hex = Array.from(new Uint8Array(hash))
-        .map(b => b.toString(16).padStart(2, '0')).join('');
+    const auth = getAuth();
 
-      if (hex === WW_HASH) {
-        document.getElementById('wachtwoord-scherm').remove();
+    // Luister naar auth-status - dit is de enige toegangscontrole
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login-scherm').style.display = 'none';
         document.getElementById('admin-inhoud').style.display = 'block';
-        sessionStorage.setItem('host-auth', WW_HASH);
       } else {
-        const fout = document.getElementById('ww-fout');
+        document.getElementById('login-scherm').style.display = 'flex';
+        document.getElementById('admin-inhoud').style.display = 'none';
+      }
+    });
+
+    async function login() {
+      const email = document.getElementById('email-invoer').value.trim();
+      const ww    = document.getElementById('ww-invoer').value;
+      const knop  = document.getElementById('login-knop');
+      const fout  = document.getElementById('login-fout');
+
+      knop.disabled = true;
+      fout.style.display = 'none';
+
+      try {
+        await signInWithEmailAndPassword(auth, email, ww);
+      } catch {
         fout.style.display = 'block';
-        setTimeout(() => fout.style.display = 'none', 2000);
+        knop.disabled = false;
       }
     }
 
-    // Al ingelogd in deze tab? Sla het scherm over.
-    if (sessionStorage.getItem('host-auth') === WW_HASH) {
-      document.getElementById('wachtwoord-scherm').remove();
-      document.getElementById('admin-inhoud').style.display = 'block';
-    }
+    // Uitlogknop beschikbaar maken voor de rest van het script
+    window.uitloggen = () => signOut(auth);
+    window.login = login;
   </script>
 
   <!-- ADMIN INHOUD -->
@@ -165,6 +192,12 @@
         <img src="../../assets/img/bureau_x_logo_dark.svg" alt="Bureau X" />
         <h1>Kamer 14</h1>
         <span class="badge-admin">Host</span>
+        <a href="../../index.html" class="btn-sec ms-auto me-2" style="font-size:0.8rem; text-decoration:none;">
+          <i class="bi bi-house me-1"></i>Home
+        </a>
+        <button onclick="window.uitloggen()" class="btn-sec" style="font-size:0.8rem;">
+          <i class="bi bi-box-arrow-right me-1"></i>Uitloggen
+        </button>
       </div>
 
       <!-- Nieuwe sessie aanmaken -->
@@ -172,7 +205,7 @@
         <div class="kaart-titel"><i class="bi bi-plus-circle me-2"></i>Nieuwe sessie aanmaken</div>
 
         <div class="mb-3">
-          <div class="code-gegenereerd" id="gegenereerde-code">——</div>
+          <div class="code-gegenereerd" id="gegenereerde-code">- - -</div>
           <button class="btn-sec ms-2" onclick="genereerCode()">
             <i class="bi bi-arrow-clockwise me-1"></i>Andere code
           </button>
@@ -223,22 +256,9 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, set, get, update }
+    import { db } from '../../shared/js/firebase-config.js';
+    import { ref, set, get, update, serverTimestamp }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey:            "AIzaSyA7HtoKiFqWnopUXOAo4Niz-s17vtihT1Y",
-      authDomain:        "bureau-x.firebaseapp.com",
-      databaseURL:       "https://bureau-x-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId:         "bureau-x",
-      storageBucket:     "bureau-x.firebasestorage.app",
-      messagingSenderId: "63256799402",
-      appId:             "1:63256799402:web:adfb38bdc32707270888d3",
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
 
     const STORAGE_KEY = 'kamer14_admin_sessies';
 
@@ -279,11 +299,11 @@
       const status    = document.getElementById('status-aanmaken');
       const btn       = document.getElementById('btn-aanmaken');
 
-      if (!code || code === '——') {
+      if (!code || code === '- - -') {
         toonStatus(status, 'Genereer eerst een code.', false); return;
       }
       if (!/^[A-Z0-9\-]{3,20}$/.test(code)) {
-        toonStatus(status, 'Ongeldige code — gebruik enkel letters, cijfers en koppeltekens.', false); return;
+        toonStatus(status, 'Ongeldige code - gebruik enkel letters, cijfers en koppeltekens.', false); return;
       }
 
       btn.disabled = true;
@@ -297,7 +317,7 @@
         }
 
         await set(ref(db, `sessions/${code}`), {
-          aangemaakt: Date.now(),
+          aangemaakt: serverTimestamp(),
           actief: true,
           puzzels: { p1: false, p2: false, p3: false, p4: false, p5: false },
           rapport:  { ingediend: false, inhoud: {} },
@@ -367,7 +387,7 @@
 
         const rapportBadge = data.rapport?.ingediend
           ? '<span class="badge-klaar"><i class="bi bi-check2 me-1"></i>Ingediend</span>'
-          : '<span style="color:#555; font-size:0.8rem;">—</span>';
+          : '<span style="color:#555; font-size:0.8rem;"> - </span>';
 
         let statusBadge;
         if (!data.actief) {
@@ -400,22 +420,12 @@
       }).join('');
     }
 
-    window.verversLijst = laadLijst;
-
-    window.kopieer = function(code) {
-      navigator.clipboard?.writeText(code).then(() => {
-        toonStatus(document.getElementById('status-aanmaken'), `Code "${code}" gekopieerd!`, true);
-      });
+    window.verversLijst = function() {
+      laadLijst();
     };
 
-    window.deactiveer = async function(code) {
-      if (!confirm(`Sessie "${code}" deactiveren?`)) return;
-      try {
-        await update(ref(db, `sessions/${code}`), { actief: false });
-        laadLijst();
-      } catch (err) {
-        alert('Fout bij deactiveren: ' + err.message);
-      }
+    window.kopieer = function(code) {
+      navigator.clipboard.writeText(code).catch(() => {});
     };
 
     window.verwijderUitLijst = function(code) {
@@ -423,16 +433,31 @@
       laadLijst();
     };
 
+    window.deactiveer = async function(code) {
+      try {
+        await update(ref(db, `sessions/${code}`), { actief: false });
+        laadLijst();
+      } catch(err) {
+        console.error('Deactiveer mislukt:', err);
+      }
+    };
+
     function toonStatus(el, tekst, ok) {
       el.textContent = tekst;
-      el.className   = `status-bericht ${ok ? 'status-ok' : 'status-fout'}`;
+      el.className = 'status-bericht ' + (ok ? 'status-ok' : 'status-fout');
       el.style.display = 'block';
-      if (ok) setTimeout(() => { el.style.display = 'none'; }, 4000);
+      setTimeout(() => el.style.display = 'none', 4000);
     }
 
-    genereerCode();
+    window.laadLijst = laadLijst;
+
+    // Init
+    window.genereerCode();
     laadLijst();
   </script>
+
+    </div><!-- /max-width wrapper -->
+  </div><!-- /admin-inhoud -->
 
 </body>
 </html>

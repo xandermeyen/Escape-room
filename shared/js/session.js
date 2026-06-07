@@ -41,9 +41,11 @@ export async function valideerSessie(sessieCode) {
 }
 
 // Puzzel markeren als voltooid
-export function puzzelVoltooid(sessieCode, puzzelNr) {
+export async function puzzelVoltooid(sessieCode, puzzelNr) {
   const puzzelRef = ref(db, `sessions/${sessieCode}/puzzels/p${puzzelNr}`);
-  set(puzzelRef, true);
+  await set(puzzelRef, true).catch((err) => {
+    console.error(`puzzelVoltooid p${puzzelNr} mislukt:`, err);
+  });
 }
 
 // Live luisteren naar puzzelstatus
