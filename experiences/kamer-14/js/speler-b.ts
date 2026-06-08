@@ -1,3 +1,4 @@
+import '../../../shared/js/sentry.ts';
 import { luisterNaarStatus, puzzelVoltooid } from '../../../shared/js/session.ts';
 import { controleerAntwoordHash } from '../../../shared/js/utils.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelEnvelopGeluid } from './audio.ts';

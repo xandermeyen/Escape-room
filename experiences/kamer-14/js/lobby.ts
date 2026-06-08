@@ -1,3 +1,4 @@
+import '../../../shared/js/sentry.ts';
 import { valideerSessie, claimRol, luisterNaarRollen } from '../../../shared/js/session.ts';
 
 let rollenUnsubscribe: (() => void) | null = null;

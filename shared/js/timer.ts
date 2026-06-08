@@ -86,7 +86,7 @@ function tick(startTijd: number): void {
   if (display) display.textContent = formateerTijd(resterend);
 }
 
-function formateerTijd(ms: number): string {
+export function formateerTijd(ms: number): string {
   const totaalSec = Math.max(0, Math.floor(ms / 1000));
   const min = Math.floor(totaalSec / 60);
   const sec = totaalSec % 60;

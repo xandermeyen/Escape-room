@@ -1,3 +1,5 @@
+import '../shared/js/sentry.ts';
+
 /* ── 1. SCROLL-ANIMATIES ── */
 
 const animeerElementen = document.querySelectorAll<HTMLElement>(

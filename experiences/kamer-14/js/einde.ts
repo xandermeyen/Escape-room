@@ -1,3 +1,4 @@
+import '../../../shared/js/sentry.ts';
 import { luisterNaarRapport, diendRapportIn, type RapportInhoud } from '../../../shared/js/session.ts';
 import { speelStem } from './audio.ts';
 
