@@ -239,18 +239,19 @@
               <input type="text" class="form-control archief-input" id="naam" name="naam" placeholder="Jouw naam" required />
             </div>
             <div class="mb-3">
-              <label for="email" class="form-label">E-mailadres</label>
+              <label for="spelers" class="form-label">Aantal spelers</label>
+              <select class="form-select archief-input" id="spelers" name="spelers">
+                <option value="2" selected>Duo (2 spelers)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mailadres speler 1</label>
               <input type="email" class="form-control archief-input" id="email" name="email" placeholder="jouw@email.be" required />
             </div>
+            <div id="extra-speler-emails"></div>
             <div class="mb-3">
               <label for="datum" class="form-label">Gewenste datum</label>
               <input type="date" class="form-control archief-input" id="datum" name="datum" required />
-            </div>
-            <div class="mb-4">
-              <label for="spelers" class="form-label">Aantal spelers</label>
-              <select class="form-select archief-input" id="spelers" name="spelers">
-                <option value="duo" selected>Duo (2 spelers)</option>
-              </select>
             </div>
             <input type="hidden" name="experience" value="Kamer 14" />
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
@@ -260,6 +261,26 @@
               </button>
             </div>
           </form>
+          <script>
+            (function () {
+              var select = document.getElementById('spelers');
+              var container = document.getElementById('extra-speler-emails');
+              function updateEmailFields() {
+                var count = parseInt(select.value, 10) || 2;
+                container.innerHTML = '';
+                for (var i = 2; i <= count; i++) {
+                  var div = document.createElement('div');
+                  div.className = 'mb-3';
+                  div.innerHTML =
+                    '<label for="email_speler_' + i + '" class="form-label">E-mailadres speler ' + i + '</label>' +
+                    '<input type="email" class="form-control archief-input" id="email_speler_' + i + '" name="email_speler_' + i + '" placeholder="speler' + i + '@email.be" required />';
+                  container.appendChild(div);
+                }
+              }
+              select.addEventListener('change', updateEmailFields);
+              updateEmailFields();
+            })();
+          </script>
         </div>
 
       </div>

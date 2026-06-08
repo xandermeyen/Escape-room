@@ -1,0 +1,1 @@
+import"./bootstrap-BArhLtuy.js";import"./sentry-BDYHEha_.js";/* empty css             */import{s as e}from"./session-Kc-GvMjX.js";var t=new URLSearchParams(window.location.search).get(`sessie`);t&&e(t).catch(e=>{console.error(`sluitSessie mislukt:`,e)});
