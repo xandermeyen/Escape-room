@@ -146,7 +146,7 @@
   <script type="module">
     import { db } from '../../shared/js/firebase-config.js';
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
-      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      from "firebase/auth";
 
     const auth = getAuth();
 
@@ -258,7 +258,7 @@
   <script type="module">
     import { db } from '../../shared/js/firebase-config.js';
     import { ref, set, get, update, serverTimestamp }
-      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+      from "firebase/database";
 
     const STORAGE_KEY = 'kamer14_admin_sessies';
 

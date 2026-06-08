@@ -11,7 +11,7 @@ import {
   get,
   set,
   serverTimestamp,
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+} from "firebase/database";
 
 const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
 
