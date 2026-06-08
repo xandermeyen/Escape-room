@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+desktop.ini
 
 # Environment variables - nooit op git
 .env

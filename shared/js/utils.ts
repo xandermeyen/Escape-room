@@ -5,20 +5,26 @@
  * it against a set of pre-computed hashes. Plain-text answers are never stored
  * in the source — a player opening DevTools sees only hashes.
  *
- * @param {string}   puzzelNr   - Key into `hashes` (e.g. 'p1')
- * @param {string}   inputId    - ID of the <input> element
- * @param {string}   feedbackId - ID of the feedback element
- * @param {string}   btnId      - ID of the submit button
- * @param {Object}   hashes     - Map of puzzelNr → string[] of SHA-256 hex hashes
- * @param {Function} onJuist    - Called when the answer is correct
- * @param {string}   foutTekst  - Feedback text shown on a wrong answer
+ * @param puzzelNr   - Key into `hashes` (e.g. 'p1')
+ * @param inputId    - ID of the <input> element
+ * @param feedbackId - ID of the feedback element
+ * @param btnId      - ID of the submit button
+ * @param hashes     - Map of puzzelNr → string[] of SHA-256 hex hashes
+ * @param onJuist    - Called when the answer is correct
+ * @param foutTekst  - Feedback text shown on a wrong answer
  */
 export async function controleerAntwoordHash(
-  puzzelNr, inputId, feedbackId, btnId, hashes, onJuist, foutTekst
-) {
-  const input    = document.getElementById(inputId);
-  const feedback = document.getElementById(feedbackId);
-  const btn      = document.getElementById(btnId);
+  puzzelNr: string,
+  inputId: string,
+  feedbackId: string,
+  btnId: string,
+  hashes: Record<string, string[]>,
+  onJuist: () => void,
+  foutTekst: string,
+): Promise<void> {
+  const input    = document.getElementById(inputId) as HTMLInputElement;
+  const feedback = document.getElementById(feedbackId) as HTMLElement;
+  const btn      = document.getElementById(btnId) as HTMLButtonElement;
   const waarde   = input.value.trim().toLowerCase();
   if (!waarde) return;
 
@@ -40,13 +46,13 @@ export async function controleerAntwoordHash(
   }
 }
 
-export function volgendHint(blokId) {
+export function volgendHint(blokId: string): void {
   const blok = document.getElementById(blokId);
   if (!blok) return;
 
-  const stappen  = blok.querySelectorAll('.hint-stap');
-  const knopMeer = blok.querySelector('.hint-verder');
-  const knopOpen = blok.querySelector('.hint-knop');
+  const stappen  = blok.querySelectorAll<HTMLElement>('.hint-stap');
+  const knopMeer = blok.querySelector<HTMLElement>('.hint-verder');
+  const knopOpen = blok.querySelector<HTMLElement>('.hint-knop');
 
   for (const stap of stappen) {
     if (stap.classList.contains('verborgen')) {
@@ -68,4 +74,10 @@ export function volgendHint(blokId) {
 }
 
 // Globaal beschikbaar voor onclick-attributen in HTML
+declare global {
+  interface Window {
+    volgendHint: typeof volgendHint;
+  }
+}
+
 window.volgendHint = volgendHint;

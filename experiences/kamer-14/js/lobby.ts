@@ -1,9 +1,9 @@
 import { valideerSessie, claimRol, luisterNaarRollen } from '../../../shared/js/session.ts';
 
-let rollenUnsubscribe = null;
+let rollenUnsubscribe: (() => void) | null = null;
 
 // ── Scherm wisselen ──────────────────────────────────────────────────────────
-function toonScherm(id) {
+function toonScherm(id: string): void {
   document.querySelectorAll('.scherm').forEach(s => s.classList.remove('actief'));
   const doel = document.getElementById(id);
   if (doel) {
@@ -20,6 +20,15 @@ function toonScherm(id) {
     stopRolListener();
   }
 }
+
+declare global {
+  interface Window {
+    toonScherm: typeof toonScherm;
+    valideerCode: typeof valideerCode;
+    kiesRol: typeof kiesRol;
+  }
+}
+
 window.toonScherm = toonScherm;
 
 // Onderschep de browserterugknop / muisknop terug
@@ -32,28 +41,28 @@ window.addEventListener('popstate', () => {
 });
 
 // ── Rol-listener ─────────────────────────────────────────────────────────────
-function startRolListener() {
+function startRolListener(): void {
   const code = sessionStorage.getItem('sessieCode');
   if (!code) return;
   stopRolListener();
   rollenUnsubscribe = luisterNaarRollen(code, (spelers) => {
-    setRolStatus('rol-kaart-a', 'a', spelers.a === 'bezet');
-    setRolStatus('rol-kaart-b', 'b', spelers.b === 'bezet');
+    setRolStatus('rol-kaart-a', 'a', spelers['a'] === 'bezet');
+    setRolStatus('rol-kaart-b', 'b', spelers['b'] === 'bezet');
   });
 }
 
-function stopRolListener() {
+function stopRolListener(): void {
   if (rollenUnsubscribe) {
     rollenUnsubscribe();
     rollenUnsubscribe = null;
   }
 }
 
-function setRolStatus(kaartId, rol, bezet) {
+function setRolStatus(kaartId: string, rol: string, bezet: boolean): void {
   const kaart      = document.getElementById(kaartId);
   if (!kaart) return;
-  const bezetLabel = kaart.querySelector('.rol-bezet-label');
-  const kiesKnop   = kaart.querySelector('.rol-knop');
+  const bezetLabel = kaart.querySelector<HTMLElement>('.rol-bezet-label');
+  const kiesKnop   = kaart.querySelector<HTMLElement>('.rol-knop');
 
   if (bezet) {
     kaart.classList.add('rol-bezet');
@@ -69,59 +78,65 @@ function setRolStatus(kaartId, rol, bezet) {
 }
 
 // ── Sessiecode valideren ──────────────────────────────────────────────────────
-async function valideerCode() {
-  const input = document.getElementById('sessieCodeInput');
-  const fout  = document.querySelector('#scherm-code .code-fout');
-  const knop  = document.querySelector('#scherm-code .btn-game');
+async function valideerCode(): Promise<void> {
+  const input = document.getElementById('sessieCodeInput') as HTMLInputElement;
+  const fout  = document.querySelector<HTMLElement>('#scherm-code .code-fout');
+  const knop  = document.querySelector<HTMLButtonElement>('#scherm-code .btn-game');
   const code  = input.value.trim().toUpperCase();
 
   if (code.length < 3) {
     input.classList.add('invoer-fout');
-    fout.textContent = 'Voer een geldige sessiecode in.';
-    fout.classList.remove('verborgen');
+    if (fout) fout.textContent = 'Voer een geldige sessiecode in.';
+    fout?.classList.remove('verborgen');
     return;
   }
 
-  knop.disabled = true;
-  knop.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Controleren…';
+  if (knop) {
+    knop.disabled = true;
+    knop.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Controleren…';
+  }
 
   try {
     const geldig = await valideerSessie(code);
 
     if (!geldig) {
       input.classList.add('invoer-fout');
-      fout.textContent = 'Ongeldige of inactieve code. Controleer je e-mail.';
-      fout.classList.remove('verborgen');
+      if (fout) fout.textContent = 'Ongeldige of inactieve code. Controleer je e-mail.';
+      fout?.classList.remove('verborgen');
       return;
     }
 
     sessionStorage.setItem('sessieCode', code);
     input.classList.remove('invoer-fout');
-    fout.classList.add('verborgen');
+    fout?.classList.add('verborgen');
     toonScherm('scherm-rol');
 
   } catch (err) {
     console.error('Firebase fout:', err);
-    fout.textContent = 'Verbindingsfout. Controleer je internetverbinding.';
-    fout.classList.remove('verborgen');
+    if (fout) fout.textContent = 'Verbindingsfout. Controleer je internetverbinding.';
+    fout?.classList.remove('verborgen');
   } finally {
-    knop.disabled = false;
-    knop.innerHTML = '<i class="bi bi-arrow-right me-2"></i>Verder';
+    if (knop) {
+      knop.disabled = false;
+      knop.innerHTML = '<i class="bi bi-arrow-right me-2"></i>Verder';
+    }
   }
 }
 window.valideerCode = valideerCode;
 
-document.getElementById('sessieCodeInput').addEventListener('input', () => {
-  document.getElementById('sessieCodeInput').classList.remove('invoer-fout');
-  document.querySelector('#scherm-code .code-fout').classList.add('verborgen');
+const sessieCodeInput = document.getElementById('sessieCodeInput') as HTMLInputElement;
+
+sessieCodeInput.addEventListener('input', () => {
+  sessieCodeInput.classList.remove('invoer-fout');
+  document.querySelector('#scherm-code .code-fout')?.classList.add('verborgen');
 });
 
-document.getElementById('sessieCodeInput').addEventListener('keydown', (e) => {
+sessieCodeInput.addEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Enter') valideerCode();
 });
 
 // ── Rol kiezen ───────────────────────────────────────────────────────────────
-async function kiesRol(rol) {
+async function kiesRol(rol: string): Promise<void> {
   const code = sessionStorage.getItem('sessieCode');
   if (!code) { toonScherm('scherm-code'); return; }
 

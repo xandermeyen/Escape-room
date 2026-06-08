@@ -1,4 +1,6 @@
-const animeerElementen = document.querySelectorAll(
+/* ── 1. SCROLL-ANIMATIES ── */
+
+const animeerElementen = document.querySelectorAll<HTMLElement>(
   '.experience-kaart, .experience-kaart-locked, .archief-kaart, .stap-nummer, .dossier-blok'
 );
 
@@ -22,8 +24,8 @@ animeerElementen.forEach(el => observer.observe(el));
 
 /* ── 2. ACTIEVE NAV-LINK OP SCROLL ── */
 
-const secties   = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.navbar-nav .nav-link');
+const secties   = document.querySelectorAll<HTMLElement>('section[id]');
+const navLinks  = document.querySelectorAll<HTMLAnchorElement>('.navbar-nav .nav-link');
 
 const navObserver = new IntersectionObserver(
   (entries) => {
@@ -33,7 +35,7 @@ const navObserver = new IntersectionObserver(
         navLinks.forEach(link => link.classList.remove('nav-link-actief'));
 
         // Voeg 'actief' toe aan de link die past bij de zichtbare sectie
-        const actieveLink = document.querySelector(
+        const actieveLink = document.querySelector<HTMLAnchorElement>(
           `.navbar-nav .nav-link[href="#${entry.target.id}"]`
         );
         if (actieveLink) actieveLink.classList.add('nav-link-actief');
@@ -51,18 +53,18 @@ secties.forEach(sectie => navObserver.observe(sectie));
 /* ── 3. FORMSPREE AJAX FORMULIER ── */
 
 // Datum minimum = vandaag
-const datumInput = document.getElementById('datum');
+const datumInput = document.getElementById('datum') as HTMLInputElement | null;
 if (datumInput) {
-  datumInput.min = new Date().toISOString().split('T')[0];
+  datumInput.min = new Date().toISOString().split('T')[0]!;
 }
 
-const form = document.getElementById('reserveerForm');
+const form = document.getElementById('reserveerForm') as HTMLFormElement | null;
 
 if (form) {
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', async (e: SubmitEvent) => {
     e.preventDefault(); // stop de normale submit/redirect
 
-    const knop = form.querySelector('button[type="submit"]');
+    const knop = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
     const origineelLabel = knop.innerHTML;
 
     // Laadstatus tonen

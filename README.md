@@ -52,6 +52,7 @@ One player takes the role of an OPZ staff member reviewing clinical records. The
 
 - Two-player collaborative gameplay with asymmetric roles and dossiers
 - Real-time session sync via Firebase Realtime Database
+- Firebase Authentication for host access
 - Atomic role claiming to prevent duplicate selections
 - Story-driven puzzle progression with live document unlocking
 - Atmospheric UI designed around the period and setting
@@ -67,10 +68,14 @@ One player takes the role of an OPZ staff member reviewing clinical records. The
 
 | Layer | Technology |
 |---|---|
-| Frontend | HTML5, CSS3, JavaScript (ES Modules) |
+| Frontend | HTML5, CSS3, TypeScript (ES Modules) |
+| Build tool | Vite |
 | Realtime Backend | Firebase Realtime Database |
+| Authentication | Firebase Authentication |
 | Styling | Bootstrap 5, Bootstrap Icons, Google Fonts |
+| Package manager | pnpm |
 | Hosting | GitHub Pages + Custom Domain |
+| CI/CD | GitHub Actions |
 
 </div>
 
@@ -82,40 +87,26 @@ One player takes the role of an OPZ staff member reviewing clinical records. The
 Escape-room/
 │
 ├── assets/
-│   ├── fonts/
 │   └── img/                        # Logos, favicons and images
 │
 ├── css/
 │   └── style.css                   # Landing page styles
 │
+├── src/
+│   └── bootstrap.ts                # Bootstrap + Bootstrap Icons entry
+│
 ├── shared/
 │   ├── css/
 │   │   └── game.css                # Shared design system
 │   └── js/
-│       ├── firebase-config.js      # Firebase initialisation
-│       ├── session.js              # Session logic (create, validate, roles, puzzles)
-│       ├── timer.js                # Shared game timer
-│       └── utils.js                # Shared helpers
+│       ├── firebase-config.ts      # Firebase initialisation (reads from env)
+│       ├── session.ts              # Session logic (create, validate, roles, puzzles)
+│       ├── timer.ts                # Shared game timer
+│       └── utils.ts                # Shared helpers
 │
 ├── experiences/
 │   └── kamer-14/
-│       ├── audio/
-│       │   ├── an-vermeersch/
-│       │   │   ├── verhaal-p1.mp3
-│       │   │   ├── verhaal-p2.mp3
-│       │   │   ├── verhaal-p3.mp3
-│       │   │   ├── verhaal-p4.mp3
-│       │   │   └── verhaal-p5.mp3
-│       │   ├── katrijn/
-│       │   │   ├── verhaal-p1.mp3
-│       │   │   ├── verhaal-p2.mp3
-│       │   │   ├── verhaal-p3.mp3
-│       │   │   ├── verhaal-p4.mp3
-│       │   │   └── verhaal-p5.mp3
-│       │   └── lena/
-│       │       └── briefkaart.mp3
-│       ├── css/
-│       │   └── kamer14.css         # Kamer 14 specific styles
+│       ├── audio/                  # Voice and atmosphere audio files
 │       ├── index.html              # Lobby (code entry + role selection)
 │       ├── speler-a.html           # Player A experience
 │       ├── speler-b.html           # Player B experience
@@ -123,21 +114,25 @@ Escape-room/
 │       ├── host-panel.html         # Host session management
 │       ├── tijd-voorbij.html       # Time-expired screen
 │       └── js/
-│           ├── lobby.js
-│           ├── speler-a.js
-│           ├── speler-b.js
-│           ├── einde.js
-│           └── audio.js
+│           ├── lobby.ts
+│           ├── speler-a.ts
+│           ├── speler-b.ts
+│           ├── einde.ts
+│           └── audio.ts
 │
 ├── js/
-│   └── landing.js                  # Landing page scripts
+│   └── landing.ts                  # Landing page scripts
 │
 ├── kamer-14/
 │   └── index.html                  # Kamer 14 sales / info page
 │
+├── public/
+│   └── CNAME                       # Custom domain (bureau-x.be)
+│
 ├── index.html                      # Landing page (homepage)
 ├── privacy.html                    # Privacy policy
-├── CNAME                           # Custom domain (bureau-x.be)
+├── vite.config.ts                  # Vite multi-page config
+├── tsconfig.json                   # TypeScript config
 ├── sitemap.xml
 └── README.md
 ```
@@ -149,11 +144,34 @@ Escape-room/
 ```bash
 git clone https://github.com/xandermeyen/Escape-room.git
 cd Escape-room
+pnpm install
 ```
 
-Open with [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) or any static file server. Direct `file://` access will not work due to ES module imports and Firebase.
+Create a `.env.development` file with your dev Firebase project config:
 
-> Firebase is already configured and connected to the live database. No additional setup is needed for read access during local testing.
+```
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_DATABASE_URL=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+```
+
+Then start the dev server:
+
+```bash
+pnpm dev
+```
+
+The dev server runs at `http://localhost:5173` and uses the dev Firebase project automatically. Production credentials are never needed locally.
+
+---
+
+## Deployment
+
+Deployments are fully automated via GitHub Actions. Every push to `main` triggers a build and deploys to the `gh-pages` branch. Production Firebase credentials are stored as GitHub repository secrets and injected at build time.
 
 ---
 

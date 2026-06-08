@@ -1,19 +1,19 @@
 import { luisterNaarStatus, puzzelVoltooid } from '../../../shared/js/session.ts';
-import { volgendHint, controleerAntwoordHash } from '../../../shared/js/utils.ts';
+import { controleerAntwoordHash } from '../../../shared/js/utils.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 
-let _audioGestart = false;
+let _audioGestart: boolean = false;
 
 // Bijhouden welke puzzels al een fragment getriggerd hebben
-const _fragmentenAfgespeeld = new Set();
+const _fragmentenAfgespeeld: Set<string> = new Set();
 
 // Fragmenten alleen spelen voor puzzels die tijdens DEZE sessie opgelost worden,
 // niet voor puzzels die al opgelost waren vóór het laden van de pagina.
-const _paginaLaadtijd = Date.now();
-const WACHT_NA_LADEN  = 4000; // ms — Firebase-initiële snapshot duurt doorgaans < 2 s
+const _paginaLaadtijd: number = Date.now();
+const WACHT_NA_LADEN: number  = 4000; // ms — Firebase-initiële snapshot duurt doorgaans < 2 s
 
-function zorgVoorAudio() {
+function zorgVoorAudio(): void {
   if (_audioGestart) return;
   _audioGestart = true;
   startAchtergrond('a');
@@ -31,13 +31,13 @@ if (!sessie) {
 // Voorkomt dat spelers per ongeluk de game verlaten via
 // terugknop, muisknop of meerdere stappen terug.
 // Wordt uitgeschakeld zodra ze bewust naar einde.html gaan.
-let _gameBeschermd = true;
+let _gameBeschermd: boolean = true;
 
 history.pushState({ scherm: 'game' }, '');
 window.addEventListener('popstate', () => {
   if (_gameBeschermd) history.pushState({ scherm: 'game' }, '');
 });
-window.addEventListener('beforeunload', (e) => {
+window.addEventListener('beforeunload', (e: BeforeUnloadEvent) => {
   if (_gameBeschermd) {
     e.preventDefault();
     e.returnValue = '';
@@ -45,18 +45,18 @@ window.addEventListener('beforeunload', (e) => {
 });
 
 // Timer starten (na sessie-definitie)
-initialiseerTimer(sessie);
+initialiseerTimer(sessie!);
 
 // Casenummer tonen in systeembalk
-document.getElementById('sys-case').textContent =
-  `Intern dossier · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
+const sysCase = document.getElementById('sys-case');
+if (sysCase) sysCase.textContent = `Intern dossier · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
 
 
 // ── Tabnavigatie ──────────────────────────────────────────
 document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
   tab.addEventListener('click', () => {
     zorgVoorAudio();
-    const doel = tab.dataset.tab;
+    const doel = (tab as HTMLElement).dataset['tab'];
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('actief'));
     tab.classList.add('actief');
@@ -66,9 +66,9 @@ document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
 
 
 // ── Voortgangsbalk bijwerken ──────────────────────────────
-function updateVoortgang(p) {
+function updateVoortgang(p: Record<string, boolean>): void {
   const stappen  = ['vp1','vp2','vp3','vp4','vp5'];
-  const voltooid = [p.p1, p.p2, p.p3, p.p4, p.p5];
+  const voltooid = [p['p1'], p['p2'], p['p3'], p['p4'], p['p5']];
   const aantalKlaar = voltooid.filter(Boolean).length;
 
   stappen.forEach((id, i) => {
@@ -83,13 +83,13 @@ function updateVoortgang(p) {
 
 
 // ── Tabs vrijgeven op basis van Firebase-status ───────────
-function updateTabs(p) {
+function updateTabs(p: Record<string, boolean>): void {
   const tabAtelier     = document.getElementById('tab-atelier');
   const tabIntakefiche = document.getElementById('tab-intakefiche');
   const tabBijlage     = document.getElementById('tab-bijlage');
 
   // Atelier: vrijgegeven na P1
-  if (p.p1 && tabAtelier.classList.contains('slot')) {
+  if (p['p1'] && tabAtelier?.classList.contains('slot')) {
     zorgVoorAudio();
     speelUnlock();
     tabAtelier.classList.remove('slot');
@@ -100,12 +100,12 @@ function updateTabs(p) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
       tabAtelier.classList.add('actief');
-      document.getElementById('panel-atelier').classList.add('actief');
+      document.getElementById('panel-atelier')?.classList.add('actief');
     });
   }
 
   // Intakefiche: vrijgegeven na P2 én P3
-  if (p.p2 && p.p3 && tabIntakefiche.classList.contains('slot')) {
+  if (p['p2'] && p['p3'] && tabIntakefiche?.classList.contains('slot')) {
     zorgVoorAudio();
     speelUnlock();
     tabIntakefiche.classList.remove('slot');
@@ -116,12 +116,12 @@ function updateTabs(p) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
       tabIntakefiche.classList.add('actief');
-      document.getElementById('panel-intakefiche').classList.add('actief');
+      document.getElementById('panel-intakefiche')?.classList.add('actief');
     });
   }
 
   // Bijlage D: vrijgegeven na P4
-  if (p.p4 && tabBijlage.classList.contains('slot')) {
+  if (p['p4'] && tabBijlage?.classList.contains('slot')) {
     zorgVoorAudio();
     speelUnlock();
     tabBijlage.classList.remove('slot');
@@ -132,12 +132,12 @@ function updateTabs(p) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
       tabBijlage.classList.add('actief');
-      document.getElementById('panel-bijlage').classList.add('actief');
+      document.getElementById('panel-bijlage')?.classList.add('actief');
     });
   }
 
   // ── Verhaalfragmenten na puzzeloplossing ─────────────────
-  ['p1','p2','p3','p4','p5'].forEach(nr => {
+  (['p1','p2','p3','p4','p5'] as const).forEach(nr => {
     if (p[nr] && !_fragmentenAfgespeeld.has(nr)) {
       _fragmentenAfgespeeld.add(nr);
       if (Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
@@ -153,18 +153,18 @@ function updateTabs(p) {
   });
 
   // Eindelink tonen als alle puzzels opgelost zijn
-  if (p.p5 && !document.getElementById('einde-link')) {
+  if (p['p5'] && !document.getElementById('einde-link')) {
     const balk     = document.createElement('a');
     balk.id        = 'einde-link';
     balk.href      = `einde.html?sessie=${sessie}`;
     balk.className = 'einde-link-balk';
     balk.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
     balk.addEventListener('click', () => { _gameBeschermd = false; });
-    document.querySelector('.tabs').insertAdjacentElement('afterend', balk);
+    document.querySelector('.tabs')?.insertAdjacentElement('afterend', balk);
   }
 }
 
-function markeerVoltooid(id) {
+function markeerVoltooid(id: string): void {
   const blok = document.getElementById(id);
   if (!blok) return;
   blok.classList.add('verborgen');
@@ -174,7 +174,7 @@ function markeerVoltooid(id) {
 // ── Puzzel-antwoorden (SHA-256 gehasht) ───────────────────
 // Plain-text antwoorden staan niet in de broncode.
 // Gebruik de console-snippet in utils.js om hashes te genereren.
-const antwoordHashes = {
+const antwoordHashes: Record<string, string[]> = {
   p1: [
     '6d95368648b569fb1fe2adced89be071011bb3f9f82abf498daf495cc213116e',
     '5443975707db4d27536283ba2581340e52064790e20a31b12f45fcc421618e4d',
@@ -204,18 +204,18 @@ const antwoordHashes = {
     controleerAntwoordHash(
       nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`,
       antwoordHashes,
-      () => puzzelVoltooid(sessie, puzzelNr),
+      () => puzzelVoltooid(sessie!, puzzelNr),
       'Niet correct. Overleg opnieuw met Speler B.'
     )
   );
-  document.getElementById(`input-${nr}`)?.addEventListener('keydown', e => {
+  document.getElementById(`input-${nr}`)?.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
   });
 });
 
 
 // ── Firebase live luisteren ───────────────────────────────
-luisterNaarStatus(sessie, (puzzels) => {
+luisterNaarStatus(sessie!, (puzzels) => {
   const p = puzzels || {};
   updateVoortgang(p);
   updateTabs(p);

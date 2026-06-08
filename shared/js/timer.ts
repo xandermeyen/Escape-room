@@ -15,10 +15,10 @@ import {
 
 const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
 
-let timerInterval       = null;
-let huidigeCode         = null;
-let waarschuwing30Klaar = false;
-let waarschuwing10Klaar = false;
+let timerInterval: number | null      = null;
+let huidigeCode: string | null        = null;
+let waarschuwing30Klaar: boolean      = false;
+let waarschuwing10Klaar: boolean      = false;
 
 // ─────────────────────────────────────────────
 // Publieke API
@@ -29,7 +29,7 @@ let waarschuwing10Klaar = false;
  * Zet de starttijd in Firebase (enkel als die er nog niet is)
  * en start de lokale aftelling.
  */
-export async function initialiseerTimer(sessieCode) {
+export async function initialiseerTimer(sessieCode: string): Promise<void> {
   huidigeCode = sessieCode;
 
   const timerRef = ref(db, `sessions/${sessieCode}/timerGestart`);
@@ -42,7 +42,7 @@ export async function initialiseerTimer(sessieCode) {
 
   // Lees de (eventueel net aangemaakte) starttijd
   const startSnapshot = await get(timerRef);
-  const startTijd = startSnapshot.val();
+  const startTijd: number = startSnapshot.val();
   if (!startTijd) return; // Zou niet mogen, maar veiligheidshalve
 
   // Bouw de klokknop + popup in de pagina
@@ -58,11 +58,11 @@ export async function initialiseerTimer(sessieCode) {
 // Interne functies
 // ─────────────────────────────────────────────
 
-function tick(startTijd) {
+function tick(startTijd: number): void {
   const resterend = TIJDSLIMIET_MS - (Date.now() - startTijd);
 
   if (resterend <= 0) {
-    clearInterval(timerInterval);
+    clearInterval(timerInterval!);
     navigeerNaarTijdVoorbij();
     return;
   }
@@ -86,7 +86,7 @@ function tick(startTijd) {
   if (display) display.textContent = formateerTijd(resterend);
 }
 
-function formateerTijd(ms) {
+function formateerTijd(ms: number): string {
   const totaalSec = Math.max(0, Math.floor(ms / 1000));
   const min = Math.floor(totaalSec / 60);
   const sec = totaalSec % 60;
@@ -97,7 +97,7 @@ function formateerTijd(ms) {
 // Timer UI — klokknop + popup
 // ─────────────────────────────────────────────
 
-function bouwTimerUI() {
+function bouwTimerUI(): void {
   // Klokknop (rechtsonder, altijd zichtbaar)
   const knop = document.createElement('button');
   knop.id = 'timer-klok-knop';
@@ -128,7 +128,7 @@ function bouwTimerUI() {
   document.body.appendChild(popup);
 }
 
-function toggleTimerPopup() {
+function toggleTimerPopup(): void {
   document.getElementById('timer-popup')?.classList.toggle('verborgen');
 }
 
@@ -136,7 +136,7 @@ function toggleTimerPopup() {
 // Waarschuwingsbalken
 // ─────────────────────────────────────────────
 
-function toonWaarschuwing(minuten) {
+function toonWaarschuwing(minuten: number): void {
   // Verwijder eventuele vorige melding
   document.getElementById('timer-waarschuwing')?.remove();
 
@@ -181,7 +181,7 @@ function toonWaarschuwing(minuten) {
 // Tijdoverschrijding
 // ─────────────────────────────────────────────
 
-function navigeerNaarTijdVoorbij() {
+function navigeerNaarTijdVoorbij(): void {
   const code = huidigeCode ? encodeURIComponent(huidigeCode) : '';
   window.location.href = `tijd-voorbij.html?sessie=${code}`;
 }

@@ -1,4 +1,4 @@
-import { luisterNaarRapport, diendRapportIn } from '../../../shared/js/session.ts';
+import { luisterNaarRapport, diendRapportIn, type RapportInhoud } from '../../../shared/js/session.ts';
 import { speelStem } from './audio.ts';
 
 // ── Sessie ophalen ────────────────────────────────────────
@@ -10,13 +10,16 @@ if (!sessie) {
 }
 
 // Sessie tonen in systeembalk en meta
-document.getElementById('sys-case-rapport').textContent =
+const sysCaseRapport = document.getElementById('sys-case-rapport');
+if (sysCaseRapport) sysCaseRapport.textContent =
   `Intern rapport · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
-document.getElementById('rapport-sessie-label').textContent = sessie;
+
+const rapportSessieLabel = document.getElementById('rapport-sessie-label');
+if (rapportSessieLabel) rapportSessieLabel.textContent = sessie;
 
 
 // ── Scherm-overgangen ─────────────────────────────────────
-function toonScherm(id) {
+function toonScherm(id: string): void {
   document.querySelectorAll('.einde-scherm').forEach(s => s.classList.remove('actief'));
   const doel = document.getElementById(id);
   if (doel) {
@@ -27,7 +30,7 @@ function toonScherm(id) {
 
 
 // ── Validatie helpers ─────────────────────────────────────
-const goedeAntwoorden = {
+const goedeAntwoorden: Record<string, (v: string) => boolean> = {
   bestemming: (v) => v.includes('diest'),
   wie:        (v) => v.includes('marie'),
   tijdstip:   (v) => {
@@ -37,106 +40,114 @@ const goedeAntwoorden = {
   },
 };
 
-function resetVeld(id) {
-  document.getElementById(`r-${id}`).classList.remove('fout');
-  document.getElementById(`fout-${id}`).style.display = 'none';
+function resetVeld(id: string): void {
+  const input    = document.getElementById(`r-${id}`);
+  const foutMsg  = document.getElementById(`fout-${id}`);
+  if (input)   input.classList.remove('fout');
+  if (foutMsg) foutMsg.style.display = 'none';
 }
 
-function markeerFout(id) {
-  document.getElementById(`r-${id}`).classList.add('fout');
-  document.getElementById(`fout-${id}`).style.display = 'block';
+function markeerFout(id: string): void {
+  const input    = document.getElementById(`r-${id}`);
+  const foutMsg  = document.getElementById(`fout-${id}`);
+  if (input)   input.classList.add('fout');
+  if (foutMsg) foutMsg.style.display = 'block';
 }
 
 
 // ── Rapport indienen ──────────────────────────────────────
-async function diendIn() {
-  const bestemming = document.getElementById('r-bestemming').value.trim().toLowerCase();
-  const wie        = document.getElementById('r-wie').value.trim().toLowerCase();
-  const vervoer    = document.getElementById('r-vervoer').value.trim();
-  const tijdstip   = document.getElementById('r-tijdstip').value.trim().toLowerCase();
+async function diendIn(): Promise<void> {
+  const bestemming = (document.getElementById('r-bestemming') as HTMLInputElement).value.trim().toLowerCase();
+  const wie        = (document.getElementById('r-wie') as HTMLInputElement).value.trim().toLowerCase();
+  const vervoer    = (document.getElementById('r-vervoer') as HTMLInputElement).value.trim();
+  const tijdstip   = (document.getElementById('r-tijdstip') as HTMLInputElement).value.trim().toLowerCase();
 
   // Reset
   ['bestemming', 'wie', 'vervoer', 'tijdstip'].forEach(resetVeld);
-  document.getElementById('rapport-validatie-bericht').style.display = 'none';
+  const validatieBericht = document.getElementById('rapport-validatie-bericht');
+  if (validatieBericht) validatieBericht.style.display = 'none';
 
   let geldig = true;
 
-  if (!goedeAntwoorden.bestemming(bestemming)) { markeerFout('bestemming'); geldig = false; }
-  if (!goedeAntwoorden.wie(wie))               { markeerFout('wie');        geldig = false; }
-  if (!vervoer)                                 { markeerFout('vervoer');    geldig = false; }
-  if (!goedeAntwoorden.tijdstip(tijdstip))      { markeerFout('tijdstip');   geldig = false; }
+  if (!goedeAntwoorden['bestemming']!(bestemming)) { markeerFout('bestemming'); geldig = false; }
+  if (!goedeAntwoorden['wie']!(wie))               { markeerFout('wie');        geldig = false; }
+  if (!vervoer)                                     { markeerFout('vervoer');    geldig = false; }
+  if (!goedeAntwoorden['tijdstip']!(tijdstip))      { markeerFout('tijdstip');   geldig = false; }
 
   if (!geldig) {
-    document.getElementById('rapport-validatie-bericht').style.display = 'block';
+    if (validatieBericht) validatieBericht.style.display = 'block';
     return;
   }
 
   // Indienen
-  const btn = document.getElementById('btn-indienen');
+  const btn = document.getElementById('btn-indienen') as HTMLButtonElement;
   btn.disabled = true;
   btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Indienen…';
 
+  const inhoud: RapportInhoud = {
+    bestemming: (document.getElementById('r-bestemming') as HTMLInputElement).value.trim(),
+    wie:        (document.getElementById('r-wie') as HTMLInputElement).value.trim(),
+    vervoer,
+    tijdstip:   (document.getElementById('r-tijdstip') as HTMLInputElement).value.trim(),
+  };
+
   try {
-    await diendRapportIn(sessie, {
-      bestemming: document.getElementById('r-bestemming').value.trim(),
-      wie:        document.getElementById('r-wie').value.trim(),
-      vervoer,
-      tijdstip:   document.getElementById('r-tijdstip').value.trim(),
-    });
+    await diendRapportIn(sessie!, inhoud);
     // luisterNaarRapport vangt de statuswijziging op en activeert het briefkaartscherm
   } catch (err) {
     console.error('Firebase fout bij indienen rapport:', err);
     btn.disabled = false;
     btn.innerHTML = '<i class="bi bi-check2-square me-2"></i>Rapport indienen';
-    document.getElementById('rapport-validatie-bericht').textContent =
-      'Verbindingsfout — probeer opnieuw.';
-    document.getElementById('rapport-validatie-bericht').style.display = 'block';
+    if (validatieBericht) {
+      validatieBericht.textContent = 'Verbindingsfout — probeer opnieuw.';
+      validatieBericht.style.display = 'block';
+    }
   }
 }
 
-document.getElementById('btn-indienen').addEventListener('click', diendIn);
+document.getElementById('btn-indienen')?.addEventListener('click', diendIn);
 
 // Enter werkt op alle inputvelden
 ['r-bestemming', 'r-wie', 'r-vervoer', 'r-tijdstip'].forEach(id => {
-  document.getElementById(id)?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') diendIn();
+  document.getElementById(id)?.addEventListener('keydown', (e: Event) => {
+    if ((e as KeyboardEvent).key === 'Enter') diendIn();
   });
 });
 
 
 // ── Postkaart omdraaien ───────────────────────────────────
-let omgedraaid = false;
+let omgedraaid: boolean = false;
 
-document.getElementById('postkaart').addEventListener('click', () => {
+document.getElementById('postkaart')?.addEventListener('click', () => {
   omgedraaid = !omgedraaid;
-  document.getElementById('postkaart').classList.toggle('omgedraaid', omgedraaid);
+  document.getElementById('postkaart')?.classList.toggle('omgedraaid', omgedraaid);
 
   if (omgedraaid) {
     speelStem('lena', 'briefkaart');
   }
 
   const hint = document.getElementById('briefkaart-hint');
-  const btn  = document.getElementById('btn-sluit-dossier');
+  const btn  = document.getElementById('btn-sluit-dossier') as HTMLButtonElement | null;
 
   if (omgedraaid) {
-    hint.textContent = 'Klik opnieuw om de voorkant te zien';
-    setTimeout(() => { btn.style.display = 'inline-block'; }, 750);
+    if (hint) hint.textContent = 'Klik opnieuw om de voorkant te zien';
+    setTimeout(() => { if (btn) btn.style.display = 'inline-block'; }, 750);
   } else {
-    hint.textContent = 'Klik op de briefkaart om ze om te draaien';
+    if (hint) hint.textContent = 'Klik op de briefkaart om ze om te draaien';
   }
 });
 
-document.getElementById('btn-sluit-dossier').addEventListener('click', () => {
+document.getElementById('btn-sluit-dossier')?.addEventListener('click', () => {
   toonScherm('scherm-slot');
 });
 
-document.getElementById('btn-terug-lobby').addEventListener('click', () => {
+document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
   window.location.href = '../../index.html';
 });
 
 
 // ── Firebase: luisteren naar rapport-status ───────────────
-luisterNaarRapport(sessie, (rapport) => {
+luisterNaarRapport(sessie!, (rapport) => {
   if (rapport?.ingediend) {
     toonScherm('scherm-briefkaart');
   }

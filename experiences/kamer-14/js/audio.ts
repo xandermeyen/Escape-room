@@ -15,18 +15,24 @@
  * Roep startAchtergrond('a') of startAchtergrond('b') aan bij eerste klik.
  */
 
-// ── Gedeelde AudioContext (lazy) ──────────────────────────
-let _ctx = null;
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
 
-function getCtx() {
-  if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
+// ── Gedeelde AudioContext (lazy) ──────────────────────────
+let _ctx: AudioContext | null = null;
+
+function getCtx(): AudioContext {
+  if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext!)();
   return _ctx;
 }
 
 
 // ── Geluidseffecten ───────────────────────────────────────
 
-function speelTonen(tonen, volume = 0.2) {
+function speelTonen(tonen: [number, number, number][], volume = 0.2): void {
   const c = getCtx();
   tonen.forEach(([freq, vertraging, duur]) => {
     const osc  = c.createOscillator();
@@ -45,7 +51,7 @@ function speelTonen(tonen, volume = 0.2) {
 }
 
 /** Tab of document vrijgegeven — drie oplopende tonen. */
-export function speelUnlock() {
+export function speelUnlock(): void {
   speelTonen([
     [523, 0,    0.35],
     [659, 0.13, 0.40],
@@ -70,7 +76,31 @@ export function speelUnlock() {
  *   — Geen drone — open en warm
  *   — Trage LFO "ademhaling" van de ruimte
  */
-const PRESETS = {
+interface RuisLaag {
+  freq: number;
+  Q: number;
+  gain: number;
+}
+
+interface Drone {
+  freq: number;
+  gain: number;
+}
+
+interface LFO {
+  freq: number;
+  depth: number;
+}
+
+interface AchtergrondPreset {
+  ruisLagen: RuisLaag[];
+  drone: Drone | null;
+  lfo: LFO | null;
+  fadeIn: number;
+  master: number;
+}
+
+const PRESETS: Record<string, AchtergrondPreset> = {
   a: {
     ruisLagen: [
       { freq:  65, Q: 2.0, gain: 0.012 },  // Diep gebromm (HVAC)
@@ -95,29 +125,31 @@ const PRESETS = {
   },
 };
 
-let _achtergrondActief     = false;
-let _achtergrondMasterGain = null;
-let _achtergrondSources    = [];
+let _achtergrondActief: boolean                     = false;
+let _achtergrondMasterGain: GainNode | null         = null;
+let _achtergrondSources: AudioScheduledSourceNode[] = [];
 
 /**
  * Start de achtergrondsfeer voor het opgegeven type ('a' of 'b').
  * Vervaagt zeer geleidelijk in. Veilig om meerdere keren aan te roepen.
  */
-export function startAchtergrond(type = 'a') {
+export function startAchtergrond(type: 'a' | 'b' = 'a'): void {
   if (_achtergrondActief) return;
   _achtergrondActief = true;
 
   const c      = getCtx();
-  const preset = PRESETS[type] ?? PRESETS.a;
+  const preset = PRESETS[type] ?? PRESETS['a'];
 
   // Master gain — vervaagt in over fadeIn seconden
-  _achtergrondMasterGain = c.createGain();
-  _achtergrondMasterGain.gain.setValueAtTime(0, c.currentTime);
-  _achtergrondMasterGain.gain.linearRampToValueAtTime(
+  // Local const so TypeScript knows it's non-null inside closures below.
+  const masterGain = c.createGain();
+  _achtergrondMasterGain = masterGain;
+  masterGain.gain.setValueAtTime(0, c.currentTime);
+  masterGain.gain.linearRampToValueAtTime(
     preset.master,
     c.currentTime + preset.fadeIn
   );
-  _achtergrondMasterGain.connect(c.destination);
+  masterGain.connect(c.destination);
 
   // LFO — subtiele modulatie voor leven in het geluid
   if (preset.lfo) {
@@ -127,7 +159,7 @@ export function startAchtergrond(type = 'a') {
     lfo.frequency.value  = preset.lfo.freq;
     lfoGain.gain.value   = preset.lfo.depth;
     lfo.connect(lfoGain);
-    lfoGain.connect(_achtergrondMasterGain.gain);
+    lfoGain.connect(masterGain.gain);
     lfo.start();
     _achtergrondSources.push(lfo);
   }
@@ -153,7 +185,7 @@ export function startAchtergrond(type = 'a') {
 
     source.connect(filter);
     filter.connect(layerGain);
-    layerGain.connect(_achtergrondMasterGain);
+    layerGain.connect(masterGain);
     source.start();
     _achtergrondSources.push(source);
   });
@@ -166,19 +198,19 @@ export function startAchtergrond(type = 'a') {
     osc.frequency.value  = preset.drone.freq;
     droneGain.gain.value = preset.drone.gain;
     osc.connect(droneGain);
-    droneGain.connect(_achtergrondMasterGain);
+    droneGain.connect(masterGain);
     osc.start();
     _achtergrondSources.push(osc);
   }
 }
 
 /** Stop de achtergrondsfeer — vervaagt geleidelijk uit (± 3 s). */
-export function stopAchtergrond() {
+export function stopAchtergrond(): void {
   if (!_achtergrondMasterGain) return;
   const c = getCtx();
   _achtergrondMasterGain.gain.linearRampToValueAtTime(0, c.currentTime + 3);
   setTimeout(() => {
-    _achtergrondSources.forEach(s => { try { s.stop(); } catch (e) {} });
+    _achtergrondSources.forEach(s => { try { s.stop(); } catch {} });
     _achtergrondSources     = [];
     _achtergrondMasterGain  = null;
     _achtergrondActief      = false;
@@ -193,7 +225,7 @@ export function stopAchtergrond() {
  * Pad: audio/<karakter>/<fragment>.mp3 (relatief aan de HTML-pagina)
  * Faalt stil als het bestand ontbreekt.
  */
-export function speelStem(karakter, fragment) {
+export function speelStem(karakter: string, fragment: string): HTMLAudioElement {
   const audio = new Audio(`audio/${karakter}/${fragment}.mp3`);
   audio.volume = 0.88;
   audio.play().catch(() => {});
@@ -204,7 +236,7 @@ export function speelStem(karakter, fragment) {
  * Speelt Lena's briefkaartfragment.
  * Aanroepen op einde.html of als afsluitend moment — niet bij het omdraaien zelf.
  */
-export function speelBriefkaartStem() {
+export function speelBriefkaartStem(): void {
   speelStem('lena', 'briefkaart');
 }
 
@@ -212,7 +244,7 @@ export function speelBriefkaartStem() {
  * Kort papiergeluid — synthesized, geen bestand nodig.
  * Aanroepen bij het omdraaien van de envelop op het prikbord.
  */
-export function speelEnvelopGeluid() {
+export function speelEnvelopGeluid(): void {
   const c = getCtx();
   const duur = 0.28;
   const bufferSize = Math.floor(c.sampleRate * duur);
@@ -251,7 +283,10 @@ export function speelEnvelopGeluid() {
  *
  * Scripts staan in: Kamer_story/naratie_scripts.md
  */
-const VERHAAL_FRAGMENTEN = {
+type SpelerType = 'a' | 'b';
+type PuzzelNr   = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
+
+const VERHAAL_FRAGMENTEN: Record<SpelerType, Record<PuzzelNr, string>> = {
   a: {
     p1: 'verhaal-p1',   // An Vermeersch — patroon di/do ontdekt
     p2: 'verhaal-p2',   // An Vermeersch — Diest ontdekt
@@ -268,7 +303,7 @@ const VERHAAL_FRAGMENTEN = {
   },
 };
 
-const KARAKTER = {
+const KARAKTER: Record<SpelerType, string> = {
   a: 'an-vermeersch',
   b: 'katrijn',
 };
@@ -278,10 +313,10 @@ const KARAKTER = {
  * Wacht 1.8 s zodat het unlock-geluid eerst klinkt.
  * Doet niets als er voor die puzzel nog geen opname is.
  *
- * @param {'a'|'b'} spelerType
- * @param {'p1'|'p2'|'p3'|'p4'|'p5'} puzzelNr
+ * @param spelerType - 'a' of 'b'
+ * @param puzzelNr   - 'p1' t/m 'p5'
  */
-export function speelVerhaalFragment(spelerType, puzzelNr) {
+export function speelVerhaalFragment(spelerType: SpelerType, puzzelNr: PuzzelNr): void {
   const fragment = VERHAAL_FRAGMENTEN[spelerType]?.[puzzelNr];
   const karakter = KARAKTER[spelerType];
   if (!fragment || !karakter) return;
