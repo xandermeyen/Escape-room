@@ -3,6 +3,15 @@ import { valideerSessie, claimRol, luisterNaarRollen } from '../../../shared/js/
 
 let rollenUnsubscribe: (() => void) | null = null;
 
+// ── Sessiecode uit URL inlezen ────────────────────────────────────────────────
+// Als de link ?sessie=CODE bevat, sla de code op zodat spelers hem niet
+// handmatig hoeven in te voeren. De code wordt gevalideerd bij "Begin".
+const _urlParams   = new URLSearchParams(window.location.search);
+const _urlSessie   = _urlParams.get('sessie')?.toUpperCase() ?? null;
+if (_urlSessie) {
+  sessionStorage.setItem('sessieCode', _urlSessie);
+}
+
 // ── Scherm wisselen ──────────────────────────────────────────────────────────
 function toonScherm(id: string): void {
   document.querySelectorAll('.scherm').forEach(s => s.classList.remove('actief'));
@@ -172,3 +181,15 @@ async function kiesRol(rol: string): Promise<void> {
   }
 }
 window.kiesRol = kiesRol;
+
+// ── Begin-knop: sla over naar rolkeuze als code al in URL zat ─────────────────
+document.getElementById('btn-begin')?.addEventListener('click', async () => {
+  if (_urlSessie) {
+    const geldig = await valideerSessie(_urlSessie);
+    if (geldig) {
+      toonScherm('scherm-rol');
+      return;
+    }
+  }
+  toonScherm('scherm-code');
+});

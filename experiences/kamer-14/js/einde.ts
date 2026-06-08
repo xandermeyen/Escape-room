@@ -1,5 +1,5 @@
 import '../../../shared/js/sentry.ts';
-import { luisterNaarRapport, diendRapportIn, type RapportInhoud } from '../../../shared/js/session.ts';
+import { luisterNaarRapport, diendRapportIn, sluitSessie, type RapportInhoud } from '../../../shared/js/session.ts';
 import { speelStem } from './audio.ts';
 
 // ── Sessie ophalen ────────────────────────────────────────
@@ -151,5 +151,8 @@ document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
 luisterNaarRapport(sessie!, (rapport) => {
   if (rapport?.ingediend) {
     toonScherm('scherm-briefkaart');
+    sluitSessie(sessie!).catch((err: unknown) => {
+      console.error('sluitSessie mislukt:', err);
+    });
   }
 });

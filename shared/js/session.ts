@@ -25,12 +25,19 @@ interface RapportData {
 type PuzzelStatus = Record<string, boolean>;
 type SpelersStatus = Record<string, string>;
 
+// Sessie deactiveren (na afloop van het spel)
+export async function sluitSessie(sessieCode: string): Promise<void> {
+  const sessieRef = ref(db, `sessions/${sessieCode}`);
+  await update(sessieRef, { actief: false });
+}
+
 // Sessie aanmaken (gastheer)
-export async function maakSessie(sessieCode: string): Promise<string> {
+export async function maakSessie(sessieCode: string, ervaringsId: string = 'kamer-14'): Promise<string> {
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   await set(sessieRef, {
     aangemaakt: serverTimestamp(),
     actief: true,
+    ervaringsId,
     puzzels: {
       p1: false,
       p2: false,
