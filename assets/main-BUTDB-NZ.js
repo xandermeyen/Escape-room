@@ -1,0 +1,12 @@
+import"./modulepreload-polyfill-Dezn_h7o.js";/* empty css              */var e=document.querySelectorAll(`.experience-kaart, .experience-kaart-locked, .archief-kaart, .stap-nummer, .dossier-blok`);e.forEach(e=>e.classList.add(`fade-in-element`));var t=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(e.target.classList.add(`zichtbaar`),t.unobserve(e.target))})},{threshold:.15});e.forEach(e=>t.observe(e));var n=document.querySelectorAll(`section[id]`),r=document.querySelectorAll(`.navbar-nav .nav-link`),i=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting){r.forEach(e=>e.classList.remove(`nav-link-actief`));let t=document.querySelector(`.navbar-nav .nav-link[href="#${e.target.id}"]`);t&&t.classList.add(`nav-link-actief`)}})},{rootMargin:`-40% 0px -55% 0px`});n.forEach(e=>i.observe(e));var a=document.getElementById(`datum`);a&&(a.min=new Date().toISOString().split(`T`)[0]);var o=document.getElementById(`reserveerForm`);o&&o.addEventListener(`submit`,async e=>{e.preventDefault();let t=o.querySelector(`button[type="submit"]`),n=t.innerHTML;t.disabled=!0,t.innerHTML=`<i class="bi bi-hourglass-split me-2"></i>Bezig met verzenden…`;try{if((await fetch(o.action,{method:`POST`,body:new FormData(o),headers:{Accept:`application/json`}})).ok)o.innerHTML=`
+          <div class="formulier-bevestiging text-center py-4">
+            <i class="bi bi-check-circle fs-1 mb-3 d-block" style="color: var(--kleur-accent);"></i>
+            <h5 class="mb-2" style="font-family: var(--font-archief); letter-spacing: 0.06em;">
+              Reservering ontvangen
+            </h5>
+            <p class="mb-0" style="color: var(--kleur-grijs); font-size: 0.95rem;">
+              Je ontvangt binnen 24 uur een bevestigingsmail<br />
+              met jullie persoonlijke spellink voor <strong>Kamer 14</strong>.
+            </p>
+          </div>
+        `;else throw Error(`Formspree fout`)}catch{t.disabled=!1,t.innerHTML=n;let e=o.querySelector(`.formulier-fout`);e&&e.remove();let r=document.createElement(`p`);r.className=`formulier-fout mt-3 mb-0 text-center`,r.style.color=`#c0392b`,r.style.fontFamily=`var(--font-archief)`,r.innerHTML=`<i class="bi bi-exclamation-triangle me-1"></i>Er ging iets mis. Probeer het opnieuw of stuur een mail.`,o.appendChild(r)}});

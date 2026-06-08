@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kamer 14 - Bureau X</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" integrity="sha256-pdY4ejLKO67E0CM2tbPtq1DJ3VGDVVdqAR6j3ZwdiE4=" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/bureau_x_favicon.svg" />
+  <script type="module" crossorigin src="/assets/lobby-DVZJbT0r.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-Dezn_h7o.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase-config-DYsVWJaX.js">
+  <link rel="modulepreload" crossorigin href="/assets/session-DHR8PKBD.js">
+  <link rel="stylesheet" crossorigin href="/assets/game-DJbYCCVe.css">
+</head>
+<body>
+
+  <!-- STAP 1: INLEIDEND SCHERM -->
+  <div id="scherm-intro" class="scherm actief">
+    <div class="container-smal">
+
+      <div class="text-center mb-4">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTAwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjEwMCI+DQogIDwhLS0gSWNvb246IG9tbGlqc3QgWCAtLT4NCiAgPHJlY3QgeD0iMjAiIHk9IjE4IiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2YwZjBmMCIgc3Ryb2tlLXdpZHRoPSIyIi8+DQogIDxsaW5lIHgxPSIzNCIgeTE9IjMyIiB4Mj0iNzAiIHkyPSI2OCIgc3Ryb2tlPSIjZjBmMGYwIiBzdHJva2Utd2lkdGg9IjUuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+DQogIDxsaW5lIHgxPSI3MCIgeTE9IjMyIiB4Mj0iMzQiIHkyPSI2OCIgc3Ryb2tlPSIjZjBmMGYwIiBzdHJva2Utd2lkdGg9IjUuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+DQoNCiAgPCEtLSBUZWtzdDogQlVSRUFVIFggLS0+DQogIDx0ZXh0IHg9IjEwNCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNTAwIiBmaWxsPSIjZjBmMGYwIiBsZXR0ZXItc3BhY2luZz0iNiI+QlVSRUFVIFg8L3RleHQ+DQoNCiAgPCEtLSBIb3Jpem9udGFsZSBsaWpuIC0tPg0KICA8bGluZSB4MT0iMTA0IiB5MT0iNjIiIHgyPSIzMDAiIHkyPSI2MiIgc3Ryb2tlPSIjZjBmMGYwIiBzdHJva2Utd2lkdGg9IjAuNzUiLz4NCg0KICA8IS0tIFN1YnRpdGVsOiBFU0NBUEUgUk9PTVMgLS0+DQogIDx0ZXh0IHg9IjEwNCIgeT0iNzQiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjYWFhYWFhIiBsZXR0ZXItc3BhY2luZz0iMyI+RVNDQVBFIFJPT01TPC90ZXh0Pg0KPC9zdmc+DQo=" alt="Bureau X" height="36" class="mb-4" />
+        <div class="dossier-label mb-2">Intern onderzoek OPZ Geel</div>
+        <h1 class="game-titel">Kamer 14</h1>
+      </div>
+
+      <div class="inleiding-blok">
+        <p>
+          <strong>Geel, België.</strong> Al meer dan zeven eeuwen wonen mensen die extra zorg nodig hebben bij gewone Geelse gezinnen als volwaardig lid van het huishouden. De plaatselijke traditie van gezinsverpleging, gestart bij het pelgrimsoord van de heilige Dymphna, is uniek in de wereld. Vandaag coördineert het <strong>OPZ Geel</strong> nog steeds deze zorg voor ongeveer tweehonderd mensen.
+        </p>
+        <p class="mb-0">
+          Ze worden <em>kostgangers</em> genoemd.
+        </p>
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn btn-game btn-lg" onclick="toonScherm('scherm-code')">
+          <i class="bi bi-play-fill me-2"></i>Begin
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STAP 2: SESSIECODE INVOEREN -->
+  <div id="scherm-code" class="scherm">
+    <div class="container-smal">
+
+      <div class="text-center mb-4">
+        <div class="dossier-label mb-2">Stap 1 van 2</div>
+        <h2 class="game-subtitel">Voer je sessiecode in</h2>
+        <p class="tekst-grijs">Je ontvangt deze code via e-mail na je reservatie.</p>
+      </div>
+
+      <div class="code-invoer-wrapper">
+        <input
+          type="text"
+          id="sessieCodeInput"
+          class="code-invoer"
+          placeholder="bv. LENA-2026-001"
+          maxlength="20"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <p id="code-fout" class="code-fout verborgen">
+          <i class="bi bi-exclamation-triangle me-1"></i>Ongeldige code. Controleer je e-mail.
+        </p>
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn btn-game btn-lg" onclick="valideerCode()">
+          <i class="bi bi-arrow-right me-2"></i>Verder
+        </button>
+      </div>
+
+      <div class="text-center mt-3">
+        <button class="btn btn-terug" onclick="toonScherm('scherm-intro')">
+          <i class="bi bi-arrow-left me-1"></i>Terug
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STAP 3: ROL KIEZEN -->
+  <div id="scherm-rol" class="scherm">
+    <div class="container-smal">
+
+      <div class="text-center mb-4">
+        <div class="dossier-label mb-2">Stap 2 van 2</div>
+        <h2 class="game-subtitel">Kies je rol</h2>
+        <p class="tekst-grijs">
+          Elke speler krijgt een eigen dossier.<br />
+          Spreek af wie welke rol neemt.
+        </p>
+      </div>
+
+      <div class="row g-3">
+
+        <!-- Speler A -->
+        <div class="col-md-6">
+          <div id="rol-kaart-a" class="rol-kaart" onclick="kiesRol('a')">
+            <div class="rol-label">Speler A</div>
+            <h4 class="rol-titel">OPZ-dossier</h4>
+            <p class="rol-beschrijving">
+              Jij hebt toegang tot het officiële dossier van Lena Bogaert bij het OPZ Geel behandelnotities, attelier-verslagen en bijlagen.
+            </p>
+            <div class="rol-knop">
+              <i class="bi bi-folder2 me-2"></i>Kies dit dossier
+            </div>
+            <div class="rol-bezet-label verborgen">
+              <i class="bi bi-lock-fill me-1"></i>Al bezet
+            </div>
+          </div>
+        </div>
+
+        <!-- Speler B -->
+        <div class="col-md-6">
+          <div id="rol-kaart-b" class="rol-kaart" onclick="kiesRol('b')">
+            <div class="rol-label">Speler B</div>
+            <h4 class="rol-titel">Buurtdossier</h4>
+            <p class="rol-beschrijving">
+              Jij hebt toegang tot het huishoudlogboek van het gastgezin Martens en de buurtinformatie rond Lena's verdwijning.
+            </p>
+            <div class="rol-knop">
+              <i class="bi bi-house me-2"></i>Kies dit dossier
+            </div>
+            <div class="rol-bezet-label verborgen">
+              <i class="bi bi-lock-fill me-1"></i>Al bezet
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p id="rol-fout" class="rol-fout verborgen text-center mt-3">
+        <i class="bi bi-exclamation-triangle me-1"></i>
+      </p>
+
+    </div>
+  </div>
+
+</body>
+</html>
