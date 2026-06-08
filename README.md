@@ -76,6 +76,8 @@ One player takes the role of an OPZ staff member reviewing clinical records. The
 | Package manager | pnpm |
 | Hosting | GitHub Pages + Custom Domain |
 | CI/CD | GitHub Actions |
+| Error monitoring | Sentry |
+| Testing | Vitest + jsdom |
 
 </div>
 
@@ -166,6 +168,12 @@ pnpm dev
 ```
 
 The dev server runs at `http://localhost:5173` and uses the dev Firebase project automatically. Production credentials are never needed locally.
+
+To run the unit tests:
+
+```bash
+pnpm test
+```
 
 ---
 
