@@ -14,6 +14,7 @@ dist-ssr
 
 # Environment variables - nooit op git
 .env
+.env.development
 .env.production
 
 # Editor directories and files
