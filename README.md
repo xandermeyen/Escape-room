@@ -14,9 +14,6 @@ Browser-based escape room experiences built around storytelling, atmosphere, and
 <a href="https://bureau-x.be">
 <img src="https://img.shields.io/badge/LIVE-bureau--x.be-black?style=for-the-badge" alt="Live" />
 </a>
-<a href="https://github.com/xandermeyen/Escape-room">
-<img src="https://img.shields.io/github/stars/xandermeyen/Escape-room?style=for-the-badge" alt="Stars" />
-</a>
 </p>
 
 </div>
@@ -25,91 +22,81 @@ Browser-based escape room experiences built around storytelling, atmosphere, and
 
 ## About
 
-Bureau X is a browser-based escape room platform built for two. Each player receives a different dossier, follows a different trail, and sees a different side of the story. The only way to crack the case is to work together.
+Bureau X is a browser-based escape room platform. Each player receives a different dossier, follows a different trail, and sees a different side of the story. The only way to crack the case is to work together.
 
-No app. No downloads. Just a link, a session code, and a story.
+No app. No downloads. Just a link and a story.
 
 ### Kamer 14
 
 The first experience is set inside the OPZ Geel psychiatric institution in Belgium, and draws from the real history of the *kostgangers*: people living with local families as part of a centuries-old community care tradition.
 
-One player takes the role of an OPZ staff member reviewing clinical records. The other steps into the neighbourhood, piecing together what the institution never wrote down. Together, they investigate the disappearance of Lena Bogaert.
+One player reviews clinical records as an OPZ staff member. The other steps into the neighbourhood, piecing together what the institution never wrote down. Together they investigate the disappearance of Lena Bogaert.
 
 ---
 
-## How It Works
+## Booking flow
 
-1. A host creates a session and shares a unique code with both players
-2. Each player enters the code and selects a role: **Speler A** (OPZ dossier) or **Speler B** (neighbourhood dossier)
-3. Roles are locked in real time via Firebase. No two players can claim the same role
-4. Players work through their own documents, share discoveries, and solve puzzles together
-5. Progress syncs live across both screens. Solved puzzles unlock new content for both players simultaneously
-6. Once all puzzles are solved, players submit a joint final report
+Bookings go through a Formspree form on the landing page. A Make.com scenario handles everything after submission:
 
----
+```
+Formspree form → Gmail (noreply@formspree.io) → Make.com watches Gmail
+  → HTTP PUT to Firebase REST API (creates session with unique code)
+  → Email (Combell SMTP) to all players with session link
+```
 
-## Features
+The session link contains `?sessie=CODE` so players land directly on the role selection screen without needing to enter a code manually.
 
-- Two-player collaborative gameplay with asymmetric roles and dossiers
-- Real-time session sync via Firebase Realtime Database
-- Firebase Authentication for host access
-- Atomic role claiming to prevent duplicate selections
-- Story-driven puzzle progression with live document unlocking
-- Atmospheric UI designed around the period and setting
-- Session timer with warnings
-- Host panel for session management
-- Navigation protection to prevent players from accidentally leaving mid-game
+The Make.com scenario runs every hour. Email confirmation arrives within ~60 minutes of booking.
 
 ---
 
-## Tech Stack
+## How the game works
 
-<div align="center">
+1. Players open the session link from their email
+2. Each player selects a role: **Speler A** (OPZ dossier) or **Speler B** (neighbourhood dossier). Roles are claimed atomically via Firebase transactions
+3. Players work through their documents, share discoveries, and solve puzzles together
+4. Puzzle progress syncs live across both screens
+5. Once all puzzles are solved, players submit a joint final report
+6. The session is automatically deactivated (`actief: false`) after the report is submitted or time runs out
+
+---
+
+## Tech stack
 
 | Layer | Technology |
 |---|---|
-| Frontend | HTML5, CSS3, TypeScript (ES Modules) |
+| Frontend | HTML5, CSS3, TypeScript (ES modules) |
 | Build tool | Vite |
-| Realtime Backend | Firebase Realtime Database |
-| Authentication | Firebase Authentication |
+| Realtime backend | Firebase Realtime Database |
 | Styling | Bootstrap 5, Bootstrap Icons, Google Fonts |
 | Package manager | pnpm |
-| Hosting | GitHub Pages + Custom Domain |
+| Hosting | GitHub Pages + custom domain |
 | CI/CD | GitHub Actions |
 | Error monitoring | Sentry |
 | Testing | Vitest + jsdom |
-
-</div>
+| Booking forms | Formspree (free plan) |
+| Automation | Make.com (free plan) |
+| Transactional email | Combell SMTP (`smtp-auth.mailprotect.be`, port 587) |
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
-Escape-room/
-│
-├── assets/
-│   └── img/                        # Logos, favicons and images
-│
-├── css/
-│   └── style.css                   # Landing page styles
-│
-├── src/
-│   └── bootstrap.ts                # Bootstrap + Bootstrap Icons entry
-│
+escape-room/
+├── assets/img/                     # Logos, favicons, images
+├── css/style.css                   # Landing page styles
 ├── shared/
-│   ├── css/
-│   │   └── game.css                # Shared design system
+│   ├── css/game.css                # Shared game design system
 │   └── js/
-│       ├── firebase-config.ts      # Firebase initialisation (reads from env)
-│       ├── session.ts              # Session logic (create, validate, roles, puzzles)
-│       ├── timer.ts                # Shared game timer
-│       └── utils.ts                # Shared helpers
-│
+│       ├── firebase-config.ts      # Firebase init (reads from .env)
+│       ├── session.ts              # Session CRUD, role claiming, puzzle sync
+│       └── sentry.ts               # Sentry init (imported per page)
 ├── experiences/
 │   └── kamer-14/
 │       ├── audio/                  # Voice and atmosphere audio files
-│       ├── index.html              # Lobby (code entry + role selection)
+│       ├── css/kamer14.css         # Experience-specific styles
+│       ├── index.html              # Lobby (URL code auto-fill + role selection)
 │       ├── speler-a.html           # Player A experience
 │       ├── speler-b.html           # Player B experience
 │       ├── einde.html              # Ending + report submission
@@ -120,28 +107,20 @@ Escape-room/
 │           ├── speler-a.ts
 │           ├── speler-b.ts
 │           ├── einde.ts
+│           ├── tijd-voorbij.ts
 │           └── audio.ts
-│
-├── js/
-│   └── landing.ts                  # Landing page scripts
-│
-├── kamer-14/
-│   └── index.html                  # Kamer 14 sales / info page
-│
-├── public/
-│   └── CNAME                       # Custom domain (bureau-x.be)
-│
-├── index.html                      # Landing page (homepage)
-├── privacy.html                    # Privacy policy
-├── vite.config.ts                  # Vite multi-page config
-├── tsconfig.json                   # TypeScript config
-├── sitemap.xml
-└── README.md
+├── js/landing.ts                   # Landing page scripts
+├── kamer-14/index.html             # Kamer 14 info/booking page
+├── email-template-kamer14.html     # HTML email template (used in Make.com)
+├── index.html                      # Homepage
+├── privacy.html
+├── vite.config.ts
+└── .github/workflows/deploy.yml   # Auto-deploy to GitHub Pages on push to main
 ```
 
 ---
 
-## Local Development
+## Local development
 
 ```bash
 git clone https://github.com/xandermeyen/Escape-room.git
@@ -149,7 +128,7 @@ cd Escape-room
 pnpm install
 ```
 
-Create a `.env.development` file with your dev Firebase project config:
+Create `.env.development` with a Firebase dev project:
 
 ```
 VITE_FIREBASE_API_KEY=...
@@ -159,48 +138,35 @@ VITE_FIREBASE_PROJECT_ID=...
 VITE_FIREBASE_STORAGE_BUCKET=...
 VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
+VITE_SENTRY_DSN=...
 ```
 
-Then start the dev server:
-
 ```bash
-pnpm dev
-```
-
-The dev server runs at `http://localhost:5173` and uses the dev Firebase project automatically. Production credentials are never needed locally.
-
-To run the unit tests:
-
-```bash
-pnpm test
+pnpm dev        # dev server at localhost:5173
+pnpm test       # run unit tests
+pnpm build      # production build
 ```
 
 ---
 
 ## Deployment
 
-Deployments are fully automated via GitHub Actions. Every push to `main` triggers a build and deploys to the `gh-pages` branch. Production Firebase credentials are stored as GitHub repository secrets and injected at build time.
+Every push to `main` triggers a GitHub Actions build. Production Firebase credentials and the Sentry DSN are stored as repository secrets and injected into `.env` at build time. The build output is deployed to the `gh-pages` branch automatically.
 
 ---
 
-## Contributing
+## Firebase security rules
 
-This is a personal project. Issues and feedback are welcome, but the codebase is not open for external contributions at this time.
+Sessions are write-protected. The rules enforce:
+
+- Required fields on create (`actief`, `aangemaakt`, `ervaringsId`, `puzzels`, `rapport`, `timerGestart`)
+- `ervaringsId` must be a string
+- `timerGestart` must be a number or null
+- Puzzle values must be booleans
+- Role values must be `"bezet"` or `"vrij"`
 
 ---
 
 ## Author
 
-<div align="center">
-
-**Xander Meyen**
-
-<a href="https://bureau-x.be">bureau-x.be</a> · <a href="https://github.com/xandermeyen">GitHub</a>
-
-</div>
-
----
-
-<div align="center">
-<sub>Immersion does not require physical walls.</sub>
-</div>
+Built by Xander Meyen - [bureau-x.be](https://bureau-x.be)
