@@ -91,6 +91,9 @@ escape-room/
 │   └── js/
 │       ├── firebase-config.ts      # Firebase init (reads from .env)
 │       ├── session.ts              # Session CRUD, role claiming, puzzle sync
+│       ├── game.ts                 # Shared player-page logic (progress, nav guard, answer hashes)
+│       ├── timer.ts                # 60-min countdown + warnings
+│       ├── utils.ts                # Answer hashing + hint helpers
 │       └── sentry.ts               # Sentry init (imported per page)
 ├── experiences/
 │   └── kamer-14/
@@ -111,11 +114,16 @@ escape-room/
 │           └── audio.ts
 ├── js/landing.ts                   # Landing page scripts
 ├── kamer-14/index.html             # Kamer 14 info/booking page
-├── email-template-kamer14.html     # HTML email template (used in Make.com)
+├── tests/                          # Vitest unit tests (session, timer, utils)
+├── firebase/database.rules.json    # Realtime Database security rules
+├── firebase.json                   # Firebase CLI config (points to the rules)
+├── docs/make-scenario.md           # Make.com booking automation reference
 ├── index.html                      # Homepage
 ├── privacy.html
 ├── vite.config.ts
-└── .github/workflows/deploy.yml   # Auto-deploy to GitHub Pages on push to main
+└── .github/workflows/
+    ├── deploy.yml                  # Auto-deploy to GitHub Pages on push to main
+    └── deploy-rules.yml            # Manual deploy of Firebase rules (workflow_dispatch)
 ```
 
 ---
@@ -164,6 +172,8 @@ Sessions are write-protected. The rules enforce:
 - `timerGestart` must be a number or null
 - Puzzle values must be booleans
 - Role values must be `"bezet"` or `"vrij"`
+
+The rules are version-controlled in `firebase/database.rules.json` (with `firebase.json` pointing the Firebase CLI to them). They are deployed manually via the `deploy-rules.yml` workflow: open the Actions tab, pick "Firebase rules deployen" and run it. This needs a `FIREBASE_TOKEN` repository secret (from `npx firebase-tools login:ci`). A normal push to `main` never touches the live rules.
 
 ---
 

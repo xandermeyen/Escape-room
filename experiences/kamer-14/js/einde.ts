@@ -1,5 +1,6 @@
 import '../../../shared/js/sentry.ts';
 import { luisterNaarRapport, diendRapportIn, sluitSessie, type RapportInhoud } from '../../../shared/js/session.ts';
+import { antwoordKlopt } from '../../../shared/js/utils.ts';
 import { speelStem } from './audio.ts';
 
 // ── Sessie ophalen ────────────────────────────────────────
@@ -31,15 +32,21 @@ function toonScherm(id: string): void {
 
 
 // ── Validatie helpers ─────────────────────────────────────
-const goedeAntwoorden: Record<string, (v: string) => boolean> = {
-  bestemming: (v) => v.includes('diest'),
-  wie:        (v) => v.includes('marie'),
-  tijdstip:   (v) => {
-    // Normaliseer: verwijder spaties, vervang 'u' en '.' door ':'
-    const n = v.replace(/\s/g, '').replace(/[u.]/g, ':');
-    return n.includes('07:35') || n.includes('7:35');
-  },
+// Antwoorden staan als SHA-256 hash in de bundle, niet als plain-text.
+// Zelfde aanpak als de puzzels in speler-a.ts / speler-b.ts.
+const GOEDE_HASHES: Record<string, string[]> = {
+  bestemming: ['0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9'], // diest
+  wie:        ['c6d17a3613b9914e68707fcfac8410f097643bc5840681bb533030d73cbb18f8'], // marie
+  tijdstip: [
+    '89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82', // 07:35
+    '27d40a0e226fb1e8e4ab8ebac2cb17f8de544c733db677ce556d0c9144a1c82d', // 7:35
+  ],
 };
+
+// Tijdstip normaliseren: spaties weg, 'u' en '.' worden ':'
+function normaliseerTijdstip(v: string): string {
+  return v.replace(/\s/g, '').replace(/[u.]/g, ':');
+}
 
 function resetVeld(id: string): void {
   const input    = document.getElementById(`r-${id}`);
@@ -70,10 +77,10 @@ async function diendIn(): Promise<void> {
 
   let geldig = true;
 
-  if (!goedeAntwoorden['bestemming']!(bestemming)) { markeerFout('bestemming'); geldig = false; }
-  if (!goedeAntwoorden['wie']!(wie))               { markeerFout('wie');        geldig = false; }
-  if (!vervoer)                                     { markeerFout('vervoer');    geldig = false; }
-  if (!goedeAntwoorden['tijdstip']!(tijdstip))      { markeerFout('tijdstip');   geldig = false; }
+  if (!(await antwoordKlopt(bestemming, GOEDE_HASHES['bestemming']!)))            { markeerFout('bestemming'); geldig = false; }
+  if (!(await antwoordKlopt(wie, GOEDE_HASHES['wie']!)))                          { markeerFout('wie');        geldig = false; }
+  if (!vervoer)                                                                   { markeerFout('vervoer');    geldig = false; }
+  if (!(await antwoordKlopt(normaliseerTijdstip(tijdstip), GOEDE_HASHES['tijdstip']!))) { markeerFout('tijdstip'); geldig = false; }
 
   if (!geldig) {
     if (validatieBericht) validatieBericht.style.display = 'block';
@@ -94,6 +101,7 @@ async function diendIn(): Promise<void> {
 
   try {
     await diendRapportIn(sessie!, inhoud);
+    await sluitSessie(sessie!); // sessie deactiveren zodat ze niet eeuwig actief blijft
     // luisterNaarRapport vangt de statuswijziging op en activeert het briefkaartscherm
   } catch (err) {
     console.error('Firebase fout bij indienen rapport:', err);
@@ -151,8 +159,5 @@ document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
 luisterNaarRapport(sessie!, (rapport) => {
   if (rapport?.ingediend) {
     toonScherm('scherm-briefkaart');
-    sluitSessie(sessie!).catch((err: unknown) => {
-      console.error('sluitSessie mislukt:', err);
-    });
   }
 });
