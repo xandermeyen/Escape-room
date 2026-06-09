@@ -1,0 +1,30 @@
+{
+  "rules": {
+    "sessions": {
+      "$sessie": {
+        ".read": true,
+        ".write": "auth != null || newData.exists()",
+        ".validate": "$sessie.matches(/^[A-Z0-9-]{3,20}$/)",
+        "aangemaakt":   { ".validate": "newData.isNumber()" },
+        "actief":       { ".validate": "newData.isBoolean()" },
+        "ervaringsId":  { ".validate": "newData.isString()" },
+        "timerGestart": { ".validate": "newData.isNumber() || newData.val() == null" },
+        "puzzels": {
+          "$p": { ".validate": "$p.matches(/^p[1-5]$/) && newData.isBoolean()" }
+        },
+        "spelers": {
+          "$rol": { ".validate": "$rol.matches(/^[a-z]$/) && newData.isString() && newData.val().length <= 16" }
+        },
+        "rapport": {
+          "ingediend": { ".validate": "newData.isBoolean()" },
+          "tijdstip":  { ".validate": "newData.isNumber()" },
+          "inhoud": {
+            "$veld": { ".validate": "newData.isString() && newData.val().length <= 1000" }
+          },
+          "$other": { ".validate": false }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}

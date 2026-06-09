@@ -15,7 +15,7 @@ import {
 
 const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
 
-let timerInterval: number | null      = null;
+let timerInterval: ReturnType<typeof setInterval> | null = null;
 let huidigeCode: string | null        = null;
 let waarschuwing30Klaar: boolean      = false;
 let waarschuwing10Klaar: boolean      = false;
@@ -111,18 +111,35 @@ function bouwTimerUI(): void {
   const popup = document.createElement('div');
   popup.id = 'timer-popup';
   popup.className = 'timer-popup verborgen';
-  popup.innerHTML = `
-    <div class="timer-popup-kop">
-      <span class="timer-popup-label">Onderzoekstijd</span>
-      <button
-        class="timer-popup-sluit"
-        onclick="document.getElementById('timer-popup').classList.add('verborgen')"
-        aria-label="Sluit"
-      ><i class="bi bi-x"></i></button>
-    </div>
-    <div id="timer-tijd-display" class="timer-tijd-display">--:--</div>
-    <p class="timer-popup-sub">Het intern dossier sluit na 60&nbsp;minuten.</p>
-  `;
+
+  const kop = document.createElement('div');
+  kop.className = 'timer-popup-kop';
+
+  const label = document.createElement('span');
+  label.className = 'timer-popup-label';
+  label.textContent = 'Onderzoekstijd';
+
+  const sluitKnop = document.createElement('button');
+  sluitKnop.className = 'timer-popup-sluit';
+  sluitKnop.setAttribute('aria-label', 'Sluit');
+  sluitKnop.innerHTML = '<i class="bi bi-x"></i>';
+  sluitKnop.addEventListener('click', () => popup.classList.add('verborgen'));
+
+  kop.appendChild(label);
+  kop.appendChild(sluitKnop);
+
+  const display = document.createElement('div');
+  display.id = 'timer-tijd-display';
+  display.className = 'timer-tijd-display';
+  display.textContent = '--:--';
+
+  const sub = document.createElement('p');
+  sub.className = 'timer-popup-sub';
+  sub.innerHTML = 'Het intern dossier sluit na 60&nbsp;minuten.';
+
+  popup.appendChild(kop);
+  popup.appendChild(display);
+  popup.appendChild(sub);
 
   document.body.appendChild(knop);
   document.body.appendChild(popup);
@@ -153,17 +170,29 @@ function toonWaarschuwing(minuten: number): void {
   const balk = document.createElement('div');
   balk.id = 'timer-waarschuwing';
   balk.className = `timer-waarschuwing${isUrgent ? ' timer-waarschuwing-urgent' : ''}`;
-  balk.innerHTML = `
-    <div class="timer-waarschuwing-inhoud">
-      <div class="timer-waarschuwing-titel">${titel}</div>
-      <div class="timer-waarschuwing-tekst">${tekst}</div>
-    </div>
-    <button
-      class="timer-waarschuwing-sluit"
-      onclick="this.closest('#timer-waarschuwing').remove()"
-      aria-label="Sluit melding"
-    ><i class="bi bi-x"></i></button>
-  `;
+
+  const inhoud = document.createElement('div');
+  inhoud.className = 'timer-waarschuwing-inhoud';
+
+  const titelEl = document.createElement('div');
+  titelEl.className = 'timer-waarschuwing-titel';
+  titelEl.textContent = titel;
+
+  const tekstEl = document.createElement('div');
+  tekstEl.className = 'timer-waarschuwing-tekst';
+  tekstEl.textContent = tekst;
+
+  inhoud.appendChild(titelEl);
+  inhoud.appendChild(tekstEl);
+
+  const sluitKnop = document.createElement('button');
+  sluitKnop.className = 'timer-waarschuwing-sluit';
+  sluitKnop.setAttribute('aria-label', 'Sluit melding');
+  sluitKnop.innerHTML = '<i class="bi bi-x"></i>';
+  sluitKnop.addEventListener('click', () => balk.remove());
+
+  balk.appendChild(inhoud);
+  balk.appendChild(sluitKnop);
 
   document.body.appendChild(balk);
 

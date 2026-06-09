@@ -72,12 +72,13 @@ export async function puzzelVoltooid(sessieCode: string, puzzelNr: number): Prom
 }
 
 // Live luisteren naar puzzelstatus
+// Geeft de unsubscribe-functie terug
 export function luisterNaarStatus(
   sessieCode: string,
   callback: (puzzels: PuzzelStatus) => void,
-): void {
+): () => void {
   const puzzelsRef = ref(db, `sessions/${sessieCode}/puzzels`);
-  onValue(puzzelsRef, (snapshot) => {
+  return onValue(puzzelsRef, (snapshot) => {
     callback(snapshot.val() || {});
   });
 }

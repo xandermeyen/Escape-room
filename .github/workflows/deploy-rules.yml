@@ -1,0 +1,37 @@
+name: Firebase rules deployen
+
+# Aparte, handmatige workflow. Draait NIET automatisch bij een push naar main.
+# Je start hem bewust via de "Run workflow"-knop (Actions-tab) zodat je nooit per
+# ongeluk je live database-rules overschrijft.
+#
+# Vereiste repository-secrets:
+#   FIREBASE_TOKEN            -> via `npx firebase-tools login:ci`
+#   VITE_FIREBASE_PROJECT_ID  -> bestaat al (wordt ook door de build gebruikt)
+#
+# Let op: `--token` is in nieuwere firebase-tools deprecated ten voordele van een
+# service-account (GOOGLE_APPLICATION_CREDENTIALS / FIREBASE_SERVICE_ACCOUNT).
+# Werkt voorlopig nog; overweeg later de overstap.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-rules:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js instellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Rules deployen naar Firebase
+        run: >
+          npx --yes firebase-tools@latest deploy
+          --only database
+          --project ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          --token ${{ secrets.FIREBASE_TOKEN }}
+          --non-interactive

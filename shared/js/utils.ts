@@ -13,6 +13,24 @@
  * @param onJuist    - Called when the answer is correct
  * @param foutTekst  - Feedback text shown on a wrong answer
  */
+/**
+ * sha256Hex: SHA-256 hash van een string als hex.
+ */
+export async function sha256Hex(waarde: string): Promise<string> {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(waarde));
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * antwoordKlopt: hasht `waarde` en kijkt of die voorkomt in `hashes`.
+ * Plain-text antwoorden hoeven zo nooit in de broncode te staan.
+ */
+export async function antwoordKlopt(waarde: string, hashes: string[]): Promise<boolean> {
+  const hex = await sha256Hex(waarde);
+  return hashes.includes(hex);
+}
+
 export async function controleerAntwoordHash(
   puzzelNr: string,
   inputId: string,
@@ -28,11 +46,7 @@ export async function controleerAntwoordHash(
   const waarde   = input.value.trim().toLowerCase();
   if (!waarde) return;
 
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(waarde));
-  const hex = Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2, '0')).join('');
-
-  if ((hashes[puzzelNr] || []).includes(hex)) {
+  if (await antwoordKlopt(waarde, hashes[puzzelNr] || [])) {
     input.classList.remove('fout');
     feedback.className   = 'puzzel-feedback correct';
     feedback.textContent = 'Correct — Firebase wordt bijgewerkt…';
