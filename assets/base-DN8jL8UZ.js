@@ -1,0 +1,1 @@
+import{t as e}from"./bootstrap-icons.min-C4R3Xioj.js";/* empty css              */e();

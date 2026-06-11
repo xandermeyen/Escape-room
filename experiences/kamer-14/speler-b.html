@@ -40,28 +40,51 @@
       padding-bottom: 6px;
       background: transparent;
     }
-    .kamer-zone:hover {
+    .kamer-zone:hover,
+    .kamer-zone:focus-visible {
       background: rgba(196,144,64,0.12);
       border-color: rgba(196,144,64,0.55);
       box-shadow: inset 0 0 20px rgba(196,144,64,0.08);
+      outline: none;
     }
-    /* Prikbord: enkel een heel subtiele dot als hint, geen border */
-    .kamer-zone--uitgelicht::after {
+    /* Elke zone krijgt een zichtbare marker, zodat ook zonder hover
+       (touchscreens!) duidelijk is waar je kan klikken */
+    .kamer-zone::after {
       content: '●';
       position: absolute;
       top: 6px;
       right: 8px;
-      font-size: 8px;
-      color: rgba(196,144,64,0.7);
+      font-size: 9px;
+      line-height: 1;
+      color: rgba(196,144,64,0.55);
+      text-shadow: 0 0 6px rgba(0,0,0,0.8);
+    }
+    /* Prikbord: iets nadrukkelijker, met puls */
+    .kamer-zone--uitgelicht::after {
+      color: rgba(196,144,64,0.9);
       animation: dot-pulse 2s ease-in-out infinite;
+    }
+    /* Onderzochte zone: vinkje en subtiel zichtbare rand */
+    .kamer-zone.zone-bekeken::after {
+      content: '✓';
+      font-size: 11px;
+      color: rgba(196,144,64,0.9);
+      animation: none;
+    }
+    .kamer-zone.zone-bekeken {
+      border-color: rgba(196,144,64,0.22);
     }
     @keyframes dot-pulse {
       0%,100% { opacity: 0.4; }
       50%      { opacity: 1; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      .kamer-zone--uitgelicht::after { animation: none; }
+    }
     .zone-label {
       font-family: 'Special Elite','Courier New',monospace;
       font-size: 10px;
+      line-height: 1.4;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: transparent;
@@ -71,10 +94,21 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
-    .kamer-zone:hover .zone-label {
+    .kamer-zone:hover .zone-label,
+    .kamer-zone:focus-visible .zone-label {
       color: rgba(230,200,140,0.95);
       background: rgba(0,0,0,0.65);
     }
+    /* Inspectievoortgang onder de foto */
+    .zone-voortgang {
+      margin: -20px 0 24px;
+      text-align: right;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--k-tekst-grijs);
+    }
+    .zone-voortgang.zv-klaar { color: var(--k-accent-licht); }
 
     /* ── Modal ── */
     #zone-modal-inhoud {
@@ -115,14 +149,14 @@
       color: var(--k-tekst-mid);
     }
   </style>
-  <script type="module" crossorigin src="/assets/spelerB-CopCVMrJ.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/bootstrap-BArhLtuy.js">
+  <script type="module" crossorigin src="/assets/spelerB-CZMslpdG.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/bootstrap-icons.min-C4R3Xioj.js">
   <link rel="modulepreload" crossorigin href="/assets/audio-CKO3Vy7H.js">
+  <link rel="modulepreload" crossorigin href="/assets/bootstrap-B4lgluNC.js">
   <link rel="modulepreload" crossorigin href="/assets/sentry-BDYHEha_.js">
-  <link rel="modulepreload" crossorigin href="/assets/firebase-config-BHl_9vDm.js">
-  <link rel="modulepreload" crossorigin href="/assets/timer-CQg3H40j.js">
-  <link rel="modulepreload" crossorigin href="/assets/session-DvBu6c4o.js">
-  <link rel="stylesheet" crossorigin href="/assets/bootstrap-Dcb7g4GN.css">
+  <link rel="modulepreload" crossorigin href="/assets/timer-Clmd3Y4X.js">
+  <link rel="modulepreload" crossorigin href="/assets/session-Dh-vMFZX.js">
+  <link rel="stylesheet" crossorigin href="/assets/bootstrap-icons-Dcb7g4GN.css">
   <link rel="stylesheet" crossorigin href="/assets/audio-bp2W296c.css">
 </head>
 <body>
@@ -404,6 +438,7 @@
       <div class="doc-tekst" style="margin-bottom:16px;">
         Inspectie uitgevoerd door An Vermeersch, OPZ Geel. Zes zones gecontroleerd.
         Geen sporen van geforceerde ingang. Vertrek lijkt vrijwillig en voorbereid.
+        <strong>Klik op de gemarkeerde zones in de foto om de bevindingen per zone te lezen.</strong>
       </div>
 
       <!-- KAMERFOTO MET KLIKBARE ZONES -->
@@ -421,37 +456,39 @@
           style="width:100%;display:block;filter:brightness(0.88) saturate(0.88);"
         />
 
-        <!-- HOTSPOT: Prikbord (links boven)  -  subtiele dot als hint -->
-        <div class="kamer-zone kamer-zone--uitgelicht" data-zone="prikbord" style="left:4%;top:10%;width:28%;height:48%;">
-          <span class="zone-label">Prikbord !</span>
+        <!-- HOTSPOT: Prikbord (links boven)  -  nadrukkelijke dot als hint -->
+        <div class="kamer-zone kamer-zone--uitgelicht" data-zone="prikbord" role="button" tabindex="0" aria-label="Onderzoek het prikbord" style="left:4%;top:10%;width:28%;height:48%;">
+          <span class="zone-label">Prikbord</span>
         </div>
 
         <!-- HOTSPOT: Kledingkast (midden-links) -->
-        <div class="kamer-zone" data-zone="kast" style="left:33%;top:15%;width:18%;height:60%;">
+        <div class="kamer-zone" data-zone="kast" role="button" tabindex="0" aria-label="Onderzoek de kledingkast" style="left:33%;top:15%;width:18%;height:60%;">
           <span class="zone-label">Kledingkast</span>
         </div>
 
         <!-- HOTSPOT: Raam (midden) -->
-        <div class="kamer-zone" data-zone="raam" style="left:45%;top:5%;width:26%;height:50%;">
+        <div class="kamer-zone" data-zone="raam" role="button" tabindex="0" aria-label="Onderzoek het raam" style="left:45%;top:5%;width:26%;height:50%;">
           <span class="zone-label">Raam</span>
         </div>
 
         <!-- HOTSPOT: Bed (midden-rechts) -->
-        <div class="kamer-zone" data-zone="bed" style="left:38%;top:48%;width:42%;height:40%;">
+        <div class="kamer-zone" data-zone="bed" role="button" tabindex="0" aria-label="Onderzoek het bed" style="left:38%;top:48%;width:42%;height:40%;">
           <span class="zone-label">Bed</span>
         </div>
 
         <!-- HOTSPOT: Nachtkastje (rechts, lamp) -->
-        <div class="kamer-zone" data-zone="nachtkastje" style="left:78%;top:52%;width:18%;height:30%;">
+        <div class="kamer-zone" data-zone="nachtkastje" role="button" tabindex="0" aria-label="Onderzoek het nachtkastje" style="left:78%;top:52%;width:18%;height:30%;">
           <span class="zone-label">Nachtkastje</span>
         </div>
 
         <!-- HOTSPOT: Onder bed (vloer voor) -->
-        <div class="kamer-zone" data-zone="onderbed" style="left:36%;top:86%;width:40%;height:11%;">
+        <div class="kamer-zone" data-zone="onderbed" role="button" tabindex="0" aria-label="Kijk onder het bed" style="left:36%;top:86%;width:40%;height:11%;">
           <span class="zone-label">Onder bed</span>
         </div>
 
       </div><!-- /kamer-container -->
+
+      <div class="zone-voortgang">Onderzocht: <span id="zone-teller">0</span>/6 zones</div>
 
       <!-- MODAL OVERLAY -->
       <div id="zone-modal">
@@ -592,14 +629,32 @@
     };
 
     /* ── Klik op zone ── */
+    function updateZoneTeller() {
+      const aantal = document.querySelectorAll('.kamer-zone.zone-bekeken').length;
+      const teller = document.getElementById('zone-teller');
+      if (!teller) return;
+      teller.textContent = aantal;
+      teller.parentElement.classList.toggle('zv-klaar', aantal === 6);
+    }
+
+    function openZone(zone) {
+      const data = zoneData[zone.dataset.zone];
+      if (!data) return;
+      document.getElementById('zone-modal-titel').textContent = data.titel;
+      document.getElementById('zone-modal-tekst').textContent = data.tekst;
+      document.getElementById('zone-prikbord-inhoud').style.display = data.heeftPrikbord ? 'block' : 'none';
+      document.getElementById('zone-modal').style.display = 'block';
+      zone.classList.add('zone-bekeken');
+      updateZoneTeller();
+    }
+
     document.querySelectorAll('.kamer-zone').forEach(zone => {
-      zone.addEventListener('click', () => {
-        const data = zoneData[zone.dataset.zone];
-        if (!data) return;
-        document.getElementById('zone-modal-titel').textContent = data.titel;
-        document.getElementById('zone-modal-tekst').textContent = data.tekst;
-        document.getElementById('zone-prikbord-inhoud').style.display = data.heeftPrikbord ? 'block' : 'none';
-        document.getElementById('zone-modal').style.display = 'block';
+      zone.addEventListener('click', () => openZone(zone));
+      zone.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openZone(zone);
+        }
       });
     });
 
@@ -611,6 +666,6 @@
       if (e.key === 'Escape') sluitModal();
     });
   </script>
-
+
 </body>
 </html>
