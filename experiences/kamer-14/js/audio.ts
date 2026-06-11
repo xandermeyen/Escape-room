@@ -6,10 +6,10 @@
  *   Speler B (Buurtdossier) : warm, huiselijk       — zachte kamerlucht + luchtstroom + trage adem
  *
  * Verhaalfragmenten (MP3):
- *   Na elke puzzeloplossing speelt automatisch een random, nog niet gehoord fragment.
- *   Speler A pool : an-vermeersch/notitie-1 t/m 3
- *   Speler B pool : katrijn/logboek-1 t/m 3
- *   Speciaal      : lena/briefkaart.mp3 bij omdraaien envelop (Speler B)
+ *   Na elke puzzeloplossing speelt automatisch het vaste fragment voor die puzzel.
+ *   Speler A : an-vermeersch/verhaal-p1 t/m p5
+ *   Speler B : katrijn/verhaal-p1 t/m p5
+ *   Speciaal : lena/briefkaart.mp3 bij omdraaien envelop (Speler B)
  *
  * Browsers blokkeren audio tot eerste gebruikersinteractie.
  * Roep startAchtergrond('a') of startAchtergrond('b') aan bij eerste klik.
@@ -286,20 +286,22 @@ export function speelEnvelopGeluid(): void {
 type SpelerType = 'a' | 'b';
 type PuzzelNr   = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
 
+// Per puzzel een vast verhaalfragment, ingesproken door het
+// personage van de eigen kant (A: An Vermeersch, B: Katrijn).
 const VERHAAL_FRAGMENTEN: Record<SpelerType, Record<PuzzelNr, string>> = {
   a: {
-    p1: 'verhaal-p1',   // An Vermeersch — patroon di/do ontdekt
-    p2: 'verhaal-p2',   // An Vermeersch — Diest ontdekt
-    p3: 'verhaal-p3',   // An Vermeersch — 8 weken sparen
-    p4: 'verhaal-p4',   // An Vermeersch — Marie Stas geïdentificeerd
-    p5: 'verhaal-p5',   // An Vermeersch — bus 07:35 bevestigd
+    p1: 'verhaal-p1',
+    p2: 'verhaal-p2',
+    p3: 'verhaal-p3',
+    p4: 'verhaal-p4',
+    p5: 'verhaal-p5',
   },
   b: {
-    p1: 'verhaal-p1',   // Katrijn — patroon di/do ontdekt
-    p2: 'verhaal-p2',   // Katrijn — Diest ontdekt
-    p3: 'verhaal-p3',   // Katrijn — 8 weken sparen
-    p4: 'verhaal-p4',   // Katrijn — Marie Stas geïdentificeerd
-    p5: 'verhaal-p5',   // Katrijn — bus 07:35 bevestigd
+    p1: 'verhaal-p1',
+    p2: 'verhaal-p2',
+    p3: 'verhaal-p3',
+    p4: 'verhaal-p4',
+    p5: 'verhaal-p5',
   },
 };
 

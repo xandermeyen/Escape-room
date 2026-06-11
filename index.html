@@ -4,12 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bureau X - Escape Rooms</title>
-  <meta name="description" content="Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel Kamer 14, een online escape room voor duo's over de Geelse traditie van gezinsverpleging." />
+  <meta name="description" content="Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel Kamer 14, een gratis online escape room voor duo's over de Geelse traditie van gezinsverpleging." />
+  <link rel="canonical" href="https://bureau-x.be/" />
 
+  <!-- Open Graph / link previews -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Bureau X - Online escape rooms" />
+  <meta property="og:description" content="Online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel Kamer 14 gratis met twee, vanuit huis." />
+  <meta property="og:url" content="https://bureau-x.be/" />
+  <meta property="og:image" content="https://bureau-x.be/assets/img/preview-1.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192x192.png" />
-  <link rel="stylesheet" href="css/style.css" />
 
   <!-- Structured data: LocalBusiness -->
   <script type="application/ld+json">
@@ -17,8 +27,8 @@
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Bureau X",
-    "url": "https://www.bureau-x.be",
-    "logo": "https://www.bureau-x.be/assets/img/bureau_x_logo_dark.svg",
+    "url": "https://bureau-x.be",
+    "logo": "https://bureau-x.be/assets/img/bureau_x_logo_dark.svg",
     "description": "Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen.",
     "email": "info@bureau-x.be",
     "hasOfferCatalog": {
@@ -27,18 +37,20 @@
       "itemListElement": [
         {
           "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR",
           "itemOffered": {
             "@type": "Service",
             "name": "Kamer 14",
-            "description": "Online escape room voor duo's over de Geelse traditie van gezinsverpleging. ±45 minuten.",
-            "url": "https://www.bureau-x.be/#experiences"
+            "description": "Gratis online escape room voor duo's over de Geelse traditie van gezinsverpleging. ±45 minuten.",
+            "url": "https://bureau-x.be/kamer-14/"
           }
         }
       ]
     },
     "potentialAction": {
       "@type": "ReserveAction",
-      "target": "https://www.bureau-x.be/#reserveerModal",
+      "target": "https://bureau-x.be/#reserveerModal",
       "name": "Boek een sessie"
     }
   }
@@ -63,11 +75,10 @@
           <li class="nav-item"><a class="nav-link" href="#experiences">Experiences</a></li>
           <li class="nav-item"><a class="nav-link" href="#over-bureau-x">Over ons</a></li>
           <li class="nav-item">
-            <a class="nav-link btn-reserveer ms-2" href="#"
-               data-bs-toggle="modal" data-bs-target="#reserveerModal"
-               aria-haspopup="dialog">
+            <button type="button" class="nav-link btn-reserveer ms-2"
+                    data-bs-toggle="modal" data-bs-target="#reserveerModal">
               Boek een sessie
-            </a>
+            </button>
           </li>
         </ul>
       </div>
@@ -81,11 +92,18 @@
       <h1 class="hero-titel">Bureau X</h1>
       <p class="hero-subtitel">Verhalen die je oplost. Samen, vanuit huis.</p>
       <p class="hero-intro">
-        Bureau X maakt online escape rooms gebaseerd op echte plaatsen, echte tradities<br />en verhalen die de moeite waard zijn om te vertellen.
+        Bureau X maakt online escape rooms gebaseerd op echte plaatsen, echte tradities en verhalen die de moeite waard zijn om te vertellen.
       </p>
-      <a href="#experiences" class="btn btn-archief btn-lg mt-3">
-        <i class="bi bi-folder2-open me-2"></i>Bekijk onze experiences
-      </a>
+      <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+        <button type="button" class="btn btn-archief btn-lg"
+                data-bs-toggle="modal" data-bs-target="#reserveerModal">
+          <i class="bi bi-calendar-check me-2"></i>Boek een sessie
+        </button>
+        <a href="#experiences" class="btn btn-archief-ghost btn-lg">
+          <i class="bi bi-folder2-open me-2"></i>Bekijk onze experiences
+        </a>
+      </div>
+      <p class="mt-4 mb-0"><span class="stempel-goud">Gratis te spelen</span></p>
     </div>
   </section>
 
@@ -97,14 +115,16 @@
 
       <div class="row justify-content-center">
         <div class="col-lg-8">
-          <div class="experience-kaart p-4 p-md-5">
+          <div class="experience-kaart experience-kaart--kamer14 p-4 p-md-5">
+            <div class="dossier-tab">Dossier 14 &middot; Geel</div>
+            <span class="stempel-rood stempel-kaart">Onopgelost</span>
             <div class="d-flex align-items-start gap-4 flex-wrap">
               <div class="dossier-nummer">14</div>
               <div class="flex-grow-1">
-                <p class="experience-label mb-1">Online escape room  -  Geel, België</p>
+                <p class="experience-label mb-1">Online escape room &middot; Geel, België</p>
                 <h3 class="experience-titel mb-3">Kamer 14</h3>
                 <p class="mb-3">
-                  Een dinsdagochtend in mei. Lena Bogaert is niet aan het ontbijt verschenen bij het gastgezin Martens. Haar bed is opgemaakt, haar jas is weg. Geen briefje.
+                  Een dinsdagochtend in mei. Om 07u00 zit Lena Bogaert gewoon aan het ontbijt bij het gastgezin Martens. Om 07u45 is haar kamer leeg. Haar jas is weg. Geen briefje.
                 </p>
                 <p class="mb-4">
                   Samen doorzoeken jullie twee dossiers: het officiële OPZ-dossier en het buurtdossier van het gastgezin. Is ze vrijwillig gegaan en waar is ze nu?
@@ -123,7 +143,7 @@
                 <a href="/kamer-14/" class="btn btn-archief">
                   <i class="bi bi-folder2-open me-2"></i>Bekijk Kamer 14
                 </a>
-                <span class="badge badge-archief ms-3">Nu beschikbaar</span>
+                <span class="badge badge-archief ms-3">Nu gratis te spelen</span>
               </div>
             </div>
           </div>
@@ -133,6 +153,7 @@
       <div class="row justify-content-center mt-4">
         <div class="col-lg-8">
           <div class="experience-kaart-locked p-4 text-center">
+            <div class="dossier-tab">Zaak 2 &middot; Geclassificeerd</div>
             <i class="bi bi-lock fs-4 mb-2 d-block tekst-grijs"></i>
             <p class="mb-0 tekst-grijs">
               <span class="font-archief">Volgende experience in ontwikkeling</span>
@@ -147,21 +168,21 @@
   <section id="hoe-het-werkt" class="py-5 sectie-donker">
     <div class="container">
       <h2 class="sectie-titel text-center mb-5">Hoe het werkt</h2>
-      <div class="row g-4 justify-content-center align-items-start">
+      <div class="row g-4 justify-content-center align-items-start stappen-rij">
         <div class="col-md-4 text-center">
           <div class="stap-nummer">1</div>
-          <h5 class="mt-3">Boek een sessie</h5>
-          <p>Vul het formulier in. Je ontvangt een bevestigingsmail met jullie persoonlijke spellink.</p>
+          <h3 class="h5 mt-3">Boek een sessie</h3>
+          <p>Vul het formulier in, helemaal gratis. Je ontvangt een bevestigingsmail met jullie persoonlijke spellink.</p>
         </div>
         <div class="col-md-4 text-center">
           <div class="stap-nummer">2</div>
-          <h5 class="mt-3">Ontvang de link</h5>
-          <p>Stuur de link naar je medespeler. Elke speler opent zijn eigen dossier in de browser geen download nodig.</p>
+          <h3 class="h5 mt-3">Ontvang de link</h3>
+          <p>Stuur de link naar je medespeler. Elke speler opent zijn eigen dossier in de browser, geen download nodig.</p>
         </div>
         <div class="col-md-4 text-center">
           <div class="stap-nummer">3</div>
-          <h5 class="mt-3">Speel samen</h5>
-          <p>Bel of chat met je medespeler. De oplossing zit in allebei de dossiers samen kom je eruit.</p>
+          <h3 class="h5 mt-3">Speel samen</h3>
+          <p>Bel of chat met je medespeler. De oplossing zit in allebei de dossiers. Samen kom je eruit.</p>
         </div>
       </div>
     </div>
@@ -174,7 +195,7 @@
         <div class="col-lg-7 text-center">
           <h2 class="sectie-titel mb-4">Over Bureau X</h2>
           <p class="mb-3">
-            Bureau X maakt online escape rooms die geworteld zijn in echte verhalen. Geen generieke thrillers of willekeurige puzzels elke experience is gebouwd rond een echte plek, een echte traditie of een thema dat de moeite waard is om te onderzoeken.
+            Bureau X maakt online escape rooms die geworteld zijn in echte verhalen. Geen generieke thrillers of willekeurige puzzels: elke experience is gebouwd rond een echte plek, een echte traditie of een thema dat de moeite waard is om te onderzoeken.
           </p>
           <p class="mb-0">
             Onze eerste experience <strong>Kamer 14</strong> is gebaseerd op de unieke Geelse traditie van gezinsverpleging, een traditie die al meer dan zeven eeuwen bestaat en vandaag nog steeds levend wordt gehouden door het <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="link-accent">OPZ Geel</a>.
@@ -205,11 +226,8 @@
           <p class="mb-1 small">
             <a href="mailto:info@bureau-x.be" class="footer-link">info@bureau-x.be</a>
           </p>
-          <p class="mb-1 small">
-            <a href="/privacy.html" class="footer-link" style="opacity:0.55;">Privacybeleid</a>
-          </p>
           <p class="mb-0 small">
-            <a href="experiences/kamer-14/host-panel.html" class="footer-link" style="opacity:0.35;">Host</a>
+            <a href="/privacy.html" class="footer-link footer-link-subtiel">Privacybeleid</a>
           </p>
         </div>
       </div>
@@ -236,47 +254,33 @@
             </div>
             <div class="mb-3">
               <label for="spelers" class="form-label">Aantal spelers</label>
-              <select class="form-select archief-input" id="spelers" name="spelers">
-                <option value="2" selected>Duo (2 spelers)</option>
-              </select>
+              <input type="text" class="form-control archief-input" id="spelers" value="Duo (2 spelers)" readonly />
+              <input type="hidden" name="spelers" value="2" />
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">E-mailadres speler 1</label>
               <input type="email" class="form-control archief-input" id="email" name="email" placeholder="jouw@email.be" required />
             </div>
-            <div id="extra-speler-emails"></div>
+            <div class="mb-3">
+              <label for="email_speler_2" class="form-label">E-mailadres speler 2</label>
+              <input type="email" class="form-control archief-input" id="email_speler_2" name="email_speler_2" placeholder="speler2@email.be" required />
+            </div>
             <div class="mb-3">
               <label for="datum" class="form-label">Gewenste datum</label>
               <input type="date" class="form-control archief-input" id="datum" name="datum" required />
+              <div class="formulier-hint mt-1">Geen vast tijdslot: jullie ontvangen de spellink per mail en spelen wanneer het past.</div>
             </div>
             <input type="hidden" name="experience" value="Kamer 14" />
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+            <p class="formulier-gratis text-center mb-3">
+              <i class="bi bi-patch-check me-1"></i>Volledig gratis. Binnen 24 uur ontvang je een mail met jullie persoonlijke spellink.
+            </p>
             <div class="d-grid">
               <button type="submit" class="btn btn-archief btn-lg">
                 <i class="bi bi-send me-2"></i>Verstuur reservering
               </button>
             </div>
           </form>
-          <script>
-            (function () {
-              var select = document.getElementById('spelers');
-              var container = document.getElementById('extra-speler-emails');
-              function updateEmailFields() {
-                var count = parseInt(select.value, 10) || 2;
-                container.innerHTML = '';
-                for (var i = 2; i <= count; i++) {
-                  var div = document.createElement('div');
-                  div.className = 'mb-3';
-                  div.innerHTML =
-                    '<label for="email_speler_' + i + '" class="form-label">E-mailadres speler ' + i + '</label>' +
-                    '<input type="email" class="form-control archief-input" id="email_speler_' + i + '" name="email_speler_' + i + '" placeholder="speler' + i + '@email.be" required />';
-                  container.appendChild(div);
-                }
-              }
-              select.addEventListener('change', updateEmailFields);
-              updateEmailFields();
-            })();
-          </script>
         </div>
 
       </div>
@@ -284,7 +288,5 @@
   </div>
 
   <script type="module" src="js/landing.ts"></script>
-
-  <script type="module" src="/src/bootstrap.ts"></script>
 </body>
 </html>

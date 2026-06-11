@@ -35,11 +35,12 @@ function toonScherm(id: string): void {
 // Antwoorden staan als SHA-256 hash in de bundle, niet als plain-text.
 // Zelfde aanpak als de puzzels in speler-a.ts / speler-b.ts.
 const GOEDE_HASHES: Record<string, string[]> = {
-  bestemming: ['0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9'], // diest
-  wie:        ['c6d17a3613b9914e68707fcfac8410f097643bc5840681bb533030d73cbb18f8'], // marie
+  bestemming: ['0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9'],
+  wie:        ['c6d17a3613b9914e68707fcfac8410f097643bc5840681bb533030d73cbb18f8'],
   tijdstip: [
-    '89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82', // 07:35
-    '27d40a0e226fb1e8e4ab8ebac2cb17f8de544c733db677ce556d0c9144a1c82d', // 7:35
+    // beide schrijfwijzen van het tijdstip zijn geldig
+    '89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82',
+    '27d40a0e226fb1e8e4ab8ebac2cb17f8de544c733db677ce556d0c9144a1c82d',
   ],
 };
 

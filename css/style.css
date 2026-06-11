@@ -11,6 +11,9 @@
   --kleur-accent-licht:#c49a2a;
   --kleur-rand:        #c8b99a;
   --kleur-grijs:       #888070;
+  /* AA-contrast varianten: licht voor donkere achtergronden, donker voor lichte */
+  --kleur-grijs-licht: #999080;
+  --kleur-grijs-donker:#6b6354;
   --kleur-wit:         #fdf9f2;
   --font-archief:      'Special Elite', 'Courier New', monospace;
   --font-body:         'Georgia', serif;
@@ -46,6 +49,7 @@ body {
 }
 .nav-link:hover { color: var(--kleur-accent-licht) !important; }
 .btn-reserveer {
+  background-color: transparent;
   border: 1px solid var(--kleur-accent);
   border-radius: 2px;
   padding: 4px 14px !important;
@@ -58,6 +62,8 @@ body {
 
 /* ── Hero ── */
 .hero-section {
+  position: relative;
+  overflow: hidden;
   background-color: var(--kleur-donker);
   background-image: repeating-linear-gradient(
     0deg,
@@ -69,12 +75,37 @@ body {
   padding: 90px 0 100px;
   border-bottom: 2px solid var(--kleur-accent);
 }
+/* Groot watermerk-X rechts, heel subtiel */
+.hero-section::before {
+  content: 'X';
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(8deg);
+  font-family: var(--font-archief);
+  font-size: 24rem;
+  line-height: 1;
+  color: rgba(200,185,154,0.045);
+  pointer-events: none;
+}
+/* Vignet zodat de aandacht naar het midden trekt */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+}
+.hero-section .container {
+  position: relative;
+  z-index: 1;
+}
 .hero-label {
   font-family: var(--font-archief);
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--kleur-grijs);
+  color: var(--kleur-grijs-licht);
   margin-bottom: 1rem;
 }
 .hero-titel {
@@ -91,9 +122,40 @@ body {
   color: var(--kleur-accent-licht);
   margin-bottom: 0.6rem;
 }
+/* Knipperende typmachine-cursor achter de subtitel */
+.hero-subtitel::after {
+  content: '_';
+  margin-left: 2px;
+  animation: caret-knipper 1.1s steps(1) infinite;
+}
+@keyframes caret-knipper {
+  50% { opacity: 0; }
+}
 .hero-intro {
   font-size: 1rem;
-  color: var(--kleur-grijs);
+  color: var(--kleur-grijs-licht);
+}
+
+/* ── Stempels ── */
+.stempel-goud,
+.stempel-rood {
+  display: inline-block;
+  font-family: var(--font-archief);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  padding: 5px 12px;
+  transform: rotate(-4deg);
+  opacity: 0.92;
+}
+.stempel-goud {
+  color: var(--kleur-accent-licht);
+  border: 3px double var(--kleur-accent-licht);
+}
+.stempel-rood {
+  color: #a33b2e;
+  border: 3px double #a33b2e;
 }
 
 /* ── Knoppen ── */
@@ -112,6 +174,22 @@ body {
   background-color: var(--kleur-accent);
   color: var(--kleur-donker);
   border-color: var(--kleur-accent);
+}
+.btn-archief-ghost {
+  font-family: var(--font-archief);
+  letter-spacing: 0.08em;
+  background-color: transparent;
+  color: var(--kleur-rand);
+  border: 2px solid var(--kleur-rand);
+  border-radius: 2px;
+  padding: 10px 28px;
+  transition: background-color .25s, color .25s, border-color .25s;
+}
+.btn-archief-ghost:hover,
+.btn-archief-ghost:focus {
+  background-color: var(--kleur-rand);
+  color: var(--kleur-donker);
+  border-color: var(--kleur-rand);
 }
 
 /* ── Sectietitels ── */
@@ -132,19 +210,58 @@ body {
   margin: 8px auto 0;
 }
 
-/* ── Experience kaart ── */
+/* ── Experience kaart ──
+   De buitenkant (map + tab) is Bureau X huisstijl: elke experience is een zaak.
+   De stijl BINNEN de kaart mag per experience verschillen. Geef elke nieuwe
+   experience een eigen modifier (zoals --kamer14 hieronder) met eigen accenten,
+   kleuren of typografie, zodat zaak 2 een compleet andere vibe kan hebben. */
 .experience-kaart {
+  position: relative;
+  margin-top: 30px;
   background: var(--kleur-wit);
   border: 1px solid var(--kleur-rand);
-  border-left: 5px solid var(--kleur-accent);
-  border-radius: 2px;
+  border-radius: 0 2px 2px 2px;
   color: var(--kleur-donker);
 }
+/* Kamer 14: archief/dossier-vibe — gouden rug en rode onopgelost-stempel */
+.experience-kaart--kamer14 {
+  border-left: 5px solid var(--kleur-accent);
+}
 .experience-kaart-locked {
+  position: relative;
+  margin-top: 30px;
   background: #ece8e0;
   border: 1px dashed var(--kleur-rand);
-  border-radius: 2px;
+  border-radius: 0 2px 2px 2px;
   color: var(--kleur-donker);
+}
+.dossier-tab {
+  position: absolute;
+  top: -29px;
+  left: 14px;
+  height: 30px;
+  font-family: var(--font-archief);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs-donker);
+  background: var(--kleur-wit);
+  border: 1px solid var(--kleur-rand);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 7px 18px 0;
+}
+.experience-kaart-locked .dossier-tab {
+  background: #ece8e0;
+  border-style: dashed;
+  border-bottom: none;
+}
+/* Stempel in de hoek van de kaart */
+.stempel-kaart {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  transform: rotate(6deg);
 }
 .dossier-nummer {
   font-family: var(--font-archief);
@@ -165,7 +282,7 @@ body {
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--kleur-grijs);
+  color: var(--kleur-grijs-donker);
 }
 .experience-titel {
   font-family: var(--font-archief);
@@ -186,7 +303,7 @@ body {
   font-family: var(--font-archief);
   font-size: 0.72rem;
   letter-spacing: 0.1em;
-  background-color: var(--kleur-accent);
+  background-color: var(--kleur-accent-licht);
   color: var(--kleur-donker);
   border-radius: 2px;
   padding: 5px 10px;
@@ -207,6 +324,23 @@ body {
   margin: 0 auto;
   text-align: center;
 }
+/* Stippellijn die de stappen verbindt op bredere schermen */
+@media (min-width: 768px) {
+  .stappen-rij { position: relative; }
+  .stappen-rij::before {
+    content: '';
+    position: absolute;
+    top: 26px;
+    left: 18%;
+    right: 18%;
+    border-top: 1px dashed rgba(196,154,42,0.35);
+  }
+  .stappen-rij .stap-nummer {
+    position: relative;
+    z-index: 1;
+    background: var(--kleur-middel);
+  }
+}
 
 /* ── Over Bureau X ── */
 .link-accent {
@@ -216,7 +350,8 @@ body {
 .link-accent:hover { color: var(--kleur-accent-licht); }
 
 /* ── Tekst helpers ── */
-.tekst-grijs { color: var(--kleur-grijs); }
+.tekst-grijs { color: var(--kleur-grijs-donker); }
+.footer-archief .tekst-grijs { color: var(--kleur-grijs-licht); }
 
 /* ── Formulier ── */
 .formulier-archief {
@@ -244,7 +379,17 @@ body {
   border-color: var(--kleur-accent) !important;
   box-shadow: 0 0 0 3px rgba(139,105,20,0.15) !important;
 }
-.archief-input::placeholder { color: var(--kleur-grijs) !important; }
+.archief-input::placeholder { color: var(--kleur-grijs-donker) !important; opacity: 0.75; }
+.formulier-hint {
+  font-size: 0.8rem;
+  color: var(--kleur-grijs-donker);
+}
+.formulier-gratis {
+  font-family: var(--font-archief);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--kleur-accent);
+}
 
 /* ── Footer ── */
 .footer-archief {
@@ -257,12 +402,20 @@ body {
   text-decoration: none;
 }
 .footer-link:hover { text-decoration: underline; color: var(--kleur-rand); }
+.footer-link-subtiel { opacity: 0.7; }
 
 /* ── Responsief ── */
 @media (max-width: 576px) {
   .hero-section { padding: 55px 0 65px; }
   .hero-subtitel { font-size: 1rem; }
   .dossier-nummer { width: 60px; height: 60px; font-size: 2.5rem; }
+  /* Hoekstempel kan op smalle schermen het label overlappen: in de flow zetten */
+  .stempel-kaart {
+    position: static;
+    display: inline-block;
+    margin-bottom: 12px;
+    transform: rotate(-2deg);
+  }
 }
 
 /* ── Scroll-animaties ── */
@@ -274,6 +427,86 @@ body {
 .fade-in-element.zichtbaar {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ── Bewegingsreductie ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-in-element {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .easter-stempel { animation: none; }
+  .hero-subtitel::after { animation: none; }
+}
+
+/* ── Easter egg: vermist-bericht ── */
+.easter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17, 16, 9, 0.85);
+  padding: 1rem;
+  cursor: pointer;
+}
+.easter-kaart {
+  position: relative;
+  background: var(--kleur-perkament);
+  color: var(--kleur-donker);
+  border: 1px solid var(--kleur-rand);
+  border-left: 5px solid var(--kleur-accent);
+  border-radius: 2px;
+  max-width: 420px;
+  padding: 2rem 2.25rem;
+  font-family: var(--font-archief);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+.easter-kaart .easter-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs-donker);
+  margin-bottom: 0.75rem;
+}
+.easter-kaart h2 {
+  font-family: var(--font-archief);
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+}
+.easter-kaart p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
+}
+.easter-stempel {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #a33b2e;
+  border: 3px double #a33b2e;
+  border-radius: 2px;
+  padding: 4px 10px;
+  transform: rotate(8deg);
+  opacity: 0.85;
+  animation: stempel-klap 0.35s ease-out;
+}
+@keyframes stempel-klap {
+  0%   { transform: rotate(8deg) scale(2.2); opacity: 0; }
+  100% { transform: rotate(8deg) scale(1);   opacity: 0.85; }
+}
+.easter-sluiten {
+  font-size: 0.75rem;
+  color: var(--kleur-grijs-donker);
+  margin-top: 1rem;
+  margin-bottom: 0;
 }
 
 /* ── Actieve nav-link ── */
