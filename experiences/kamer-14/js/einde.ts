@@ -2,6 +2,7 @@ import '../../../shared/js/sentry.ts';
 import { luisterNaarRapport, diendRapportIn, sluitSessie, haalTijden, type RapportInhoud } from '../../../shared/js/session.ts';
 import { antwoordKlopt } from '../../../shared/js/utils.ts';
 import { formateerTijd } from '../../../shared/js/timer.ts';
+import { schrijfReview } from '../../../shared/js/reviews.ts';
 import { speelStem } from './audio.ts';
 
 // ── Sessie ophalen ────────────────────────────────────────
@@ -185,6 +186,73 @@ async function vulStats(): Promise<void> {
     console.error('Eindstatistieken laden mislukt:', err);
   }
 }
+
+// ── Review achterlaten ────────────────────────────────────
+let reviewRating = 0;
+const sterKnoppen = Array.from(
+  document.querySelectorAll<HTMLButtonElement>('#review-sterren .ster'),
+);
+
+function tekenSterren(): void {
+  sterKnoppen.forEach((knop, i) => {
+    const actief = i < reviewRating;
+    knop.textContent = actief ? '★' : '☆';
+    knop.classList.toggle('actief', actief);
+  });
+}
+
+sterKnoppen.forEach((knop) => {
+  knop.addEventListener('click', () => {
+    reviewRating = Number(knop.dataset.waarde);
+    tekenSterren();
+  });
+});
+
+const reviewBtn = document.getElementById('btn-review-verstuur') as HTMLButtonElement | null;
+
+reviewBtn?.addEventListener('click', async () => {
+  const tekst = (document.getElementById('review-tekst') as HTMLTextAreaElement).value.trim();
+  const naam  = (document.getElementById('review-naam') as HTMLInputElement).value.trim();
+  const fout  = document.getElementById('review-fout');
+
+  if (reviewRating < 1 || tekst.length < 3) {
+    if (fout) {
+      fout.textContent = 'Kies een aantal sterren en schrijf een korte review.';
+      fout.style.display = 'block';
+    }
+    return;
+  }
+  if (fout) fout.style.display = 'none';
+
+  reviewBtn.disabled = true;
+  reviewBtn.textContent = 'Versturen…';
+
+  try {
+    await schrijfReview({
+      rating: reviewRating,
+      tekst,
+      naam: naam || undefined,
+      ervaring: 'kamer-14',
+    });
+
+    sterKnoppen.forEach((k) => (k.disabled = true));
+    (document.getElementById('review-tekst') as HTMLTextAreaElement).disabled = true;
+    (document.getElementById('review-naam') as HTMLInputElement).disabled = true;
+    reviewBtn.style.display = 'none';
+
+    const dank = document.getElementById('review-dank');
+    if (dank) dank.style.display = 'block';
+  } catch (err) {
+    console.error('Review versturen mislukt:', err);
+    reviewBtn.disabled = false;
+    reviewBtn.textContent = 'Review versturen';
+    if (fout) {
+      fout.textContent = 'Versturen mislukt. Probeer opnieuw.';
+      fout.style.display = 'block';
+    }
+  }
+});
+
 
 // ── Firebase: luisteren naar rapport-status ───────────────
 luisterNaarRapport(sessie!, (rapport) => {

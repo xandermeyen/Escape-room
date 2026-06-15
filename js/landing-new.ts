@@ -1,4 +1,5 @@
 import '../shared/js/sentry.ts';
+import { leesGoedgekeurdeReviews, type Review } from '../shared/js/reviews.ts';
 
 // ── DATUM MINIMUM ──────────────────────────────────────────────
 const datumInput = document.getElementById('datum') as HTMLInputElement | null;
@@ -84,6 +85,78 @@ document.getElementById('modal-sluit')?.addEventListener('click', closeModal);
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeModal();
 });
+
+// ── ECHTE REVIEWS LADEN ────────────────────────────────────────
+// Reviews komen uit Firebase en worden enkel getoond als ze
+// goedgekeurd zijn. Zolang er geen zijn, blijven de sectie en de
+// marquee verborgen (geen verzonnen reviews).
+const ERVARING_LABELS: Record<string, string> = {
+  'kamer-14': 'Kamer 14',
+  'dua': 'D.U.A.',
+};
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sterrenHtml(rating: number): string {
+  const n = Math.max(1, Math.min(5, Math.round(rating)));
+  return '★'.repeat(n) + '☆'.repeat(5 - n);
+}
+
+function reviewKaart(r: Review): string {
+  const naam = r.naam ? escapeHtml(r.naam) : 'Anonieme speler';
+  const exp = escapeHtml(ERVARING_LABELS[r.ervaring] ?? r.ervaring);
+  return `<div class="review-card reveal visible">`
+    + `<div class="review-quote">&ldquo;</div>`
+    + `<div class="review-stars">${sterrenHtml(r.rating)}</div>`
+    + `<p class="review-text">${escapeHtml(r.tekst)}</p>`
+    + `<div class="review-author">${naam}</div>`
+    + `<div class="review-exp">${exp}</div></div>`;
+}
+
+function marqueeItem(r: Review): string {
+  const naam = r.naam ? escapeHtml(r.naam) : 'Anonieme speler';
+  const kort = r.tekst.length > 90 ? r.tekst.slice(0, 88).trim() + '…' : r.tekst;
+  return `<div class="marquee-item"><span class="stars">${sterrenHtml(r.rating)}</span>`
+    + `"${escapeHtml(kort)}" &middot; ${naam}</div>`;
+}
+
+async function laadReviews(): Promise<void> {
+  const sectie = document.getElementById('reviews');
+  const grid = document.getElementById('reviews-grid');
+  if (!sectie || !grid) return;
+
+  const marqueeWrap = document.getElementById('marquee-wrap');
+  const marqueeTrack = document.getElementById('marquee-track');
+
+  let reviews: Review[] = [];
+  try {
+    reviews = await leesGoedgekeurdeReviews(12);
+  } catch (err) {
+    console.error('Reviews laden mislukt:', err);
+    return; // sectie en marquee blijven verborgen
+  }
+
+  if (reviews.length === 0) return;
+
+  grid.innerHTML = reviews.slice(0, 6).map(reviewKaart).join('');
+  sectie.style.display = '';
+
+  if (marqueeWrap && marqueeTrack) {
+    // Twee keer dezelfde set voor een naadloze lus.
+    const items = reviews.map(marqueeItem).join('');
+    marqueeTrack.innerHTML = items + items;
+    marqueeWrap.style.display = '';
+  }
+}
+
+laadReviews();
 
 // ── EASTER EGG ─────────────────────────────────────────────────
 console.log(

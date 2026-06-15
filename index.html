@@ -216,7 +216,7 @@
     <li><a href="#experiences">Experiences</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><button class="btn-nav" data-modal="boek">Boek een sessie</button></li>
+    <li><a href="#experiences" class="btn-nav">Boek nu</a></li>
   </ul>
 </nav>
 
@@ -239,19 +239,8 @@
   </div>
 </section>
 
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Voelde echt als een onderzoek" &mdash; Lotte &amp; Dries</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Beste online escape room die ik ooit gespeeld heb" &mdash; Joren</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"De puzzels zijn logisch en het verhaal klopte echt" &mdash; Sara</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Perfect voor een avond thuis met twee" &mdash; Thomas &amp; Elien</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>"Gratis en kwalitatief, hoe bestaat het" &mdash; Michiel</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Voelde echt als een onderzoek" &mdash; Lotte &amp; Dries</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Beste online escape room die ik ooit gespeeld heb" &mdash; Joren</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"De puzzels zijn logisch en het verhaal klopte echt" &mdash; Sara</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Perfect voor een avond thuis met twee" &mdash; Thomas &amp; Elien</div>
-    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>"Gratis en kwalitatief, hoe bestaat het" &mdash; Michiel</div>
-  </div>
+<div class="marquee-wrap" id="marquee-wrap" style="display:none;">
+  <div class="marquee-track" id="marquee-track"></div>
 </div>
 
 <section class="section" id="experiences" style="background:var(--bg);">
@@ -316,17 +305,13 @@
   </div>
 </section>
 
-<section class="section" id="reviews" style="background:var(--bg);">
+<section class="section" id="reviews" style="background:var(--bg);display:none;">
   <div class="container">
     <p class="label reveal">Wat spelers zeggen</p>
     <h2 class="heading reveal">Gespeeld. Beoordeeld.</h2>
     <div class="rule reveal"></div>
-    <div class="reviews-grid">
-      <div class="review-card reveal"><div class="review-quote">&ldquo;</div><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="review-text">"We speelden Kamer 14 op een vrijdagavond en hadden het gevoel echt een zaak op te lossen. De dossiers voelen authentiek en de puzzels zijn logisch."</p><div class="review-author">Lotte &amp; Dries</div><div class="review-exp">Kamer 14</div></div>
-      <div class="review-card reveal"><div class="review-quote">&ldquo;</div><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="review-text">"Beste online escape room die ik ooit gespeeld heb. Het verhaal over OPZ Geel kende ik niet en heeft me echt geraakt. Dat het gratis is, is gewoon ongelofelijk."</p><div class="review-author">Joren V.</div><div class="review-exp">Kamer 14</div></div>
-      <div class="review-card reveal"><div class="review-quote">&ldquo;</div><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div><p class="review-text">"Perfect voor een avond thuis. We hadden de oplossing bijna maar niet helemaal zelf gevonden. Goed gemaakt voor een gratis spel."</p><div class="review-author">Thomas &amp; Elien</div><div class="review-exp">Kamer 14</div></div>
-    </div>
-    <p class="reviews-note">Na het spelen ontvang je een uitnodiging om een review achter te laten.</p>
+    <div class="reviews-grid" id="reviews-grid"></div>
+    <p class="reviews-note">Na het spelen kun je zelf een review achterlaten.</p>
   </div>
 </section>
 

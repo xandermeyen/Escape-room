@@ -448,6 +448,86 @@
       color: var(--k-tekst-grijs);
     }
 
+    /* ── Review achterlaten ── */
+    .slot-review {
+      max-width: 420px;
+      margin: 8px auto 0;
+      text-align: center;
+    }
+    .slot-review-titel {
+      font-size: 13px;
+      color: var(--k-tekst-donker);
+      margin-bottom: 4px;
+    }
+    .slot-review-sub {
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      color: var(--k-tekst-grijs);
+      margin-bottom: 16px;
+    }
+    .review-sterren {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+    .review-sterren .ster {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 26px;
+      line-height: 1;
+      color: var(--k-rand);
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+    .review-sterren .ster.actief { color: var(--k-accent); }
+    .review-sterren .ster:hover { color: var(--k-accent-licht); }
+    .slot-review textarea,
+    .slot-review input {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--k-bg-panel);
+      border: 1px solid var(--k-rand);
+      color: var(--k-tekst-donker);
+      font-family: var(--font);
+      font-size: 13px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      resize: vertical;
+    }
+    .slot-review textarea:focus,
+    .slot-review input:focus {
+      outline: none;
+      border-color: var(--k-accent);
+    }
+    .slot-review-btn {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--k-accent);
+      border: none;
+      color: #1a1a1a;
+      padding: 10px 22px;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: opacity 0.2s;
+    }
+    .slot-review-btn:hover { opacity: 0.85; }
+    .slot-review-btn:disabled { opacity: 0.5; cursor: default; }
+    .review-fout {
+      display: none;
+      font-size: 11px;
+      color: #b04a3a;
+      margin-bottom: 10px;
+    }
+    .review-dank {
+      display: none;
+      font-size: 12px;
+      color: var(--k-accent);
+      margin-top: 4px;
+    }
+
   </style>
 </head>
 <body>
@@ -658,6 +738,30 @@
       </p>
 
       <div class="slot-bureau">Een Bureau X–experience</div>
+
+      <div class="slot-divider"></div>
+
+      <div class="slot-review" id="slot-review">
+        <p class="slot-review-titel">Laat een review achter</p>
+        <p class="slot-review-sub">Optioneel. Verschijnt pas op de website na goedkeuring.</p>
+
+        <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
+          <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
+          <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+        </div>
+
+        <textarea id="review-tekst" rows="3" maxlength="500" placeholder="Wat vonden jullie van Kamer 14?"></textarea>
+        <input id="review-naam" type="text" maxlength="40" placeholder="Naam (optioneel)" />
+
+        <p class="review-fout" id="review-fout">Kies een aantal sterren en schrijf een korte review.</p>
+        <button class="slot-review-btn" id="btn-review-verstuur">Review versturen</button>
+        <p class="review-dank" id="review-dank">Bedankt. Je review is verstuurd en verschijnt na goedkeuring.</p>
+      </div>
+
+      <div class="slot-divider"></div>
 
       <button class="slot-terug-btn" id="btn-terug-lobby">
         ← Terug naar de website

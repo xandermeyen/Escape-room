@@ -48,6 +48,21 @@
         },
         "$other": { ".validate": false }
       }
+    },
+    "reviews": {
+      ".read": true,
+      ".indexOn": ["goedgekeurd"],
+      "$id": {
+        ".write": "!data.exists() && newData.exists()",
+        ".validate": "newData.hasChildren(['rating','tekst','ervaring','tijdstip'])",
+        "rating":      { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5" },
+        "tekst":       { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 500" },
+        "naam":        { ".validate": "newData.isString() && newData.val().length <= 40" },
+        "ervaring":    { ".validate": "newData.isString() && newData.val().length <= 24" },
+        "tijdstip":    { ".validate": "newData.isNumber()" },
+        "goedgekeurd": { ".validate": "newData.isBoolean() && newData.val() == false" },
+        "$other":      { ".validate": false }
+      }
     }
   }
 }
