@@ -3,25 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bureau X - Escape Rooms</title>
+  <title>Bureau X - Online Escape Rooms</title>
   <meta name="description" content="Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel Kamer 14, een gratis online escape room voor duo's over de Geelse traditie van gezinsverpleging." />
   <link rel="canonical" href="https://bureau-x.be/" />
-
-  <!-- Open Graph / link previews -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Bureau X - Online escape rooms" />
-  <meta property="og:description" content="Online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel Kamer 14 gratis met twee, vanuit huis." />
-  <meta property="og:url" content="https://bureau-x.be/" />
-  <meta property="og:image" content="https://bureau-x.be/assets/img/preview-1.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Bureau X — Online escape rooms" />
+  <meta property="og:description" content="Online escape rooms gebaseerd op echte Belgische plaatsen en verhalen. Gratis te spelen, vanuit huis." />
+  <meta property="og:url"         content="https://bureau-x.be/" />
+  <meta property="og:image"       content="https://bureau-x.be/assets/img/preview-1.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <link rel="icon" type="image/png" sizes="32x32"   href="/assets/img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192x192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192x192.png" />
-
-  <!-- Structured data: LocalBusiness -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -30,263 +26,489 @@
     "url": "https://bureau-x.be",
     "logo": "https://bureau-x.be/assets/img/bureau_x_logo_dark.svg",
     "description": "Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen.",
-    "email": "info@bureau-x.be",
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Escape Room Experiences",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "EUR",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Kamer 14",
-            "description": "Gratis online escape room voor duo's over de Geelse traditie van gezinsverpleging. ±45 minuten.",
-            "url": "https://bureau-x.be/kamer-14/"
-          }
-        }
-      ]
-    },
-    "potentialAction": {
-      "@type": "ReserveAction",
-      "target": "https://bureau-x.be/#reserveerModal",
-      "name": "Boek een sessie"
-    }
+    "email": "info@bureau-x.be"
   }
   </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0b09; --bg-2: #131210; --bg-3: #1c1916;
+      --gold: #c8a96e; --gold-dim: #7a6035; --gold-bright: #d9bc84;
+      --red: #8b1a1a; --text: #e8dcc8; --text-dim: #9a8a76;
+      --text-faint: #5a4e44; --border: #252015; --border-gold: #2e2718;
+      --ff: 'Special Elite', serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; overflow-x: hidden; }
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 64px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; transition: background .4s, border-color .4s; border-bottom: 1px solid transparent; }
+    .nav.scrolled { background: rgba(12,11,9,.96); backdrop-filter: blur(12px); border-color: var(--border-gold); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 34px; }
+    .nav-logo span { font-family: var(--ff); font-size: 1.2rem; color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-dim); text-decoration: none; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .btn-nav { padding: .45rem 1.2rem; border: 1px solid var(--gold-dim); background: transparent; color: var(--gold); font-family: var(--ff); font-size: .78rem; letter-spacing: .1em; cursor: pointer; text-decoration: none; transition: all .2s; }
+    .btn-nav:hover { background: var(--gold); color: var(--bg); }
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 640px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    #hero-canvas { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 40% 60%, #1a1408 0%, #0c0b09 70%); }
+    .hero-vignette { position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse at center, transparent 30%, rgba(12,11,9,.78) 100%); }
+    .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 1.5rem; max-width: 820px; }
+    .hero-eyebrow { font-family: var(--ff); font-size: .7rem; letter-spacing: .35em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.75rem; opacity: 0; animation: fadeUp .7s .3s forwards; }
+    .hero-title { font-family: var(--ff); font-size: clamp(2.8rem,7vw,5.5rem); color: var(--text); line-height: 1.05; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp .7s .5s forwards; }
+    .hero-title em { color: var(--gold); font-style: normal; }
+    .hero-sub { font-size: clamp(.95rem,2vw,1.1rem); color: var(--text-dim); margin-bottom: 2.75rem; max-width: 560px; margin-left: auto; margin-right: auto; opacity: 0; animation: fadeUp .7s .7s forwards; }
+    .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeUp .7s .9s forwards; }
+    .hero-tag { display: inline-block; margin-top: 2rem; padding: .35rem 1rem; border: 1px solid rgba(139,26,26,.45); background: rgba(139,26,26,.08); color: #c44; font-family: var(--ff); font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; opacity: 0; animation: fadeUp .7s 1.1s forwards; }
+    .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .5rem; opacity: 0; animation: fadeUp .7s 1.4s forwards; }
+    .scroll-label { font-family: var(--ff); font-size: .6rem; letter-spacing: .3em; text-transform: uppercase; color: var(--text-faint); }
+    .scroll-line { width: 1px; height: 42px; background: linear-gradient(to bottom,var(--gold-dim),transparent); animation: pulse 2.2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:.25} 50%{opacity:1} }
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: .5rem; padding: .875rem 2rem; font-family: var(--ff); font-size: .875rem; letter-spacing: .1em; cursor: pointer; text-decoration: none; border: none; transition: all .2s; }
+    .btn-gold { background: var(--gold); color: var(--bg); }
+    .btn-gold:hover { background: var(--gold-bright); transform: translateY(-2px); }
+    .btn-outline { background: transparent; border: 1px solid rgba(232,220,200,.25); color: var(--text); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-sm { padding: .6rem 1.5rem; font-size: .8rem; }
+    /* MARQUEE */
+    .marquee-wrap { background: var(--bg-2); border-top: 1px solid var(--border-gold); border-bottom: 1px solid var(--border-gold); padding: 1rem 0; overflow: hidden; }
+    .marquee-track { display: flex; gap: 3.5rem; animation: marquee 32s linear infinite; width: max-content; }
+    .marquee-item { display: flex; align-items: center; gap: .6rem; white-space: nowrap; font-size: .85rem; color: var(--text-dim); }
+    .stars { color: var(--gold); font-size: .7rem; letter-spacing: .05em; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    /* SECTIONS */
+    .section { padding: 6rem 1.5rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .container--narrow { max-width: 740px; margin: 0 auto; }
+    .label { font-family: var(--ff); font-size: .68rem; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); margin-bottom: .9rem; }
+    .heading { font-family: var(--ff); font-size: clamp(1.7rem,3.5vw,2.4rem); color: var(--text); line-height: 1.2; margin-bottom: 1rem; }
+    .sub { color: var(--text-dim); font-size: 1.05rem; max-width: 580px; line-height: 1.7; }
+    .rule { width: 36px; height: 1px; background: var(--gold-dim); margin: 1.75rem 0; }
+    /* EXPERIENCE CARDS */
+    .exp-grid { display: grid; gap: 1.25rem; margin-top: 3rem; }
+    .exp-card { position: relative; border: 1px solid var(--border-gold); background: var(--bg-2); display: grid; grid-template-columns: 72px 1fr; overflow: hidden; transition: border-color .3s, transform .3s, box-shadow .3s; cursor: pointer; }
+    .exp-card::before { content:''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); transform: scaleY(0); transform-origin: bottom; transition: transform .35s ease; }
+    .exp-card:hover { border-color: var(--gold-dim); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+    .exp-card:hover::before { transform: scaleY(1); }
+    .exp-card--locked { opacity: .65; cursor: default; }
+    .exp-card--locked:hover { transform: none; border-color: var(--border-gold); box-shadow: none; }
+    .exp-card--locked::before { display: none; }
+    .exp-num-col { background: var(--bg-3); border-right: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; }
+    .exp-num { font-family: var(--ff); font-size: 2.25rem; color: var(--text-faint); }
+    .exp-body { padding: 2rem 2.25rem; }
+    .exp-tab { display: inline-block; font-family: var(--ff); font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-faint); border: 1px solid var(--border); padding: .18rem .55rem; margin-bottom: .65rem; }
+    .exp-badge { position: absolute; top: 1.1rem; right: 1.1rem; font-family: var(--ff); font-size: .62rem; letter-spacing: .15em; text-transform: uppercase; padding: .25rem .65rem; border: 1px solid; }
+    .badge-red { border-color:rgba(139,26,26,.5); background:rgba(139,26,26,.08); color:#cc3333; }
+    .badge-grey { border-color:rgba(90,78,68,.4); background:rgba(90,78,68,.06); color:var(--text-faint); }
+    .exp-title { font-family: var(--ff); font-size: 1.7rem; color: var(--text); margin-bottom: .35rem; }
+    .exp-meta { font-size: .78rem; color: var(--text-faint); letter-spacing: .08em; margin-bottom: 1rem; }
+    .exp-desc { color: var(--text-dim); font-size: .95rem; line-height: 1.75; margin-bottom: 1.5rem; }
+    .exp-specs { display: flex; gap: 1.75rem; flex-wrap: wrap; margin-bottom: 1.6rem; }
+    .spec { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--text-dim); }
+    .spec-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-dim); flex-shrink: 0; }
+    .exp-actions { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+    .exp-free { font-family: var(--ff); font-size: .72rem; color: var(--gold-dim); letter-spacing: .12em; }
+    /* USP */
+    .usp-section { background: var(--bg-2); border-top: 1px solid var(--border-gold); border-bottom: 1px solid var(--border-gold); }
+    .usp-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 3rem; margin-top: 3.5rem; }
+    .usp-item { text-align: center; }
+    .usp-icon { width: 46px; height: 46px; margin: 0 auto 1.25rem; border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.1rem; }
+    .usp-title { font-family: var(--ff); font-size: 1.05rem; color: var(--text); margin-bottom: .5rem; }
+    .usp-desc { font-size: .875rem; color: var(--text-dim); }
+    /* REVIEWS */
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(270px,1fr)); gap: 1.25rem; margin-top: 3rem; }
+    .review-card { border: 1px solid var(--border-gold); background: var(--bg-2); padding: 1.75rem; position: relative; transition: border-color .3s; }
+    .review-card:hover { border-color: var(--gold-dim); }
+    .review-quote { position: absolute; top: 1rem; right: 1.5rem; font-family: var(--ff); font-size: 3.5rem; color: var(--border-gold); line-height: 1; user-select: none; }
+    .review-stars { color: var(--gold); font-size: .72rem; letter-spacing: .08em; margin-bottom: 1rem; }
+    .review-text { color: var(--text-dim); font-size: .9rem; line-height: 1.75; font-style: italic; margin-bottom: 1.25rem; }
+    .review-author { font-family: var(--ff); font-size: .78rem; color: var(--text-faint); letter-spacing: .1em; }
+    .review-exp { font-size: .68rem; color: var(--gold-dim); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
+    .reviews-note { margin-top: 2rem; text-align: center; font-family: var(--ff); font-size: .72rem; color: var(--text-faint); letter-spacing: .1em; }
+    /* HOW */
+    .how-section { background: var(--bg-2); border-top: 1px solid var(--border-gold); }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 3rem; margin-top: 3.5rem; }
+    .step { text-align: center; }
+    .step-num { width: 50px; height: 50px; margin: 0 auto 1.25rem; border: 1px solid var(--gold-dim); display: flex; align-items: center; justify-content: center; font-family: var(--ff); font-size: 1.2rem; color: var(--gold); }
+    .step-title { font-family: var(--ff); font-size: 1rem; color: var(--text); margin-bottom: .5rem; }
+    .step-desc { font-size: .875rem; color: var(--text-dim); }
+    /* FAQ */
+    .faq-list { margin-top: 3rem; border-top: 1px solid var(--border); }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q { width: 100%; text-align: left; padding: 1.2rem 0; background: none; border: none; color: var(--text); font-family: var(--ff); font-size: .97rem; letter-spacing: .02em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .faq-arrow { color: var(--gold-dim); font-size: .8rem; transition: transform .3s; flex-shrink: 0; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+    .faq-item.open .faq-a { max-height: 220px; }
+    .faq-a p { color: var(--text-dim); font-size: .92rem; padding-bottom: 1.25rem; line-height: 1.75; }
+    /* CTA */
+    .cta-section { background: var(--bg-2); border-top: 1px solid var(--border-gold); text-align: center; padding: 6rem 1.5rem; }
+    .cta-title { font-family: var(--ff); font-size: clamp(1.5rem,3.5vw,2.2rem); color: var(--text); margin-bottom: .75rem; }
+    .cta-sub { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 2.5rem; }
+    .cta-footnote { display: block; margin-top: 1.1rem; font-family: var(--ff); font-size: .7rem; color: var(--text-faint); letter-spacing: .12em; }
+    /* FOOTER */
+    .footer { background: var(--bg); border-top: 1px solid var(--border); padding: 3.5rem 1.5rem 2rem; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 3rem; }
+    .footer-brand { font-family: var(--ff); font-size: 1.1rem; color: var(--text); margin-bottom: .5rem; }
+    .footer-tag { font-size: .82rem; color: var(--text-faint); line-height: 1.6; max-width: 220px; }
+    .footer-head { font-family: var(--ff); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 1rem; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: .55rem; }
+    .footer-links a { color: var(--text-faint); text-decoration: none; font-size: .85rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--text-dim); }
+    .footer-copy { max-width: 1100px; margin: 2.5rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: .75rem; color: var(--text-faint); }
+    .footer-copy a { color: inherit; text-decoration: none; }
+    .footer-copy a:hover { color: var(--text-dim); }
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(12,11,9,.93); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-box { background: var(--bg-2); border: 1px solid var(--border-gold); max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border-gold); }
+    .modal-title { font-family: var(--ff); font-size: 1rem; letter-spacing: .06em; color: var(--text); }
+    .modal-sluit { background: none; border: none; color: var(--text-faint); font-size: 1.25rem; cursor: pointer; line-height: 1; padding: .25rem; transition: color .2s; }
+    .modal-sluit:hover { color: var(--text); }
+    .modal-body { padding: 1.75rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-family: var(--ff); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: .5rem; }
+    .form-input { width: 100%; padding: .75rem 1rem; background: var(--bg-3); border: 1px solid var(--border-gold); color: var(--text); font-size: .9rem; outline: none; transition: border-color .2s; }
+    .form-input:focus { border-color: var(--gold-dim); }
+    .form-hint { font-size: .75rem; color: var(--text-faint); margin-top: .35rem; }
+    .form-submit { width: 100%; padding: .875rem; background: var(--gold); border: none; color: var(--bg); font-family: var(--ff); font-size: .9rem; letter-spacing: .1em; cursor: pointer; margin-top: .5rem; transition: background .2s; }
+    .form-submit:hover { background: var(--gold-bright); }
+    .form-submit:disabled { opacity: .6; cursor: default; }
+    .form-free { text-align: center; font-family: var(--ff); font-size: .72rem; color: var(--text-faint); letter-spacing: .1em; margin-bottom: 1rem; }
+    .form-bevestiging { text-align: center; padding: 2rem 0; }
+    .form-bevestiging__check { font-size: 2rem; color: var(--gold); margin-bottom: .75rem; }
+    .form-bevestiging__titel { font-family: var(--ff); font-size: 1.1rem; color: var(--text); letter-spacing: .06em; margin-bottom: .5rem; }
+    .form-bevestiging__sub { color: var(--text-dim); font-size: .9rem; line-height: 1.7; }
+    .form-err { color: #c44; font-size: .85rem; text-align: center; margin-top: 1rem; }
+    /* EASTER EGG */
+    .easter-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(12,11,9,.96); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .easter-kaart { max-width: 420px; text-align: center; padding: 3rem 2rem; border: 1px solid var(--border-gold); }
+    .easter-stempel { font-family: var(--ff); font-size: .7rem; letter-spacing: .25em; text-transform: uppercase; color: #c44; display: block; margin-bottom: 1rem; }
+    .easter-kaart h2 { font-family: var(--ff); font-size: 1.8rem; color: var(--text); margin-bottom: 1rem; }
+    .easter-kaart p { color: var(--text-dim); margin-bottom: .5rem; }
+    .easter-sluiten { margin-top: 2rem; font-family: var(--ff); font-size: .7rem; letter-spacing: .15em; color: var(--text-faint) !important; }
+    .easter-label { font-family: var(--ff); font-size: .68rem; letter-spacing: .12em; color: var(--text-faint); margin-bottom: .75rem; }
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .exp-card { grid-template-columns: 1fr; }
+      .exp-num-col { display: none; }
+      .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark-archief sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="38" />
-      </a>
-      <button class="navbar-toggler" type="button"
-              data-bs-toggle="collapse" data-bs-target="#navMenu"
-              aria-controls="navMenu" aria-expanded="false"
-              aria-label="Navigatiemenu openen of sluiten">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#experiences">Experiences</a></li>
-          <li class="nav-item"><a class="nav-link" href="#over-bureau-x">Over ons</a></li>
-          <li class="nav-item">
-            <button type="button" class="nav-link btn-reserveer ms-2"
-                    data-bs-toggle="modal" data-bs-target="#reserveerModal">
-              Boek een sessie
-            </button>
-          </li>
-        </ul>
-      </div>
+<nav class="nav" id="navbar">
+  <a href="/" class="nav-logo">
+    <img src="/assets/img/bureau_x_logo_dark.svg" alt="Bureau X" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+    <span style="display:none;">Bureau X</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#experiences">Experiences</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><button class="btn-nav" data-modal="boek">Boek een sessie</button></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Bureau X &nbsp;&middot;&nbsp; Online Escape Rooms</p>
+    <h1 class="hero-title">Echte mysteries.<br><em>Jij lost ze op.</em></h1>
+    <p class="hero-sub">Online escape rooms gebaseerd op echte Belgische plaatsen en onopgeloste verhalen. Samen spelen, vanuit huis. Altijd gratis.</p>
+    <div class="hero-ctas">
+      <a href="#experiences" class="btn btn-gold">Bekijk experiences</a>
+      <a href="#over" class="btn btn-outline">Over Bureau X</a>
     </div>
-  </nav>
+    <div><span class="hero-tag">&#9632;&nbsp; Gratis &nbsp;&middot;&nbsp; 2 experiences &nbsp;&middot;&nbsp; Nederlandstalig</span></div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-label">Scroll</div>
+    <div class="scroll-line"></div>
+  </div>
+</section>
 
-  <!-- HERO -->
-  <section class="hero-section">
-    <div class="container text-center">
-      <p class="hero-label">Online escape room experiences</p>
-      <h1 class="hero-titel">Bureau X</h1>
-      <p class="hero-subtitel">Verhalen die je oplost. Samen, vanuit huis.</p>
-      <p class="hero-intro">
-        Bureau X maakt online escape rooms gebaseerd op echte plaatsen, echte tradities en verhalen die de moeite waard zijn om te vertellen.
-      </p>
-      <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
-        <button type="button" class="btn btn-archief btn-lg"
-                data-bs-toggle="modal" data-bs-target="#reserveerModal">
-          <i class="bi bi-calendar-check me-2"></i>Boek een sessie
-        </button>
-        <a href="#experiences" class="btn btn-archief-ghost btn-lg">
-          <i class="bi bi-folder2-open me-2"></i>Bekijk onze experiences
-        </a>
-      </div>
-      <p class="mt-4 mb-0"><span class="stempel-goud">Gratis te spelen</span></p>
-    </div>
-  </section>
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Voelde echt als een onderzoek" &mdash; Lotte &amp; Dries</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Beste online escape room die ik ooit gespeeld heb" &mdash; Joren</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"De puzzels zijn logisch en het verhaal klopte echt" &mdash; Sara</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Perfect voor een avond thuis met twee" &mdash; Thomas &amp; Elien</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>"Gratis en kwalitatief, hoe bestaat het" &mdash; Michiel</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Voelde echt als een onderzoek" &mdash; Lotte &amp; Dries</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Beste online escape room die ik ooit gespeeld heb" &mdash; Joren</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"De puzzels zijn logisch en het verhaal klopte echt" &mdash; Sara</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>"Perfect voor een avond thuis met twee" &mdash; Thomas &amp; Elien</div>
+    <div class="marquee-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>"Gratis en kwalitatief, hoe bestaat het" &mdash; Michiel</div>
+  </div>
+</div>
 
-  <!-- EXPERIENCES -->
-  <section id="experiences" class="py-5 sectie-licht">
-    <div class="container">
-      <h2 class="sectie-titel text-center mb-2">Onze experiences</h2>
-      <p class="text-center tekst-grijs mb-5">Elke Bureau X experience is verankerd in een echte plek of traditie.</p>
-
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="experience-kaart experience-kaart--kamer14 p-4 p-md-5">
-            <div class="dossier-tab">Dossier 14 &middot; Geel</div>
-            <span class="stempel-rood stempel-kaart">Onopgelost</span>
-            <div class="d-flex align-items-start gap-4 flex-wrap">
-              <div class="dossier-nummer">14</div>
-              <div class="flex-grow-1">
-                <p class="experience-label mb-1">Online escape room &middot; Geel, België</p>
-                <h3 class="experience-titel mb-3">Kamer 14</h3>
-                <p class="mb-3">
-                  Een dinsdagochtend in mei. Om 07u00 zit Lena Bogaert gewoon aan het ontbijt bij het gastgezin Martens. Om 07u45 is haar kamer leeg. Haar jas is weg. Geen briefje.
-                </p>
-                <p class="mb-4">
-                  Samen doorzoeken jullie twee dossiers: het officiële OPZ-dossier en het buurtdossier van het gastgezin. Is ze vrijwillig gegaan en waar is ze nu?
-                </p>
-                <div class="row g-3 mb-4">
-                  <div class="col-sm-4">
-                    <div class="spec-item"><i class="bi bi-clock-history me-2"></i>±45 minuten</div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="spec-item"><i class="bi bi-people me-2"></i>Duo (2 spelers)</div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="spec-item"><i class="bi bi-laptop me-2"></i>100% online</div>
-                  </div>
-                </div>
-                <a href="/kamer-14/" class="btn btn-archief">
-                  <i class="bi bi-folder2-open me-2"></i>Bekijk Kamer 14
-                </a>
-                <span class="badge badge-archief ms-3">Nu gratis te spelen</span>
-              </div>
-            </div>
+<section class="section" id="experiences" style="background:var(--bg);">
+  <div class="container">
+    <p class="label reveal">Onze experiences</p>
+    <h2 class="heading reveal">Twee verhalen. Jij kiest welk.</h2>
+    <p class="sub reveal">Elke Bureau X experience is gebouwd rond een echte plek of een onopgelost Belgisch mysterie.</p>
+    <div class="rule reveal"></div>
+    <div class="exp-grid">
+      <div class="exp-card reveal">
+        <span class="exp-badge badge-red">Onopgelost</span>
+        <div class="exp-num-col"><span class="exp-num">14</span></div>
+        <div class="exp-body">
+          <span class="exp-tab">Dossier 14 &middot; Geel</span>
+          <h3 class="exp-title">Kamer 14</h3>
+          <p class="exp-meta">Online escape room &nbsp;&middot;&nbsp; Geel, Belgie &nbsp;&middot;&nbsp; Duo</p>
+          <p class="exp-desc">Een dinsdagochtend in mei. Om 07u00 zit Lena Bogaert aan het ontbijt bij het gastgezin Martens. Om 07u45 is haar kamer leeg. Haar jas is weg. Geen briefje.<br><br>Jullie doorzoeken twee dossiers: het officiele OPZ-dossier en het buurtdossier van het gastgezin. Samen kom je erachter.</p>
+          <div class="exp-specs">
+            <div class="spec"><span class="spec-dot"></span>45 minuten</div>
+            <div class="spec"><span class="spec-dot"></span>Duo &mdash; 2 spelers</div>
+            <div class="spec"><span class="spec-dot"></span>100% online</div>
+          </div>
+          <div class="exp-actions">
+            <button class="btn btn-gold btn-sm" data-modal="boek">Boek sessie &rarr;</button>
+            <a href="/kamer-14/" class="btn btn-outline btn-sm">Meer info</a>
+            <span class="exp-free">Gratis</span>
           </div>
         </div>
       </div>
-
-      <div class="row justify-content-center mt-4">
-        <div class="col-lg-8">
-          <div class="experience-kaart-locked p-4 text-center">
-            <div class="dossier-tab">Zaak 2 &middot; Geclassificeerd</div>
-            <i class="bi bi-lock fs-4 mb-2 d-block tekst-grijs"></i>
-            <p class="mb-0 tekst-grijs">
-              <span class="font-archief">Volgende experience in ontwikkeling</span>
-            </p>
+      <div class="exp-card exp-card--locked reveal">
+        <span class="exp-badge badge-grey">Binnenkort</span>
+        <div class="exp-num-col"><span class="exp-num">II</span></div>
+        <div class="exp-body">
+          <span class="exp-tab">Dossier 1934/RR &middot; Gent</span>
+          <h3 class="exp-title">D.U.A.</h3>
+          <p class="exp-meta">Online escape room &nbsp;&middot;&nbsp; Gent, Belgie &nbsp;&middot;&nbsp; 2&ndash;4 spelers</p>
+          <p class="exp-desc">In de nacht van 10 op 11 april 1934 verdwijnt <em>De Rechtvaardige Rechters</em> uit de Sint-Baafskathedraal. Dertien afpersbrieven. Een sterfbedbekentenis. Het paneel is nooit teruggevonden.<br><br>Een deel van jullie speelt in 1934. De rest zoekt honderd jaar later. Praten mag. Door de tijd heen.</p>
+          <div class="exp-specs">
+            <div class="spec"><span class="spec-dot"></span>60 minuten</div>
+            <div class="spec"><span class="spec-dot"></span>2&ndash;4 spelers</div>
+            <div class="spec"><span class="spec-dot"></span>100% online</div>
+          </div>
+          <div class="exp-actions">
+            <a href="/dua/" class="btn btn-outline btn-sm">Meer info</a>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOE HET WERKT -->
-  <section id="hoe-het-werkt" class="py-5 sectie-donker">
-    <div class="container">
-      <h2 class="sectie-titel text-center mb-5">Hoe het werkt</h2>
-      <div class="row g-4 justify-content-center align-items-start stappen-rij">
-        <div class="col-md-4 text-center">
-          <div class="stap-nummer">1</div>
-          <h3 class="h5 mt-3">Boek een sessie</h3>
-          <p>Vul het formulier in, helemaal gratis. Je ontvangt een bevestigingsmail met jullie persoonlijke spellink.</p>
-        </div>
-        <div class="col-md-4 text-center">
-          <div class="stap-nummer">2</div>
-          <h3 class="h5 mt-3">Ontvang de link</h3>
-          <p>Stuur de link naar je medespeler. Elke speler opent zijn eigen dossier in de browser, geen download nodig.</p>
-        </div>
-        <div class="col-md-4 text-center">
-          <div class="stap-nummer">3</div>
-          <h3 class="h5 mt-3">Speel samen</h3>
-          <p>Bel of chat met je medespeler. De oplossing zit in allebei de dossiers. Samen kom je eruit.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OVER BUREAU X -->
-  <section id="over-bureau-x" class="py-5 sectie-licht">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-7 text-center">
-          <h2 class="sectie-titel mb-4">Over Bureau X</h2>
-          <p class="mb-3">
-            Bureau X maakt online escape rooms die geworteld zijn in echte verhalen. Geen generieke thrillers of willekeurige puzzels: elke experience is gebouwd rond een echte plek, een echte traditie of een thema dat de moeite waard is om te onderzoeken.
-          </p>
-          <p class="mb-0">
-            Onze eerste experience <strong>Kamer 14</strong> is gebaseerd op de unieke Geelse traditie van gezinsverpleging, een traditie die al meer dan zeven eeuwen bestaat en vandaag nog steeds levend wordt gehouden door het <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="link-accent">OPZ Geel</a>.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="py-4 footer-archief">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
-          <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="32" loading="lazy" />
-        </div>
-        <div class="col-md-4 text-center mb-3 mb-md-0">
-          <p class="mb-1 small tekst-grijs">
-            Kamer 14 is gebaseerd op de echte traditie van gezinsverpleging in Geel.
-          </p>
-          <p class="mb-0 small tekst-grijs">
-            <a href="https://www.opzgeel.be" target="_blank" rel="noopener" class="footer-link">OPZ Geel</a>
-            &middot;
-            <a href="https://www.sint-dymphna.be" target="_blank" rel="noopener" class="footer-link">Sint-Dymphna</a>
-          </p>
-        </div>
-        <div class="col-md-4 text-center text-md-end">
-          <p class="mb-1 small">
-            <a href="mailto:info@bureau-x.be" class="footer-link">info@bureau-x.be</a>
-          </p>
-          <p class="mb-0 small">
-            <a href="/privacy.html" class="footer-link footer-link-subtiel">Privacybeleid</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- RESERVEER MODAL -->
-  <div class="modal fade" id="reserveerModal" tabindex="-1" aria-labelledby="reserveerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content modal-archief">
-
-        <div class="modal-header modal-header-archief">
-          <h5 class="modal-title" id="reserveerModalLabel">
-            <i class="bi bi-folder2-open me-2"></i>Boek een sessie - Kamer 14
-          </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Sluiten"></button>
-        </div>
-
-        <div class="modal-body p-4">
-          <form id="reserveerForm" action="https://formspree.io/f/xvzlanbj" method="POST">
-            <div class="mb-3">
-              <label for="naam" class="form-label">Naam</label>
-              <input type="text" class="form-control archief-input" id="naam" name="naam" placeholder="Jouw naam" required />
-            </div>
-            <div class="mb-3">
-              <label for="spelers" class="form-label">Aantal spelers</label>
-              <input type="text" class="form-control archief-input" id="spelers" value="Duo (2 spelers)" readonly />
-              <input type="hidden" name="spelers" value="2" />
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">E-mailadres speler 1</label>
-              <input type="email" class="form-control archief-input" id="email" name="email" placeholder="jouw@email.be" required />
-            </div>
-            <div class="mb-3">
-              <label for="email_speler_2" class="form-label">E-mailadres speler 2</label>
-              <input type="email" class="form-control archief-input" id="email_speler_2" name="email_speler_2" placeholder="speler2@email.be" required />
-            </div>
-            <div class="mb-3">
-              <label for="datum" class="form-label">Gewenste datum</label>
-              <input type="date" class="form-control archief-input" id="datum" name="datum" required />
-              <div class="formulier-hint mt-1">Geen vast tijdslot: jullie ontvangen de spellink per mail en spelen wanneer het past.</div>
-            </div>
-            <input type="hidden" name="experience" value="Kamer 14" />
-            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-            <p class="formulier-gratis text-center mb-3">
-              <i class="bi bi-patch-check me-1"></i>Volledig gratis. Binnen 24 uur ontvang je een mail met jullie persoonlijke spellink.
-            </p>
-            <div class="d-grid">
-              <button type="submit" class="btn btn-archief btn-lg">
-                <i class="bi bi-send me-2"></i>Verstuur reservering
-              </button>
-            </div>
-          </form>
-        </div>
-
       </div>
     </div>
   </div>
+</section>
 
-  <script type="module" src="js/landing.ts"></script>
+<section class="section usp-section" id="over">
+  <div class="container">
+    <p class="label reveal" style="text-align:center;">Waarom Bureau X</p>
+    <h2 class="heading reveal" style="text-align:center;max-width:540px;margin:0 auto 0.5rem;">Geen gewone escape room</h2>
+    <div class="usp-grid">
+      <div class="usp-item reveal"><div class="usp-icon">&#10006;</div><h3 class="usp-title">Gebaseerd op echte verhalen</h3><p class="usp-desc">Geen willekeurige puzzels. Elke experience is gebouwd rond een echte plek, traditie of onopgelost mysterie.</p></div>
+      <div class="usp-item reveal"><div class="usp-icon">&#9675;</div><h3 class="usp-title">Altijd gratis</h3><p class="usp-desc">Geen abonnement, geen verborgen kosten. Bureau X experiences zijn gratis te spelen. Altijd.</p></div>
+      <div class="usp-item reveal"><div class="usp-icon">&#8895;</div><h3 class="usp-title">Vanuit huis</h3><p class="usp-desc">Elke speler opent zijn eigen dossier in de browser. Geen download, geen verplaatsing.</p></div>
+      <div class="usp-item reveal"><div class="usp-icon">&#9670;</div><h3 class="usp-title">Volledig Nederlandstalig</h3><p class="usp-desc">Alle verhalen, puzzels en dossiers zijn in het Nederlands. Gemaakt voor Nederlandstaligen.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reviews" style="background:var(--bg);">
+  <div class="container">
+    <p class="label reveal">Wat spelers zeggen</p>
+    <h2 class="heading reveal">Gespeeld. Beoordeeld.</h2>
+    <div class="rule reveal"></div>
+    <div class="reviews-grid">
+      <div class="review-card reveal"><div class="review-quote">&ldquo;</div><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="review-text">"We speelden Kamer 14 op een vrijdagavond en hadden het gevoel echt een zaak op te lossen. De dossiers voelen authentiek en de puzzels zijn logisch."</p><div class="review-author">Lotte &amp; Dries</div><div class="review-exp">Kamer 14</div></div>
+      <div class="review-card reveal"><div class="review-quote">&ldquo;</div><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="review-text">"Beste online escape room die ik ooit gespeeld heb. Het verhaal over OPZ Geel kende ik niet en heeft me echt geraakt. Dat het gratis is, is gewoon ongelofelijk."</p><div class="review-author">Joren V.</div><div class="review-exp">Kamer 14</div></div>
+      <div class="review-card reveal"><div class="review-quote">&ldquo;</div><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div><p class="review-text">"Perfect voor een avond thuis. We hadden de oplossing bijna maar niet helemaal zelf gevonden. Goed gemaakt voor een gratis spel."</p><div class="review-author">Thomas &amp; Elien</div><div class="review-exp">Kamer 14</div></div>
+    </div>
+    <p class="reviews-note">Na het spelen ontvang je een uitnodiging om een review achter te laten.</p>
+  </div>
+</section>
+
+<section class="section how-section">
+  <div class="container">
+    <p class="label reveal" style="text-align:center;">Hoe het werkt</p>
+    <h2 class="heading reveal" style="text-align:center;max-width:480px;margin:0 auto .5rem;">In drie stappen aan de slag</h2>
+    <div class="steps-grid">
+      <div class="step reveal"><div class="step-num">1</div><h3 class="step-title">Boek een sessie</h3><p class="step-desc">Vul het formulier in. Gratis, geen account nodig. Binnen 24 uur ontvang je een persoonlijke spellink per mail.</p></div>
+      <div class="step reveal"><div class="step-num">2</div><h3 class="step-title">Stuur de link door</h3><p class="step-desc">Stuur de link naar je medespeler. Ieder opent zijn eigen dossier in de browser. Geen download, geen installatie.</p></div>
+      <div class="step reveal"><div class="step-num">3</div><h3 class="step-title">Los het samen op</h3><p class="step-desc">Bel of chat met je medespeler. Jullie dossiers vullen elkaar aan. Samen kom je erachter wat er echt gebeurd is.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq" style="background:var(--bg);">
+  <div class="container--narrow">
+    <p class="label reveal">Vragen</p>
+    <h2 class="heading reveal">Veelgestelde vragen</h2>
+    <div class="rule reveal"></div>
+    <div class="faq-list reveal">
+      <div class="faq-item"><button class="faq-q">Is Bureau X echt gratis? <span class="faq-arrow">&#9662;</span></button><div class="faq-a"><p>Ja, volledig gratis. Geen abonnement, geen in-app aankopen. Je boekt een sessie, ontvangt een spellink per mail en speelt.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Wat heb ik nodig om te spelen? <span class="faq-arrow">&#9662;</span></button><div class="faq-a"><p>Alleen een browser en een manier om met je medespeler te communiceren, zoals een telefoongesprek of videocall. Geen downloads, geen speciale software.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Hoeveel spelers heb ik nodig? <span class="faq-arrow">&#9662;</span></button><div class="faq-a"><p>Kamer 14 is gemaakt voor precies 2 spelers. D.U.A., onze tweede experience, is speelbaar met 2 tot 4 spelers.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Hoe lang duurt een sessie? <span class="faq-arrow">&#9662;</span></button><div class="faq-a"><p>Kamer 14 duurt gemiddeld 45 minuten. Er is geen vaste tijdslimiet. Jullie spelen in jullie eigen tempo.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Zijn de verhalen echt? <span class="faq-arrow">&#9662;</span></button><div class="faq-a"><p>Ja. Kamer 14 is gebaseerd op de echte Geelse traditie van gezinsverpleging bij het OPZ Geel. D.U.A. is gebaseerd op de tot op vandaag onopgeloste diefstal van De Rechtvaardige Rechters uit de Sint-Baafskathedraal in 1934.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <p class="label" style="text-align:center;">Klaar voor het onderzoek?</p>
+  <h2 class="cta-title">Start je eerste dossier</h2>
+  <p class="cta-sub">Kamer 14 wacht. Jullie ook?</p>
+  <button class="btn btn-gold" style="font-size:.95rem;padding:1rem 2.5rem;" data-modal="boek">Boek Kamer 14 &rarr;</button>
+  <span class="cta-footnote">Volledig gratis &nbsp;&middot;&nbsp; Geen account nodig &nbsp;&middot;&nbsp; Zo gespeeld</span>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Bureau X</div>
+      <p class="footer-tag">Online escape rooms gebaseerd op echte Belgische verhalen en onopgeloste mysteries.</p>
+    </div>
+    <div>
+      <p class="footer-head">Experiences</p>
+      <ul class="footer-links">
+        <li><a href="/kamer-14/">Kamer 14</a></li>
+        <li><a href="/dua/">D.U.A. (binnenkort)</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-head">Info</p>
+      <ul class="footer-links">
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="mailto:info@bureau-x.be">Contact</a></li>
+        <li><a href="/privacy.html">Privacybeleid</a></li>
+        <li><a href="https://www.opzgeel.be" target="_blank" rel="noopener">OPZ Geel</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>&copy; 2025 Bureau X</span>
+    <a href="mailto:info@bureau-x.be">info@bureau-x.be</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-head">
+      <span class="modal-title">Boek een sessie &mdash; Kamer 14</span>
+      <button class="modal-sluit" id="modal-sluit" aria-label="Sluiten">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="form-free">Volledig gratis &nbsp;&middot;&nbsp; Binnen 24 uur ontvang je de spellink</p>
+      <form id="reserveerForm" action="https://formspree.io/f/xvzlanbj" method="POST">
+        <div class="form-group">
+          <label class="form-label" for="naam">Naam</label>
+          <input class="form-input" type="text" id="naam" name="naam" placeholder="Jouw naam" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">E-mailadres speler 1</label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="jouw@email.be" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email_speler_2">E-mailadres speler 2</label>
+          <input class="form-input" type="email" id="email_speler_2" name="email_speler_2" placeholder="speler2@email.be" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="datum">Gewenste datum</label>
+          <input class="form-input" type="date" id="datum" name="datum" required />
+          <p class="form-hint">Geen vast tijdslot, jullie spelen wanneer het uitkomt.</p>
+        </div>
+        <input type="hidden" name="experience" value="Kamer 14" />
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+        <button class="form-submit" type="submit">Verstuur reservering</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var canvas = document.getElementById('hero-canvas');
+  if (!window.THREE || !canvas) return;
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 5;
+  var COUNT = 400;
+  var pos = new Float32Array(COUNT * 3);
+  var vel = [];
+  for (var i = 0; i < COUNT; i++) {
+    pos[i*3]   = (Math.random() - .5) * 26;
+    pos[i*3+1] = (Math.random() - .5) * 16;
+    pos[i*3+2] = (Math.random() - .5) * 10 - 2;
+    vel.push({ x:(Math.random()-.5)*.0025, y:Math.random()*.004+.0008, p:Math.random()*Math.PI*2 });
+  }
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  var mat1 = new THREE.PointsMaterial({ color: 0xc8a96e, size: .045, transparent: true, opacity: .35, sizeAttenuation: true });
+  var mat2 = new THREE.PointsMaterial({ color: 0xe8dcc8, size: .018, transparent: true, opacity: .5, sizeAttenuation: true });
+  var pts1 = new THREE.Points(geo, mat1);
+  var pts2 = new THREE.Points(geo, mat2);
+  scene.add(pts1, pts2);
+  var t = 0;
+  (function tick() {
+    requestAnimationFrame(tick);
+    t += .006;
+    for (var j = 0; j < COUNT; j++) {
+      pos[j*3]   += vel[j].x + Math.sin(t + vel[j].p) * .0008;
+      pos[j*3+1] += vel[j].y;
+      if (pos[j*3+1] > 8) { pos[j*3+1] = -8; pos[j*3] = (Math.random()-.5)*26; }
+    }
+    geo.attributes.position.needsUpdate = true;
+    pts1.rotation.y = pts2.rotation.y = Math.sin(t*.04)*.015;
+    renderer.render(scene, camera);
+  })();
+  window.addEventListener('resize', function () {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+})();
+
+var navbar = document.getElementById('navbar');
+window.addEventListener('scroll', function () {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+document.querySelectorAll('.usp-grid, .steps-grid, .reviews-grid, .exp-grid').forEach(function (grid) {
+  grid.querySelectorAll('.reveal').forEach(function (el, i) {
+    el.style.transitionDelay = (i * 90) + 'ms';
+  });
+});
+var io = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+document.querySelectorAll('.faq-q').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var item = btn.parentElement;
+    var was = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function (i) { i.classList.remove('open'); });
+    if (!was) item.classList.add('open');
+  });
+});
+
+var overlay = document.getElementById('modal-overlay');
+function openModal() { if (!overlay) return; overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModal() { if (!overlay) return; overlay.classList.remove('open'); document.body.style.overflow = ''; }
+document.querySelectorAll('[data-modal="boek"]').forEach(function (btn) { btn.addEventListener('click', openModal); });
+overlay && overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+document.getElementById('modal-sluit') && document.getElementById('modal-sluit').addEventListener('click', closeModal);
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+</script>
+
+<script type="module" src="/js/landing-new.ts"></script>
 </body>
 </html>

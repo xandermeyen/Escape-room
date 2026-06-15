@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D.U.A. - Gent, 1934</title>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/dua.css" />
+</head>
+<body class="era-1934">
+
+  <div id="dua-schaduw"><span>D.U.A.</span></div>
+  <div id="dua-melding" class="d-melding"></div>
+
+  <!-- Systeembalk -->
+  <div class="systeembalk">
+    <div style="display:flex;align-items:center;">
+      <span class="sys-logo">Bureau X</span>
+      <span class="sys-sep">|</span>
+      <span class="sys-case" id="sys-case">D.U.A. · laden…</span>
+    </div>
+    <div class="sys-rechts">
+      <div class="verdenking-wrap">VERDENKING
+        <div class="verdenking-bar"><i id="verdenking-vul"></i></div>
+        <span id="verdenking-pct">0%</span>
+      </div>
+      <button class="muteknop" id="muteknop">♪</button>
+      <span class="sys-badge era1934" id="sys-rol">1934</span>
+      <span class="sys-timer" id="dua-timer">60:00</span>
+    </div>
+  </div>
+
+  <div class="voortgangbalk">
+    <div class="pz" id="pz1">P1</div><div class="pz" id="pz2">P2</div>
+    <div class="pz" id="pz3">P3</div><div class="pz" id="pz4">P4</div>
+    <div class="pz" id="pz5">P5</div>
+  </div>
+
+  <div class="papier">
+    <h2 class="era-kop se">Gent, april 1934 — jullie zijn D.U.A.</h2>
+    <p class="era-sub">De Schrijver typt. De Loper beweegt. De politie kijkt mee.
+      En 2034 weet dingen die jullie niet kunnen weten: vraag ernaar voor je iets onomkeerbaars doet.</p>
+
+    <!-- ⓪ Handdruk -->
+    <div class="stuk" id="s-zegel">
+      <h3>⓪ De handdruk door de tijd <span class="hintje">(oefenronde)</span></h3>
+      <p>Eerst leren jullie hoe dit werkt. Druk het waszegel van D.U.A. op een leeg vel. Niets meer.
+        Vraag dan aan 2034 wat er bij hen gebeurt.</p>
+      <button class="d-knop klein" id="zegelknop">Druk het zegel</button>
+      <span id="zegel-toon" style="margin-left:14px"></span>
+    </div>
+
+    <!-- ① Typemachine -->
+    <div class="stuk" id="s-hamers">
+      <h3>① De typemachine is gesaboteerd</h3>
+      <p>Iemand heeft de letterhamers verwisseld. Herstel het mechaniek: klik twee hamers om ze
+        te wisselen tot elke hamer in het juiste vak hangt.</p>
+      <div class="hamerrij" id="hamerrij"></div>
+      <p class="hintje" id="hamer-status">Pas als de machine hersteld is, kan brief XII getypt worden.</p>
+    </div>
+
+    <div class="stuk slot" id="s-brief">
+      <h3>① Brief XII aan bisschop Coppieters</h3>
+      <p>Sla precies <b>vijf letters dieper aan</b> (klik ze aan). Samen, in leesvolgorde, vormen ze
+        het woord dat 2034 nodig heeft. De doorslag is alles wat overblijft.</p>
+      <p class="typvel" id="typvel"></p>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <button class="d-knop klein" id="btn-verstuur">Sla door en verstuur</button>
+        <button class="d-knop klein" id="btn-gom">Nieuw vel</button>
+      </div>
+      <p class="hintje" id="brief-status" style="margin-top:8px">Nog 5 letters te kiezen.</p>
+    </div>
+
+    <!-- ② Noordstation -->
+    <div class="stuk" id="s-kluis">
+      <h3>② Noordstation Brussel — de teruggave</h3>
+      <p>De Loper staat bij de bagagekluizen, <em>Johannes de Doper</em> onder de arm.
+        De perronwachter loopt zijn ronde. Deponeer alleen wanneer hij <b>buiten zicht</b> is.
+        Kies eerst het kluisnummer; denk aan wat de brief belooft:
+        <em>"één meer dan het aantal brieven dat u telt"</em>, en brief XIII versturen jullie nooit.</p>
+      <div class="wachterbaan"><div class="wachter" id="wachter"></div></div>
+      <div class="baanlabels"><span>◉ wachter dichtbij — gevaar</span><span>perron</span><span>buiten zicht — veilig</span></div>
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+        <input class="d-input" id="kluis-keuze" maxlength="2" placeholder="__"
+          style="max-width:90px;font-size:24px;letter-spacing:8px;text-align:center" autocomplete="off" />
+        <button class="d-knop klein" id="btn-deponeer">Deponeer nu</button>
+      </div>
+      <p class="hintje" id="kluis-status" style="margin-top:8px">Luister naar de voetstappen.</p>
+    </div>
+
+    <!-- ③ Route -->
+    <div class="stuk" id="s-route">
+      <h3>③ Wat jullie die nacht zagen</h3>
+      <p>Jullie stonden op wacht bij de kathedraal. De route van de dragers, in volgorde:
+        <b>sacristie → kooromgang → Vijdkapel → zijdeur</b>.
+        De politieplattegrond met zonenummers heeft alleen 2034. Zeg wat je zag, niet wat je niet weet.</p>
+    </div>
+
+    <!-- ④ Werkkamer -->
+    <div class="stuk" id="s-kamer">
+      <h3>④ Wetteren, 25 november 1934 — de werkkamer</h3>
+      <p>Goedertier is stervende. De politie is onderweg: <b>90 seconden</b> binnen.
+        Eerst de sleutel vinden (<em>"waar het licht valt"</em>), dan de doorslagen en de laatste
+        aanwijzing verstoppen. Maar kies de bergplaats niet zomaar: 2034 heeft het
+        huiszoekingsverslag en weet waar de politie straks zal zoeken. Vraag het hen VOOR je naar binnen gaat.</p>
+      <button class="d-knop klein" id="btn-kamer">Ga naar binnen</button>
+      <span class="kamer-timer" id="kamer-timer" style="margin-left:14px"></span>
+      <div id="kamer" style="display:none">
+        <svg viewBox="0 0 460 230" class="svg-kader" style="margin-top:10px">
+          <rect class="klikbaar" data-plek="kast" x="15" y="25" width="75" height="150" fill="#6e5a40" stroke="#3f3324" stroke-width="2"/>
+          <text x="32" y="105" font-size="12" fill="#f5f0e8" style="pointer-events:none">KAST</text>
+          <rect class="klikbaar" data-plek="bureau" x="110" y="120" width="140" height="60" fill="#8a6f4d" stroke="#3f3324" stroke-width="2"/>
+          <text x="148" y="155" font-size="12" fill="#f5f0e8" style="pointer-events:none">BUREAU</text>
+          <circle class="klikbaar" data-plek="vensterbank" cx="395" cy="55" r="20" fill="#d8c98e" stroke="#3f3324" stroke-width="2"/>
+          <text x="368" y="92" font-size="10" fill="#3f3324" style="pointer-events:none">vensterbank</text>
+          <rect class="klikbaar" data-plek="schouw" x="270" y="40" width="70" height="140" fill="#9c8468" stroke="#3f3324" stroke-width="2"/>
+          <text x="280" y="115" font-size="11" fill="#f5f0e8" style="pointer-events:none">SCHOUW</text>
+          <rect class="klikbaar" data-plek="boekenrek" x="110" y="25" width="140" height="55" fill="#7a6248" stroke="#3f3324" stroke-width="2"/>
+          <text x="138" y="58" font-size="11" fill="#f5f0e8" style="pointer-events:none">BOEKENREK</text>
+          <rect class="klikbaar" data-plek="vloerplank" x="355" y="150" width="90" height="30" fill="#b3a07c" stroke="#3f3324" stroke-width="2"/>
+          <text x="358" y="170" font-size="10" fill="#2b2620" style="pointer-events:none">losse vloerplank</text>
+        </svg>
+        <p class="hintje" id="kamer-status">Vind eerst de sleutel.</p>
+      </div>
+      <div class="hint-blok" id="hint-p4a">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p4a')">Hint vragen</button>
+        <div class="hint-stap verborgen">» "Waar het licht valt." Waar valt licht een kamer binnen?</div>
+        <div class="hint-stap verborgen">» De sleutel ligt op de vensterbank. Verstop het mapje daarna NIET waar de politie gaat zoeken; 2034 heeft het verslag.</div>
+        <div class="hint-stap verborgen">» Oplossing: sleutel op de vensterbank; veilig verstoppen kan alleen in de schouw of onder de losse vloerplank.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p4a')">Nog een hint</button>
+      </div>
+    </div>
+
+    <!-- ⑤ Bergplaats -->
+    <div class="stuk" id="s-pin">
+      <h3>⑤ De bergplaats</h3>
+      <p>Het moment van de waarheid. Eén regel mag mee de geschiedenis in:
+        <em>"op een plaats waar noch ik, noch iemand anders het kan weghalen zonder de aandacht
+        van het publiek te wekken."</em> Maar denk verder dan het raadsel: de plek moet ook
+        <b>honderd jaar overleven</b>. Wat weet 2034 over wat er met deze gebouwen gebeurde?
+        Klik pas als je zeker bent. Daarna: zwijgen over de plek. Erecode.</p>
+      <svg viewBox="0 0 420 260" class="svg-kader kaartplek" id="kaart-1934">
+        <path d="M0,200 C120,180 300,220 420,190" stroke="#7fa0b5" stroke-width="14" fill="none"/>
+        <text x="12" y="186" font-size="10" fill="#5a7382">de Leie</text>
+        <rect x="180" y="80" width="56" height="80" fill="#d8ccae" stroke="#3f3324" data-plek="sintbaafs"/>
+        <text x="166" y="70" font-size="10" fill="#3f3324">Sint-Baafskathedraal</text>
+        <rect x="80" y="60" width="44" height="44" fill="#d8ccae" stroke="#3f3324" data-plek="belfort"/>
+        <text x="76" y="52" font-size="10" fill="#3f3324">Belfort</text>
+        <rect x="300" y="50" width="50" height="36" fill="#d8ccae" stroke="#3f3324" data-plek="station"/>
+        <text x="282" y="42" font-size="10" fill="#3f3324">St-Pietersstation</text>
+        <rect x="60" y="170" width="50" height="30" fill="#d8ccae" stroke="#3f3324" data-plek="gravensteen"/>
+        <text x="52" y="162" font-size="10" fill="#3f3324">Gravensteen</text>
+      </svg>
+      <p class="hintje" id="pin-status"></p>
+    </div>
+
+    <!-- Finale: de veertiende brief -->
+    <div class="stuk verborgen" id="s-brief14">
+      <h3>De veertiende brief</h3>
+      <p>2034 heeft de plek gevonden. Schrijf nu de brief waarmee voor hen alles begon.
+        De cirkel sluit zich.</p>
+      <textarea class="d-input" id="brief14" rows="5" placeholder="Aan wie dit vindt, honderd jaar na ons..."></textarea>
+      <br /><br />
+      <button class="d-knop goud klein" id="btn-brief14">Verzegel de brief en open het eindrapport</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/speler-1934.ts"></script>
+  <script type="module" src="/src/bootstrap.ts"></script>
+</body>
+</html>

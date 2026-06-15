@@ -104,6 +104,21 @@ export function luisterNaarRapport(
   });
 }
 
+// Tijden ophalen voor de eindstatistieken
+export interface SessieTijden {
+  timerGestart: number | null;
+  rapportTijdstip: number | null;
+}
+
+export async function haalTijden(sessieCode: string): Promise<SessieTijden> {
+  const snapshot = await get(ref(db, `sessions/${sessieCode}`));
+  const data = snapshot.val() || {};
+  return {
+    timerGestart: data.timerGestart ?? null,
+    rapportTijdstip: data.rapport?.tijdstip ?? null,
+  };
+}
+
 // Rol atomisch claimen — voorkomt dat twee spelers dezelfde rol kiezen
 // Geeft true terug als claimen gelukt is, false als de rol al bezet was
 export async function claimRol(sessieCode: string, rol: string): Promise<boolean> {

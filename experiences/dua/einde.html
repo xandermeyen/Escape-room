@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D.U.A. - De cirkel is rond</title>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/dua.css" />
+  <style>
+    .duo { display: flex; gap: 18px; flex-wrap: wrap; }
+    .duo > div { flex: 1; min-width: 280px; }
+    .wacht-tekst { text-align: center; }
+  </style>
+</head>
+<body class="era-2034">
+
+  <div id="dua-melding" class="d-melding"></div>
+
+  <div class="systeembalk">
+    <div style="display:flex;align-items:center;">
+      <span class="sys-logo">Bureau X</span>
+      <span class="sys-sep">|</span>
+      <span class="sys-case" id="sys-case">D.U.A. · eindrapport</span>
+    </div>
+    <div class="sys-rechts">
+      <span class="sys-badge">Zaak heropend</span>
+    </div>
+  </div>
+
+  <div class="papier" style="max-width:860px">
+    <span class="d-stempel">Zaak heropend</span>
+    <h2 class="era-kop se" style="margin-top:14px">De cirkel is rond.</h2>
+
+    <p class="wacht-tekst hintje" id="wacht-status"></p>
+
+    <div class="d-stats" id="einde-stats" style="display:none"></div>
+
+    <div class="duo">
+      <div class="stuk">
+        <h3>De veertiende brief (1934)</h3>
+        <p id="einde-brief" style="white-space:pre-wrap" class="hintje">Nog niet verzegeld…</p>
+      </div>
+      <div class="stuk">
+        <h3>Het rapport (2034)</h3>
+        <p id="einde-rapport" style="white-space:pre-wrap" class="hintje">Nog niet ingediend…</p>
+      </div>
+    </div>
+
+    <div class="stuk verborgen" id="einde-onthulling">
+      <h3>En in het echt?</h3>
+      <p>
+        De diefstal van 10 op 11 april 1934 is nooit opgelost. De dertien brieven van D.U.A. bestaan echt,
+        net als de sterfbedwoorden van Arsène Goedertier en de teruggave van Johannes de Doper in een
+        bagagekluis van het Brusselse Noordstation. Het paneel is nooit teruggevonden. Eind 2024 zocht
+        het Gentse parket nog in Oosterzele. Zonder resultaat.
+        Misschien heeft iemand in 1934 het gewoon te goed verstopt.
+      </p>
+      <p class="hintje">
+        Meer weten? <a href="https://rechtvaardigerechters.be" target="_blank" rel="noopener">rechtvaardigerechters.be</a>
+        · <a href="https://visit.gent.be/nl" target="_blank" rel="noopener">visit.gent.be</a>
+      </p>
+    </div>
+
+    <p style="text-align:center;margin-top:24px">
+      <button class="d-knop" id="btn-terug">← Terug naar de website</button>
+    </p>
+  </div>
+
+  <script type="module" src="js/einde.ts"></script>
+  <script type="module" src="/src/bootstrap.ts"></script>
+</body>
+</html>

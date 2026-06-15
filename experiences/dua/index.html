@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D.U.A. - Bureau X</title>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/dua.css" />
+</head>
+<body class="era-2034">
+
+  <!-- ── Scherm 1: intro ── -->
+  <div id="scherm-intro" class="scherm actief">
+    <div class="lobby-wrap">
+      <span class="d-stempel">Strikt vertrouwelijk</span>
+      <h1 class="lobby-titel">D.U.A.</h1>
+      <div class="lobby-sub">BUREAU X · DOSSIER 1934/RR · TIJDSPLIT-EXPERIENCE</div>
+      <p class="lobby-verhaal">
+        Gent, april 2034. Honderd jaar na de diefstal van <em>De Rechtvaardige Rechters</em>
+        ontvangt Bureau X een anonieme doos: het vergeelde onderzoeksdossier uit 1934
+        en een veertiende brief, ondertekend <b>D.U.A.</b>
+      </p>
+      <p class="lobby-verhaal">
+        Dit verhaal heeft twee kanten. Een deel van jullie speelt in <b>1934</b>, als de mensen
+        achter D.U.A., met de politie in de nek en een spoor om achter te laten. De rest speelt
+        in <b>2034</b> en kent de afloop van de eeuw. Wat 1934 verstopt, vindt 2034.
+        Wat 1934 verknoeit, is honderd jaar later nog steeds verknoeid.
+      </p>
+      <p class="lobby-verhaal hintje">
+        2 tot 4 spelers · 60 minuten · bel of videocall met je team en zet je geluid aan.
+      </p>
+      <button class="d-knop goud" id="btn-begin">Open de lijn</button>
+    </div>
+  </div>
+
+  <!-- ── Scherm 2: sessiecode ── -->
+  <div id="scherm-code" class="scherm">
+    <div class="lobby-wrap">
+      <h2 class="se" style="color:var(--d-groen)">Sessiecode</h2>
+      <p class="lobby-verhaal" style="text-align:center">
+        Je vindt de code in je bevestigingsmail (formaat: DUA-2026-001).
+      </p>
+      <input class="d-input" id="sessieCodeInput" placeholder="DUA-2026-001"
+        style="max-width:280px;text-align:center;letter-spacing:0.15em;text-transform:uppercase"
+        maxlength="16" autocomplete="off" />
+      <div class="code-fout verborgen"></div>
+      <br />
+      <button class="d-knop btn-game" onclick="valideerCode()">Verder</button>
+    </div>
+  </div>
+
+  <!-- ── Scherm 3: rolkeuze ── -->
+  <div id="scherm-rol" class="scherm">
+    <div class="lobby-wrap" style="max-width:860px">
+      <h2 class="se" style="color:var(--d-groen)">Kies je kant van de tijd</h2>
+      <p class="lobby-verhaal" style="text-align:center">
+        Er moet minstens één onderzoeker in elk tijdperk staan.<br />
+        Met z'n tweeën? Neem elk één tijdperk, je ziet daar alles van je twee rollen.
+      </p>
+
+      <div class="rol-grid">
+        <div class="rol-kaart" id="rol-kaart-schrijver">
+          <div class="rol-era">1934 · GENT</div>
+          <div class="rol-naam">De Schrijver</div>
+          <div class="rol-info">Typt de afpersbrieven aan het bisdom en bepaalt welke codes de eeuw oversteken. De typemachine is helaas… stuk.</div>
+          <div class="rol-bezet-label verborgen">— bezet —</div>
+        </div>
+        <div class="rol-kaart" id="rol-kaart-loper">
+          <div class="rol-era">1934 · BRUSSEL & WETTEREN</div>
+          <div class="rol-naam">De Loper</div>
+          <div class="rol-info">Beweegt door stations en werkkamers, ontwijkt wachters en verstopt wat honderd jaar bewaard moet blijven.</div>
+          <div class="rol-bezet-label verborgen">— bezet —</div>
+        </div>
+        <div class="rol-kaart" id="rol-kaart-archivaris">
+          <div class="rol-era">2034 · BUREAU X</div>
+          <div class="rol-naam">De Archivaris</div>
+          <div class="rol-info">Leest de doorslagen, het politiedossier en de kranten. Weet waar de politie in december 1934 zal zoeken.</div>
+          <div class="rol-bezet-label verborgen">— bezet —</div>
+        </div>
+        <div class="rol-kaart" id="rol-kaart-restaurateur">
+          <div class="rol-era">2034 · BUREAU X</div>
+          <div class="rol-naam">De Restaurateur</div>
+          <div class="rol-info">Onderzoekt de panelen, de museale reconstructie en het stadsarchief. Weet wat de eeuw overleeft.</div>
+          <div class="rol-bezet-label verborgen">— bezet —</div>
+        </div>
+      </div>
+
+      <div class="code-fout verborgen" id="rol-fout"></div>
+      <p class="rol-tip">
+        Beide rollen van een tijdperk delen hetzelfde dossier. De rolnaam bepaalt wie waarover waakt.
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="js/lobby.ts"></script>
+  <script type="module" src="/src/bootstrap.ts"></script>
+</body>
+</html>

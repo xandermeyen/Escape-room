@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D.U.A. - Bureau X, 2034</title>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="css/dua.css" />
+</head>
+<body class="era-2034">
+
+  <div id="dua-schaduw"><span>D.U.A.</span></div>
+  <div id="dua-melding" class="d-melding"></div>
+
+  <!-- Systeembalk -->
+  <div class="systeembalk">
+    <div style="display:flex;align-items:center;">
+      <span class="sys-logo">Bureau X</span>
+      <span class="sys-sep">|</span>
+      <span class="sys-case" id="sys-case">D.U.A. · laden…</span>
+    </div>
+    <div class="sys-rechts">
+      <div class="verdenking-wrap">VERDENKING
+        <div class="verdenking-bar"><i id="verdenking-vul"></i></div>
+        <span id="verdenking-pct">0%</span>
+      </div>
+      <button class="muteknop" id="muteknop">♪</button>
+      <span class="sys-badge" id="sys-rol">2034</span>
+      <span class="sys-timer" id="dua-timer">60:00</span>
+    </div>
+  </div>
+
+  <div class="voortgangbalk">
+    <div class="pz" id="pz1">P1</div><div class="pz" id="pz2">P2</div>
+    <div class="pz" id="pz3">P3</div><div class="pz" id="pz4">P4</div>
+    <div class="pz" id="pz5">P5</div>
+  </div>
+
+  <div class="papier">
+    <h2 class="era-kop se">Bureau X, 2034 — het koude spoor</h2>
+    <p class="era-sub">De Archivaris leest. De Restaurateur onderzoekt. En vergeet niet:
+      jullie kennen de afloop van de eeuw. Die kennis kan 1934 redden, als jullie ze op tijd delen.</p>
+
+    <!-- ⓪ Handdruk -->
+    <div class="stuk" id="s-zegel">
+      <h3>⓪ De handdruk door de tijd <span class="hintje">(oefenronde)</span></h3>
+      <p id="zegel-tekst">Bovenop de doos ligt een leeg, vergeeld vel. Vreemd. Alsof er nog iets moet verschijnen…</p>
+      <span id="zegel-toon"></span>
+      <div id="zegel-actie" style="display:none;margin-top:10px">
+        <button class="d-knop klein" id="btn-zegel-bevestig">Bevestig: wij zien het zegel</button>
+      </div>
+    </div>
+
+    <!-- Archiefzoeker -->
+    <div class="stuk">
+      <h3>Archiefzoeker</h3>
+      <p>Zoek een stuk op archiefnummer (formaat RR-__):</p>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input class="d-input" id="archief-zoek" placeholder="bv. RR-04" style="max-width:160px" autocomplete="off" />
+        <button class="d-knop klein" id="btn-archief">Zoek</button>
+      </div>
+    </div>
+
+    <!-- ① Doorslag -->
+    <div class="stuk" id="s-doorslag">
+      <h3>① Doorslag van brief XII <span class="hintje">(P1)</span></h3>
+      <div id="doorslag-inhoud"><p class="hintje">Er ligt hier nog niets. In 1934 is de brief nog niet getypt…</p></div>
+      <div id="doorslag-vraag" style="display:none;margin-top:10px">
+        <p>Sommige letters zijn dieper doorgedrukt. Welk woord vormen ze?</p>
+        <div style="display:flex;gap:8px">
+          <input class="d-input" id="ant-woord" maxlength="8"
+            style="max-width:200px;font-size:19px;letter-spacing:4px;text-align:center" autocomplete="off" />
+          <button class="d-knop klein" id="btn-woord">Lees</button>
+        </div>
+      </div>
+      <div class="hint-blok" id="hint-p1">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p1')">Hint vragen</button>
+        <div class="hint-stap verborgen">» De doorgedrukte letters lees je in de volgorde waarin ze in de brief staan.</div>
+        <div class="hint-stap verborgen">» Het zijn er vijf, en samen vormen ze een plek waar je iets in bewaart.</div>
+        <div class="hint-stap verborgen">» Oplossing: het woord hoort KLUIS te zijn. Staat er iets anders, dan moet 1934 een nieuw vel typen.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p1')">Nog een hint</button>
+      </div>
+    </div>
+
+    <!-- ② Kluis -->
+    <div class="stuk" id="s-kluis">
+      <h3>② Bagagekluizen, Noordstation <span class="hintje">(P2)</span></h3>
+      <div id="ticket-inhoud"><p class="hintje">Bewijsstuk 7 (kluisticket) is nog niet aangetroffen.</p></div>
+      <div id="kluis-spel" style="display:none">
+        <div class="kluis" style="margin-top:10px">
+          <div class="draaiknop" id="draaiknop"><div class="wijzer"></div></div>
+          <div>
+            <div class="kluis-display" id="kluis-display">__</div>
+            <p class="hintje" style="margin-top:8px">Klik: volgend cijfer. Dubbelklik: cijfer bevestigen.<br />Twee cijfers, dan beslist het slot.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hint-blok" id="hint-p2">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p2')">Hint vragen</button>
+        <div class="hint-stap verborgen">» Het eerste cijfer staat nog op het ticket. Het tweede zit in de brief zelf.</div>
+        <div class="hint-stap verborgen">» "Eén meer dan het aantal brieven dat u telt." Het bisdom telde wat aankwam, en brief XIII kwam nooit aan.</div>
+        <div class="hint-stap verborgen">» Oplossing: twaalf ontvangen brieven plus één. Draai het eerste cijfer, bevestig, draai het tweede, bevestig.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p2')">Nog een hint</button>
+      </div>
+    </div>
+
+    <!-- ③ Getuigen -->
+    <div class="stuk" id="s-getuigen">
+      <h3>③ Politiedossier: plattegrond en getuigen <span class="hintje">(P3)</span></h3>
+      <svg viewBox="0 0 460 240" class="svg-kader" style="max-width:560px">
+        <rect x="10" y="60" width="90" height="120" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="22" y="125" font-size="11">5 · Westportaal</text>
+        <rect x="110" y="60" width="120" height="120" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="138" y="125" font-size="11">2 · Middenschip</text>
+        <rect x="240" y="60" width="80" height="55" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="248" y="92" font-size="11">1 · Kooromgang</text>
+        <rect x="240" y="125" width="80" height="55" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="252" y="157" font-size="11">9 · Vijdkapel</text>
+        <rect x="330" y="60" width="80" height="55" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="345" y="92" font-size="11">3 · Sacristie</text>
+        <rect x="330" y="125" width="80" height="55" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="348" y="157" font-size="11">4 · Zijdeur</text>
+      </svg>
+      <p style="margin:10px 0 4px"><b>Getuigen, 11 april 1934:</b></p>
+      <p>⏱ 00:15 — Koster: "gestommel bij de <b>sacristie</b>."</p>
+      <p>⏱ 00:40 — Nachtwaker: "lichtschijnsel in de <b>kooromgang</b>."</p>
+      <p>⏱ 01:05 — Buurman: "bij <b>volle maan</b> zag ik twee mannen aan het <b>westportaal</b>, haarscherp."</p>
+      <p>⏱ 01:20 — Melkboer: "beweging bij de <b>Vijdkapel</b>, daarna sloeg de <b>zijdeur</b>."</p>
+      <p class="hintje" style="margin-top:8px">De Gentenaar, 11 april: "het was die nacht zwaar bewolkt en aardedonker;
+        de straatverlichting was gedoofd." Eén getuige liegt dus. En 1934 stond erbij: vraag het hen.</p>
+      <p style="margin:10px 0 6px">Zonenummers van de route, in volgorde:</p>
+      <div style="display:flex;gap:8px">
+        <input class="d-input" id="ant-route" maxlength="4" placeholder="????"
+          style="max-width:160px;font-size:22px;letter-spacing:8px;text-align:center" autocomplete="off" />
+        <button class="d-knop klein" id="btn-route">Controleer</button>
+      </div>
+      <div class="hint-blok" id="hint-p3">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p3')">Hint vragen</button>
+        <div class="hint-stap verborgen">» Vergelijk wat de buurman zegt met het weerbericht in de krant.</div>
+        <div class="hint-stap verborgen">» Volle maan bij zwaar bewolkt en aardedonker? De buurman liegt; schrap het westportaal. Vraag 1934 naar de echte volgorde.</div>
+        <div class="hint-stap verborgen">» Oplossing: sacristie (3), kooromgang (1), Vijdkapel (9), zijdeur (4).</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p3')">Nog een hint</button>
+      </div>
+    </div>
+
+    <!-- Huiszoekingsverslag -->
+    <div class="stuk">
+      <h3>Huiszoekingsverslag — december 1934 <span class="hintje">(cruciaal voor P4)</span></h3>
+      <p>"Op last van het parket werd de woning te Wetteren doorzocht. Grondig onderzocht werden:
+        <b>het bureau</b> (alle laden gelicht), <b>de kast</b> (volledig leeggehaald) en
+        <b>het boekenrek</b> (boek per boek). Niets van waarde aangetroffen."</p>
+      <p class="hintje">Alles wat dáár verstopt wordt, is in 2034 dus al lang in beslag genomen.
+        Zeg het 1934 voor het te laat is.</p>
+    </div>
+
+    <!-- ④ Museum -->
+    <div class="stuk" id="s-museum">
+      <h3>④ Museale reconstructie: de werkkamer in Wetteren <span class="hintje">(P4)</span></h3>
+      <div id="museum-slot"><p class="hintje">Vergrendeld tot de kluis (P2) en de route (P3) zijn opgehelderd.</p></div>
+      <div id="museum-spel" style="display:none">
+        <p>Honderd jaar later staat de kamer er nog, als museum. Ergens ligt het mapje dat de
+          huiszoeking overleefde. Waar heeft D.U.A. het gelaten?</p>
+        <svg viewBox="0 0 460 230" class="svg-kader">
+          <rect class="klikbaar" data-plek="kast" x="15" y="25" width="75" height="150" fill="#6e5a40" stroke="#3f3324" stroke-width="2"/>
+          <text x="32" y="105" font-size="12" fill="#f5f0e8" style="pointer-events:none">KAST</text>
+          <rect class="klikbaar" data-plek="bureau" x="110" y="120" width="140" height="60" fill="#8a6f4d" stroke="#3f3324" stroke-width="2"/>
+          <text x="148" y="155" font-size="12" fill="#f5f0e8" style="pointer-events:none">BUREAU</text>
+          <circle class="klikbaar" data-plek="vensterbank" cx="395" cy="55" r="20" fill="#d8c98e" stroke="#3f3324" stroke-width="2"/>
+          <text x="368" y="92" font-size="10" fill="#3f3324" style="pointer-events:none">vensterbank</text>
+          <rect class="klikbaar" data-plek="schouw" x="270" y="40" width="70" height="140" fill="#9c8468" stroke="#3f3324" stroke-width="2"/>
+          <text x="280" y="115" font-size="11" fill="#f5f0e8" style="pointer-events:none">SCHOUW</text>
+          <rect class="klikbaar" data-plek="boekenrek" x="110" y="25" width="140" height="55" fill="#7a6248" stroke="#3f3324" stroke-width="2"/>
+          <text x="138" y="58" font-size="11" fill="#f5f0e8" style="pointer-events:none">BOEKENREK</text>
+          <rect class="klikbaar" data-plek="vloerplank" x="355" y="150" width="90" height="30" fill="#b3a07c" stroke="#3f3324" stroke-width="2"/>
+          <text x="358" y="170" font-size="10" fill="#2b2620" style="pointer-events:none">losse vloerplank</text>
+        </svg>
+        <p class="hintje" id="museum-status"></p>
+      </div>
+      <div class="hint-blok" id="hint-p4b">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p4b')">Hint vragen</button>
+        <div class="hint-stap verborgen">» Het verslag zegt waar de politie zocht. Daar ligt het dus niet (meer).</div>
+        <div class="hint-stap verborgen">» Vraag 1934 letterlijk waar ze het mapje lieten. Praten mag, dit is geen geheim.</div>
+        <div class="hint-stap verborgen">» Oplossing: klik de plek die 1934 koos. Was dat bureau, kast of boekenrek, dan is het mapje verloren en moet 1934 opnieuw.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p4b')">Nog een hint</button>
+      </div>
+    </div>
+
+    <!-- Stadsarchief -->
+    <div class="stuk">
+      <h3>Stadsarchief: een eeuw Gent <span class="hintje">(cruciaal voor P5)</span></h3>
+      <p>"Het <b>Belfort</b> en het <b>Gravensteen</b> werden in de loop van de twintigste eeuw volledig
+        gerestaureerd; elke ruimte werd daarbij geïnventariseerd. Het <b>station</b> werd meermaals
+        verbouwd, de oude kelders bleven niet bewaard. Alleen de <b>kathedraal</b> bleef al die jaren
+        open voor het publiek, dag na dag, en werd nooit volledig ontruimd."</p>
+      <p class="hintje">Een bergplaats moet honderd jaar overleven. Vertel 1934 wat de eeuw overleeft, voor zij kiezen.</p>
+    </div>
+
+    <!-- ⑤ Stadsplan -->
+    <div class="stuk" id="s-pin">
+      <h3>⑤ Het stadsplan <span class="hintje">(P5)</span></h3>
+      <div id="pin-slot"><p class="hintje">Vergrendeld tot de werkkamer (P4) zijn geheim heeft prijsgegeven.</p></div>
+      <div id="pin-spel" style="display:none">
+        <p>"Op een plaats waar noch ik, noch iemand anders het kan weghalen zonder de aandacht van het
+          publiek te wekken." 1934 weet waar. Maar mag het niet zeggen. Stel de juiste vragen en klik op dezelfde plek.</p>
+        <svg viewBox="0 0 420 260" class="svg-kader kaartplek" id="kaart-2034">
+          <path d="M0,200 C120,180 300,220 420,190" stroke="#7fa0b5" stroke-width="14" fill="none"/>
+          <text x="12" y="186" font-size="10" fill="#5a7382">de Leie</text>
+          <rect x="180" y="80" width="56" height="80" fill="#cabfa9" stroke="#3f3324" data-plek="sintbaafs"/>
+          <text x="166" y="70" font-size="10" fill="#3f3324">Sint-Baafskathedraal</text>
+          <rect x="80" y="60" width="44" height="44" fill="#cabfa9" stroke="#3f3324" data-plek="belfort"/>
+          <text x="76" y="52" font-size="10" fill="#3f3324">Belfort</text>
+          <rect x="300" y="50" width="50" height="36" fill="#cabfa9" stroke="#3f3324" data-plek="station"/>
+          <text x="282" y="42" font-size="10" fill="#3f3324">St-Pietersstation</text>
+          <rect x="60" y="170" width="50" height="30" fill="#cabfa9" stroke="#3f3324" data-plek="gravensteen"/>
+          <text x="52" y="162" font-size="10" fill="#3f3324">Gravensteen</text>
+        </svg>
+      </div>
+      <div class="hint-blok" id="hint-p5">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p5')">Hint vragen</button>
+        <div class="hint-stap verborgen">» Herlees de beroemde zin. Waar komt het publiek elke dag, zonder iets te zien?</div>
+        <div class="hint-stap verborgen">» Het stadsarchief vertelt welke gebouwen doorzocht of verbouwd werden. Eén plek bleef altijd open en werd nooit ontruimd.</div>
+        <div class="hint-stap verborgen">» Oplossing: de plek waar het allemaal begon. Verstopt in het volle zicht.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p5')">Nog een hint</button>
+      </div>
+    </div>
+
+    <!-- Brief XIII (easter egg) -->
+    <div class="stuk verborgen" id="brief13">
+      <h3>Brief XIII — RR-13 · nooit verstuurd</h3>
+      <p>"Indien u dit leest, ben ik er niet meer. Volg niet de woorden van een stervende,
+        maar de handen van wie verstopte. — A.G."</p>
+      <p class="hintje">Bonusstuk: de sterfbedwoorden zijn niet de verstopplek. Vraag het 1934.</p>
+    </div>
+
+    <!-- Lam Gods -->
+    <div class="stuk">
+      <h3>Het Lam Gods (schema)</h3>
+      <svg viewBox="0 0 460 130" class="svg-kader" style="max-width:560px">
+        <rect x="10" y="20" width="70" height="90" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="14" y="68" font-size="11">Rechters</text><text x="14" y="82" font-size="11" fill="#8a2f2b">GESTOLEN</text>
+        <rect x="85" y="20" width="70" height="90" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="92" y="68" font-size="11">Ridders</text>
+        <rect x="160" y="20" width="140" height="90" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="180" y="60" font-size="11">Aanbidding van</text><text x="190" y="74" font-size="11">het Lam</text>
+        <circle id="lam" cx="230" cy="92" r="9" fill="#fffdf7" stroke="#b9974e" stroke-width="2" style="cursor:pointer"/>
+        <rect x="305" y="20" width="70" height="90" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="312" y="68" font-size="11">Kluizenaars</text>
+        <rect x="380" y="20" width="70" height="90" fill="#efe7d6" stroke="#1d3a2f" stroke-width="1.5"/><text x="388" y="68" font-size="11">Pelgrims</text>
+      </svg>
+    </div>
+
+    <!-- Briefkaart & zoekertje -->
+    <div class="stuk">
+      <h3>Ongecatalogeerd — briefkaart</h3>
+      <p id="briefkaart" style="cursor:pointer">Een briefkaart uit <b>Geel</b>, geadresseerd aan Bureau X.
+        <em>"Kamer 14 is gesloten. Maar archieven vergeten nooit. — L.B."</em></p>
+    </div>
+    <div class="stuk">
+      <h3>Zoekertje, De Gentenaar</h3>
+      <p><em>"Verloren: geduld. Gevonden: niets. Inlichtingen: tel. Gent 1180."</em></p>
+    </div>
+
+    <!-- Finale: rapport -->
+    <div class="stuk verborgen" id="s-rapport">
+      <h3>Eindrapport Bureau X</h3>
+      <p>De plek klopt. Schrijf jullie conclusie: wie was D.U.A., en waarom?</p>
+      <textarea class="d-input" id="rapport" rows="5" placeholder="Wij, onderzoekers van Bureau X, concluderen dat..."></textarea>
+      <br /><br />
+      <button class="d-knop goud klein" id="btn-rapport">Dien het rapport in en open het eindscherm</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/speler-2034.ts"></script>
+  <script type="module" src="/src/bootstrap.ts"></script>
+</body>
+</html>

@@ -419,6 +419,35 @@
     }
     .slot-terug-btn:hover { color: var(--k-accent-licht); border-color: var(--k-accent); }
 
+    /* ── Eindstatistieken ── */
+    .slot-stats {
+      display: none;            /* wordt 'flex' zodra de data geladen is */
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .slot-stat {
+      border: 1px solid var(--k-rand);
+      background: var(--k-bg-panel);
+      padding: 12px 20px;
+      min-width: 120px;
+      text-align: center;
+    }
+    .slot-stat b {
+      display: block;
+      font-size: 20px;
+      color: var(--k-accent);
+      letter-spacing: 0.08em;
+      font-weight: normal;
+    }
+    .slot-stat span {
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--k-tekst-grijs);
+    }
+
   </style>
 </head>
 <body>
@@ -598,6 +627,12 @@
       <img src="../../assets/img/bureau_x_logo.svg" alt="Bureau X" height="34" class="slot-logo" />
 
       <div class="slot-divider"></div>
+
+      <div class="slot-stats" id="slot-stats">
+        <div class="slot-stat"><b id="stat-onderzoekstijd">--:--</b><span>Onderzoekstijd</span></div>
+        <div class="slot-stat"><b id="stat-resttijd">--:--</b><span>Marge</span></div>
+        <div class="slot-stat"><b>5/5</b><span>Puzzels opgelost</span></div>
+      </div>
 
       <p class="slot-hoofdtekst">
         De gezinsverpleging van Geel bestaat al meer dan zeven eeuwen

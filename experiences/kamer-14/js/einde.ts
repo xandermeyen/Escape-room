@@ -1,6 +1,7 @@
 import '../../../shared/js/sentry.ts';
-import { luisterNaarRapport, diendRapportIn, sluitSessie, type RapportInhoud } from '../../../shared/js/session.ts';
+import { luisterNaarRapport, diendRapportIn, sluitSessie, haalTijden, type RapportInhoud } from '../../../shared/js/session.ts';
 import { antwoordKlopt } from '../../../shared/js/utils.ts';
+import { formateerTijd } from '../../../shared/js/timer.ts';
 import { speelStem } from './audio.ts';
 
 // ── Sessie ophalen ────────────────────────────────────────
@@ -156,9 +157,39 @@ document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
 });
 
 
+// ── Eindstatistieken ──────────────────────────────────────
+// Onderzoekstijd en marge worden berekend uit timerGestart en
+// rapport.tijdstip (beide serverTimestamps in Firebase).
+const TIJDSLIMIET_MS = 60 * 60 * 1000;
+let statsGeladen = false;
+
+async function vulStats(): Promise<void> {
+  if (statsGeladen || !sessie) return;
+  statsGeladen = true;
+
+  try {
+    const { timerGestart, rapportTijdstip } = await haalTijden(sessie);
+    if (!timerGestart || !rapportTijdstip) return; // geen data, blok blijft verborgen
+
+    const duurMs  = Math.max(0, rapportTijdstip - timerGestart);
+    const margeMs = Math.max(0, TIJDSLIMIET_MS - duurMs);
+
+    const duurEl  = document.getElementById('stat-onderzoekstijd');
+    const margeEl = document.getElementById('stat-resttijd');
+    if (duurEl)  duurEl.textContent  = formateerTijd(duurMs);
+    if (margeEl) margeEl.textContent = formateerTijd(margeMs);
+
+    const blok = document.getElementById('slot-stats');
+    if (blok) blok.style.display = 'flex';
+  } catch (err) {
+    console.error('Eindstatistieken laden mislukt:', err);
+  }
+}
+
 // ── Firebase: luisteren naar rapport-status ───────────────
 luisterNaarRapport(sessie!, (rapport) => {
   if (rapport?.ingediend) {
     toonScherm('scherm-briefkaart');
+    vulStats();
   }
 });
