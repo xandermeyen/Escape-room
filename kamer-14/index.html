@@ -216,29 +216,22 @@
     .footer-copy a { color: inherit; text-decoration: none; }
     .footer-copy a:hover { color: var(--text-dim); }
 
-    /* ── MODAL ── */
-    .modal-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(12,11,9,.93); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity .3s; }
-    .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    .modal-box   { background: var(--bg-2); border: 1px solid var(--border-gold); max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; }
-    .modal-head  { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border-gold); }
-    .modal-title { font-family: var(--ff); font-size: 1rem; letter-spacing: .06em; color: var(--text); }
-    .modal-sluit { background: none; border: none; color: var(--text-faint); font-size: 1.25rem; cursor: pointer; line-height: 1; padding: .25rem; transition: color .2s; }
-    .modal-sluit:hover { color: var(--text); }
-    .modal-body  { padding: 1.75rem; }
-    .form-group  { margin-bottom: 1.25rem; }
+    /* ── FORMVELDEN ── */
     .form-label  { display: block; font-family: var(--ff); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: .5rem; }
     .form-input  { width: 100%; padding: .75rem 1rem; background: var(--bg-3); border: 1px solid var(--border-gold); color: var(--text); font-size: .9rem; outline: none; transition: border-color .2s; }
     .form-input:focus { border-color: var(--gold-dim); }
-    .form-hint   { font-size: .75rem; color: var(--text-faint); margin-top: .35rem; }
-    .form-submit { width: 100%; padding: .875rem; background: var(--gold); border: none; color: var(--bg); font-family: var(--ff); font-size: .9rem; letter-spacing: .1em; cursor: pointer; margin-top: .5rem; transition: background .2s; }
-    .form-submit:hover { background: var(--gold-bright); }
-    .form-submit:disabled { opacity: .6; cursor: default; }
-    .form-free   { text-align: center; font-family: var(--ff); font-size: .72rem; color: var(--text-faint); letter-spacing: .1em; margin-bottom: 1rem; }
-    .form-bevestiging { text-align: center; padding: 2rem 0; }
-    .form-bevestiging__check { font-size: 2rem; color: var(--gold); margin-bottom: .75rem; }
-    .form-bevestiging__titel { font-family: var(--ff); font-size: 1.1rem; color: var(--text); letter-spacing: .06em; margin-bottom: .5rem; }
-    .form-bevestiging__sub   { color: var(--text-dim); font-size: .9rem; line-height: 1.7; }
-    .form-err    { color: #c44; font-size: .85rem; text-align: center; margin-top: 1rem; }
+
+    /* ── INLINE BOEKFORM ── */
+    .boek-form   { margin-top: 2.5rem; }
+    .form-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-field  { display: flex; flex-direction: column; }
+    .form-req    { color: var(--gold-dim); }
+    .boek-btn    { margin-top: 1.5rem; width: 100%; padding: 1rem; background: var(--gold); border: none; color: var(--bg); font-family: var(--ff); font-size: .9rem; letter-spacing: .12em; cursor: pointer; transition: background .2s; }
+    .boek-btn:hover { background: var(--gold-bright); }
+    .boek-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .form-note   { font-size: .78rem; color: var(--text-faint); text-align: center; margin-top: .75rem; }
+    .boek-ok     { font-family: var(--ff); font-size: .95rem; color: var(--gold-dim); text-align: center; margin-top: 2rem; display: none; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
 
     /* ── SCROLL REVEAL ── */
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
@@ -270,7 +263,7 @@
     <li><a href="/#experiences">Experiences</a></li>
     <li><a href="#verhaal">De zaak</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><button class="btn-nav" data-modal="boek">Boek Kamer 14</button></li>
+    <li><a href="#boek" class="btn-nav">Boek Kamer 14</a></li>
   </ul>
 </nav>
 
@@ -284,7 +277,7 @@
         <strong>Een dinsdagochtend in mei.</strong> Om 07u00 zit Lena Bogaert gewoon aan het ontbijt bij het gastgezin Martens. Om 07u45 is haar kamer leeg. Haar jas is weg. Geen briefje.<br><br>Jullie krijgen elk een eigen dossier en zoeken samen uit waar ze is.
       </p>
       <div class="hero-ctas">
-        <button class="btn btn-gold" data-modal="boek">Boek een sessie &rarr;</button>
+        <a href="#boek" class="btn btn-gold">Boek een sessie &rarr;</a>
         <a href="#verhaal" class="btn btn-outline">Meer over de zaak</a>
       </div>
       <div>
@@ -380,13 +373,43 @@
   </div>
 </section>
 
-<!-- ── CTA ── -->
-<section class="cta-section">
-  <p class="label" style="text-align:center;">Klaar om te spelen?</p>
-  <h2 class="cta-title">Boek jullie sessie</h2>
-  <p class="cta-sub">Gratis. Geen account. Binnen 24 uur spellink in je mailbox.</p>
-  <button class="btn btn-gold" style="font-size:.95rem;padding:1rem 2.5rem;" data-modal="boek">Boek Kamer 14 &rarr;</button>
-  <span class="cta-footnote">Volledig gratis &nbsp;&middot;&nbsp; Geen vast tijdslot &nbsp;&middot;&nbsp; Jullie spelen wanneer het uitkomt</span>
+<!-- ── BOEKEN ── -->
+<section class="section" id="boek" style="background:var(--bg-2);border-top:1px solid var(--border-gold);">
+  <div class="container container--narrow">
+    <p class="label reveal" style="text-align:center;">Reserveer je plek</p>
+    <h2 class="heading reveal" style="text-align:center;">Boek een sessie Kamer 14</h2>
+    <p class="sub reveal" style="text-align:center;">Kamer 14 speel je met twee. Ieder krijgt een eigen spellink via mail. Gratis, geen vast tijdslot, jullie spelen wanneer het uitkomt.</p>
+
+    <form class="boek-form reveal" id="boekForm" action="https://formspree.io/f/xvzlanbj" method="POST">
+      <input type="hidden" name="_subject" value="Kamer 14 Reservaties" />
+      <input type="hidden" name="experience" value="Kamer 14" />
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Naam contactpersoon <span class="form-req">*</span></label>
+          <input class="form-input" type="text" name="naam" placeholder="Jan Janssen" required />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Gewenste datum <span class="form-req">*</span></label>
+          <input class="form-input" type="date" name="datum" required />
+        </div>
+      </div>
+
+      <div class="form-field" style="margin-bottom:.75rem;">
+        <label class="form-label">E-mail speler 1 <span class="form-req">*</span></label>
+        <input class="form-input" type="email" name="email_speler_1" placeholder="speler1@email.be" required />
+      </div>
+      <div class="form-field" style="margin-bottom:.75rem;">
+        <label class="form-label">E-mail speler 2 <span class="form-req">*</span></label>
+        <input class="form-input" type="email" name="email_speler_2" placeholder="speler2@email.be" required />
+      </div>
+
+      <button class="boek-btn" type="submit">Sessie aanvragen</button>
+      <p class="form-note">Je ontvangt binnen 24 uur een bevestiging met de spellinks voor beide spelers.</p>
+    </form>
+    <p class="boek-ok" id="boek-ok">&#10003; Aanvraag ontvangen. Jullie spellinks worden zo snel mogelijk verstuurd.</p>
+  </div>
 </section>
 
 <!-- ── FOOTER ── -->
@@ -400,7 +423,7 @@
       <p class="footer-head">Experiences</p>
       <ul class="footer-links">
         <li><a href="/">Terug naar Bureau X</a></li>
-        <li><a href="/dua/">D.U.A. (binnenkort)</a></li>
+        <li><a href="/dua/">D.U.A.</a></li>
       </ul>
     </div>
     <div>
@@ -418,41 +441,6 @@
     <a href="mailto:info@bureau-x.be">info@bureau-x.be</a>
   </div>
 </footer>
-
-<!-- ── MODAL ── -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box" id="modal-box">
-    <div class="modal-head">
-      <span class="modal-title">Boek een sessie, Kamer 14</span>
-      <button class="modal-sluit" id="modal-sluit" aria-label="Sluiten">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p class="form-free">Volledig gratis &nbsp;&middot;&nbsp; Binnen 24 uur ontvang je de spellink</p>
-      <form id="reserveerForm" action="https://formspree.io/f/xvzlanbj" method="POST">
-        <div class="form-group">
-          <label class="form-label" for="naam">Naam</label>
-          <input class="form-input" type="text" id="naam" name="naam" placeholder="Jouw naam" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="email">E-mailadres speler 1</label>
-          <input class="form-input" type="email" id="email" name="email" placeholder="jouw@email.be" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="email_speler_2">E-mailadres speler 2</label>
-          <input class="form-input" type="email" id="email_speler_2" name="email_speler_2" placeholder="speler2@email.be" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="datum">Gewenste datum</label>
-          <input class="form-input" type="date" id="datum" name="datum" required />
-          <p class="form-hint">Geen vast tijdslot, jullie spelen wanneer het uitkomt.</p>
-        </div>
-        <input type="hidden" name="experience" value="Kamer 14" />
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-        <button class="form-submit" type="submit">Verstuur reservering</button>
-      </form>
-    </div>
-  </div>
-</div>
 
 <script>
 var navbar = document.getElementById('navbar');
@@ -476,46 +464,23 @@ document.querySelectorAll('.faq-q').forEach(function (btn) {
   });
 });
 
-var datum = document.getElementById('datum');
-if (datum) datum.min = new Date().toISOString().split('T')[0];
+var boekForm = document.getElementById('boekForm');
+if (boekForm) {
+  var datumInput = boekForm.querySelector('input[name="datum"]');
+  if (datumInput) datumInput.min = new Date().toISOString().split('T')[0];
 
-var overlay = document.getElementById('modal-overlay');
-function openModal() { if (!overlay) return; overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeModal() { if (!overlay) return; overlay.classList.remove('open'); document.body.style.overflow = ''; }
-document.querySelectorAll('[data-modal="boek"]').forEach(function (btn) { btn.addEventListener('click', openModal); });
-overlay && overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
-document.getElementById('modal-sluit') && document.getElementById('modal-sluit').addEventListener('click', closeModal);
-document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
-
-var form = document.getElementById('reserveerForm');
-if (form) {
-  form.addEventListener('submit', function (e) {
+  boekForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-    var knop = form.querySelector('button[type="submit"]');
-    var orig = knop.innerHTML;
-    knop.disabled = true;
-    knop.textContent = 'Bezig met verzenden...';
-    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-      .then(function (res) {
-        if (res.ok) {
-          form.innerHTML = '<div class="form-bevestiging"><p class="form-bevestiging__check">&#10003;</p><p class="form-bevestiging__titel">Reservering ontvangen</p><p class="form-bevestiging__sub">Je ontvangt binnen 24 uur een bevestigingsmail met jullie persoonlijke spellink.</p></div>';
-        } else { throw new Error(); }
-      })
-      .catch(function () {
-        knop.disabled = false;
-        knop.innerHTML = orig;
-        if (!form.querySelector('.form-err')) { var p = document.createElement('p'); p.className = 'form-err'; p.textContent = 'Er ging iets mis. Probeer opnieuw of stuur een mail.'; form.appendChild(p); }
-      });
-  });
-}
-</script>
-</body>
-</html>
-gingsmail met jullie persoonlijke spellink.</p></div>';
+    var btn = boekForm.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Bezig…';
+    try {
+      var res = await fetch(boekForm.action, { method: 'POST', body: new FormData(boekForm), headers: { Accept: 'application/json' } });
+      if (res.ok) {
+        boekForm.style.display = 'none';
+        document.getElementById('boek-ok').style.display = 'block';
       } else { throw new Error(); }
     } catch {
-      knop.disabled = false; knop.textContent = 'Verstuur reservering';
-      if (!form.querySelector('.form-err')) { var p = document.createElement('p'); p.className='form-err'; p.textContent='Er ging iets mis. Probeer opnieuw of stuur een mail.'; form.appendChild(p); }
+      btn.disabled = false; btn.textContent = 'Sessie aanvragen';
     }
   });
 }
