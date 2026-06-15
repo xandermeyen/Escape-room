@@ -592,6 +592,28 @@ document.querySelectorAll('.speler-btn').forEach(function (btn) {
   });
 });
 
+// Easter egg: typ "goedertier" op de pagina
+(function () {
+  var woord = 'goedertier';
+  var buffer = '';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#f2e8d0;color:#1a1208;font-family:"Special Elite",serif;font-size:.88rem;line-height:1.7;padding:1.25rem 1.75rem;border:1px solid #d4c49c;max-width:420px;text-align:center;opacity:0;transition:opacity .5s,transform .5s;z-index:999;pointer-events:none;';
+  toast.innerHTML = '"Ik alleen weet waar de Rechtvaardige Rechters rusten.<br>Dit geheim zal met mij sterven."<br><span style="font-size:.72rem;opacity:.6;display:block;margin-top:.5rem;">— Arsène Goedertier, november 1934</span>';
+  document.body.appendChild(toast);
+
+  document.addEventListener('keydown', function (e) {
+    buffer = (buffer + e.key).toLowerCase().slice(-woord.length);
+    if (buffer === woord) {
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      setTimeout(function () {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+      }, 5000);
+    }
+  });
+})();
+
 // Boeking form
 var boekForm = document.getElementById('boekForm');
 if (boekForm) {
