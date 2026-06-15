@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D.U.A. — Host</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/bureau_x_favicon.svg" />
+  <link rel="stylesheet" href="../../shared/css/game.css" />
+
+  <style>
+    body { background: #1a1a1a; color: #e8e0d0; min-height: 100vh; padding: 2rem 1rem; }
+
+    .admin-header {
+      display: flex; align-items: center; gap: 1rem;
+      border-bottom: 1px solid #444; padding-bottom: 1rem; margin-bottom: 2rem;
+    }
+    .admin-header img  { height: 28px; opacity: 0.8; }
+    .admin-header h1   { font-family: 'Special Elite', serif; font-size: 1.4rem; margin: 0; color: #c9b99a; }
+    .badge-admin {
+      background: #2d4a3e; color: #8fc9a8; font-size: 0.65rem;
+      padding: 2px 8px; border-radius: 3px; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .kaart {
+      background: #252525; border: 1px solid #3a3a3a; border-radius: 6px;
+      padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .kaart-titel {
+      font-family: 'Special Elite', serif; font-size: 1rem;
+      color: #c9b99a; margin-bottom: 1rem; letter-spacing: 0.5px;
+    }
+
+    .code-gegenereerd {
+      font-family: monospace; font-size: 1.6rem; letter-spacing: 3px;
+      color: #e8e0d0; background: #1a1a1a; border: 1px dashed #555;
+      border-radius: 4px; padding: 0.6rem 1.2rem; display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .btn-admin {
+      background: #2d4a3e; color: #e8e0d0; border: none;
+      padding: 0.5rem 1.2rem; border-radius: 4px; font-size: 0.9rem; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-admin:hover    { background: #3d6b5a; color: #fff; }
+    .btn-admin:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-sec {
+      background: transparent; color: #aaa; border: 1px solid #444;
+      padding: 0.5rem 1.2rem; border-radius: 4px; font-size: 0.9rem; cursor: pointer;
+    }
+    .btn-sec:hover { border-color: #888; color: #e8e0d0; }
+
+    .veld-label { color: #888; font-size: 0.8rem; margin-bottom: 0.3rem; display: block; }
+
+    select.admin-select {
+      background: #1a1a1a; border: 1px solid #444; color: #e8e0d0;
+      border-radius: 4px; padding: 0.45rem 0.6rem;
+      font-family: 'Special Elite', serif; font-size: 0.9rem; cursor: pointer;
+    }
+    select.admin-select:focus { outline: none; border-color: #2d4a3e; }
+
+    .sessie-tabel { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .sessie-tabel th {
+      text-align: left; color: #888; font-weight: normal; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 1px; padding: 0 0.5rem 0.75rem;
+      border-bottom: 1px solid #333;
+    }
+    .sessie-tabel td { padding: 0.7rem 0.5rem; border-bottom: 1px solid #2a2a2a; vertical-align: middle; }
+    .sessie-tabel tr:last-child td { border-bottom: none; }
+    .sessie-tabel tr:hover td { background: #2a2a2a; }
+
+    .code-cel { font-family: monospace; font-size: 0.95rem; letter-spacing: 2px; color: #c9b99a; }
+
+    .puzzel-bollen { display: flex; gap: 4px; align-items: center; }
+    .bol { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #444; }
+    .bol.klaar { background: #4a7c4a; border-color: #4a7c4a; }
+    .bol.open  { background: #2a2a2a; }
+
+    .badge-actief   { background: #2a4a2a; color: #7dc47d; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
+    .badge-klaar    { background: #4a3a00; color: #c9a84c; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
+    .badge-bezig    { background: #2d4a3e; color: #8fc9a8; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
+    .badge-inactief { background: #3a2a2a; color: #888;    font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
+
+    .kopieer-knop {
+      background: none; border: none; color: #666; cursor: pointer; padding: 2px 6px;
+      border-radius: 3px; transition: color 0.15s;
+    }
+    .kopieer-knop:hover { color: #c9b99a; }
+
+    .link-input {
+      background: #1a1a1a; border: 1px solid #333; color: #888;
+      border-radius: 3px; padding: 2px 6px; font-family: monospace;
+      font-size: 0.75rem; width: 230px; vertical-align: middle;
+    }
+
+    .status-bericht {
+      padding: 0.6rem 1rem; border-radius: 4px; font-size: 0.85rem; margin-top: 1rem; display: none;
+    }
+    .status-ok   { background: #2a4a2a; color: #7dc47d; }
+    .status-fout { background: #4a2a2a; color: #c47d7d; }
+
+    .laden       { color: #666; font-size: 0.85rem; }
+    .geen-sessies { color: #555; font-size: 0.85rem; text-align: center; padding: 2rem; }
+
+    .terug-link { color: #666; font-size: 0.8rem; text-decoration: none; transition: color 0.2s; }
+    .terug-link:hover { color: #c9b99a; }
+
+    .spelers-info {
+      display: inline-flex; gap: 4px; align-items: center;
+      font-size: 0.75rem; color: #666;
+    }
+    .era-dot {
+      width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+    }
+    .era-1934 { background: #8b6914; }
+    .era-2034 { background: #2d4a3e; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Loginscherm ── -->
+  <div id="login-scherm" style="
+    position:fixed; inset:0; background:#1a1a1a;
+    display:flex; align-items:center; justify-content:center; z-index:9999;">
+    <div style="text-align:center; color:#e8e0d0; font-family:'Special Elite',serif; width:280px;">
+      <div style="font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.4rem; color:#c9b99a;">
+        Bureau X · Host-toegang
+      </div>
+      <div style="font-size:0.8rem; color:#666; margin-bottom:1.5rem; letter-spacing:0.05em;">
+        D.U.A.
+      </div>
+      <input id="email-invoer" type="email" placeholder="E-mailadres"
+        style="background:#252525; border:1px solid #444; color:#e8e0d0;
+               padding:0.6rem 1rem; border-radius:4px; font-size:1rem;
+               outline:none; width:100%; margin-bottom:0.75rem; box-sizing:border-box;"
+        onkeydown="if(event.key==='Enter') login()" />
+      <input id="ww-invoer" type="password" placeholder="Wachtwoord"
+        style="background:#252525; border:1px solid #444; color:#e8e0d0;
+               padding:0.6rem 1rem; border-radius:4px; font-size:1rem;
+               outline:none; width:100%; box-sizing:border-box;"
+        onkeydown="if(event.key==='Enter') login()" />
+      <br><br>
+      <button id="login-knop" onclick="login()"
+        style="background:#2d4a3e; color:#fff; border:none;
+               padding:0.5rem 1.5rem; border-radius:4px; cursor:pointer;
+               font-family:'Special Elite',serif; font-size:0.9rem; letter-spacing:0.05em; width:100%;">
+        Inloggen
+      </button>
+      <div id="login-fout" style="color:#c47d7d; margin-top:1rem; font-size:0.85rem; display:none;">
+        Ongeldig e-mailadres of wachtwoord.
+      </div>
+      <div style="margin-top:1.5rem;">
+        <a href="../../index.html" class="terug-link">
+          <i class="bi bi-arrow-left me-1"></i>Terug naar home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Auth-script ── -->
+  <script type="module">
+    import { db } from '../../shared/js/firebase-config.ts';
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+      from 'firebase/auth';
+
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById('login-scherm').style.display  = user ? 'none'  : 'flex';
+      document.getElementById('admin-inhoud').style.display  = user ? 'block' : 'none';
+    });
+
+    async function login() {
+      const email = document.getElementById('email-invoer').value.trim();
+      const ww    = document.getElementById('ww-invoer').value;
+      const knop  = document.getElementById('login-knop');
+      const fout  = document.getElementById('login-fout');
+      knop.disabled = true;
+      fout.style.display = 'none';
+      try {
+        await signInWithEmailAndPassword(auth, email, ww);
+      } catch {
+        fout.style.display = 'block';
+        knop.disabled = false;
+      }
+    }
+
+    window.uitloggen = () => signOut(auth);
+    window.login = login;
+  </script>
+
+  <!-- ── Admin-inhoud ── -->
+  <div id="admin-inhoud" style="display:none;">
+    <div style="max-width: 860px; margin: 0 auto;">
+
+      <!-- Header -->
+      <div class="admin-header">
+        <img src="../../assets/img/bureau_x_logo_dark.svg" alt="Bureau X" />
+        <h1>D.U.A.</h1>
+        <span class="badge-admin">Host</span>
+        <a href="../../index.html" class="btn-sec ms-auto me-2" style="font-size:0.8rem; text-decoration:none;">
+          <i class="bi bi-house me-1"></i>Home
+        </a>
+        <button onclick="window.uitloggen()" class="btn-sec" style="font-size:0.8rem;">
+          <i class="bi bi-box-arrow-right me-1"></i>Uitloggen
+        </button>
+      </div>
+
+      <!-- Nieuwe sessie aanmaken -->
+      <div class="kaart">
+        <div class="kaart-titel"><i class="bi bi-plus-circle me-2"></i>Nieuwe sessie aanmaken</div>
+
+        <div class="mb-3">
+          <div class="code-gegenereerd" id="volgende-code">
+            <span style="color:#555;">Laden…</span>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3" style="flex-wrap:wrap;">
+          <div>
+            <label class="veld-label">Aantal spelers</label>
+            <select id="select-spelers" class="admin-select">
+              <option value="2">2 spelers</option>
+              <option value="3">3 spelers</option>
+              <option value="4" selected>4 spelers</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-admin" id="btn-aanmaken" onclick="maakSessieAan()">
+          <i class="bi bi-database-add me-2"></i>Sessie aanmaken
+        </button>
+
+        <div class="status-bericht" id="status-aanmaken"></div>
+      </div>
+
+      <!-- Sessie-overzicht -->
+      <div class="kaart">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="kaart-titel mb-0"><i class="bi bi-list-ul me-2"></i>Sessie-overzicht</div>
+          <button class="btn-sec" style="font-size:0.8rem; padding:3px 10px;" onclick="laadLijst()">
+            <i class="bi bi-arrow-clockwise me-1"></i>Verversen
+          </button>
+        </div>
+
+        <div class="laden" id="laden-label">Laden…</div>
+
+        <table class="sessie-tabel" id="sessie-tabel" style="display:none;">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Aangemaakt</th>
+              <th>Spelers</th>
+              <th>Puzzels</th>
+              <th>Status</th>
+              <th>Lobby-link</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sessie-tbody"></tbody>
+        </table>
+
+        <div class="geen-sessies" id="geen-sessies" style="display:none;">
+          Nog geen D.U.A.-sessies aangemaakt.
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /admin-inhoud -->
+
+  <!-- ── Sessie-logica ── -->
+  <script type="module">
+    import { db } from '../../shared/js/firebase-config.ts';
+    import { ref, set, get, update, serverTimestamp, query, orderByChild, equalTo }
+      from 'firebase/database';
+
+    const JAAR       = new Date().getFullYear();
+    const BASIS_URL  = window.location.origin;
+    const LOBBY_PAD  = '/experiences/dua/';
+
+    // ── Volgende code berekenen ──────────────────────────────────────────────
+    async function berekenVolgendeCode() {
+      const snap = await get(ref(db, 'sessions'));
+      let hoogste = 0;
+      if (snap.exists()) {
+        snap.forEach((kind) => {
+          const match = (kind.key ?? '').match(/^DUA-(\d{4})-(\d{3,})$/);
+          if (match && parseInt(match[1]) === JAAR) {
+            const nr = parseInt(match[2]);
+            if (nr > hoogste) hoogste = nr;
+          }
+        });
+      }
+      return `DUA-${JAAR}-${String(hoogste + 1).padStart(3, '0')}`;
+    }
+
+    async function verversCode() {
+      const el = document.getElementById('volgende-code');
+      el.innerHTML = '<span style="color:#555;">Berekenen…</span>';
+      try {
+        const code = await berekenVolgendeCode();
+        el.textContent = code;
+        el.dataset.code = code;
+      } catch {
+        el.innerHTML = '<span style="color:#c47d7d;">Fout</span>';
+      }
+    }
+
+    // ── Sessie aanmaken ──────────────────────────────────────────────────────
+    window.maakSessieAan = async function() {
+      const code   = document.getElementById('volgende-code').dataset.code;
+      const status = document.getElementById('status-aanmaken');
+      const btn    = document.getElementById('btn-aanmaken');
+      const spelers = parseInt(document.getElementById('select-spelers').value);
+
+      if (!code) { toonStatus(status, 'Code nog niet geladen, probeer opnieuw.', false); return; }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Aanmaken…';
+
+      try {
+        const snap = await get(ref(db, `sessions/${code}`));
+        if (snap.exists()) {
+          toonStatus(status, `${code} bestaat al. Ververs en probeer opnieuw.`, false);
+          return;
+        }
+
+        await set(ref(db, `sessions/${code}`), {
+          ervaringsId:    'dua',
+          actief:          true,
+          aangemaakt:      serverTimestamp(),
+          aantalSpelers:   spelers,
+          puzzels:         { p0: false, p1: false, p2: false, p3: false, p4: false, p5: false },
+          rapport:         { ingediend: false },
+          timerGestart:    null,
+        });
+
+        toonStatus(status, `✓ Sessie "${code}" aangemaakt! Lobby-link staat in de tabel.`, true);
+        await laadLijst();
+        await verversCode();
+
+      } catch (err) {
+        console.error(err);
+        toonStatus(status, 'Firebase-fout: ' + err.message, false);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-database-add me-2"></i>Sessie aanmaken';
+      }
+    };
+
+    // ── Sessie-overzicht laden ───────────────────────────────────────────────
+    window.laadLijst = async function() {
+      const laden    = document.getElementById('laden-label');
+      const tabel    = document.getElementById('sessie-tabel');
+      const geenMsg  = document.getElementById('geen-sessies');
+      const tbody    = document.getElementById('sessie-tbody');
+
+      laden.style.display  = 'block';
+      tabel.style.display  = 'none';
+      geenMsg.style.display = 'none';
+
+      try {
+        const snap = await get(ref(db, 'sessions'));
+        laden.style.display = 'none';
+
+        if (!snap.exists()) {
+          geenMsg.style.display = 'block';
+          return;
+        }
+
+        const rijen = [];
+        snap.forEach((kind) => {
+          const d = kind.val();
+          if (d?.ervaringsId === 'dua') {
+            rijen.push({ code: kind.key, data: d });
+          }
+        });
+
+        if (rijen.length === 0) {
+          geenMsg.style.display = 'block';
+          return;
+        }
+
+        // Nieuwste eerst
+        rijen.sort((a, b) => (b.data.aangemaakt ?? 0) - (a.data.aangemaakt ?? 0));
+
+        tbody.innerHTML = rijen.map(({ code, data }) => {
+          const p = data.puzzels || {};
+          const bollen = [p.p1, p.p2, p.p3, p.p4, p.p5]
+            .map(v => `<div class="bol ${v ? 'klaar' : 'open'}"></div>`)
+            .join('');
+          const aantalKlaar = [p.p1, p.p2, p.p3, p.p4, p.p5].filter(Boolean).length;
+
+          const bezet = Object.keys(data.spelers || {}).length;
+          const max   = data.aantalSpelers ?? '?';
+
+          const datum = data.aangemaakt
+            ? new Date(data.aangemaakt).toLocaleString('nl-BE', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+              })
+            : '—';
+
+          let statusBadge;
+          if (!data.actief) {
+            statusBadge = '<span class="badge-inactief">Inactief</span>';
+          } else if (data.timerGestart) {
+            statusBadge = '<span class="badge-bezig">Bezig</span>';
+          } else if (aantalKlaar === 5) {
+            statusBadge = '<span class="badge-klaar">Voltooid</span>';
+          } else {
+            statusBadge = '<span class="badge-actief">Actief</span>';
+          }
+
+          const lobbyUrl = `${BASIS_URL}${LOBBY_PAD}?sessie=${code}`;
+
+          return `<tr>
+            <td class="code-cel">
+              ${code}
+              <button class="kopieer-knop" title="Kopieer code" onclick="kopieer('${code}', this)">
+                <i class="bi bi-copy"></i>
+              </button>
+            </td>
+            <td style="color:#666; font-size:0.8rem;">${datum}</td>
+            <td style="font-size:0.82rem; color:#888;">${bezet} / ${max}</td>
+            <td>
+              <div class="puzzel-bollen">${bollen}</div>
+              <span style="color:#666; font-size:0.75rem;">${aantalKlaar}/5</span>
+            </td>
+            <td>${statusBadge}</td>
+            <td>
+              <input class="link-input" readonly value="${lobbyUrl}" />
+              <button class="kopieer-knop" title="Kopieer lobby-link" onclick="kopieer('${lobbyUrl}', this)">
+                <i class="bi bi-clipboard"></i>
+              </button>
+              <a href="${lobbyUrl}" target="_blank" class="kopieer-knop" title="Open lobby">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+            </td>
+            <td>
+              ${data.actief ? `
+                <button class="kopieer-knop" title="Deactiveer sessie" onclick="deactiveer('${code}')" style="color:#666;">
+                  <i class="bi bi-stop-circle"></i>
+                </button>` : ''}
+            </td>
+          </tr>`;
+        }).join('');
+
+        tabel.style.display = 'table';
+
+      } catch (err) {
+        console.error(err);
+        laden.textContent = 'Fout bij laden.';
+      }
+    };
+
+    // ── Deactiveer ───────────────────────────────────────────────────────────
+    window.deactiveer = async function(code) {
+      if (!confirm(`Sessie ${code} deactiveren? Spelers die bezig zijn worden naar het tijdvoorbij-scherm gestuurd.`)) return;
+      try {
+        await update(ref(db, `sessions/${code}`), { actief: false });
+        laadLijst();
+      } catch (err) {
+        console.error('Deactiveer mislukt:', err);
+      }
+    };
+
+    // ── Kopieer naar klembord ────────────────────────────────────────────────
+    window.kopieer = async function(tekst, knop) {
+      await navigator.clipboard.writeText(tekst).catch(() => {});
+      const origineel = knop.innerHTML;
+      knop.innerHTML = '<i class="bi bi-check2"></i>';
+      knop.style.color = '#7dc47d';
+      setTimeout(() => {
+        knop.innerHTML = origineel;
+        knop.style.color = '';
+      }, 1800);
+    };
+
+    function toonStatus(el, tekst, ok) {
+      el.textContent  = tekst;
+      el.className    = 'status-bericht ' + (ok ? 'status-ok' : 'status-fout');
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    verversCode();
+    laadLijst();
+  </script>
+
+  <script type="module" src="/src/bootstrap.ts"></script>
+</body>
+</html>

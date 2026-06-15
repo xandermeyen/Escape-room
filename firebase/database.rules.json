@@ -5,23 +5,46 @@
         ".read": true,
         ".write": "auth != null || newData.exists()",
         ".validate": "$sessie.matches(/^[A-Z0-9-]{3,20}$/)",
-        "aangemaakt":   { ".validate": "newData.isNumber()" },
-        "actief":       { ".validate": "newData.isBoolean()" },
-        "ervaringsId":  { ".validate": "newData.isString()" },
-        "timerGestart": { ".validate": "newData.isNumber() || newData.val() == null" },
+        "aangemaakt":     { ".validate": "newData.isNumber()" },
+        "actief":         { ".validate": "newData.isBoolean()" },
+        "ervaringsId":    { ".validate": "newData.isString()" },
+        "aantalSpelers":  { ".validate": "newData.isNumber()" },
+        "timerGestart":   { ".validate": "newData.isNumber() || newData.val() == null" },
         "puzzels": {
-          "$p": { ".validate": "$p.matches(/^p[1-5]$/) && newData.isBoolean()" }
+          "$p": { ".validate": "$p.matches(/^p[0-5]$/) && newData.isBoolean()" }
         },
         "spelers": {
-          "$rol": { ".validate": "$rol.matches(/^[a-z]$/) && newData.isString() && newData.val().length <= 16" }
+          "$rol": { ".validate": "$rol.matches(/^[a-z]{1,16}$/) && newData.isString() && newData.val().length <= 16" }
         },
         "rapport": {
           "ingediend": { ".validate": "newData.isBoolean()" },
           "tijdstip":  { ".validate": "newData.isNumber()" },
           "inhoud": {
-            "$veld": { ".validate": "newData.isString() && newData.val().length <= 1000" }
+            "$veld": { ".validate": "newData.isString() && newData.val().length <= 4000" }
           },
           "$other": { ".validate": false }
+        },
+        "dua": {
+          "p0zegel":     { ".validate": "newData.isBoolean()" },
+          "brief": {
+            "letters":   { ".validate": "newData.isString() && newData.val().length <= 32" },
+            "verstuurd": { ".validate": "newData.isBoolean()" }
+          },
+          "kluisNummer": { ".validate": "newData.isString() || newData.val() == null" },
+          "verstopPlek": { ".validate": "newData.isString() || newData.val() == null" },
+          "pin1934":     { ".validate": "newData.isString() || newData.val() == null" },
+          "brief14": {
+            "tekst": { ".validate": "newData.isString() && newData.val().length <= 4000" },
+            "klaar": { ".validate": "newData.isBoolean()" }
+          },
+          "meta": {
+            "verdenking": { ".validate": "newData.isNumber()" },
+            "strafMs":    { ".validate": "newData.isNumber()" },
+            "hints":      { ".validate": "newData.isNumber()" }
+          },
+          "badges": {
+            "$badge": { ".validate": "newData.isBoolean()" }
+          }
         },
         "$other": { ".validate": false }
       }
