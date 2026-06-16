@@ -129,6 +129,8 @@ function tekenTicket(): void {
     spel.style.display = 'none';
     return;
   }
+  // Veilig: kluisNummer wordt door escHtml gehaald, de rest is statische opmaak.
+  // eslint-disable-next-line no-unsanitized/property
   inhoud.innerHTML =
     `<p style="font-family:var(--font);font-size:18px;border:1px dashed #999;padding:10px;display:inline-block">` +
     `NOORDSTATION BRUSSEL · BAGAGEKLUIS Nr. ${escHtml(dua.kluisNummer[0])}<span style="color:#bbb">▓</span> · 1934</p>` +

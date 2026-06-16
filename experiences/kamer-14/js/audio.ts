@@ -210,7 +210,13 @@ export function stopAchtergrond(): void {
   const c = getCtx();
   _achtergrondMasterGain.gain.linearRampToValueAtTime(0, c.currentTime + 3);
   setTimeout(() => {
-    _achtergrondSources.forEach(s => { try { s.stop(); } catch {} });
+    _achtergrondSources.forEach(s => {
+      try {
+        s.stop();
+      } catch {
+        /* bron was al gestopt */
+      }
+    });
     _achtergrondSources     = [];
     _achtergrondMasterGain  = null;
     _achtergrondActief      = false;
