@@ -81,7 +81,6 @@ describe('puzzelVoltooid', () => {
 
 describe('claimRol', () => {
   it('gebruikt runTransaction en claimt een vrije rol', async () => {
-    // Simuleer een vrije rol: huidige waarde is null -> updater geeft 'bezet'
     runTransactionMock.mockImplementation(async (_ref: unknown, updater: (h: unknown) => unknown) => {
       const nieuw = updater(null);
       return { committed: nieuw !== undefined };
@@ -94,7 +93,6 @@ describe('claimRol', () => {
   });
 
   it('weigert een rol die al bezet is', async () => {
-    // Simuleer een bezette rol: huidige waarde is niet null -> updater breekt af (undefined)
     runTransactionMock.mockImplementation(async (_ref: unknown, updater: (h: unknown) => unknown) => {
       const nieuw = updater('bezet');
       return { committed: nieuw !== undefined };
@@ -104,6 +102,31 @@ describe('claimRol', () => {
 
     expect(runTransactionMock).toHaveBeenCalled();
     expect(ok).toBe(false);
+  });
+
+  it('draait de transactie op het juiste spelers-pad', async () => {
+    runTransactionMock.mockResolvedValue({ committed: true });
+
+    await claimRol('XYZ', 'spelerB');
+
+    expect(refMock).toHaveBeenCalledWith({}, 'sessions/XYZ/spelers/spelerB');
+    expect(runTransactionMock).toHaveBeenCalledWith(
+      { path: 'sessions/XYZ/spelers/spelerB' },
+      expect.any(Function),
+    );
+  });
+
+  it('updater: claimt een vrije rol (null) en breekt af bij een bezette rol', async () => {
+    let updater: (h: unknown) => unknown = () => undefined;
+    runTransactionMock.mockImplementation(async (_ref: unknown, fn: (h: unknown) => unknown) => {
+      updater = fn;
+      return { committed: true };
+    });
+
+    await claimRol('ABC', 'spelerA');
+
+    expect(updater(null)).toBe('bezet');
+    expect(updater('bezet')).toBeUndefined();
   });
 });
 
