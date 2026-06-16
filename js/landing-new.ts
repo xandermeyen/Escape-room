@@ -50,7 +50,7 @@ async function laadReviews(): Promise<void> {
   const marqueeWrap = document.getElementById('marquee-wrap');
   const marqueeTrack = document.getElementById('marquee-track');
 
-  let reviews: Review[] = [];
+  let reviews: Review[];
   try {
     reviews = await leesGoedgekeurdeReviews(12);
   } catch (err) {
@@ -60,12 +60,15 @@ async function laadReviews(): Promise<void> {
 
   if (reviews.length === 0) return;
 
+  // Veilig: reviewKaart/marqueeItem halen alle spelerteksten door escapeHtml.
+  // eslint-disable-next-line no-unsanitized/property
   grid.innerHTML = reviews.slice(0, 6).map(reviewKaart).join('');
   sectie.style.display = '';
 
   if (marqueeWrap && marqueeTrack) {
     // Twee keer dezelfde set voor een naadloze lus.
     const items = reviews.map(marqueeItem).join('');
+    // eslint-disable-next-line no-unsanitized/property
     marqueeTrack.innerHTML = items + items;
     marqueeWrap.style.display = '';
   }

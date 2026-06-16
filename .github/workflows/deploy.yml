@@ -47,6 +47,12 @@ jobs:
       - name: Dependencies installeren
         run: pnpm install
 
+      - name: Linten
+        run: pnpm lint
+
+      - name: Tests draaien
+        run: pnpm test
+
       - name: Bouwen
         run: pnpm build
 

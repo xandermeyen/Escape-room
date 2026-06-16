@@ -1,4 +1,16 @@
 /**
+ * requireEl: haalt een element op via id en gooit een duidelijke fout als het
+ * niet bestaat. Vervangt de `getElementById(...)!`-patronen die met strict mode
+ * een stille null-deref konden geven. Gebruik het type-argument voor de
+ * concrete elementsoort, bijv. `requireEl<HTMLInputElement>('antwoord')`.
+ */
+export function requireEl<T extends HTMLElement = HTMLElement>(id: string): T {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Verwacht element #${id} bestaat niet in de DOM`);
+  return el as T;
+}
+
+/**
  * sha256Hex: SHA-256 hash van een string als hex.
  */
 export async function sha256Hex(waarde: string): Promise<string> {
@@ -40,9 +52,9 @@ export async function controleerAntwoordHash(
   onJuist: () => void,
   foutTekst: string,
 ): Promise<void> {
-  const input    = document.getElementById(inputId) as HTMLInputElement;
-  const feedback = document.getElementById(feedbackId) as HTMLElement;
-  const btn      = document.getElementById(btnId) as HTMLButtonElement;
+  const input    = requireEl<HTMLInputElement>(inputId);
+  const feedback = requireEl<HTMLElement>(feedbackId);
+  const btn      = requireEl<HTMLButtonElement>(btnId);
   const waarde   = input.value.trim().toLowerCase();
   if (!waarde) return;
 
@@ -77,11 +89,7 @@ export function volgendHint(blokId: string): void {
 
       // Toon of verberg de "Volgende aanwijzing"-knop
       const nogMeer = [...stappen].some(s => s.classList.contains('verborgen'));
-      if (knopMeer) {
-        nogMeer
-          ? knopMeer.classList.remove('verborgen')
-          : knopMeer.classList.add('verborgen');
-      }
+      knopMeer?.classList.toggle('verborgen', !nogMeer);
       return;
     }
   }

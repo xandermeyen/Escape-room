@@ -60,6 +60,8 @@ function bouwHamers(): void {
   hamers.forEach((h, i) => {
     const div = document.createElement('div');
     div.className = 'hamerslot';
+    // Veilig: HAMER_SLOTS is een vaste constante, geen externe invoer.
+    // eslint-disable-next-line no-unsanitized/property
     div.innerHTML = `<div class="label">vak ${HAMER_SLOTS[i]}</div>`;
     const knop = document.createElement('div');
     knop.className = `hamer${i === hamerSel ? ' gekozen' : ''}${hamersHersteld ? ' goedzo' : ''}`;

@@ -61,6 +61,9 @@ async function vernieuw(): Promise<void> {
     const duur = Math.max(0, data.rapportTijdstip - data.timerGestart);
     resttijd = formateerTijd(Math.max(0, TIJDSLIMIET_MS - (data.meta.strafMs || 0) - duur));
   }
+  // Veilig: alle interpolaties zijn numerieke spelstatus of geformatteerde tijd,
+  // geen vrije spelertekst.
+  // eslint-disable-next-line no-unsanitized/property
   statsEl.innerHTML =
     `<div class="d-stat"><b>${resttijd}</b><span>Resttijd</span></div>` +
     `<div class="d-stat"><b>${data.meta.hints || 0}</b><span>Hints gebruikt</span></div>` +

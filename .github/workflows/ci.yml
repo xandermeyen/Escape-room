@@ -1,0 +1,36 @@
+name: CI (lint, types, tests)
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  kwaliteit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pnpm installeren
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Node.js instellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Dependencies installeren
+        run: pnpm install --frozen-lockfile
+
+      - name: Linten
+        run: pnpm lint
+
+      - name: Types controleren
+        run: pnpm typecheck
+
+      - name: Tests draaien
+        run: pnpm test
