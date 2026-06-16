@@ -4,14 +4,15 @@
  */
 import '../../../shared/js/sentry.ts';
 import { valideerSessie, claimRol, luisterNaarRollen } from '../../../shared/js/session.ts';
+import { activeerScherm, bewaakRolScherm, koppelCodeInvoer } from '../../../shared/js/lobby-ui.ts';
 import { initDua } from './dua-session.ts';
 
 type Rol = 'schrijver' | 'loper' | 'archivaris' | 'restaurateur';
 
 const ROL_PAGINA: Record<Rol, string> = {
-  schrijver:    'speler-1934.html',
-  loper:        'speler-1934.html',
-  archivaris:   'speler-2034.html',
+  schrijver: 'speler-1934.html',
+  loper: 'speler-1934.html',
+  archivaris: 'speler-2034.html',
   restaurateur: 'speler-2034.html',
 };
 
@@ -25,10 +26,7 @@ if (_urlSessie) sessionStorage.setItem('sessieCode', _urlSessie);
 
 // ── Schermen ──
 function toonScherm(id: string): void {
-  document.querySelectorAll('.scherm').forEach(s => s.classList.remove('actief'));
-  document.getElementById(id)?.classList.add('actief');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
+  activeerScherm(id);
   if (id === 'scherm-rol') {
     history.pushState({ scherm: 'rol' }, '');
     startRolListener();
@@ -37,11 +35,7 @@ function toonScherm(id: string): void {
   }
 }
 
-window.addEventListener('popstate', () => {
-  if (document.querySelector('.scherm.actief')?.id === 'scherm-rol') {
-    history.pushState({ scherm: 'rol' }, '');
-  }
-});
+bewaakRolScherm();
 
 // ── Live rolstatus ──
 function startRolListener(): void {
@@ -49,7 +43,7 @@ function startRolListener(): void {
   if (!code) return;
   stopRolListener();
   rollenUnsubscribe = luisterNaarRollen(code, (spelers) => {
-    ROLLEN.forEach(rol => setRolStatus(rol, spelers[rol] === 'bezet'));
+    ROLLEN.forEach((rol) => setRolStatus(rol, spelers[rol] === 'bezet'));
   });
 }
 
@@ -76,23 +70,32 @@ function setRolStatus(rol: Rol, bezet: boolean): void {
 // ── Sessiecode valideren ──
 async function valideerCode(): Promise<void> {
   const input = document.getElementById('sessieCodeInput') as HTMLInputElement;
-  const fout  = document.querySelector<HTMLElement>('#scherm-code .code-fout');
-  const knop  = document.querySelector<HTMLButtonElement>('#scherm-code .btn-game');
-  const code  = input.value.trim().toUpperCase();
+  const fout = document.querySelector<HTMLElement>('#scherm-code .code-fout');
+  const knop = document.querySelector<HTMLButtonElement>('#scherm-code .btn-game');
+  const code = input.value.trim().toUpperCase();
 
   if (code.length < 3) {
     input.classList.add('invoer-fout');
-    if (fout) { fout.textContent = 'Voer een geldige sessiecode in.'; fout.classList.remove('verborgen'); }
+    if (fout) {
+      fout.textContent = 'Voer een geldige sessiecode in.';
+      fout.classList.remove('verborgen');
+    }
     return;
   }
 
-  if (knop) { knop.disabled = true; knop.textContent = 'Controleren…'; }
+  if (knop) {
+    knop.disabled = true;
+    knop.textContent = 'Controleren…';
+  }
 
   try {
     const geldig = await valideerSessie(code);
     if (!geldig) {
       input.classList.add('invoer-fout');
-      if (fout) { fout.textContent = 'Ongeldige of inactieve code. Controleer je e-mail.'; fout.classList.remove('verborgen'); }
+      if (fout) {
+        fout.textContent = 'Ongeldige of inactieve code. Controleer je e-mail.';
+        fout.classList.remove('verborgen');
+      }
       return;
     }
     sessionStorage.setItem('sessieCode', code);
@@ -102,18 +105,27 @@ async function valideerCode(): Promise<void> {
     toonScherm('scherm-rol');
   } catch (err) {
     console.error('Firebase fout:', err);
-    if (fout) { fout.textContent = 'Verbindingsfout. Controleer je internetverbinding.'; fout.classList.remove('verborgen'); }
+    if (fout) {
+      fout.textContent = 'Verbindingsfout. Controleer je internetverbinding.';
+      fout.classList.remove('verborgen');
+    }
   } finally {
-    if (knop) { knop.disabled = false; knop.textContent = 'Verder'; }
+    if (knop) {
+      knop.disabled = false;
+      knop.textContent = 'Verder';
+    }
   }
 }
 
 // ── Rol claimen ──
 async function kiesRol(rol: Rol): Promise<void> {
   const code = sessionStorage.getItem('sessieCode');
-  if (!code) { toonScherm('scherm-code'); return; }
+  if (!code) {
+    toonScherm('scherm-code');
+    return;
+  }
 
-  const kaart   = document.getElementById(`rol-kaart-${rol}`);
+  const kaart = document.getElementById(`rol-kaart-${rol}`);
   const rolFout = document.getElementById('rol-fout');
   kaart?.classList.add('rol-laden');
   rolFout?.classList.add('verborgen');
@@ -145,19 +157,11 @@ declare global {
 }
 window.valideerCode = valideerCode;
 
-// ── Invoerveld gedrag ──
-const sessieCodeInput = document.getElementById('sessieCodeInput') as HTMLInputElement;
-sessieCodeInput.addEventListener('input', () => {
-  sessieCodeInput.classList.remove('invoer-fout');
-  document.querySelector('#scherm-code .code-fout')?.classList.add('verborgen');
-});
-sessieCodeInput.addEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Enter') valideerCode();
-});
+koppelCodeInvoer(valideerCode);
 
 // ── Begin-knop ──
 document.getElementById('btn-begin')?.addEventListener('click', async () => {
-  if (_urlSessie && await valideerSessie(_urlSessie)) {
+  if (_urlSessie && (await valideerSessie(_urlSessie))) {
     await initDua(_urlSessie);
     toonScherm('scherm-rol');
     return;
