@@ -25,6 +25,7 @@ import {
   runTransaction,
   serverTimestamp,
 } from 'firebase/database';
+import { authReady } from '../../../shared/js/auth.ts';
 
 // De brief die de Schrijver typt — beide tijdperken lezen dezelfde tekst.
 export const BRIEFTEKST =
@@ -57,6 +58,7 @@ const metaRef = (code: string) => ref(db, `sessions/${code}/dua/meta`);
 
 // ── Init: zorgt dat de dua-node en p0 bestaan (idempotent) ──
 export async function initDua(code: string): Promise<void> {
+  await authReady;
   const snap = await get(duaRef(code));
   if (!snap.exists()) {
     await set(duaRef(code), {
@@ -87,33 +89,40 @@ export function luisterDua(
 
 // ── Acties 1934 ──
 export async function zetZegel(code: string): Promise<void> {
+  await authReady;
   await update(duaRef(code), { p0zegel: true });
 }
 
 export async function zetBrief(code: string, letters: number[]): Promise<void> {
+  await authReady;
   await update(duaRef(code), {
     brief: { letters: letters.join(','), verstuurd: true },
   });
 }
 
 export async function gomBrief(code: string): Promise<void> {
+  await authReady;
   await update(duaRef(code), { brief: { letters: '', verstuurd: false } });
   await set(ref(db, `sessions/${code}/puzzels/p1`), false);
 }
 
 export async function zetKluisNummer(code: string, nummer: string): Promise<void> {
+  await authReady;
   await update(duaRef(code), { kluisNummer: nummer });
 }
 
 export async function zetVerstopPlek(code: string, plek: string | null): Promise<void> {
+  await authReady;
   await update(duaRef(code), { verstopPlek: plek });
 }
 
 export async function zetPin1934(code: string, plek: string | null): Promise<void> {
+  await authReady;
   await update(duaRef(code), { pin1934: plek });
 }
 
 export async function zetBrief14(code: string, tekst: string): Promise<void> {
+  await authReady;
   await update(duaRef(code), { brief14: { tekst, klaar: true } });
 }
 
@@ -121,6 +130,7 @@ export async function zetBrief14(code: string, tekst: string): Promise<void> {
 export const STRAF_BIJ_HONDERD_MS = 5 * 60 * 1000;
 
 export async function verhoogVerdenking(code: string, plus: number): Promise<void> {
+  await authReady;
   await runTransaction(metaRef(code), (meta: DuaMeta | null) => {
     const m: DuaMeta = meta ?? { verdenking: 0, strafMs: 0, hints: 0 };
     m.verdenking = Math.min(100, (m.verdenking || 0) + plus);
@@ -134,6 +144,7 @@ export async function verhoogVerdenking(code: string, plus: number): Promise<voi
 
 // ── Hints tellen (voor de eindstatistieken) ──
 export async function telHint(code: string): Promise<void> {
+  await authReady;
   await runTransaction(metaRef(code), (meta: DuaMeta | null) => {
     const m: DuaMeta = meta ?? { verdenking: 0, strafMs: 0, hints: 0 };
     m.hints = (m.hints || 0) + 1;
@@ -143,11 +154,13 @@ export async function telHint(code: string): Promise<void> {
 
 // ── Insignes (easter eggs, teambreed) ──
 export async function zetBadge(code: string, naam: string): Promise<void> {
+  await authReady;
   await set(ref(db, `sessions/${code}/dua/badges/${naam}`), true);
 }
 
 // ── Rapport 2034 (vrije conclusie, los van het kamer-14 formaat) ──
 export async function dienDuaRapportIn(code: string, conclusie: string): Promise<void> {
+  await authReady;
   await update(ref(db, `sessions/${code}/rapport`), {
     ingediend: true,
     inhoud: { conclusie },

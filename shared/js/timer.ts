@@ -12,6 +12,7 @@ import {
   set,
   serverTimestamp,
 } from "firebase/database";
+import { authReady } from './auth.ts';
 
 // Gedeelde tijdslimiet voor het hele spel — ook gebruikt door de eindschermen.
 export const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
@@ -31,6 +32,7 @@ let waarschuwing10Klaar: boolean      = false;
  * en start de lokale aftelling.
  */
 export async function initialiseerTimer(sessieCode: string): Promise<void> {
+  await authReady;
   huidigeCode = sessieCode;
 
   const timerRef = ref(db, `sessions/${sessieCode}/timerGestart`);

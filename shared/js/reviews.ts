@@ -1,5 +1,6 @@
 import { db } from './firebase-config.ts';
 import { ref, push, query, orderByChild, equalTo, get } from 'firebase/database';
+import { authReady } from './auth.ts';
 
 // Een review zoals een speler ze achterlaat op het eindscherm.
 export interface ReviewInzending {
@@ -23,6 +24,7 @@ export interface Review {
 // op true gezet wordt. De databaseregels blokkeren goedgekeurd = true
 // vanuit de client.
 export async function schrijfReview(inzending: ReviewInzending): Promise<void> {
+  await authReady;
   const data: Record<string, unknown> = {
     rating: Math.round(inzending.rating),
     tekst: inzending.tekst.trim().slice(0, 500),

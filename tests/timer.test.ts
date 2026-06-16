@@ -13,6 +13,8 @@ vi.mock('../shared/js/firebase-config.ts', () => ({
   db: {},
 }));
 
+vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
+
 // Pas na de mocks importeren
 import { formateerTijd } from '../shared/js/timer.ts';
 
@@ -107,6 +109,7 @@ async function laadTimer(bestaat: boolean, startTijd: number = START): Promise<T
     serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
   }));
   vi.doMock('../shared/js/firebase-config.ts', () => ({ db: {} }));
+  vi.doMock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
 
   const mod = await import('../shared/js/timer.ts');
   return { initialiseerTimer: mod.initialiseerTimer, setMock };
@@ -124,6 +127,7 @@ describe('initialiseerTimer', () => {
     vi.useRealTimers();
     vi.doUnmock('firebase/database');
     vi.doUnmock('../shared/js/firebase-config.ts');
+    vi.doUnmock('../shared/js/auth.ts');
   });
 
   it('schrijft timerGestart enkel als die nog niet bestaat', async () => {
@@ -157,6 +161,7 @@ describe('tick — waarschuwingen en redirect', () => {
     vi.useRealTimers();
     vi.doUnmock('firebase/database');
     vi.doUnmock('../shared/js/firebase-config.ts');
+    vi.doUnmock('../shared/js/auth.ts');
   });
 
   it('toont een niet-urgente melding bij 30 minuten resterend', async () => {

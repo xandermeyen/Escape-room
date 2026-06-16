@@ -3,7 +3,7 @@
     "sessions": {
       "$sessie": {
         ".read": true,
-        ".write": "auth != null || newData.exists()",
+        ".write": "auth != null",
         ".validate": "$sessie.matches(/^[A-Z0-9-]{3,20}$/)",
         "aangemaakt":     { ".validate": "newData.isNumber()" },
         "actief":         { ".validate": "newData.isBoolean()" },

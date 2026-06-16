@@ -16,6 +16,8 @@ vi.mock('../shared/js/firebase-config.ts', () => ({
   db: {},
 }));
 
+vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
+
 // Pas na de mocks importeren
 import { ref, set, get, update, onValue, runTransaction } from 'firebase/database';
 import {

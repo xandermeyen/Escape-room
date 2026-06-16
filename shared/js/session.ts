@@ -8,6 +8,7 @@ import {
   serverTimestamp,
   runTransaction,
 } from "firebase/database";
+import { authReady } from './auth.ts';
 
 export interface RapportInhoud {
   bestemming: string;
@@ -27,12 +28,14 @@ type SpelersStatus = Record<string, string>;
 
 // Sessie deactiveren (na afloop van het spel)
 export async function sluitSessie(sessieCode: string): Promise<void> {
+  await authReady;
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   await update(sessieRef, { actief: false });
 }
 
 // Sessie aanmaken (gastheer)
 export async function maakSessie(sessieCode: string, ervaringsId: string = 'kamer-14'): Promise<string> {
+  await authReady;
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   await set(sessieRef, {
     aangemaakt: serverTimestamp(),
@@ -65,6 +68,7 @@ export async function valideerSessie(sessieCode: string): Promise<boolean> {
 
 // Puzzel markeren als voltooid
 export async function puzzelVoltooid(sessieCode: string, puzzelNr: number): Promise<void> {
+  await authReady;
   const puzzelRef = ref(db, `sessions/${sessieCode}/puzzels/p${puzzelNr}`);
   await set(puzzelRef, true).catch((err: unknown) => {
     console.error(`puzzelVoltooid p${puzzelNr} mislukt:`, err);
@@ -85,6 +89,7 @@ export function luisterNaarStatus(
 
 // Rapport indienen
 export async function diendRapportIn(sessieCode: string, inhoud: RapportInhoud): Promise<void> {
+  await authReady;
   const rapportRef = ref(db, `sessions/${sessieCode}/rapport`);
   await update(rapportRef, {
     ingediend: true,
@@ -122,6 +127,7 @@ export async function haalTijden(sessieCode: string): Promise<SessieTijden> {
 // Rol atomisch claimen — voorkomt dat twee spelers dezelfde rol kiezen
 // Geeft true terug als claimen gelukt is, false als de rol al bezet was
 export async function claimRol(sessieCode: string, rol: string): Promise<boolean> {
+  await authReady;
   const rolRef = ref(db, `sessions/${sessieCode}/spelers/${rol}`);
   const result = await runTransaction(rolRef, (huidig) => {
     if (huidig !== null) return; // undefined = transaction afgebroken

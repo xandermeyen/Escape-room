@@ -5,12 +5,13 @@ name: Firebase rules deployen
 # ongeluk je live database-rules overschrijft.
 #
 # Vereiste repository-secrets:
-#   FIREBASE_TOKEN            -> via `npx firebase-tools login:ci`
+#   FIREBASE_SERVICE_ACCOUNT  -> de volledige service-account JSON (Firebase-console
+#                                > Projectinstellingen > Service accounts > Genereer
+#                                nieuwe privésleutel). Plak de hele inhoud als secret.
 #   VITE_FIREBASE_PROJECT_ID  -> bestaat al (wordt ook door de build gebruikt)
 #
-# Let op: `--token` is in nieuwere firebase-tools deprecated ten voordele van een
-# service-account (GOOGLE_APPLICATION_CREDENTIALS / FIREBASE_SERVICE_ACCOUNT).
-# Werkt voorlopig nog; overweeg later de overstap.
+# Authenticatie gebeurt via GOOGLE_APPLICATION_CREDENTIALS (service-account),
+# de aanbevolen manier. De oude --token methode is in firebase-tools v14 verwijderd.
 
 on:
   workflow_dispatch:
@@ -29,9 +30,12 @@ jobs:
           node-version: 22
 
       - name: Rules deployen naar Firebase
-        run: >
-          npx --yes firebase-tools@latest deploy
-          --only database
-          --project ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          --token ${{ secrets.FIREBASE_TOKEN }}
-          --non-interactive
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-sa.json
+        run: |
+          printf '%s' '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$GOOGLE_APPLICATION_CREDENTIALS"
+          npx --yes firebase-tools@latest deploy \
+            --only database \
+            --project ${{ secrets.VITE_FIREBASE_PROJECT_ID }} \
+            --non-interactive
+          rm -f "$GOOGLE_APPLICATION_CREDENTIALS"
