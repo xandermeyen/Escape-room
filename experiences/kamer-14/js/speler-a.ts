@@ -59,6 +59,23 @@ document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
 });
 
 
+// Geeft een vergrendelde tab vrij: speelt het unlock-geluid, toont het label
+// en koppelt de klik die deze tab plus zijn paneel activeert.
+function ontgrendelTab(tab: HTMLElement, label: string, panelId: string): void {
+  zorgVoorAudio();
+  speelUnlock();
+  tab.classList.remove('slot');
+  tab.textContent = label;
+  tab.classList.add('nieuw-doc');
+  tab.addEventListener('click', () => {
+    zorgVoorAudio();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
+    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
+    tab.classList.add('actief');
+    document.getElementById(panelId)?.classList.add('actief');
+  });
+}
+
 // ── Tabs vrijgeven op basis van Firebase-status ───────────
 function updateTabs(p: Record<string, boolean>): void {
   const tabAtelier     = document.getElementById('tab-atelier');
@@ -67,50 +84,17 @@ function updateTabs(p: Record<string, boolean>): void {
 
   // Atelier: vrijgegeven na P1
   if (p['p1'] && tabAtelier?.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabAtelier.classList.remove('slot');
-    tabAtelier.textContent = 'Atelier';
-    tabAtelier.classList.add('nieuw-doc');
-    tabAtelier.addEventListener('click', () => {
-      zorgVoorAudio();
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabAtelier.classList.add('actief');
-      document.getElementById('panel-atelier')?.classList.add('actief');
-    });
+    ontgrendelTab(tabAtelier, 'Atelier', 'panel-atelier');
   }
 
   // Intakefiche: vrijgegeven na P2 én P3
   if (p['p2'] && p['p3'] && tabIntakefiche?.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabIntakefiche.classList.remove('slot');
-    tabIntakefiche.textContent = 'Intakefiche';
-    tabIntakefiche.classList.add('nieuw-doc');
-    tabIntakefiche.addEventListener('click', () => {
-      zorgVoorAudio();
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabIntakefiche.classList.add('actief');
-      document.getElementById('panel-intakefiche')?.classList.add('actief');
-    });
+    ontgrendelTab(tabIntakefiche, 'Intakefiche', 'panel-intakefiche');
   }
 
   // Bijlage D: vrijgegeven na P4
   if (p['p4'] && tabBijlage?.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabBijlage.classList.remove('slot');
-    tabBijlage.textContent = 'Bijlage D';
-    tabBijlage.classList.add('nieuw-doc');
-    tabBijlage.addEventListener('click', () => {
-      zorgVoorAudio();
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabBijlage.classList.add('actief');
-      document.getElementById('panel-bijlage')?.classList.add('actief');
-    });
+    ontgrendelTab(tabBijlage, 'Bijlage D', 'panel-bijlage');
   }
 
   // ── Verhaalfragmenten na puzzeloplossing ─────────────────

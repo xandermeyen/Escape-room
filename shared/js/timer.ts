@@ -13,7 +13,8 @@ import {
   serverTimestamp,
 } from "firebase/database";
 
-const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
+// Gedeelde tijdslimiet voor het hele spel — ook gebruikt door de eindschermen.
+export const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
 
 let timerInterval: ReturnType<typeof setInterval> | null = null;
 let huidigeCode: string | null        = null;

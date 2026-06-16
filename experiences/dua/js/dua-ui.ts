@@ -5,12 +5,10 @@
  */
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, get, set, serverTimestamp, onValue } from 'firebase/database';
-import { formateerTijd } from '../../../shared/js/timer.ts';
+import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { volgendHint } from '../../../shared/js/utils.ts';
 import { telHint, zetBadge, type DuaMeta } from './dua-session.ts';
 import { fx, isGedempt, wisselGeluid } from './dua-audio.ts';
-
-const TIJDSLIMIET_MS = 60 * 60 * 1000;
 
 // ── Melding (toast) ─────────────────────────────────────────
 let meldingTimer: ReturnType<typeof setTimeout> | null = null;

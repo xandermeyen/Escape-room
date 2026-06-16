@@ -1,7 +1,7 @@
 import '../../../shared/js/sentry.ts';
 import { luisterNaarRapport, diendRapportIn, sluitSessie, haalTijden, type RapportInhoud } from '../../../shared/js/session.ts';
 import { antwoordKlopt } from '../../../shared/js/utils.ts';
-import { formateerTijd } from '../../../shared/js/timer.ts';
+import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { schrijfReview } from '../../../shared/js/reviews.ts';
 import { speelStem } from './audio.ts';
 
@@ -161,7 +161,6 @@ document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
 // ── Eindstatistieken ──────────────────────────────────────
 // Onderzoekstijd en marge worden berekend uit timerGestart en
 // rapport.tijdstip (beide serverTimestamps in Firebase).
-const TIJDSLIMIET_MS = 60 * 60 * 1000;
 let statsGeladen = false;
 
 async function vulStats(): Promise<void> {

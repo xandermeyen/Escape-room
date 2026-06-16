@@ -59,24 +59,30 @@ document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
 });
 
 
+// Geeft een vergrendelde tab vrij: speelt het unlock-geluid, toont het label
+// en koppelt de klik die deze tab plus zijn paneel activeert.
+function ontgrendelTab(tab: HTMLElement, label: string, panelId: string): void {
+  zorgVoorAudio();
+  speelUnlock();
+  tab.classList.remove('slot');
+  tab.textContent = label;
+  tab.classList.add('nieuw-doc');
+  tab.addEventListener('click', () => {
+    zorgVoorAudio();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
+    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
+    tab.classList.add('actief');
+    document.getElementById(panelId)?.classList.add('actief');
+  });
+}
+
 // ── Tab vrijgeven op basis van Firebase-status ────────────
 function updateTabs(p: Record<string, boolean>): void {
   const tabKamer = document.getElementById('tab-kamer');
 
   // Kamerinspectie: vrijgegeven na P2 én P3
   if (p['p2'] && p['p3'] && tabKamer?.classList.contains('slot')) {
-    zorgVoorAudio();
-    speelUnlock();
-    tabKamer.classList.remove('slot');
-    tabKamer.textContent = 'Kamerinspectie';
-    tabKamer.classList.add('nieuw-doc');
-    tabKamer.addEventListener('click', () => {
-      zorgVoorAudio();
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('actief'));
-      tabKamer.classList.add('actief');
-      document.getElementById('panel-kamer')?.classList.add('actief');
-    });
+    ontgrendelTab(tabKamer, 'Kamerinspectie', 'panel-kamer');
   }
 
   // Puzzels vrijgeven op basis van voortgang

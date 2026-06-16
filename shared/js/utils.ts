@@ -1,19 +1,4 @@
 /**
- * controleerAntwoordHash
- * ──────────────────────────────────────────────────────────────────────────
- * Checks a puzzle answer by SHA-256 hashing the player's input and comparing
- * it against a set of pre-computed hashes. Plain-text answers are never stored
- * in the source — a player opening DevTools sees only hashes.
- *
- * @param puzzelNr   - Key into `hashes` (e.g. 'p1')
- * @param inputId    - ID of the <input> element
- * @param feedbackId - ID of the feedback element
- * @param btnId      - ID of the submit button
- * @param hashes     - Map of puzzelNr → string[] of SHA-256 hex hashes
- * @param onJuist    - Called when the answer is correct
- * @param foutTekst  - Feedback text shown on a wrong answer
- */
-/**
  * sha256Hex: SHA-256 hash van een string als hex.
  */
 export async function sha256Hex(waarde: string): Promise<string> {
@@ -31,6 +16,21 @@ export async function antwoordKlopt(waarde: string, hashes: string[]): Promise<b
   return hashes.includes(hex);
 }
 
+/**
+ * controleerAntwoordHash
+ * ──────────────────────────────────────────────────────────────────────────
+ * Checks a puzzle answer by SHA-256 hashing the player's input and comparing
+ * it against a set of pre-computed hashes. Plain-text answers are never stored
+ * in the source — a player opening DevTools sees only hashes.
+ *
+ * @param puzzelNr   - Key into `hashes` (e.g. 'p1')
+ * @param inputId    - ID of the <input> element
+ * @param feedbackId - ID of the feedback element
+ * @param btnId      - ID of the submit button
+ * @param hashes     - Map of puzzelNr → string[] of SHA-256 hex hashes
+ * @param onJuist    - Called when the answer is correct
+ * @param foutTekst  - Feedback text shown on a wrong answer
+ */
 export async function controleerAntwoordHash(
   puzzelNr: string,
   inputId: string,

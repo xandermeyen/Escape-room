@@ -114,6 +114,13 @@ let draaiHoek = 0;
 let draaiCijfer = 0;
 let kluisInvoer = '';
 
+// Escapet een waarde voor veilige weergave in innerHTML (data komt van team 1934).
+function escHtml(s: string): string {
+  return s.replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] ?? c
+  ));
+}
+
 function tekenTicket(): void {
   const inhoud = document.getElementById('ticket-inhoud')!;
   const spel = document.getElementById('kluis-spel')!;
@@ -124,7 +131,7 @@ function tekenTicket(): void {
   }
   inhoud.innerHTML =
     `<p style="font-family:var(--font);font-size:18px;border:1px dashed #999;padding:10px;display:inline-block">` +
-    `NOORDSTATION BRUSSEL · BAGAGEKLUIS Nr. ${dua.kluisNummer[0]}<span style="color:#bbb">▓</span> · 1934</p>` +
+    `NOORDSTATION BRUSSEL · BAGAGEKLUIS Nr. ${escHtml(dua.kluisNummer[0])}<span style="color:#bbb">▓</span> · 1934</p>` +
     `<p class="hintje">Het tweede cijfer is vervaagd. De brief zegt: één meer dan het aantal brieven dat het bisdom telt. ` +
     `Hoeveel verstuurde 1934 er werkelijk?</p>`;
   spel.style.display = puzzels['p2'] ? 'none' : 'block';

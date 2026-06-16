@@ -233,14 +233,6 @@ export function speelStem(karakter: string, fragment: string): HTMLAudioElement 
 }
 
 /**
- * Speelt Lena's briefkaartfragment.
- * Aanroepen op einde.html of als afsluitend moment — niet bij het omdraaien zelf.
- */
-export function speelBriefkaartStem(): void {
-  speelStem('lena', 'briefkaart');
-}
-
-/**
  * Kort papiergeluid — synthesized, geen bestand nodig.
  * Aanroepen bij het omdraaien van de envelop op het prikbord.
  */

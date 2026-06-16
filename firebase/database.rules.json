@@ -30,9 +30,9 @@
             "letters":   { ".validate": "newData.isString() && newData.val().length <= 32" },
             "verstuurd": { ".validate": "newData.isBoolean()" }
           },
-          "kluisNummer": { ".validate": "newData.isString() || newData.val() == null" },
-          "verstopPlek": { ".validate": "newData.isString() || newData.val() == null" },
-          "pin1934":     { ".validate": "newData.isString() || newData.val() == null" },
+          "kluisNummer": { ".validate": "(newData.isString() && newData.val().length <= 24) || newData.val() == null" },
+          "verstopPlek": { ".validate": "(newData.isString() && newData.val().length <= 24) || newData.val() == null" },
+          "pin1934":     { ".validate": "(newData.isString() && newData.val().length <= 24) || newData.val() == null" },
           "brief14": {
             "tekst": { ".validate": "newData.isString() && newData.val().length <= 4000" },
             "klaar": { ".validate": "newData.isBoolean()" }

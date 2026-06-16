@@ -6,11 +6,10 @@
 import '../../../shared/js/sentry.ts';
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, onValue } from 'firebase/database';
-import { formateerTijd } from '../../../shared/js/timer.ts';
+import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { haalEinde } from './dua-session.ts';
 import { fx } from './dua-audio.ts';
 
-const TIJDSLIMIET_MS = 60 * 60 * 1000;
 const AANTAL_EGGS = 6;
 
 const sessie = new URLSearchParams(window.location.search).get('sessie');
