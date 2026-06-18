@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /experiences/
+
+Sitemap: https://bureau-x.be/sitemap.xml

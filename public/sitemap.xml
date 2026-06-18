@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  LET OP: de echte sitemap die gedeployed wordt staat in public/sitemap.xml
-  Vite kopieert alleen public/ naar dist/. Dit bestand in de root wordt NIET
-  gepubliceerd en mag verwijderd worden. Hier voor de zekerheid gelijkgetrokken.
--->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Homepage -->
