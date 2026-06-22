@@ -103,7 +103,7 @@
 
     /* Art deco corner ornaments */
     .hero-corners {
-      position: absolute; inset: 3rem; z-index: 1; pointer-events: none;
+      position: absolute; inset: 3rem 3rem 1rem 3rem; z-index: 1; pointer-events: none;
       border: 1px solid rgba(200,169,110,.12);
     }
     .hero-corners::before,
@@ -117,7 +117,7 @@
 
     .hero-content {
       position: relative; z-index: 2;
-      text-align: center; padding: 0 2rem; max-width: 860px;
+      text-align: center; padding: 0 2rem 4rem; max-width: 860px;
     }
 
     /* Newspaper masthead style */
@@ -283,7 +283,7 @@
       .split-col:first-child { border-right: none; border-bottom: 1px solid var(--border-gold); }
       .feiten-balk { grid-template-columns: 1fr 1fr; }
       .feit { border-bottom: 1px solid var(--border-gold); }
-      .hero-corners { inset: 1.5rem; }
+      .hero-corners { inset: 1.5rem 1.5rem 0.5rem 1.5rem; }
     }
     @media (max-width: 700px) {
       .nav-links    { display: none; }
@@ -320,8 +320,8 @@
     </div>
     <p class="dua-subtitle">Diefstallen &nbsp;·&nbsp; Uitlokkingen &nbsp;·&nbsp; Afpersingen</p>
     <div class="dua-rule-mid"></div>
-    <p class="dua-kop">"In de nacht van 10 op 11 april 1934 verdwijnt het paneel <em>De Rechtvaardige Rechters</em> uit de Sint-Baafskathedraal. Dertien afpersbrieven later: nog steeds spoorloos."</p>
-    <p class="dua-lead">Een team speelt in 1934 en laat sporen na. Een team speelt in 2034 en vindt ze honderd jaar later. Jullie kunnen praten, door de tijd heen. Volledig online en gratis thuis te spelen.</p>
+    <p class="dua-kop">"Op 10 april 1934 verdwijnt het paneel <em>De Rechtvaardige Rechters</em> van Jan van Eyck uit de Sint-Baafskathedraal in Gent. De dader stuurde dertien anonieme afpersbrieven, stierf met het geheim op zijn sterfbed, en het paneel is nooit teruggevonden."</p>
+    <p class="dua-lead">Jullie spelen in twee ploegen tegelijkertijd, elk in een andere tijd. De ene ploeg bevindt zich in Gent, april 1934, midden in de zaak na de diefstal. De andere werkt een eeuw later voor Bureau X en reconstrueert wat er werkelijk is gebeurd. De twee ploegen mogen vrij met elkaar praten, maar informatie stroomt maar in één richting: van verleden naar toekomst. Pas aan het einde begrijpen jullie waarom jullie zelf D.U.A. zijn.</p>
     <div class="coming-badge"><span class="coming-dot"></span>Nu beschikbaar</div>
     <div class="hero-ctas">
       <a href="#verhaal" class="btn btn-outline">De echte zaak</a>
@@ -338,7 +338,7 @@
 <div class="feiten-balk">
   <div class="feit"><div class="feit-waarde">1934</div><div class="feit-label">Tijdperk A</div></div>
   <div class="feit"><div class="feit-waarde">2034</div><div class="feit-label">Tijdperk B</div></div>
-  <div class="feit"><div class="feit-waarde">2–4</div><div class="feit-label">Spelers</div></div>
+  <div class="feit"><div class="feit-waarde">2 tot 4</div><div class="feit-label">Spelers</div></div>
   <div class="feit"><div class="feit-waarde">±60 min</div><div class="feit-label">Speelduur</div></div>
 </div>
 
@@ -360,13 +360,13 @@
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <p class="tl-jaar">10–11 april 1934 &nbsp;·&nbsp; Nacht</p>
+          <p class="tl-jaar">10 en 11 april 1934 &nbsp;·&nbsp; Nacht</p>
           <h3 class="tl-kop">Het paneel verdwijnt</h3>
           <p class="tl-txt">Tijdens de nacht van Passiezondag op Stille Maandag wordt het linker onderpaneel, <em>De Rechtvaardige Rechters</em>, gestolen uit de kathedraal. Hoe de dief binnenkwam, is nooit bewezen.</p>
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <p class="tl-jaar">April – november 1934</p>
+          <p class="tl-jaar">April tot november 1934</p>
           <h3 class="tl-kop">Dertien afpersbrieven</h3>
           <p class="tl-txt">De kathedraal en de Belgische staat ontvangen dertien anonieme afpersbrieven. De auteur eist losgeld. Het paneel wordt nooit geleverd. De brieven zijn echt. Ze zijn bewaard.</p>
         </div>
@@ -378,7 +378,7 @@
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <p class="tl-jaar">1945 – heden</p>
+          <p class="tl-jaar">1945 tot heden</p>
           <h3 class="tl-kop">Kopie op zijn plek</h3>
           <p class="tl-txt">Kunstschilder Jef Van der Veken maakt een kopie op basis van oude foto's. Die hangt vandaag in het veelluik. Het origineel is nooit teruggevonden.</p>
         </div>
@@ -411,7 +411,7 @@
   <div class="container">
     <p class="label reveal" style="text-align:center;">Hoe D.U.A. werkt</p>
     <h2 class="heading reveal" style="text-align:center;max-width:580px;margin:0 auto .5rem;">Twee tijdperken. Één zaak.</h2>
-    <p class="sub reveal" style="text-align:center;max-width:560px;margin:.5rem auto 0;">Jullie spelers worden verdeeld over 1934 en 2034. Informatie gaat maar één kant op: van verleden naar toekomst. Jullie overleggen samen. Jullie lossen het samen op.</p>
+    <p class="sub reveal" style="text-align:center;max-width:560px;margin:.5rem auto 0;">1934 werkt in het verleden: de typemachine is gesaboteerd, de perronwachter in Brussel loopt zijn ronde, en Goedertiers werkkamer moet doorzocht worden in 90 seconden. 2034 leest de doorslagen van de brieven die 1934 net heeft getypt, en weet waar de politie straks zal zoeken. Jullie kunnen praten, maar de informatie gaat maar één kant op.</p>
     <div class="rule reveal" style="margin:1.75rem auto;"></div>
 
     <div class="split-grid reveal">
@@ -480,9 +480,9 @@
 <!-- ── BOEKING ── -->
 <section class="section" id="boek" style="background:var(--bg-2);border-top:1px solid var(--border-gold);">
   <div class="container container--narrow">
-    <p class="label reveal" style="text-align:center;">Reserveer je plek</p>
-    <h2 class="heading reveal" style="text-align:center;">Boek een sessie D.U.A.</h2>
-    <p class="sub reveal" style="text-align:center;">Jullie kiezen zelf wie welke rol opneemt eens jullie inloggen. Iedereen krijgt een eigen spellink via mail. D.U.A. is gratis.</p>
+    <p class="label reveal" style="text-align:center;">Gratis &middot; 2 tot 4 spelers &middot; vanuit huis</p>
+    <h2 class="heading reveal" style="text-align:center;">Neem de zaak aan</h2>
+    <p class="sub reveal" style="text-align:center;">Arsène Goedertier stierf op 25 november 1934 als enige die wist waar het paneel ligt. Het ligt er waarschijnlijk nog. Vul de e-mailadressen in van iedereen die meespeelt. Ieder krijgt zijn eigen spellink en kiest zijn rol zodra jullie inloggen. D.U.A. is gratis.</p>
 
     <form class="boek-form reveal" id="boekForm" action="https://formspree.io/f/xlgkzpqy" method="POST">
       <input type="hidden" name="_subject" value="DUA Reservaties" />
@@ -611,7 +611,7 @@ document.querySelectorAll('.speler-btn').forEach(function (btn) {
   var buffer = '';
   var toast = document.createElement('div');
   toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#f2e8d0;color:#1a1208;font-family:"Special Elite",serif;font-size:.88rem;line-height:1.7;padding:1.25rem 1.75rem;border:1px solid #d4c49c;max-width:420px;text-align:center;opacity:0;transition:opacity .5s,transform .5s;z-index:999;pointer-events:none;';
-  toast.innerHTML = '"Ik alleen weet waar de Rechtvaardige Rechters rusten.<br>Dit geheim zal met mij sterven."<br><span style="font-size:.72rem;opacity:.6;display:block;margin-top:.5rem;">— Arsène Goedertier, november 1934</span>';
+  toast.innerHTML = '"Ik alleen weet waar de Rechtvaardige Rechters rusten.<br>Dit geheim zal met mij sterven."<br><span style="font-size:.72rem;opacity:.6;display:block;margin-top:.5rem;">- Arsène Goedertier, november 1934</span>';
   document.body.appendChild(toast);
 
   document.addEventListener('keydown', function (e) {
