@@ -21,10 +21,42 @@ const auth = getAuth(app);
 
 export let authGelukt = false;
 
-export const authReady: Promise<void> = signInAnonymously(auth)
-  .then(() => {
-    authGelukt = true;
-  })
+/** Fouten die door een tijdelijk netwerkprobleem komen en dus opnieuw geprobeerd mogen worden. */
+const TIJDELIJKE_FOUTEN = new Set([
+  'auth/network-request-failed',
+  'auth/timeout',
+  'auth/internal-error',
+]);
+
+function isTijdelijkeFout(err: unknown): boolean {
+  const code = (err as { code?: string } | null)?.code;
+  return typeof code === 'string' && TIJDELIJKE_FOUTEN.has(code);
+}
+
+const wacht = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Probeert anoniem in te loggen, met enkele herpogingen bij tijdelijke
+ * netwerkfouten. Mobiele verbindingen vallen soms even weg; een eenmalige
+ * poging mislukt dan onnodig. Een echte configfout (geen tijdelijke code)
+ * faalt meteen, zonder te wachten.
+ */
+async function logInMetHerpoging(maxPogingen = 3): Promise<void> {
+  for (let poging = 1; poging <= maxPogingen; poging++) {
+    try {
+      await signInAnonymously(auth);
+      authGelukt = true;
+      return;
+    } catch (err) {
+      const laatstePoging = poging === maxPogingen;
+      if (laatstePoging || !isTijdelijkeFout(err)) throw err;
+      // Korte oplopende backoff: 400ms, 800ms, ...
+      await wacht(400 * poging);
+    }
+  }
+}
+
+export const authReady: Promise<void> = logInMetHerpoging()
   .catch((err: unknown) => {
     console.error('Anonieme login mislukt:', err);
     Sentry.captureException(err, { tags: { context: 'anonieme-login' } });
