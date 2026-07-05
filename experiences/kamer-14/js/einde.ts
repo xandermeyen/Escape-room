@@ -3,6 +3,7 @@ import { luisterNaarRapport, diendRapportIn, sluitSessie, haalTijden, type Rappo
 import { antwoordKlopt, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
+import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { speelStem } from './audio.ts';
 
 // ── Sessie ophalen (redirect + stop als die ontbreekt) ────
@@ -157,6 +158,7 @@ document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
 // Onderzoekstijd en marge worden berekend uit timerGestart en
 // rapport.tijdstip (beide serverTimestamps in Firebase).
 let statsGeladen = false;
+let deelDuur: string | null = null; // gezet zodra de stats geladen zijn
 
 async function vulStats(): Promise<void> {
   if (statsGeladen) return;
@@ -168,6 +170,7 @@ async function vulStats(): Promise<void> {
 
     const duurMs  = Math.max(0, rapportTijdstip - timerGestart);
     const margeMs = Math.max(0, TIJDSLIMIET_MS - duurMs);
+    deelDuur = formateerTijd(duurMs);
 
     const duurEl  = document.getElementById('stat-onderzoekstijd');
     const margeEl = document.getElementById('stat-resttijd');
@@ -183,6 +186,13 @@ async function vulStats(): Promise<void> {
 
 // ── Review achterlaten (gedeeld formulier) ────────────────
 koppelReviewFormulier('kamer-14');
+
+// ── Resultaat delen ───────────────────────────────────────
+koppelDeelKnop('btn-deel-resultaat', () =>
+  deelDuur
+    ? `Wij losten Kamer 14 op in ${deelDuur} 🕵️ Gratis online escape room over de Geelse gezinsverpleging: https://bureau-x.be/kamer-14/`
+    : 'Wij losten Kamer 14 op 🕵️ Gratis online escape room over de Geelse gezinsverpleging: https://bureau-x.be/kamer-14/',
+);
 
 
 // ── Firebase: luisteren naar rapport-status ───────────────

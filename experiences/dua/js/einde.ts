@@ -9,6 +9,7 @@ import { ref, onValue } from 'firebase/database';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { requireEl, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
+import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { haalEinde } from './dua-session.ts';
 import { fx } from './dua-audio.ts';
 
@@ -24,6 +25,16 @@ document.getElementById('btn-terug')?.addEventListener('click', () => {
 
 // ── Review achterlaten (gedeeld formulier) ──
 koppelReviewFormulier('dua');
+
+// ── Resultaat delen ──
+let deelResttijd: string | null = null;
+let deelBadges = 0;
+
+koppelDeelKnop('btn-deel-resultaat', () =>
+  deelResttijd
+    ? `Wij kraakten D.U.A. met ${deelResttijd} resttijd en ${deelBadges}/${AANTAL_EGGS} insignes 🕰️ Gratis online escape room over De Rechtvaardige Rechters: https://bureau-x.be/dua/`
+    : 'Wij kraakten D.U.A. 🕰️ Gratis online escape room over De Rechtvaardige Rechters: https://bureau-x.be/dua/',
+);
 
 let klokGeluid = false;
 let statsGetoond = false;
@@ -75,6 +86,10 @@ async function vernieuw(): Promise<void> {
     `<div class="d-stat"><b>${data.meta.verdenking || 0}%</b><span>Eindverdenking</span></div>` +
     `<div class="d-stat"><b>${data.badges}/${AANTAL_EGGS}</b><span>Insignes</span></div>`;
   statsEl.style.display = 'flex';
+
+  deelResttijd = resttijd;
+  deelBadges = data.badges;
+  document.getElementById('btn-deel-resultaat')?.classList.remove('verborgen');
 }
 
 // Live: vernieuw zodra brief14 of rapport binnenkomt

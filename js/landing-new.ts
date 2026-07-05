@@ -42,6 +42,43 @@ function marqueeItem(r: Review): string {
     + `"${escapeHtml(kort)}" &middot; ${naam}</div>`;
 }
 
+// ── RICH RESULTS: review-sterren voor Google ───────────────────
+// Injecteert per experience een Product-schema met AggregateRating,
+// berekend uit de echte goedgekeurde reviews. Google rendert JavaScript,
+// dus client-side JSON-LD telt mee voor rich results.
+const EXPERIENCE_URLS: Record<string, string> = {
+  'kamer-14': 'https://bureau-x.be/kamer-14/',
+  'dua': 'https://bureau-x.be/dua/',
+};
+
+function injecteerRatingSchema(reviews: Review[]): void {
+  for (const [ervaring, url] of Object.entries(EXPERIENCE_URLS)) {
+    const subset = reviews.filter((r) => r.ervaring === ervaring);
+    if (subset.length === 0) continue;
+    const gemiddelde = subset.reduce((som, r) => som + r.rating, 0) / subset.length;
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: ERVARING_LABELS[ervaring] ?? ervaring,
+      url,
+      brand: { '@type': 'Brand', name: 'Bureau X' },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Math.round(gemiddelde * 10) / 10,
+        reviewCount: subset.length,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    };
+
+    const el = document.createElement('script');
+    el.type = 'application/ld+json';
+    el.textContent = JSON.stringify(schema);
+    document.head.appendChild(el);
+  }
+}
+
 async function laadReviews(): Promise<void> {
   const sectie = document.getElementById('reviews');
   const grid = document.getElementById('reviews-grid');
@@ -52,13 +89,17 @@ async function laadReviews(): Promise<void> {
 
   let reviews: Review[];
   try {
-    reviews = await leesGoedgekeurdeReviews(12);
+    // Ruim ophalen: de eerste 6 worden getoond, maar het gemiddelde voor
+    // de rich results telt over alle goedgekeurde reviews.
+    reviews = await leesGoedgekeurdeReviews(100);
   } catch (err) {
     console.error('Reviews laden mislukt:', err);
     return; // sectie en marquee blijven verborgen
   }
 
   if (reviews.length === 0) return;
+
+  injecteerRatingSchema(reviews);
 
   // Veilig: reviewKaart/marqueeItem halen alle spelerteksten door escapeHtml.
   // eslint-disable-next-line no-unsanitized/property
@@ -67,7 +108,7 @@ async function laadReviews(): Promise<void> {
 
   if (marqueeWrap && marqueeTrack) {
     // Twee keer dezelfde set voor een naadloze lus.
-    const items = reviews.map(marqueeItem).join('');
+    const items = reviews.slice(0, 12).map(marqueeItem).join('');
     // eslint-disable-next-line no-unsanitized/property
     marqueeTrack.innerHTML = items + items;
     marqueeWrap.style.display = '';

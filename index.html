@@ -11,22 +11,36 @@
   <meta property="og:description" content="Online escape rooms gebaseerd op echte Belgische plaatsen en verhalen. Gratis te spelen, vanuit huis." />
   <meta property="og:url"         content="https://bureau-x.be/" />
   <meta property="og:image"       content="https://bureau-x.be/assets/img/kamer-14-preview.jpg" />
+  <meta property="og:locale"      content="nl_BE" />
   <meta name="twitter:card"       content="summary_large_image" />
   <link rel="icon" type="image/png" sizes="32x32"   href="/assets/img/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192x192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "Organization",
     "name": "Bureau X",
     "url": "https://bureau-x.be",
     "logo": "https://bureau-x.be/assets/img/bureau_x_logo_dark.svg",
     "description": "Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen.",
     "email": "info@bureau-x.be"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is Bureau X echt gratis?", "acceptedAnswer": { "@type": "Answer", "text": "Ja, volledig gratis. Geen abonnement, geen in-app aankopen. Je boekt een sessie, ontvangt een spellink per mail en speelt." } },
+      { "@type": "Question", "name": "Wat heb ik nodig om te spelen?", "acceptedAnswer": { "@type": "Answer", "text": "Alleen een browser en een manier om met je medespeler te communiceren, zoals een telefoongesprek of videocall. Geen downloads, geen speciale software." } },
+      { "@type": "Question", "name": "Hoeveel spelers heb ik nodig?", "acceptedAnswer": { "@type": "Answer", "text": "Kamer 14 is gemaakt voor precies 2 spelers. D.U.A., onze tweede experience, is speelbaar met 2 tot 4 spelers." } },
+      { "@type": "Question", "name": "Hoe lang duurt een sessie?", "acceptedAnswer": { "@type": "Answer", "text": "Kamer 14 duurt gemiddeld 45 minuten. Er is geen vaste tijdslimiet. Jullie spelen in jullie eigen tempo." } },
+      { "@type": "Question", "name": "Zijn de verhalen echt?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Kamer 14 is gebaseerd op de echte Geelse traditie van gezinsverpleging bij het OPZ Geel. D.U.A. is gebaseerd op de tot op vandaag onopgeloste diefstal van De Rechtvaardige Rechters uit de Sint-Baafskathedraal in 1934." } }
+    ]
   }
   </script>
   <style>
@@ -360,7 +374,8 @@
 </footer>
 
 <script>
-(function () {
+// three.js laadt met defer; wacht op DOMContentLoaded zodat THREE bestaat.
+document.addEventListener('DOMContentLoaded', function () {
   var canvas = document.getElementById('hero-canvas');
   if (!window.THREE || !canvas) return;
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
@@ -403,7 +418,7 @@
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
-})();
+});
 
 var navbar = document.getElementById('navbar');
 window.addEventListener('scroll', function () {
