@@ -5,14 +5,15 @@ const dsn = import.meta.env.VITE_SENTRY_DSN as string | undefined;
 /**
  * Initialiseert Sentry error monitoring.
  *
- * Activeert alleen als VITE_SENTRY_DSN aanwezig is —
- * dus in development (geen DSN) doet dit niets.
+ * Activeert alleen in een productie-build mét VITE_SENTRY_DSN. De dev-server
+ * rapporteert nooit — ook niet als er een DSN in een lokale .env staat —
+ * zodat lokale tests geen ruis in Sentry veroorzaken.
  *
  * DSN instellen:
  *   - Productie: voeg VITE_SENTRY_DSN toe als GitHub Secret
- *   - Lokaal testen: voeg toe aan .env (nooit .env.development)
+ *   - Lokaal testen: `pnpm build && pnpm preview` met een DSN in .env
  */
-if (dsn) {
+if (dsn && import.meta.env.PROD) {
   Sentry.init({
     dsn,
     environment: import.meta.env.MODE,   // 'production' of 'development'
