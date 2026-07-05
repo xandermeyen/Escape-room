@@ -1,12 +1,12 @@
 import '../../../shared/js/sentry.ts';
-import { luisterNaarStatus, puzzelVoltooid } from '../../../shared/js/session.ts';
-import { controleerAntwoordHash } from '../../../shared/js/utils.ts';
+import { luisterNaarStatus, puzzelVoltooid, bewaakSessieGesloten } from '../../../shared/js/session.ts';
+import { controleerAntwoordHash, sessieUitUrl } from '../../../shared/js/utils.ts';
 import {
   updateVoortgang,
   markeerVoltooid,
   installeerNavigatieGuard,
-  KAMER14_ANTWOORD_HASHES,
 } from '../../../shared/js/game.ts';
+import { KAMER14_ANTWOORD_HASHES, KAMER14_TIMER_WAARSCHUWINGEN } from './kamer14-config.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 
@@ -26,20 +26,24 @@ function zorgVoorAudio(): void {
   startAchtergrond('a');
 }
 
-// Sessie ophalen uit URL
-const params = new URLSearchParams(window.location.search);
-const sessie = params.get('sessie');
-
-if (!sessie) {
-  window.location.href = 'index.html';
-}
+// Sessie ophalen uit URL (redirect + stop als die ontbreekt)
+const sessie = sessieUitUrl();
 
 // ── Browsernavigatie blokkeren ────────────────────────────
 // Wordt uitgeschakeld zodra de speler bewust naar einde.html gaat.
 const schakelGuardUit = installeerNavigatieGuard();
 
 // Timer starten (na sessie-definitie)
-initialiseerTimer(sessie!);
+initialiseerTimer(sessie, {
+  waarschuwingen: KAMER14_TIMER_WAARSCHUWINGEN,
+  voorRedirect: schakelGuardUit,
+});
+
+// Host kan de sessie deactiveren → naar het tijd-voorbij-scherm
+bewaakSessieGesloten(sessie, () => {
+  schakelGuardUit();
+  window.location.href = `tijd-voorbij.html?sessie=${encodeURIComponent(sessie)}`;
+});
 
 // Casenummer tonen in systeembalk
 const sysCase = document.getElementById('sys-case');
@@ -132,7 +136,7 @@ function updateTabs(p: Record<string, boolean>): void {
     controleerAntwoordHash(
       nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`,
       KAMER14_ANTWOORD_HASHES,
-      () => puzzelVoltooid(sessie!, puzzelNr),
+      () => puzzelVoltooid(sessie, puzzelNr),
       'Niet correct. Overleg opnieuw met Speler B.'
     )
   );
@@ -143,7 +147,7 @@ function updateTabs(p: Record<string, boolean>): void {
 
 
 // ── Firebase live luisteren ───────────────────────────────
-const unsubscribe = luisterNaarStatus(sessie!, (puzzels) => {
+const unsubscribe = luisterNaarStatus(sessie, (puzzels) => {
   const p = puzzels || {};
   updateVoortgang(p);
   updateTabs(p);

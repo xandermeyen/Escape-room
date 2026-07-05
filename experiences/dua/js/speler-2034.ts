@@ -4,8 +4,8 @@
  * Antwoorden staan als SHA-256 hash in de bundle (zelfde aanpak als kamer-14).
  */
 import '../../../shared/js/sentry.ts';
-import { luisterNaarStatus, puzzelVoltooid, sluitSessie } from '../../../shared/js/session.ts';
-import { antwoordKlopt } from '../../../shared/js/utils.ts';
+import { luisterNaarStatus, puzzelVoltooid, sluitSessie, bewaakSessieGesloten } from '../../../shared/js/session.ts';
+import { antwoordKlopt, requireEl, escHtml } from '../../../shared/js/utils.ts';
 import {
   luisterDua, zetVerstopPlek, zetPin1934, verhoogVerdenking,
   dienDuaRapportIn, zetBadge, BRIEFTEKST, DOORZOCHT, type DuaState,
@@ -16,11 +16,11 @@ import {
 } from './dua-ui.ts';
 import { fx, koppelTypgeluid } from './dua-audio.ts';
 
-const sessie = leesSessie()!;
+const sessie = leesSessie();
 const rol = new URLSearchParams(window.location.search).get('rol') ?? 'archivaris';
 
-document.getElementById('sys-case')!.textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;
-document.getElementById('sys-rol')!.textContent =
+requireEl('sys-case').textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;
+requireEl('sys-rol').textContent =
   `2034 · ${rol === 'restaurateur' ? 'De Restaurateur' : 'De Archivaris'}`;
 
 // Antwoord-hashes (sha256, lowercase): nooit plain-text in de bundle.
@@ -39,17 +39,17 @@ window.duaHintKlik = (blokId: string) => duaHint(sessie, blokId);
 // ═══════════════════ P0: HET ZEGEL ═══════════════════
 function tekenZegel(): void {
   if (!dua.p0zegel || puzzels['p0']) return;
-  document.getElementById('zegel-tekst')!.textContent =
+  requireEl('zegel-tekst').textContent =
     'Op het vergeelde vel staat plots, honderd jaar oud en toch kraakvers:';
-  document.getElementById('zegel-toon')!.innerHTML = '<span class="zegel">D.U.A.</span>';
-  document.getElementById('zegel-actie')!.style.display = 'block';
+  requireEl('zegel-toon').innerHTML = '<span class="zegel">D.U.A.</span>';
+  requireEl('zegel-actie').style.display = 'block';
 }
 
 document.getElementById('btn-zegel-bevestig')?.addEventListener('click', async () => {
   if (!dua.p0zegel || puzzels['p0']) return;
   fx.kerkklok(1, true);
   await puzzelVoltooid(sessie, 0);
-  document.getElementById('zegel-actie')!.style.display = 'none';
+  requireEl('zegel-actie').style.display = 'none';
   document.getElementById('s-zegel')?.classList.add('klaar');
   melding('De handdruk is compleet. Zo werkt dit spel: wat 1934 doet, vinden jullie. Aan het werk.');
 });
@@ -61,8 +61,8 @@ function briefWoord(): string {
 }
 
 function tekenDoorslag(): void {
-  const inhoud = document.getElementById('doorslag-inhoud')!;
-  const vraag = document.getElementById('doorslag-vraag')!;
+  const inhoud = requireEl('doorslag-inhoud');
+  const vraag = requireEl('doorslag-vraag');
   if (!dua.brief?.verstuurd) {
     inhoud.innerHTML = '<p class="hintje">Er ligt hier nog niets. In 1934 is de brief nog niet getypt…</p>';
     vraag.style.display = 'none';
@@ -88,7 +88,7 @@ function tekenDoorslag(): void {
 
 document.getElementById('btn-woord')?.addEventListener('click', async () => {
   if (!dua.brief?.verstuurd) { fx.fout(); melding('Er is nog geen doorslag. 1934 moet eerst typen.'); return; }
-  const input = document.getElementById('ant-woord') as HTMLInputElement;
+  const input = requireEl<HTMLInputElement>('ant-woord');
   const val = input.value.trim().toLowerCase();
   const woord = briefWoord().toLowerCase();
 
@@ -114,16 +114,9 @@ let draaiHoek = 0;
 let draaiCijfer = 0;
 let kluisInvoer = '';
 
-// Escapet een waarde voor veilige weergave in innerHTML (data komt van team 1934).
-function escHtml(s: string): string {
-  return s.replace(/[&<>"']/g, c => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] ?? c
-  ));
-}
-
 function tekenTicket(): void {
-  const inhoud = document.getElementById('ticket-inhoud')!;
-  const spel = document.getElementById('kluis-spel')!;
+  const inhoud = requireEl('ticket-inhoud');
+  const spel = requireEl('kluis-spel');
   if (!dua.kluisNummer) {
     inhoud.innerHTML = '<p class="hintje">Bewijsstuk 7 (kluisticket) is nog niet aangetroffen.</p>';
     spel.style.display = 'none';
@@ -145,15 +138,15 @@ document.getElementById('draaiknop')?.addEventListener('click', () => {
   fx.klik();
   draaiCijfer = (draaiCijfer + 1) % 10;
   draaiHoek += 36;
-  (document.getElementById('draaiknop') as HTMLElement).style.transform = `rotate(${draaiHoek}deg)`;
-  document.getElementById('kluis-display')!.textContent = (kluisInvoer || '_') + draaiCijfer;
+  requireEl('draaiknop').style.transform = `rotate(${draaiHoek}deg)`;
+  requireEl('kluis-display').textContent = (kluisInvoer || '_') + draaiCijfer;
 });
 
 document.getElementById('draaiknop')?.addEventListener('dblclick', async () => {
   if (puzzels['p2'] || !dua.kluisNummer) return;
   kluisInvoer += draaiCijfer;
   fx.lade();
-  document.getElementById('kluis-display')!.textContent = kluisInvoer.padEnd(2, '_');
+  requireEl('kluis-display').textContent = kluisInvoer.padEnd(2, '_');
   if (kluisInvoer.length >= 2) {
     if (kluisInvoer === dua.kluisNummer) {
       fx.kerkklok(2, true);
@@ -162,7 +155,7 @@ document.getElementById('draaiknop')?.addEventListener('dblclick', async () => {
     } else {
       fx.fout();
       kluisInvoer = '';
-      document.getElementById('kluis-display')!.textContent = '__';
+      requireEl('kluis-display').textContent = '__';
       melding('Het slot weigert. Verkeerde kluis.');
     }
   }
@@ -171,7 +164,7 @@ document.getElementById('draaiknop')?.addEventListener('dblclick', async () => {
 // ═══════════════════ P3: DE GETUIGEN ═══════════════════
 document.getElementById('btn-route')?.addEventListener('click', async () => {
   if (!puzzels['p1']) { fx.fout(); melding('Eerst P1: zonder de brief weet niemand waarnaar te zoeken.'); return; }
-  const input = document.getElementById('ant-route') as HTMLInputElement;
+  const input = requireEl<HTMLInputElement>('ant-route');
   if (await antwoordKlopt(input.value.trim(), HASH_ROUTE)) {
     fx.kerkklok(3, true);
     await puzzelVoltooid(sessie, 3);
@@ -190,7 +183,8 @@ document.querySelectorAll<SVGElement>('#museum-spel [data-plek]').forEach(el => 
   el.addEventListener('click', async () => {
     if (puzzels['p4'] || !ontgrendeld(puzzels, 4)) return;
     if (!dua.verstopPlek) { fx.fout(); melding('1934 heeft nog niets verstopt. Letterlijk niets te vinden.'); return; }
-    const plek = el.getAttribute('data-plek')!;
+    const plek = el.getAttribute('data-plek');
+    if (!plek) return;
     if (plek !== dua.verstopPlek) {
       fx.fout();
       melding('Niets onder het stof. Vraag 1934 waar ze het lieten.');
@@ -235,9 +229,9 @@ document.getElementById('kaart-2034')?.addEventListener('click', async (e: Event
 
 // ═══════════════════ FINALE: HET RAPPORT ═══════════════════
 document.getElementById('btn-rapport')?.addEventListener('click', async () => {
-  const tekst = (document.getElementById('rapport') as HTMLTextAreaElement).value.trim();
+  const tekst = requireEl<HTMLTextAreaElement>('rapport').value.trim();
   if (tekst.length < 20) { fx.fout(); melding('Een conclusie van Bureau X telt minstens een paar zinnen.'); return; }
-  const knop = document.getElementById('btn-rapport') as HTMLButtonElement;
+  const knop = requireEl<HTMLButtonElement>('btn-rapport');
   knop.disabled = true;
   try {
     await dienDuaRapportIn(sessie, tekst);
@@ -252,7 +246,7 @@ document.getElementById('btn-rapport')?.addEventListener('click', async () => {
 
 // ═══════════════════ EASTER EGGS (2034) ═══════════════════
 document.getElementById('btn-archief')?.addEventListener('click', () => {
-  const v = (document.getElementById('archief-zoek') as HTMLInputElement).value.trim().toUpperCase();
+  const v = requireEl<HTMLInputElement>('archief-zoek').value.trim().toUpperCase();
   if (v === 'RR-13' || v === '13') {
     document.getElementById('brief13')?.classList.remove('verborgen');
     fx.lade();
@@ -295,12 +289,12 @@ luisterNaarStatus(sessie, (p) => {
   tekenDoorslag();
   tekenTicket();
 
-  document.getElementById('museum-slot')!.style.display = ontgrendeld(p, 4) || p['p4'] ? 'none' : 'block';
-  document.getElementById('museum-spel')!.style.display = ontgrendeld(p, 4) || p['p4'] ? 'block' : 'none';
+  requireEl('museum-slot').style.display = ontgrendeld(p, 4) || p['p4'] ? 'none' : 'block';
+  requireEl('museum-spel').style.display = ontgrendeld(p, 4) || p['p4'] ? 'block' : 'none';
   document.getElementById('s-museum')?.classList.toggle('klaar', !!p['p4']);
 
-  document.getElementById('pin-slot')!.style.display = ontgrendeld(p, 5) || p['p5'] ? 'none' : 'block';
-  document.getElementById('pin-spel')!.style.display = ontgrendeld(p, 5) || p['p5'] ? 'block' : 'none';
+  requireEl('pin-slot').style.display = ontgrendeld(p, 5) || p['p5'] ? 'none' : 'block';
+  requireEl('pin-spel').style.display = ontgrendeld(p, 5) || p['p5'] ? 'block' : 'none';
   document.getElementById('s-pin')?.classList.toggle('klaar', !!p['p5']);
 
   document.getElementById('s-rapport')?.classList.toggle('verborgen', !p['p5']);
@@ -313,3 +307,8 @@ koppelTypgeluid();
 koppelEasterEggs(sessie);
 koppelMeta(sessie);
 startDuaTimer(sessie);
+
+// Host kan de sessie deactiveren → naar het tijd-voorbij-scherm
+bewaakSessieGesloten(sessie, () => {
+  window.location.href = `tijd-voorbij.html?sessie=${encodeURIComponent(sessie)}`;
+});

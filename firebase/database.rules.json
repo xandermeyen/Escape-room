@@ -1,6 +1,7 @@
 {
   "rules": {
     "sessions": {
+      ".read": "auth != null && auth.provider === 'password'",
       "$sessie": {
         ".read": true,
         ".write": "auth != null",

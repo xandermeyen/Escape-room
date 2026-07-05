@@ -103,17 +103,19 @@ escape-room/
 │   ├── css/game.css                # Shared game design system
 │   └── js/
 │       ├── firebase-config.ts      # Firebase init (reads from .env)
-│       ├── auth.ts                 # Anonymous player login (reports failures to Sentry)
-│       ├── session.ts              # Session CRUD, role claiming, puzzle sync
-│       ├── game.ts                 # Shared player-page logic (progress, nav guard, answer hashes)
-│       ├── timer.ts                # 60-min countdown + warnings
-│       ├── utils.ts                # requireEl helper, answer hashing, hint helpers
+│       ├── auth.ts                 # Anonymous player login with retries (reports failures to Sentry)
+│       ├── session.ts              # Session CRUD (atomic create), role claiming, puzzle sync, deactivation watch
+│       ├── game.ts                 # Shared player-page logic (progress, nav guard)
+│       ├── timer.ts                # 60-min countdown, server-clock offset, per-experience warnings
+│       ├── utils.ts                # requireEl / sessieUitUrl / escHtml, answer hashing, hint helpers
 │       ├── verbinding.ts           # Visible "connection failed" banner + Sentry on write errors
 │       ├── reviews.ts              # Approved reviews (landing page)
-│       ├── lobby-ui.ts             # Shared lobby helpers (screen switch, back-button guard, code input)
+│       ├── review-form.ts          # Shared review form on both ending screens
+│       ├── lobby-ui.ts             # Shared lobby flow (validate, claim, live roles, resume banner)
 │       ├── tijd-voorbij.ts         # Shared "time-expired" logic
 │       ├── host-auth.ts            # Shared host email/password login
 │       ├── host-ui.ts              # Shared host UI helpers (status, copy, escaping)
+│       ├── host-sessies.ts         # Shared host session list (fetch, filter, table fragments)
 │       └── sentry.ts               # Sentry init (imported per page)
 ├── experiences/
 │   ├── kamer-14/                   # OPZ Geel — 2 players (Speler A / B)
@@ -205,7 +207,7 @@ Every push to `main` triggers a GitHub Actions build. Production Firebase creden
 
 ## Firebase security rules
 
-Sessions are write-protected. The rules enforce required fields on create, typed values (puzzle flags must be booleans, `timerGestart` a number or null, role values constrained), and `auth != null` for writes.
+Sessions are write-protected. The rules enforce required fields on create, typed values (puzzle flags must be booleans, `timerGestart` a number or null, role values constrained), and `auth != null` for writes. Listing **all** sessions (used by the host panels) additionally requires an email/password login (`auth.provider === 'password'`); anonymous players can only read individual sessions.
 
 The rules are version-controlled in `firebase/database.rules.json` (with `firebase.json` pointing the Firebase CLI to them). They are deployed manually via the `deploy-rules.yml` workflow: open the Actions tab, pick "Firebase rules deployen" and run it. This needs a `FIREBASE_TOKEN` repository secret (from `npx firebase-tools login:ci`). A normal push to `main` never touches the live rules.
 

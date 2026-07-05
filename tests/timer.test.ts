@@ -6,6 +6,7 @@ vi.mock('firebase/database', () => ({
   ref:             vi.fn(),
   get:             vi.fn(),
   set:             vi.fn(),
+  onValue:         vi.fn(() => vi.fn()),
   serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
 }));
 
@@ -106,6 +107,7 @@ async function laadTimer(bestaat: boolean, startTijd: number = START): Promise<T
     ref:             vi.fn((_db: unknown, path: string) => ({ path })),
     get:             getMock,
     set:             setMock,
+    onValue:         vi.fn(() => vi.fn()),
     serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
   }));
   vi.doMock('../shared/js/firebase-config.ts', () => ({ db: {} }));

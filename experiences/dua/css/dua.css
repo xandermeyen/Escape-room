@@ -438,6 +438,46 @@ body.era-1934 .svg-kader { background: #efe2c4; border-color: #b3a07c; }
   font-size: 12px;
 }
 
+/* ── Reviewformulier (eindscherm) ── */
+.review-sterren { display: flex; gap: 6px; margin: 10px 0; }
+.review-sterren .ster {
+  background: none;
+  border: none;
+  font-size: 26px;
+  color: var(--d-goud);
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+.review-sterren .ster:disabled { cursor: default; opacity: 0.7; }
+#einde-review .d-input { display: block; width: 100%; margin-bottom: 10px; }
+.review-fout { display: none; color: var(--d-rood); font-size: 12px; }
+.review-dank { display: none; color: var(--d-goud); font-size: 13px; margin-top: 8px; }
+
+/* ── Terugkeer-banner in de lobby ── */
+.rol-hervat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border: 1px dashed var(--d-goud);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+.rol-hervat-knop {
+  background: none;
+  border: none;
+  color: var(--d-groen);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 13px;
+  text-decoration: underline;
+  padding: 0;
+}
+
 @media (max-width: 700px) {
   .papier { margin: 10px 8px 50px; padding: 20px 14px; }
   .systeembalk { justify-content: center; }

@@ -1,15 +1,24 @@
 /**
  * host-panel.ts (D.U.A.) — operator-paneel.
- * Voorheen inline in host-panel.html; nu een getypte module.
  *
- * Codes lopen op als DUA-<jaar>-<volgnr>; de lijst leest live alle dua-sessies
- * uit Firebase.
+ * Codes lopen op als DUA-<jaar>-<volgnr>. Sessies worden aangemaakt via het
+ * gedeelde maakSessie() (atomisch) en de lijst komt uit de gedeelde
+ * host-sessies-helpers, gefilterd op ervaringsId 'dua'.
  */
 import '../../../shared/js/sentry.ts';
+import { maakSessie } from '../../../shared/js/session.ts';
 import { db } from '../../../shared/js/firebase-config.ts';
-import { ref, set, get, update, serverTimestamp } from 'firebase/database';
+import { ref, update } from 'firebase/database';
 import { koppelHostAuth } from '../../../shared/js/host-auth.ts';
 import { toonStatus, kopieerNaarKlembord, escHtml, foutTekst } from '../../../shared/js/host-ui.ts';
+import {
+  haalSessies,
+  aantalOpgelost,
+  puzzelBollenHtml,
+  statusBadgeHtml,
+  datumHtml,
+  lobbyLinkHtml,
+} from '../../../shared/js/host-sessies.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 
 declare global {
@@ -24,21 +33,19 @@ declare global {
 koppelHostAuth();
 
 const JAAR = new Date().getFullYear();
-const BASIS_URL = window.location.origin;
 const LOBBY_PAD = '/experiences/dua/';
+const PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'];
 
 // ── Volgende code berekenen ──
 async function berekenVolgendeCode(): Promise<string> {
-  const snap = await get(ref(db, 'sessions'));
+  const rijen = await haalSessies(() => true);
   let hoogste = 0;
-  if (snap.exists()) {
-    snap.forEach((kind) => {
-      const match = (kind.key ?? '').match(/^DUA-(\d{4})-(\d{3,})$/);
-      if (match && parseInt(match[1]) === JAAR) {
-        const nr = parseInt(match[2]);
-        if (nr > hoogste) hoogste = nr;
-      }
-    });
+  for (const { code } of rijen) {
+    const match = code.match(/^DUA-(\d{4})-(\d{3,})$/);
+    if (match && parseInt(match[1]) === JAAR) {
+      const nr = parseInt(match[2]);
+      if (nr > hoogste) hoogste = nr;
+    }
   }
   return `DUA-${JAAR}-${String(hoogste + 1).padStart(3, '0')}`;
 }
@@ -71,21 +78,15 @@ window.maakSessieAan = async function () {
   btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Aanmaken…';
 
   try {
-    const snap = await get(ref(db, `sessions/${code}`));
-    if (snap.exists()) {
+    const aangemaakt = await maakSessie(code, {
+      ervaringsId: 'dua',
+      aantalSpelers: spelers,
+      puzzelIds: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'],
+    });
+    if (!aangemaakt) {
       toonStatus(status, `${code} bestaat al. Ververs en probeer opnieuw.`, false);
       return;
     }
-
-    await set(ref(db, `sessions/${code}`), {
-      ervaringsId: 'dua',
-      actief: true,
-      aangemaakt: serverTimestamp(),
-      aantalSpelers: spelers,
-      puzzels: { p0: false, p1: false, p2: false, p3: false, p4: false, p5: false },
-      rapport: { ingediend: false },
-      timerGestart: null,
-    });
 
     toonStatus(status, `✓ Sessie "${code}" aangemaakt! Lobby-link staat in de tabel.`, true);
     await laadLijst();
@@ -111,68 +112,24 @@ async function laadLijst(): Promise<void> {
   geenMsg.style.display = 'none';
 
   try {
-    const snap = await get(ref(db, 'sessions'));
+    const rijen = await haalSessies((d) => d.ervaringsId === 'dua');
     laden.style.display = 'none';
-
-    if (!snap.exists()) {
-      geenMsg.style.display = 'block';
-      return;
-    }
-
-    const rijen: { code: string; data: Record<string, unknown> }[] = [];
-    snap.forEach((kind) => {
-      const d = kind.val();
-      if (d?.ervaringsId === 'dua') {
-        rijen.push({ code: kind.key ?? '', data: d });
-      }
-    });
 
     if (rijen.length === 0) {
       geenMsg.style.display = 'block';
       return;
     }
 
-    // Nieuwste eerst
-    rijen.sort((a, b) => ((b.data.aangemaakt as number) ?? 0) - ((a.data.aangemaakt as number) ?? 0));
-
-    // Veilig: `code` en `lobbyUrl` worden door escHtml gehaald; de rest is
-    // cijfers, een geformatteerde datum of vaste markup.
+    // Veilig: code, datum en lobby-link gaan door escHtml; de rest is
+    // cijfers of vaste markup.
     // eslint-disable-next-line no-unsanitized/property
     tbody.innerHTML = rijen
       .map(({ code, data }) => {
-        const p = (data.puzzels as Record<string, unknown>) || {};
-        const bollen = [p.p1, p.p2, p.p3, p.p4, p.p5]
-          .map((v) => `<div class="bol ${v ? 'klaar' : 'open'}"></div>`)
-          .join('');
-        const aantalKlaar = [p.p1, p.p2, p.p3, p.p4, p.p5].filter(Boolean).length;
+        const veiligeCode = escHtml(code);
+        const aantalKlaar = aantalOpgelost(data, PUZZELS);
 
         const bezet = Object.keys((data.spelers as Record<string, unknown>) || {}).length;
         const max = (data.aantalSpelers as number) ?? '?';
-
-        const datum = data.aangemaakt
-          ? new Date(data.aangemaakt as number).toLocaleString('nl-BE', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })
-          : '—';
-
-        let statusBadge: string;
-        if (!data.actief) {
-          statusBadge = '<span class="badge-inactief">Inactief</span>';
-        } else if (data.timerGestart) {
-          statusBadge = '<span class="badge-bezig">Bezig</span>';
-        } else if (aantalKlaar === 5) {
-          statusBadge = '<span class="badge-klaar">Voltooid</span>';
-        } else {
-          statusBadge = '<span class="badge-actief">Actief</span>';
-        }
-
-        const veiligeCode = escHtml(code);
-        const lobbyUrl = `${BASIS_URL}${LOBBY_PAD}?sessie=${code}`;
-        const veiligeUrl = escHtml(lobbyUrl);
 
         return `<tr>
           <td class="code-cel">
@@ -181,22 +138,14 @@ async function laadLijst(): Promise<void> {
               <i class="bi bi-copy"></i>
             </button>
           </td>
-          <td style="color:#666; font-size:0.8rem;">${escHtml(datum)}</td>
+          <td style="color:#666; font-size:0.8rem;">${datumHtml(data)}</td>
           <td style="font-size:0.82rem; color:#888;">${bezet} / ${escHtml(String(max))}</td>
           <td>
-            <div class="puzzel-bollen">${bollen}</div>
-            <span style="color:#666; font-size:0.75rem;">${aantalKlaar}/5</span>
+            <div class="puzzel-bollen">${puzzelBollenHtml(data, PUZZELS)}</div>
+            <span style="color:#666; font-size:0.75rem;">${aantalKlaar}/${PUZZELS.length}</span>
           </td>
-          <td>${statusBadge}</td>
-          <td>
-            <input class="link-input" readonly value="${veiligeUrl}" />
-            <button class="kopieer-knop" title="Kopieer lobby-link" onclick="kopieer('${veiligeUrl}', this)">
-              <i class="bi bi-clipboard"></i>
-            </button>
-            <a href="${veiligeUrl}" target="_blank" rel="noopener noreferrer" class="kopieer-knop" title="Open lobby">
-              <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-          </td>
+          <td>${statusBadgeHtml(data, aantalKlaar, PUZZELS.length)}</td>
+          <td>${lobbyLinkHtml(LOBBY_PAD, code)}</td>
           <td>
             ${
               data.actief

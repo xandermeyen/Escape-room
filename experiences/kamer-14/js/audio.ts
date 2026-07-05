@@ -25,7 +25,11 @@ declare global {
 let _ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext {
-  if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext!)();
+  if (!_ctx) {
+    const Ctx = window.AudioContext ?? window.webkitAudioContext;
+    if (!Ctx) throw new Error('Web Audio API niet beschikbaar');
+    _ctx = new Ctx();
+  }
   return _ctx;
 }
 

@@ -569,3 +569,27 @@ body {
   letter-spacing: 0.04em;
   color: var(--kleur-accent-licht);
 }
+
+/* ── Terugkeer-banner in de lobby ── */
+.rol-hervat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border: 1px dashed var(--kleur-accent, #c9b99a);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+.rol-hervat-knop {
+  background: none;
+  border: none;
+  color: var(--kleur-accent, #c9b99a);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  padding: 0;
+}

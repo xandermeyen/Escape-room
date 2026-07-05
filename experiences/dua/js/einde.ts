@@ -7,29 +7,33 @@ import '../../../shared/js/sentry.ts';
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, onValue } from 'firebase/database';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
+import { requireEl, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { haalEinde } from './dua-session.ts';
 import { fx } from './dua-audio.ts';
 
 const AANTAL_EGGS = 6;
 
-const sessie = new URLSearchParams(window.location.search).get('sessie');
-if (!sessie) window.location.href = 'index.html';
+const sessie = sessieUitUrl();
 
-document.getElementById('sys-case')!.textContent = `D.U.A. · eindrapport · Sessie ${sessie}`;
+requireEl('sys-case').textContent = `D.U.A. · eindrapport · Sessie ${sessie}`;
 
 document.getElementById('btn-terug')?.addEventListener('click', () => {
   window.location.href = '../../index.html';
 });
 
+// ── Review achterlaten (gedeeld formulier) ──
+koppelReviewFormulier('dua');
+
 let klokGeluid = false;
 let statsGetoond = false;
 
 async function vernieuw(): Promise<void> {
-  const data = await haalEinde(sessie!);
+  const data = await haalEinde(sessie);
 
   // Beide teksten (live bijgewerkt)
-  const briefEl = document.getElementById('einde-brief')!;
-  const rapportEl = document.getElementById('einde-rapport')!;
+  const briefEl = requireEl('einde-brief');
+  const rapportEl = requireEl('einde-rapport');
   if (data.brief14Klaar) {
     briefEl.textContent = data.brief14Tekst;
     briefEl.classList.remove('hintje');
@@ -39,7 +43,7 @@ async function vernieuw(): Promise<void> {
     rapportEl.classList.remove('hintje');
   }
 
-  const wacht = document.getElementById('wacht-status')!;
+  const wacht = requireEl('wacht-status');
   if (!data.brief14Klaar || !data.rapportIngediend) {
     wacht.textContent = !data.brief14Klaar
       ? 'Wachten op 1934: de veertiende brief is nog niet verzegeld…'
@@ -47,15 +51,16 @@ async function vernieuw(): Promise<void> {
     return;
   }
 
-  // Beide klaar → onthulling + stats
+  // Beide klaar → onthulling + stats + reviewformulier
   wacht.textContent = 'De brief uit 1934 en het rapport uit 2034 liggen naast elkaar. Jullie waren D.U.A. Allebei. Altijd al.';
   document.getElementById('einde-onthulling')?.classList.remove('verborgen');
+  document.getElementById('einde-review')?.classList.remove('verborgen');
 
   if (!klokGeluid) { klokGeluid = true; fx.kerkklok(5, true); }
   if (statsGetoond) return;
   statsGetoond = true;
 
-  const statsEl = document.getElementById('einde-stats')!;
+  const statsEl = requireEl('einde-stats');
   let resttijd = '--:--';
   if (data.timerGestart && data.rapportTijdstip) {
     const duur = Math.max(0, data.rapportTijdstip - data.timerGestart);

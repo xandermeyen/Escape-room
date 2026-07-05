@@ -1,17 +1,12 @@
 import '../../../shared/js/sentry.ts';
 import { luisterNaarRapport, diendRapportIn, sluitSessie, haalTijden, type RapportInhoud } from '../../../shared/js/session.ts';
-import { antwoordKlopt } from '../../../shared/js/utils.ts';
+import { antwoordKlopt, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
-import { schrijfReview } from '../../../shared/js/reviews.ts';
+import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { speelStem } from './audio.ts';
 
-// ── Sessie ophalen ────────────────────────────────────────
-const params = new URLSearchParams(window.location.search);
-const sessie = params.get('sessie');
-
-if (!sessie) {
-  window.location.href = 'index.html';
-}
+// ── Sessie ophalen (redirect + stop als die ontbreekt) ────
+const sessie = sessieUitUrl();
 
 // Sessie tonen in systeembalk en meta
 const sysCaseRapport = document.getElementById('sys-case-rapport');
@@ -80,10 +75,10 @@ async function diendIn(): Promise<void> {
 
   let geldig = true;
 
-  if (!(await antwoordKlopt(bestemming, GOEDE_HASHES['bestemming']!)))            { markeerFout('bestemming'); geldig = false; }
-  if (!(await antwoordKlopt(wie, GOEDE_HASHES['wie']!)))                          { markeerFout('wie');        geldig = false; }
-  if (!vervoer)                                                                   { markeerFout('vervoer');    geldig = false; }
-  if (!(await antwoordKlopt(normaliseerTijdstip(tijdstip), GOEDE_HASHES['tijdstip']!))) { markeerFout('tijdstip'); geldig = false; }
+  if (!(await antwoordKlopt(bestemming, GOEDE_HASHES['bestemming'] ?? [])))            { markeerFout('bestemming'); geldig = false; }
+  if (!(await antwoordKlopt(wie, GOEDE_HASHES['wie'] ?? [])))                          { markeerFout('wie');        geldig = false; }
+  if (!vervoer)                                                                        { markeerFout('vervoer');    geldig = false; }
+  if (!(await antwoordKlopt(normaliseerTijdstip(tijdstip), GOEDE_HASHES['tijdstip'] ?? []))) { markeerFout('tijdstip'); geldig = false; }
 
   if (!geldig) {
     if (validatieBericht) validatieBericht.style.display = 'block';
@@ -103,8 +98,8 @@ async function diendIn(): Promise<void> {
   };
 
   try {
-    await diendRapportIn(sessie!, inhoud);
-    await sluitSessie(sessie!); // sessie deactiveren zodat ze niet eeuwig actief blijft
+    await diendRapportIn(sessie, inhoud);
+    await sluitSessie(sessie); // sessie deactiveren zodat ze niet eeuwig actief blijft
     // luisterNaarRapport vangt de statuswijziging op en activeert het briefkaartscherm
   } catch (err) {
     console.error('Firebase fout bij indienen rapport:', err);
@@ -164,7 +159,7 @@ document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
 let statsGeladen = false;
 
 async function vulStats(): Promise<void> {
-  if (statsGeladen || !sessie) return;
+  if (statsGeladen) return;
   statsGeladen = true;
 
   try {
@@ -186,75 +181,12 @@ async function vulStats(): Promise<void> {
   }
 }
 
-// ── Review achterlaten ────────────────────────────────────
-let reviewRating = 0;
-const sterKnoppen = Array.from(
-  document.querySelectorAll<HTMLButtonElement>('#review-sterren .ster'),
-);
-
-function tekenSterren(): void {
-  sterKnoppen.forEach((knop, i) => {
-    const actief = i < reviewRating;
-    knop.textContent = actief ? '★' : '☆';
-    knop.classList.toggle('actief', actief);
-  });
-}
-
-sterKnoppen.forEach((knop) => {
-  knop.addEventListener('click', () => {
-    reviewRating = Number(knop.dataset.waarde);
-    tekenSterren();
-  });
-});
-
-const reviewBtn = document.getElementById('btn-review-verstuur') as HTMLButtonElement | null;
-
-reviewBtn?.addEventListener('click', async () => {
-  const tekst = (document.getElementById('review-tekst') as HTMLTextAreaElement).value.trim();
-  const naam  = (document.getElementById('review-naam') as HTMLInputElement).value.trim();
-  const fout  = document.getElementById('review-fout');
-
-  if (reviewRating < 1 || tekst.length < 3) {
-    if (fout) {
-      fout.textContent = 'Kies een aantal sterren en schrijf een korte review.';
-      fout.style.display = 'block';
-    }
-    return;
-  }
-  if (fout) fout.style.display = 'none';
-
-  reviewBtn.disabled = true;
-  reviewBtn.textContent = 'Versturen…';
-
-  try {
-    await schrijfReview({
-      rating: reviewRating,
-      tekst,
-      naam: naam || undefined,
-      ervaring: 'kamer-14',
-    });
-
-    sterKnoppen.forEach((k) => (k.disabled = true));
-    (document.getElementById('review-tekst') as HTMLTextAreaElement).disabled = true;
-    (document.getElementById('review-naam') as HTMLInputElement).disabled = true;
-    reviewBtn.style.display = 'none';
-
-    const dank = document.getElementById('review-dank');
-    if (dank) dank.style.display = 'block';
-  } catch (err) {
-    console.error('Review versturen mislukt:', err);
-    reviewBtn.disabled = false;
-    reviewBtn.textContent = 'Review versturen';
-    if (fout) {
-      fout.textContent = 'Versturen mislukt. Probeer opnieuw.';
-      fout.style.display = 'block';
-    }
-  }
-});
+// ── Review achterlaten (gedeeld formulier) ────────────────
+koppelReviewFormulier('kamer-14');
 
 
 // ── Firebase: luisteren naar rapport-status ───────────────
-luisterNaarRapport(sessie!, (rapport) => {
+luisterNaarRapport(sessie, (rapport) => {
   if (rapport?.ingediend) {
     toonScherm('scherm-briefkaart');
     vulStats();

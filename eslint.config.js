@@ -52,11 +52,13 @@ export default tseslint.config(
   },
   {
     // Tests bouwen DOM-fixtures op via innerHTML; geen externe invoer, dus de
-    // XSS-regel is hier niet relevant.
+    // XSS-regel is hier niet relevant. Non-null assertions zijn in tests
+    // idiomatisch: een ontbrekend element laat de test toch falen.
     files: ['tests/**/*.ts'],
     rules: {
       'no-unsanitized/property': 'off',
       'no-unsanitized/method': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
   // Prettier als laatste: zet alle opmaak-regels uit zodat eslint en prettier

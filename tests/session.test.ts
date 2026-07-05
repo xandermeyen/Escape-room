@@ -26,6 +26,9 @@ import {
   claimRol,
   diendRapportIn,
   luisterNaarStatus,
+  luisterNaarRapport,
+  maakSessie,
+  bewaakSessieGesloten,
 } from '../shared/js/session.ts';
 
 // Korte alias zodat de tests de mocks kunnen sturen
@@ -183,5 +186,127 @@ describe('luisterNaarStatus', () => {
     luisterNaarStatus('ABC', callback);
 
     expect(callback).toHaveBeenCalledWith({});
+  });
+});
+
+// ── luisterNaarRapport ────────────────────────────────────────────────────────
+
+describe('luisterNaarRapport', () => {
+  it('geeft de unsubscribe-functie van onValue terug', () => {
+    const unsub = vi.fn();
+    onValueMock.mockReturnValue(unsub);
+
+    expect(luisterNaarRapport('ABC', () => {})).toBe(unsub);
+  });
+});
+
+// ── maakSessie ────────────────────────────────────────────────────────────────
+
+describe('maakSessie', () => {
+  it('maakt de sessie aan via een transactie op het sessiepad', async () => {
+    let updater: (h: unknown) => unknown = () => undefined;
+    runTransactionMock.mockImplementation(async (_ref: unknown, fn: (h: unknown) => unknown) => {
+      updater = fn;
+      return { committed: true };
+    });
+
+    const ok = await maakSessie('ABC-123', { ervaringsId: 'kamer-14' });
+
+    expect(ok).toBe(true);
+    expect(refMock).toHaveBeenCalledWith({}, 'sessions/ABC-123');
+
+    const nieuw = updater(null) as Record<string, unknown>;
+    expect(nieuw).toMatchObject({
+      actief: true,
+      ervaringsId: 'kamer-14',
+      puzzels: { p1: false, p2: false, p3: false, p4: false, p5: false },
+      rapport: { ingediend: false, inhoud: {} },
+    });
+  });
+
+  it('breekt af als de sessie al bestaat', async () => {
+    let updater: (h: unknown) => unknown = () => undefined;
+    runTransactionMock.mockImplementation(async (_ref: unknown, fn: (h: unknown) => unknown) => {
+      updater = fn;
+      const resultaat = fn({ actief: true });
+      return { committed: resultaat !== undefined };
+    });
+
+    const ok = await maakSessie('ABC-123');
+
+    expect(ok).toBe(false);
+    expect(updater({ actief: true })).toBeUndefined();
+  });
+
+  it('neemt aantalSpelers en eigen puzzelIds mee (D.U.A.)', async () => {
+    let updater: (h: unknown) => unknown = () => undefined;
+    runTransactionMock.mockImplementation(async (_ref: unknown, fn: (h: unknown) => unknown) => {
+      updater = fn;
+      return { committed: true };
+    });
+
+    await maakSessie('DUA-2026-001', {
+      ervaringsId: 'dua',
+      aantalSpelers: 3,
+      puzzelIds: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'],
+    });
+
+    const nieuw = updater(null) as Record<string, unknown>;
+    expect(nieuw.ervaringsId).toBe('dua');
+    expect(nieuw.aantalSpelers).toBe(3);
+    expect(nieuw.puzzels).toEqual({
+      p0: false, p1: false, p2: false, p3: false, p4: false, p5: false,
+    });
+  });
+});
+
+// ── bewaakSessieGesloten ──────────────────────────────────────────────────────
+
+describe('bewaakSessieGesloten', () => {
+  it('vuurt opGesloten als actief false wordt zonder ingediend rapport', async () => {
+    let actiefCb: (snap: { val: () => unknown }) => void = () => {};
+    onValueMock.mockImplementation((_ref: unknown, cb: (snap: { val: () => unknown }) => void) => {
+      actiefCb = cb;
+      return vi.fn();
+    });
+    getMock.mockResolvedValue({ val: () => null }); // rapport niet ingediend
+
+    const opGesloten = vi.fn();
+    bewaakSessieGesloten('ABC', opGesloten);
+
+    actiefCb({ val: () => false });
+    await vi.waitFor(() => expect(opGesloten).toHaveBeenCalled());
+  });
+
+  it('doet niets zolang de sessie actief is', () => {
+    let actiefCb: (snap: { val: () => unknown }) => void = () => {};
+    onValueMock.mockImplementation((_ref: unknown, cb: (snap: { val: () => unknown }) => void) => {
+      actiefCb = cb;
+      return vi.fn();
+    });
+
+    const opGesloten = vi.fn();
+    bewaakSessieGesloten('ABC', opGesloten);
+
+    actiefCb({ val: () => true });
+    expect(opGesloten).not.toHaveBeenCalled();
+    expect(getMock).not.toHaveBeenCalled();
+  });
+
+  it('vuurt NIET bij een natuurlijk einde (rapport ingediend)', async () => {
+    let actiefCb: (snap: { val: () => unknown }) => void = () => {};
+    onValueMock.mockImplementation((_ref: unknown, cb: (snap: { val: () => unknown }) => void) => {
+      actiefCb = cb;
+      return vi.fn();
+    });
+    getMock.mockResolvedValue({ val: () => true }); // rapport wél ingediend
+
+    const opGesloten = vi.fn();
+    bewaakSessieGesloten('ABC', opGesloten);
+
+    actiefCb({ val: () => false });
+    // De get-promise moet eerst afgehandeld zijn
+    await new Promise((r) => setTimeout(r, 0));
+    expect(opGesloten).not.toHaveBeenCalled();
   });
 });

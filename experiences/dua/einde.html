@@ -48,6 +48,27 @@
       </div>
     </div>
 
+    <div class="stuk verborgen" id="einde-review">
+      <h3>Laat een review achter</h3>
+      <p class="hintje">Optioneel. Verschijnt pas op de website na goedkeuring.</p>
+
+      <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
+        <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
+        <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
+        <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
+        <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
+        <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+      </div>
+
+      <textarea id="review-tekst" class="d-input" rows="3" maxlength="500"
+        placeholder="Wat vonden jullie van D.U.A.?"></textarea>
+      <input id="review-naam" class="d-input" type="text" maxlength="40" placeholder="Naam (optioneel)" />
+
+      <p class="review-fout" id="review-fout">Kies een aantal sterren en schrijf een korte review.</p>
+      <button class="d-knop" id="btn-review-verstuur">Review versturen</button>
+      <p class="review-dank" id="review-dank">Bedankt. Je review is verstuurd en verschijnt na goedkeuring.</p>
+    </div>
+
     <div class="stuk verborgen" id="einde-onthulling">
       <h3>En in het echt?</h3>
       <p>

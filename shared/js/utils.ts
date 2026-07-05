@@ -11,6 +11,28 @@ export function requireEl<T extends HTMLElement = HTMLElement>(id: string): T {
 }
 
 /**
+ * sessieUitUrl: leest ?sessie= uit de URL. Ontbreekt de code, dan sturen we de
+ * speler terug naar de lobby en gooien we, zodat de rest van de module niet
+ * verder draait tegen een niet-bestaande sessie.
+ */
+export function sessieUitUrl(redirectNaar = 'index.html'): string {
+  const sessie = new URLSearchParams(window.location.search).get('sessie');
+  if (!sessie) {
+    window.location.href = redirectNaar;
+    throw new Error('Geen sessiecode in de URL');
+  }
+  return sessie;
+}
+
+/** escHtml: escapet tekst voor veilige interpolatie in innerHTML. */
+export function escHtml(s: string): string {
+  return s.replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c,
+  );
+}
+
+/**
  * sha256Hex: SHA-256 hash van een string als hex.
  */
 export async function sha256Hex(waarde: string): Promise<string> {

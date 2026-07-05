@@ -4,7 +4,8 @@
  * en leeft onder politiedruk: wachter, werkkamer-klok en verdenking.
  */
 import '../../../shared/js/sentry.ts';
-import { luisterNaarStatus } from '../../../shared/js/session.ts';
+import { luisterNaarStatus, bewaakSessieGesloten } from '../../../shared/js/session.ts';
+import { requireEl } from '../../../shared/js/utils.ts';
 import {
   luisterDua, zetZegel, zetBrief, gomBrief, zetKluisNummer,
   zetVerstopPlek, zetPin1934, zetBrief14, verhoogVerdenking,
@@ -16,11 +17,11 @@ import {
 } from './dua-ui.ts';
 import { fx, koppelTypgeluid } from './dua-audio.ts';
 
-const sessie = leesSessie()!;
+const sessie = leesSessie();
 const rol = new URLSearchParams(window.location.search).get('rol') ?? 'schrijver';
 
-document.getElementById('sys-case')!.textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;
-document.getElementById('sys-rol')!.textContent = `1934 · ${rol === 'loper' ? 'De Loper' : 'De Schrijver'}`;
+requireEl('sys-case').textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;
+requireEl('sys-rol').textContent = `1934 · ${rol === 'loper' ? 'De Loper' : 'De Schrijver'}`;
 
 // ── Lokale spiegel van de gedeelde state ──
 let dua: DuaState = {};
@@ -43,8 +44,8 @@ document.getElementById('zegelknop')?.addEventListener('click', async () => {
 
 function tekenZegel(): void {
   if (!dua.p0zegel) return;
-  document.getElementById('zegel-toon')!.innerHTML = '<span class="zegel">D.U.A.</span>';
-  (document.getElementById('zegelknop') as HTMLButtonElement).style.display = 'none';
+  requireEl('zegel-toon').innerHTML = '<span class="zegel">D.U.A.</span>';
+  requireEl<HTMLButtonElement>('zegelknop').style.display = 'none';
   document.getElementById('s-zegel')?.classList.add('klaar');
 }
 
@@ -55,7 +56,7 @@ let hamerSel = -1;
 let hamersHersteld = false;
 
 function bouwHamers(): void {
-  const rij = document.getElementById('hamerrij')!;
+  const rij = requireEl('hamerrij');
   rij.innerHTML = '';
   hamers.forEach((h, i) => {
     const div = document.createElement('div');
@@ -83,13 +84,13 @@ function hamerKlik(i: number): void {
   if (hamerSel < 0) {
     hamerSel = i;
   } else {
-    [hamers[hamerSel], hamers[i]] = [hamers[i]!, hamers[hamerSel]!];
+    [hamers[hamerSel], hamers[i]] = [hamers[i] ?? '', hamers[hamerSel] ?? ''];
     hamerSel = -1;
     fx.typDiep();
     if (hamers.every((h, j) => h === HAMER_SLOTS[j])) {
       hamersHersteld = true;
       document.getElementById('s-hamers')?.classList.add('klaar');
-      document.getElementById('hamer-status')!.textContent = 'Mechaniek hersteld. De machine wacht op de Schrijver.';
+      requireEl('hamer-status').textContent = 'Mechaniek hersteld. De machine wacht op de Schrijver.';
       document.getElementById('s-brief')?.classList.remove('slot');
       fx.kerkklok(1);
       melding('De typemachine doet het weer.');
@@ -103,7 +104,7 @@ bouwHamers();
 let briefLetters: number[] = [];
 
 function bouwTypvel(): void {
-  const vel = document.getElementById('typvel')!;
+  const vel = requireEl('typvel');
   vel.innerHTML = '';
   [...BRIEFTEKST].forEach((ch, i) => {
     const span = document.createElement('span');
@@ -124,7 +125,7 @@ function kiesLetter(i: number): void {
   else if (briefLetters.length < 5) { briefLetters.push(i); fx.typDiep(); }
   else { fx.fout(); }
   bouwTypvel();
-  document.getElementById('brief-status')!.textContent = briefLetters.length < 5
+  requireEl('brief-status').textContent = briefLetters.length < 5
     ? `Nog ${5 - briefLetters.length} letters te kiezen.`
     : 'Vijf letters gekozen. Sla door wanneer je zeker bent.';
 }
@@ -143,7 +144,7 @@ document.getElementById('btn-gom')?.addEventListener('click', async () => {
   fx.lade();
   await gomBrief(sessie);
   bouwTypvel();
-  document.getElementById('brief-status')!.textContent = 'Nog 5 letters te kiezen.';
+  requireEl('brief-status').textContent = 'Nog 5 letters te kiezen.';
   document.getElementById('s-brief')?.classList.remove('klaar');
 });
 
@@ -175,13 +176,13 @@ const wachterVeilig = (): boolean => wachterPos >= 65;
 document.getElementById('btn-deponeer')?.addEventListener('click', async () => {
   if (!puzzels['p1']) { fx.fout(); melding('Eerst de brief (P1): zonder belofte op papier heeft een kluis geen zin.'); return; }
   if (dua.kluisNummer) { melding(`Het paneel ligt al in kluis ${dua.kluisNummer}.`); return; }
-  const v = (document.getElementById('kluis-keuze') as HTMLInputElement).value.trim();
+  const v = requireEl<HTMLInputElement>('kluis-keuze').value.trim();
   if (!/^\d{2}$/.test(v)) { fx.fout(); melding('Twee cijfers.'); return; }
   if (!wachterVeilig()) {
     await verhoogVerdenking(sessie, 15);
     fx.fluitje();
     melding('⚠ De perronwachter zag je bij de kluizen rommelen. Verdenking +15%');
-    document.getElementById('kluis-status')!.textContent = 'Betrapt. Wacht tot hij écht buiten zicht is (rechts op de baan).';
+    requireEl('kluis-status').textContent = 'Betrapt. Wacht tot hij écht buiten zicht is (rechts op de baan).';
     return;
   }
   fx.stoom(); fx.lade();
@@ -192,7 +193,7 @@ document.getElementById('btn-deponeer')?.addEventListener('click', async () => {
 function tekenKluis(): void {
   if (!dua.kluisNummer) return;
   document.getElementById('s-kluis')?.classList.add('klaar');
-  document.getElementById('kluis-status')!.textContent =
+  requireEl('kluis-status').textContent =
     `Paneel gedeponeerd in kluis ${dua.kluisNummer}. Nu is het wachten op 2034.`;
 }
 
@@ -207,13 +208,13 @@ document.getElementById('btn-kamer')?.addEventListener('click', () => {
   kamerActief = true;
   sleutelGevonden = false;
   kamerTijd = toezichtVerscherpt ? 60 : 90;
-  document.getElementById('kamer')!.style.display = 'block';
-  (document.getElementById('btn-kamer') as HTMLButtonElement).style.display = 'none';
-  document.getElementById('kamer-status')!.textContent = 'Vind eerst de sleutel. "Waar het licht valt."';
+  requireEl('kamer').style.display = 'block';
+  requireEl<HTMLButtonElement>('btn-kamer').style.display = 'none';
+  requireEl('kamer-status').textContent = 'Vind eerst de sleutel. "Waar het licht valt."';
   fx.lade();
   kamerInterval = setInterval(async () => {
     kamerTijd--;
-    document.getElementById('kamer-timer')!.textContent = `${kamerTijd}s`;
+    requireEl('kamer-timer').textContent = `${kamerTijd}s`;
     if (kamerTijd <= 10) fx.hartslag();
     if (kamerTijd <= 0) {
       kamerUit();
@@ -227,36 +228,37 @@ document.getElementById('btn-kamer')?.addEventListener('click', () => {
 function kamerUit(): void {
   if (kamerInterval) clearInterval(kamerInterval);
   kamerActief = false;
-  document.getElementById('kamer')!.style.display = 'none';
-  (document.getElementById('btn-kamer') as HTMLButtonElement).style.display = 'inline-block';
-  document.getElementById('kamer-timer')!.textContent = '';
+  requireEl('kamer').style.display = 'none';
+  requireEl<HTMLButtonElement>('btn-kamer').style.display = 'inline-block';
+  requireEl('kamer-timer').textContent = '';
 }
 
 document.querySelectorAll<SVGElement>('#kamer [data-plek]').forEach(el => {
   el.addEventListener('click', async () => {
     if (!kamerActief) return;
-    const plek = el.getAttribute('data-plek')!;
+    const plek = el.getAttribute('data-plek');
+    if (!plek) return;
     if (!sleutelGevonden) {
       if (plek === 'vensterbank') {
         sleutelGevonden = true;
         fx.klik();
-        document.getElementById('kamer-status')!.textContent =
+        requireEl('kamer-status').textContent =
           'De sleutel, in het late zonlicht. Kies nu de bergplaats voor het mapje. Kies goed: één kans.';
       } else {
         fx.fout();
-        document.getElementById('kamer-status')!.textContent = 'Niets. De seconden tikken. "Waar het licht valt..."';
+        requireEl('kamer-status').textContent = 'Niets. De seconden tikken. "Waar het licht valt..."';
       }
       return;
     }
     if (plek === 'vensterbank') {
       fx.fout();
-      document.getElementById('kamer-status')!.textContent = 'Daar lag de sleutel. Geen bergplaats.';
+      requireEl('kamer-status').textContent = 'Daar lag de sleutel. Geen bergplaats.';
       return;
     }
     if (kamerInterval) clearInterval(kamerInterval);
     kamerActief = false;
     fx.lade();
-    document.getElementById('kamer-timer')!.textContent = '';
+    requireEl('kamer-timer').textContent = '';
     await zetVerstopPlek(sessie, plek);
     melding('De werkkamer is verzegeld in de tijd. 2034 kan zoeken zodra P2 en P3 rond zijn.');
   });
@@ -266,8 +268,8 @@ function tekenKamer(): void {
   const plek = dua.verstopPlek;
   document.getElementById('s-kamer')?.classList.toggle('klaar', !!plek);
   if (plek) {
-    document.getElementById('kamer')!.style.display = 'none';
-    document.getElementById('kamer-status')!.textContent = `Mapje verstopt: ${plek}. Honderd jaar wachten maar.`;
+    requireEl('kamer').style.display = 'none';
+    requireEl('kamer-status').textContent = `Mapje verstopt: ${plek}. Honderd jaar wachten maar.`;
   }
 }
 
@@ -284,14 +286,14 @@ document.getElementById('kaart-1934')?.addEventListener('click', async (e: Event
 
 function tekenPin(): void {
   document.getElementById('s-pin')?.classList.toggle('klaar', !!dua.pin1934);
-  document.getElementById('pin-status')!.textContent = dua.pin1934
+  requireEl('pin-status').textContent = dua.pin1934
     ? 'Het paneel is verstopt. 2034 moet dezelfde plek aanduiden, zonder dat jullie ze noemen.'
     : '';
 }
 
 // ═══════════════════ FINALE: BRIEF 14 ═══════════════════
 document.getElementById('btn-brief14')?.addEventListener('click', async () => {
-  const tekst = (document.getElementById('brief14') as HTMLTextAreaElement).value.trim();
+  const tekst = requireEl<HTMLTextAreaElement>('brief14').value.trim();
   if (tekst.length < 20) { fx.fout(); melding('Een brief die honderd jaar moet overleven, verdient meer woorden.'); return; }
   fx.typmachine();
   await zetBrief14(sessie, tekst);
@@ -328,3 +330,8 @@ koppelTypgeluid();
 koppelEasterEggs(sessie);
 koppelMeta(sessie, (meta) => { toezichtVerscherpt = (meta.verdenking || 0) >= 50; });
 startDuaTimer(sessie);
+
+// Host kan de sessie deactiveren → naar het tijd-voorbij-scherm
+bewaakSessieGesloten(sessie, () => {
+  window.location.href = `tijd-voorbij.html?sessie=${encodeURIComponent(sessie)}`;
+});

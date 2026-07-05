@@ -35,27 +35,47 @@ export async function sluitSessie(sessieCode: string): Promise<void> {
 }
 
 // Sessie aanmaken (gastheer)
-export async function maakSessie(sessieCode: string, ervaringsId: string = 'kamer-14'): Promise<string> {
+// Loopt via een transactie zodat twee hosts nooit dezelfde code kunnen
+// overschrijven. Geeft false terug als de code al bestond.
+export interface MaakSessieOpties {
+  ervaringsId?: string;
+  aantalSpelers?: number;
+  puzzelIds?: string[];
+}
+
+export async function maakSessie(
+  sessieCode: string,
+  opties: MaakSessieOpties = {},
+): Promise<boolean> {
   await authReady;
-  const sessieRef = ref(db, `sessions/${sessieCode}`);
-  await schrijf('maakSessie', set(sessieRef, {
+  const {
+    ervaringsId = 'kamer-14',
+    aantalSpelers,
+    puzzelIds = ['p1', 'p2', 'p3', 'p4', 'p5'],
+  } = opties;
+
+  const puzzels: Record<string, boolean> = {};
+  for (const id of puzzelIds) puzzels[id] = false;
+
+  const nieuw: Record<string, unknown> = {
     aangemaakt: serverTimestamp(),
     actief: true,
     ervaringsId,
-    puzzels: {
-      p1: false,
-      p2: false,
-      p3: false,
-      p4: false,
-      p5: false,
-    },
+    puzzels,
     rapport: {
       ingediend: false,
       inhoud: {},
     },
-    timerGestart: null, // Wordt gezet door timer.js zodra de eerste speler de game laadt
+    timerGestart: null, // Wordt gezet door timer.ts zodra de eerste speler de game laadt
+  };
+  if (aantalSpelers) nieuw.aantalSpelers = aantalSpelers;
+
+  const sessieRef = ref(db, `sessions/${sessieCode}`);
+  const result = await schrijf('maakSessie', runTransaction(sessieRef, (huidig) => {
+    if (huidig !== null) return; // bestaat al → transactie afbreken
+    return nieuw;
   }));
-  return sessieCode;
+  return result.committed;
 }
 
 // Sessie valideren bij inloggen
@@ -100,14 +120,41 @@ export async function diendRapportIn(sessieCode: string, inhoud: RapportInhoud):
 }
 
 // Luisteren naar rapport (voor briefkaart reveal)
+// Geeft de unsubscribe-functie terug
 export function luisterNaarRapport(
   sessieCode: string,
   callback: (rapport: RapportData) => void,
-): void {
+): () => void {
   const rapportRef = ref(db, `sessions/${sessieCode}/rapport`);
-  onValue(rapportRef, (snapshot) => {
+  return onValue(rapportRef, (snapshot) => {
     callback(snapshot.val() || {});
   });
+}
+
+// Bewaakt of de sessie nog actief is. Zet de host de sessie op inactief
+// (of was ze dat al bij het laden), dan vuurt `opGesloten`. Een natuurlijk
+// einde — rapport ingediend, waarna de spelers zelf sluiten — telt niet als
+// onderbreking. Geeft de unsubscribe-functie terug.
+export function bewaakSessieGesloten(
+  sessieCode: string,
+  opGesloten: () => void,
+): () => void {
+  const actiefRef = ref(db, `sessions/${sessieCode}/actief`);
+  return onValue(actiefRef, (snapshot) => {
+    if (snapshot.val() !== false) return;
+    get(ref(db, `sessions/${sessieCode}/rapport/ingediend`))
+      .then((r) => {
+        if (r.val() !== true) opGesloten();
+      })
+      .catch(() => opGesloten());
+  });
+}
+
+// Aantal spelers van een sessie (D.U.A.: 2–4). Null als het niet gezet is.
+export async function haalAantalSpelers(sessieCode: string): Promise<number | null> {
+  const snap = await get(ref(db, `sessions/${sessieCode}/aantalSpelers`));
+  const waarde = snap.val();
+  return typeof waarde === 'number' ? waarde : null;
 }
 
 // Tijden ophalen voor de eindstatistieken

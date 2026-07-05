@@ -1,8 +1,12 @@
 /**
- * timer.js — Shared timer module
+ * timer.ts — Shared timer module
  * 60 minuten aftellen. Verborgen tenzij opgevraagd.
- * Waarschuwingen op 30 en 10 minuten.
- * Bij tijdoverschrijding → tijd-voorbij.html (relatief aan de pagina)
+ * Waarschuwingsteksten zijn per experience instelbaar (opties.waarschuwingen).
+ * Bij tijdoverschrijding → tijd-voorbij.html (relatief aan de pagina).
+ *
+ * De resterende tijd wordt berekend met de servertijd (via
+ * `.info/serverTimeOffset`), zodat een scheve apparaatklok het spel niet
+ * korter of langer maakt.
  */
 
 import { db } from './firebase-config.ts';
@@ -10,43 +14,109 @@ import {
   ref,
   get,
   set,
+  onValue,
   serverTimestamp,
 } from "firebase/database";
 import { authReady } from './auth.ts';
+import { schrijf } from './verbinding.ts';
 
 // Gedeelde tijdslimiet voor het hele spel — ook gebruikt door de eindschermen.
 export const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
 
+export interface TimerWaarschuwing {
+  minuten: number;   // toon zodra er ≤ dit aantal minuten rest
+  titel: string;
+  tekst: string;
+  urgent: boolean;
+}
+
+export interface TimerOpties {
+  waarschuwingen?: TimerWaarschuwing[];
+  /** Aangeroepen vlak vóór de redirect naar tijd-voorbij.html
+   *  (bv. om de navigatie-guard uit te schakelen). */
+  voorRedirect?: () => void;
+}
+
+const STANDAARD_WAARSCHUWINGEN: TimerWaarschuwing[] = [
+  {
+    minuten: 30,
+    titel: 'Melding — halftime',
+    tekst: 'De helft van de tijd is voorbij. U heeft nog 30 minuten.',
+    urgent: false,
+  },
+  {
+    minuten: 10,
+    titel: '⚠ Dringend — nog 10 minuten',
+    tekst: 'Nog 10 minuten. Rond het onderzoek af.',
+    urgent: true,
+  },
+];
+
 let timerInterval: ReturnType<typeof setInterval> | null = null;
-let huidigeCode: string | null        = null;
-let waarschuwing30Klaar: boolean      = false;
-let waarschuwing10Klaar: boolean      = false;
+let huidigeCode: string | null = null;
+let huidigeOpties: TimerOpties = {};
+const waarschuwingGetoond = new Set<number>();
+
+// ─────────────────────────────────────────────
+// Servertijd
+// ─────────────────────────────────────────────
+
+let serverOffsetMs = 0;
+let offsetGekoppeld = false;
+
+/** Houdt het verschil tussen apparaatklok en servertijd bij. */
+export function koppelServerTijd(): void {
+  if (offsetGekoppeld) return;
+  offsetGekoppeld = true;
+  onValue(ref(db, '.info/serverTimeOffset'), (snap) => {
+    serverOffsetMs = typeof snap.val() === 'number' ? snap.val() : 0;
+  });
+}
+
+/** Huidige tijd volgens de server (valt terug op de apparaatklok). */
+export function serverNu(): number {
+  return Date.now() + serverOffsetMs;
+}
 
 // ─────────────────────────────────────────────
 // Publieke API
 // ─────────────────────────────────────────────
 
 /**
- * Roep aan bij het laden van speler-a.html / speler-b.html.
- * Zet de starttijd in Firebase (enkel als die er nog niet is)
- * en start de lokale aftelling.
+ * Zorgt dat sessions/{code}/timerGestart bestaat (idempotent) en geeft de
+ * starttijd terug. Wacht op de anonieme login en maakt een geweigerde
+ * schrijfactie zichtbaar via verbinding.ts, in plaats van stil te falen.
  */
-export async function initialiseerTimer(sessieCode: string): Promise<void> {
+export async function zorgStartTijd(sessieCode: string): Promise<number | null> {
   await authReady;
-  huidigeCode = sessieCode;
+  koppelServerTijd();
 
   const timerRef = ref(db, `sessions/${sessieCode}/timerGestart`);
-
-  // Zet starttijd enkel als die nog niet bestaat
   const snapshot = await get(timerRef);
   if (!snapshot.exists() || snapshot.val() === null) {
-    await set(timerRef, serverTimestamp());
+    // schrijf() toont de balk + meldt aan Sentry; we slikken het opnieuw
+    // gooien zodat de pagina verder laadt.
+    await schrijf('timerGestart', set(timerRef, serverTimestamp())).catch(() => {});
   }
 
   // Lees de (eventueel net aangemaakte) starttijd
   const startSnapshot = await get(timerRef);
-  const startTijd: number = startSnapshot.val();
-  if (!startTijd) return; // Zou niet mogen, maar veiligheidshalve
+  const startTijd: number | null = startSnapshot.val();
+  return typeof startTijd === 'number' ? startTijd : null;
+}
+
+/**
+ * Roep aan bij het laden van de spelerpagina's.
+ * Zet de starttijd in Firebase (enkel als die er nog niet is)
+ * en start de lokale aftelling.
+ */
+export async function initialiseerTimer(sessieCode: string, opties: TimerOpties = {}): Promise<void> {
+  huidigeCode = sessieCode;
+  huidigeOpties = opties;
+  waarschuwingGetoond.clear();
+
+  const startTijd = await zorgStartTijd(sessieCode);
+  if (!startTijd) return; // schrijven mislukt; de verbindingsbalk is al zichtbaar
 
   // Bouw de klokknop + popup in de pagina
   bouwTimerUI();
@@ -62,26 +132,22 @@ export async function initialiseerTimer(sessieCode: string): Promise<void> {
 // ─────────────────────────────────────────────
 
 function tick(startTijd: number): void {
-  const resterend = TIJDSLIMIET_MS - (Date.now() - startTijd);
+  const resterend = TIJDSLIMIET_MS - (serverNu() - startTijd);
 
   if (resterend <= 0) {
-    clearInterval(timerInterval!);
+    if (timerInterval) clearInterval(timerInterval);
     navigeerNaarTijdVoorbij();
     return;
   }
 
   const minuten = Math.floor(resterend / 60000);
 
-  // 30-minuten melding
-  if (minuten <= 30 && !waarschuwing30Klaar) {
-    waarschuwing30Klaar = true;
-    toonWaarschuwing(30);
-  }
-
-  // 10-minuten melding
-  if (minuten <= 10 && !waarschuwing10Klaar) {
-    waarschuwing10Klaar = true;
-    toonWaarschuwing(10);
+  const waarschuwingen = huidigeOpties.waarschuwingen ?? STANDAARD_WAARSCHUWINGEN;
+  for (const w of waarschuwingen) {
+    if (minuten <= w.minuten && !waarschuwingGetoond.has(w.minuten)) {
+      waarschuwingGetoond.add(w.minuten);
+      toonWaarschuwing(w);
+    }
   }
 
   // Update tijdsweergave in popup als die open is
@@ -156,34 +222,24 @@ function toggleTimerPopup(): void {
 // Waarschuwingsbalken
 // ─────────────────────────────────────────────
 
-function toonWaarschuwing(minuten: number): void {
+function toonWaarschuwing(w: TimerWaarschuwing): void {
   // Verwijder eventuele vorige melding
   document.getElementById('timer-waarschuwing')?.remove();
 
-  const isUrgent = minuten <= 10;
-
-  const titel = isUrgent
-    ? '⚠ Dringend — nog 10 minuten'
-    : 'Melding — halftime';
-
-  const tekst = isUrgent
-    ? 'Het intern dossier van Lena Bogaert wordt automatisch gesloten als er geen rapport is ingediend.'
-    : 'Het kantoor van An Vermeersch sluit om 17u00. U heeft nog 30 minuten om uw rapport in te dienen.';
-
   const balk = document.createElement('div');
   balk.id = 'timer-waarschuwing';
-  balk.className = `timer-waarschuwing${isUrgent ? ' timer-waarschuwing-urgent' : ''}`;
+  balk.className = `timer-waarschuwing${w.urgent ? ' timer-waarschuwing-urgent' : ''}`;
 
   const inhoud = document.createElement('div');
   inhoud.className = 'timer-waarschuwing-inhoud';
 
   const titelEl = document.createElement('div');
   titelEl.className = 'timer-waarschuwing-titel';
-  titelEl.textContent = titel;
+  titelEl.textContent = w.titel;
 
   const tekstEl = document.createElement('div');
   tekstEl.className = 'timer-waarschuwing-tekst';
-  tekstEl.textContent = tekst;
+  tekstEl.textContent = w.tekst;
 
   inhoud.appendChild(titelEl);
   inhoud.appendChild(tekstEl);
@@ -200,7 +256,7 @@ function toonWaarschuwing(minuten: number): void {
   document.body.appendChild(balk);
 
   // Auto-verdwijnen
-  const vertraging = isUrgent ? 25_000 : 20_000;
+  const vertraging = w.urgent ? 25_000 : 20_000;
   setTimeout(() => {
     if (balk.isConnected) {
       balk.classList.add('timer-waarschuwing-verdwijnen');
@@ -214,6 +270,7 @@ function toonWaarschuwing(minuten: number): void {
 // ─────────────────────────────────────────────
 
 function navigeerNaarTijdVoorbij(): void {
+  huidigeOpties.voorRedirect?.();
   const code = huidigeCode ? encodeURIComponent(huidigeCode) : '';
   window.location.href = `tijd-voorbij.html?sessie=${code}`;
 }

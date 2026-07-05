@@ -2,13 +2,9 @@
  * host-ui.ts — gedeelde UI-helpers voor de host-panels.
  */
 
-/** Escapet tekst voor veilige interpolatie in innerHTML. */
-export function escHtml(s: string): string {
-  return s.replace(
-    /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c,
-  );
-}
+// escHtml leeft in utils.ts (ook spelerpagina's hebben het nodig);
+// hier her-geëxporteerd zodat de host-panels één import-punt houden.
+export { escHtml } from './utils.ts';
 
 /** Toont een tijdelijk statusbericht. ok = groen, anders rood. */
 export function toonStatus(el: HTMLElement, tekst: string, ok: boolean, ms = 4000): void {

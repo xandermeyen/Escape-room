@@ -4,9 +4,9 @@
  * hints en de tijdperk-overschrijdende easter eggs.
  */
 import { db } from '../../../shared/js/firebase-config.ts';
-import { ref, get, set, serverTimestamp, onValue } from 'firebase/database';
-import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
-import { volgendHint } from '../../../shared/js/utils.ts';
+import { ref, onValue } from 'firebase/database';
+import { formateerTijd, TIJDSLIMIET_MS, zorgStartTijd, serverNu } from '../../../shared/js/timer.ts';
+import { volgendHint, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { telHint, zetBadge, type DuaMeta } from './dua-session.ts';
 import { fx, isGedempt, wisselGeluid } from './dua-audio.ts';
 
@@ -28,17 +28,14 @@ let timerInterval: ReturnType<typeof setInterval> | null = null;
 let w10 = false;
 
 export async function startDuaTimer(code: string): Promise<void> {
-  const timerRef = ref(db, `sessions/${code}/timerGestart`);
-  const snap = await get(timerRef);
-  if (!snap.exists() || snap.val() === null) {
-    await set(timerRef, serverTimestamp());
-  }
-  const start: number = (await get(timerRef)).val();
+  // zorgStartTijd wacht op de anonieme login en maakt een geweigerde
+  // schrijfactie zichtbaar (verbinding.ts), in plaats van stil te falen.
+  const start = await zorgStartTijd(code);
   if (!start) return;
 
   if (timerInterval) clearInterval(timerInterval);
   timerInterval = setInterval(() => {
-    const rest = TIJDSLIMIET_MS - strafMs - (Date.now() - start);
+    const rest = TIJDSLIMIET_MS - strafMs - (serverNu() - start);
     const el = document.getElementById('dua-timer');
     if (el) el.textContent = formateerTijd(Math.max(0, rest));
 
@@ -52,7 +49,7 @@ export async function startDuaTimer(code: string): Promise<void> {
       if (sec >= 0 && sec % (rest < 2 * 60 * 1000 ? 1 : 3) === 0) fx.hartslag();
     }
     if (rest <= 0) {
-      clearInterval(timerInterval!);
+      if (timerInterval) clearInterval(timerInterval);
       window.location.href = `tijd-voorbij.html?sessie=${encodeURIComponent(code)}`;
     }
   }, 1000);
@@ -163,8 +160,8 @@ export function koppelEasterEggs(code: string): void {
 }
 
 // ── Sessiecode uit de URL (zoals kamer-14) ──────────────────
-export function leesSessie(): string | null {
-  const sessie = new URLSearchParams(window.location.search).get('sessie');
-  if (!sessie) window.location.href = 'index.html';
-  return sessie;
+// Redirect naar de lobby en gooit als de code ontbreekt, zodat de rest van
+// de pagina niet verder draait tegen een niet-bestaande sessie.
+export function leesSessie(): string {
+  return sessieUitUrl();
 }
