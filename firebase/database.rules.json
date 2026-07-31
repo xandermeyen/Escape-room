@@ -4,7 +4,7 @@
       ".read": "auth != null && auth.provider === 'password'",
       "$sessie": {
         ".read": true,
-        ".write": "auth != null",
+        ".write": true,
         ".validate": "$sessie.matches(/^[A-Z0-9-]{3,20}$/)",
         "aangemaakt":     { ".validate": "newData.isNumber()" },
         "actief":         { ".validate": "newData.isBoolean()" },
