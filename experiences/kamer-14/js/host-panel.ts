@@ -33,7 +33,9 @@ declare global {
   }
 }
 
-koppelHostAuth();
+koppelHostAuth(() => {
+  void laadLijst();
+});
 
 const PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'];
 const LOBBY_PAD = '/experiences/kamer-14/';
@@ -185,4 +187,5 @@ window.laadLijst = function () {
 
 // Init
 window.genereerCode();
-void laadLijst();
+// laadLijst() loopt pas via de onIngelogd-callback hierboven, zodra er
+// echt een ingelogde host is (zie koppelHostAuth-aanroep).

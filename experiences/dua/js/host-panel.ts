@@ -30,7 +30,10 @@ declare global {
   }
 }
 
-koppelHostAuth();
+koppelHostAuth(() => {
+  void verversCode();
+  void laadLijst();
+});
 
 const JAAR = new Date().getFullYear();
 const LOBBY_PAD = '/experiences/dua/';
@@ -192,5 +195,5 @@ window.laadLijst = function () {
 };
 
 // ── Init ──
-void verversCode();
-void laadLijst();
+// verversCode()/laadLijst() lopen pas via de onIngelogd-callback hierboven,
+// zodra er echt een ingelogde host is (zie koppelHostAuth-aanroep).

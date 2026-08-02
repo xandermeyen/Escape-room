@@ -19,8 +19,17 @@ declare global {
   }
 }
 
-/** Koppelt login/logout en wisselt tussen loginscherm en admin-inhoud. */
-export function koppelHostAuth(): void {
+/**
+ * Koppelt login/logout en wisselt tussen loginscherm en admin-inhoud.
+ *
+ * `onIngelogd` wordt pas aangeroepen zodra Firebase bevestigt dat er een
+ * ingelogde host is (auth.provider === 'password'). Sessiedata ophalen vóór
+ * dat moment geeft een permission-denied, want de database-rules eisen
+ * `auth != null` voor het lezen van de volledige sessielijst — en
+ * onAuthStateChanged meldt zich pas na een async check, niet meteen bij
+ * paginalaad.
+ */
+export function koppelHostAuth(onIngelogd?: () => void): void {
   const auth = getAuth(app);
   const loginScherm = requireEl('login-scherm');
   const adminInhoud = requireEl('admin-inhoud');
@@ -28,6 +37,7 @@ export function koppelHostAuth(): void {
   onAuthStateChanged(auth, (user) => {
     loginScherm.style.display = user ? 'none' : 'flex';
     adminInhoud.style.display = user ? 'block' : 'none';
+    if (user) onIngelogd?.();
   });
 
   async function login(): Promise<void> {

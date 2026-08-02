@@ -19,5 +19,13 @@ if (dsn && import.meta.env.PROD) {
     environment: import.meta.env.MODE,   // 'production' of 'development'
     tracesSampleRate: 0,                  // geen performance monitoring
     replaysSessionSampleRate: 0,          // geen session replay
+    ignoreErrors: [
+      // Bekende Firebase Auth-eigenaardigheid op Safari/iOS: de interne
+      // IndexedDB-polling voor multi-tab auth-sync loopt soms nog net op
+      // het moment dat de tab sluit/navigeert, waardoor Safari de
+      // IndexedDB-connectie al dicht heeft. Komt niet uit onze code en
+      // breekt niets voor de speler — puur ruis in Sentry.
+      /Failed to execute 'transaction' on 'IDBDatabase'/,
+    ],
   });
 }
