@@ -17,6 +17,7 @@ export interface Review {
   naam?: string;
   ervaring: string;
   tijdstip: number;
+  goedgekeurd: boolean;
 }
 
 // Schrijft een nieuwe review weg. Staat standaard op goedgekeurd = false,
