@@ -719,6 +719,28 @@
         Deel jullie resultaat
       </button>
 
+      <div class="slot-divider"></div>
+
+      <div class="slot-review" id="slot-review">
+        <p class="slot-review-titel">Laat een review achter</p>
+        <p class="slot-review-sub">Optioneel. We lezen elke review zelf, de leukste verschijnen op de website.</p>
+
+        <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
+          <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
+          <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+        </div>
+
+        <textarea id="review-tekst" rows="3" maxlength="500" placeholder="Wat vonden jullie van Kamer 14?"></textarea>
+        <input id="review-naam" type="text" maxlength="40" placeholder="Naam (optioneel)" />
+
+        <p class="review-fout" id="review-fout">Kies een aantal sterren en schrijf een korte review.</p>
+        <button class="slot-review-btn" id="btn-review-verstuur">Review versturen</button>
+        <p class="review-dank" id="review-dank">Bedankt voor jullie review!</p>
+      </div>
+
       <p class="slot-hoofdtekst">
         De gezinsverpleging van Geel bestaat al meer dan zeven eeuwen
         en is uniek in de wereld. Vandaag wonen nog steeds ongeveer
@@ -744,27 +766,6 @@
 
       <div class="slot-bureau">Een Bureau X-experience</div>
 
-      <div class="slot-divider"></div>
-
-      <div class="slot-review" id="slot-review">
-        <p class="slot-review-titel">Laat een review achter</p>
-        <p class="slot-review-sub">Optioneel. Verschijnt pas op de website na goedkeuring.</p>
-
-        <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
-          <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
-          <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
-        </div>
-
-        <textarea id="review-tekst" rows="3" maxlength="500" placeholder="Wat vonden jullie van Kamer 14?"></textarea>
-        <input id="review-naam" type="text" maxlength="40" placeholder="Naam (optioneel)" />
-
-        <p class="review-fout" id="review-fout">Kies een aantal sterren en schrijf een korte review.</p>
-        <button class="slot-review-btn" id="btn-review-verstuur">Review versturen</button>
-        <p class="review-dank" id="review-dank">Bedankt. Je review is verstuurd en verschijnt na goedkeuring.</p>
-      </div>
 
       <div class="slot-divider"></div>
 
