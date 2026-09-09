@@ -20,6 +20,7 @@ import {
   datumHtml,
   lobbyLinkHtml,
 } from '../../../shared/js/host-sessies.ts';
+import { haalReviews, keurReviewGoed, reviewKaartHtml } from '../../../shared/js/host-reviews.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 
 declare global {
@@ -30,11 +31,13 @@ declare global {
     laadLijst: () => void;
     kopieer: (tekst: string, knop?: HTMLElement) => void;
     deactiveer: (code: string) => void;
+    keurGoed: (id: string) => void;
   }
 }
 
 koppelHostAuth(() => {
   void laadLijst();
+  void laadReviews();
 });
 
 const PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'];
@@ -157,6 +160,44 @@ async function laadLijst(): Promise<void> {
     laden.textContent = 'Fout bij laden.';
   }
 }
+
+async function laadReviews(): Promise<void> {
+  const laden = requireEl('reviews-laden');
+  const lijst = requireEl('reviews-lijst');
+  const geenMsg = requireEl('geen-reviews');
+
+  laden.style.display = 'block';
+  lijst.style.display = 'none';
+  geenMsg.style.display = 'none';
+
+  try {
+    const rijen = await haalReviews('kamer-14');
+    laden.style.display = 'none';
+
+    if (rijen.length === 0) {
+      geenMsg.style.display = 'block';
+      return;
+    }
+
+    // Veilig: reviewKaartHtml escaped tekst/naam zelf.
+    // eslint-disable-next-line no-unsanitized/property
+    lijst.innerHTML = rijen.map(reviewKaartHtml).join('');
+    lijst.style.display = 'block';
+  } catch (err) {
+    console.error(err);
+    laden.textContent = 'Fout bij laden.';
+  }
+}
+
+window.keurGoed = async function (id) {
+  try {
+    await keurReviewGoed(id);
+    void laadReviews();
+  } catch (err) {
+    console.error('Goedkeuren mislukt:', err);
+    alert('Goedkeuren mislukt: ' + foutTekst(err));
+  }
+};
 
 window.verversLijst = function () {
   void laadLijst();

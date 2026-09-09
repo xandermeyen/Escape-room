@@ -61,7 +61,10 @@
         "naam":        { ".validate": "newData.isString() && newData.val().length <= 40" },
         "ervaring":    { ".validate": "newData.isString() && newData.val().length <= 24" },
         "tijdstip":    { ".validate": "newData.isNumber()" },
-        "goedgekeurd": { ".validate": "newData.isBoolean() && newData.val() == false" },
+        "goedgekeurd": {
+          ".write":    "auth != null && auth.provider === 'password'",
+          ".validate": "newData.isBoolean() && (newData.val() == false || (auth != null && auth.provider === 'password'))"
+        },
         "$other":      { ".validate": false }
       }
     }

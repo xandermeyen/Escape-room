@@ -103,6 +103,13 @@
 
     .laden { color: #666; font-size: 0.85rem; }
     .geen-sessies { color: #555; font-size: 0.85rem; text-align: center; padding: 2rem; }
+    .geen-reviews { color: #555; font-size: 0.85rem; text-align: center; padding: 2rem; }
+
+    .review-kaart {
+      background: #1a1a1a; border: 1px solid #333; border-radius: 5px;
+      padding: 1rem 1.2rem; margin-bottom: 0.9rem;
+    }
+    .review-kaart:last-child { margin-bottom: 0; }
 
     .terug-link {
       color: #666; font-size: 0.8rem; text-decoration: none;
@@ -218,6 +225,17 @@
 
         <div class="geen-sessies" id="geen-sessies" style="display:none;">
           Nog geen Kamer 14-sessies aangemaakt.
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="kaart">
+        <div class="kaart-titel"><i class="bi bi-star me-2"></i>Reviews</div>
+
+        <div class="laden" id="reviews-laden">Laden…</div>
+        <div id="reviews-lijst" style="display:none;"></div>
+        <div class="geen-reviews" id="geen-reviews" style="display:none;">
+          Nog geen reviews voor Kamer 14.
         </div>
       </div>
 
