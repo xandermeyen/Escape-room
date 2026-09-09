@@ -28,3 +28,6 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# Lokale Claude-config
+.claude/settings.local.json
