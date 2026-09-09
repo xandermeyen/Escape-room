@@ -31,3 +31,6 @@ desktop.ini
 
 # Lokale Claude-config
 .claude/settings.local.json
+
+# Lokale pnpm-store (per ongeluk aangemaakt via een sandbox-install)
+.pnpm-store/
