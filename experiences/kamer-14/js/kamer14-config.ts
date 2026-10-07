@@ -108,16 +108,51 @@ export function normaliseerTijd(basis: string): string {
   return basis;
 }
 
+// ── "Dicht bij"-hashes (gedeeltelijke antwoorden) ─────────
+// Een fout antwoord waarvan een deel overeenkomt met een van deze hashes,
+// krijgt de melding "Je zit dicht bij het antwoord. Overleg nog eens."
+const BIJNA_HASHES = {
+  // één van de twee dagen
+  p1: [
+    '6840256bfd48d0fd13232873b39598f56713436ea2a7c420903f61c3beff836a',
+    '6191fbd66df12698077ebe41ef598172d4fdb37ef4ba362ed72704b6d1e0f43b',
+  ],
+  // één week ernaast
+  p3: [
+    'e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683',
+    '2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3',
+  ],
+  // alleen de voornaam of alleen de achternaam
+  p4: [
+    'c6d17a3613b9914e68707fcfac8410f097643bc5840681bb533030d73cbb18f8',
+    '6983682fa44129f21f376d56c3d534e1ddd42a8f14682f36f3ce627bb623ff68',
+  ],
+  // juiste uur, verkeerde minuten
+  p5: ['19b100ab7725c612f3d80ff203ca53cea5cadaafae3bf0f88f0fb4089fe08815'],
+};
+
+const woorden = (vorm: string) => vorm.split(' ').filter(Boolean);
+
 export const KAMER14_ANTWOORD_REGELS: Record<string, AntwoordRegel> = {
-  p1: { normaliseer: normaliseerDagen },
-  p3: { normaliseer: normaliseerAantal },
+  p1: {
+    normaliseer: normaliseerDagen,
+    bijnaHashes: BIJNA_HASHES.p1,
+    deelvormen: vorm => woorden(vorm).filter(w => WEEKDAGEN.includes(w)),
+  },
+  p3: { normaliseer: normaliseerAantal, bijnaHashes: BIJNA_HASHES.p3 },
   p4: {
     normaliseer: normaliseerNaam,
     // Eén letter verschil mag (typfout). De varianten worden van de invoer
     // gemaakt en daarna gehasht, het antwoord zelf staat nergens.
     varianten: basis => eenTypfoutVarianten(basis),
+    bijnaHashes: BIJNA_HASHES.p4,
+    deelvormen: woorden,
   },
-  p5: { normaliseer: normaliseerTijd },
+  p5: {
+    normaliseer: normaliseerTijd,
+    bijnaHashes: BIJNA_HASHES.p5,
+    deelvormen: vorm => (/^\d{2}:\d{2}$/.test(vorm) ? [vorm.slice(0, 2)] : []),
+  },
 };
 
 // ── Timer-waarschuwingen in de verhaalwereld van Kamer 14 ─

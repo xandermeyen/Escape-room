@@ -85,9 +85,18 @@ export interface AntwoordRegel {
    * typfout. Elke kandidaat gaat nog door `normaliseer`.
    */
   varianten?: (basis: string) => string[];
+  /**
+   * Hashes van gedeeltelijke antwoorden (bv. één van de twee dagen, of het
+   * juiste uur). Komt een deelvorm overeen, dan is het oordeel 'bijna'.
+   */
+  bijnaHashes?: string[];
+  /** Delen van de vaste vorm die tegen bijnaHashes getoetst worden. Standaard: de vaste vorm zelf. */
+  deelvormen?: (vasteVorm: string) => string[];
 }
 
-export type Beoordeling = 'juist' | 'fout';
+export type Beoordeling = 'juist' | 'bijna' | 'fout';
+
+export const BIJNA_TEKST = 'Je zit dicht bij het antwoord. Overleg nog eens.';
 
 /**
  * beoordeelAntwoord: normaliseert `waarde`, hasht de vaste vorm (en eventuele
@@ -109,7 +118,16 @@ export async function beoordeelAntwoord(
   }
 
   const kandidaatHashes = await Promise.all([...kandidaten].map(sha256Hex));
-  return kandidaatHashes.some(h => hashes.includes(h)) ? 'juist' : 'fout';
+  if (kandidaatHashes.some(h => hashes.includes(h))) return 'juist';
+
+  const bijna = regel.bijnaHashes ?? [];
+  if (bijna.length) {
+    const vorm = vasteVorm(basis);
+    const delen = regel.deelvormen ? regel.deelvormen(vorm) : [vorm];
+    const deelHashes = await Promise.all(delen.map(sha256Hex));
+    if (deelHashes.some(h => bijna.includes(h))) return 'bijna';
+  }
+  return 'fout';
 }
 
 /**
@@ -178,8 +196,8 @@ export async function controleerAntwoordHash(
     onJuist();
   } else {
     input.classList.add('fout');
-    feedback.className   = 'puzzel-feedback fout';
-    feedback.textContent = foutTekst || 'Niet correct.';
+    feedback.className   = oordeel === 'bijna' ? 'puzzel-feedback fout bijna' : 'puzzel-feedback fout';
+    feedback.textContent = oordeel === 'bijna' ? BIJNA_TEKST : foutTekst || 'Niet correct.';
     setTimeout(() => input.classList.remove('fout'), 1500);
   }
 }
