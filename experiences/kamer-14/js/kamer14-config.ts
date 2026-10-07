@@ -57,7 +57,7 @@ export function normaliseerDagen(basis: string): string {
     else overige.push(woord);
   }
   const gesorteerd = [...dagen].sort((a, b) => WEEKDAGEN.indexOf(a) - WEEKDAGEN.indexOf(b));
-  // Onbekende woorden blijven staan, zodat "dinsdag donderdag diest" niet
+  // Onbekende woorden blijven staan, zodat de twee dagen plus een stadsnaam niet
   // stilletjes als juist telt.
   return [...gesorteerd, ...overige].join(' ');
 }
@@ -68,7 +68,7 @@ const GETALWOORDEN: Record<string, number> = {
   zeventien: 17, achttien: 18, negentien: 19, twintig: 20,
 };
 
-/** P3: "7", "7 weken", "zeven", "zeven weken", "7w" → alleen het cijfer. */
+/** P3: "5", "5 weken", "vijf", "vijf weken", "5w" → alleen het cijfer. */
 export function normaliseerAantal(basis: string): string {
   const woorden = basis.split(' ');
   for (const woord of woorden) {
@@ -76,7 +76,7 @@ export function normaliseerAantal(basis: string): string {
     if (cijfers) return String(parseInt(cijfers[1] ?? '', 10));
   }
   // Geen cijfers: getalwoorden. "een" telt pas als er geen ander getal staat
-  // ("een week of zeven" → 7).
+  // ("een week of vijf" → 5).
   const getallen = woorden.filter(w => w in GETALWOORDEN);
   const keuze = getallen.find(w => w !== 'een') ?? getallen[0];
   return keuze !== undefined ? String(GETALWOORDEN[keuze]) : basis;
@@ -89,8 +89,8 @@ export function normaliseerNaam(basis: string): string {
 
 /**
  * P5: elke tijdnotatie → "uu:mm". Leestekens zijn al spaties geworden, dus
- * "7:35" en "7.35" komen hier binnen als "7 35".
- * Herkent o.a. 7u35, 07u35, 7 35, 0735, 735, 7h35, "om 7u35", "7u35 uur".
+ * "8:15" en "8.15" komen hier binnen als "8 15".
+ * Herkent o.a. 8u15, 08u15, 8 15, 0815, 815, 8h15, "om 8u15", "8u15 uur".
  */
 export function normaliseerTijd(basis: string): string {
   const pad = (n: number) => String(n).padStart(2, '0');
