@@ -259,11 +259,11 @@
           </div>
           <div class="meta-field">
             <span class="meta-label">Laatst bijgewerkt</span>
-            <span class="meta-value">27 mei 2026</span>
+            <span class="meta-value">7 oktober 2026</span>
           </div>
           <div class="meta-field">
             <span class="meta-label">Rechtsgrond</span>
-            <span class="meta-value">AVG / GDPR - art. 6.1.b</span>
+            <span class="meta-value">AVG / GDPR - art. 6.1.a en 6.1.b</span>
           </div>
         </div>
 
@@ -323,6 +323,7 @@
             <div class="artikel-nummer">Artikel 4</div>
             <div class="artikel-titel">Rechtsgrond</div>
             <p>De verwerking is gebaseerd op de <strong>uitvoering van een overeenkomst</strong> (art. 6.1.b AVG): je vraagt een sessie aan, en wij verwerken jouw gegevens om die sessie te kunnen organiseren en uitvoeren.</p>
+            <p>Voor analytische cookies (Google Analytics) is de rechtsgrond jouw <strong>toestemming</strong> (art. 6.1.a AVG). Die kan je op elk moment intrekken, zie artikel 8.</p>
           </div>
 
           <div class="artikel">
@@ -334,7 +335,8 @@
           <div class="artikel">
             <div class="artikel-nummer">Artikel 6</div>
             <div class="artikel-titel">Ontvangers van jouw gegevens</div>
-            <p>Jouw gegevens worden verwerkt via <a href="https://formspree.io" target="_blank" rel="noopener" class="link-accent">Formspree</a>, een externe dienst voor formulierverwerking die handelt in overeenstemming met de GDPR. Buiten Formspree worden jouw gegevens niet gedeeld met andere partijen en niet doorverkocht.</p>
+            <p>Jouw gegevens worden verwerkt via <a href="https://formspree.io" target="_blank" rel="noopener" class="link-accent">Formspree</a>, een externe dienst voor formulierverwerking die handelt in overeenstemming met de GDPR. Buiten Formspree worden jouw boekingsgegevens niet gedeeld met andere partijen en niet doorverkocht.</p>
+            <p>Voor het spel zelf gebruiken we <strong>Google Firebase</strong> (de voortgang van je sessie, gekoppeld aan een sessiecode, en reviews die je zelf achterlaat) en <strong>Sentry</strong> (technische foutmeldingen, zodat we fouten kunnen oplossen). Geef je toestemming voor analytische cookies, dan worden gegevens over je bezoek ook verwerkt door <strong>Google Analytics</strong> (Google Ireland Ltd.), zie artikel 8.</p>
           </div>
 
           <div class="artikel">
@@ -367,8 +369,10 @@
 
           <div class="artikel">
             <div class="artikel-nummer">Artikel 8</div>
-            <div class="artikel-titel">Cookies</div>
-            <p>Bureau X gebruikt geen tracking cookies of analytische cookies. De website maakt geen gebruik van Google Analytics of vergelijkbare diensten. Er worden enkel technisch noodzakelijke cookies gebruikt voor de werking van de site.</p>
+            <div class="artikel-titel" id="cookies">Cookies en analytics</div>
+            <p><strong>Noodzakelijk.</strong> Voor de werking van de site en het spel bewaren we enkele gegevens in je browser, zoals je sessiecode, de rol die je koos en je cookiekeuze. Die zijn nodig om de site te laten werken en vragen geen toestemming.</p>
+            <p><strong>Analytisch (alleen met toestemming).</strong> Als je op "Accepteren" klikt, gebruiken we Google Analytics 4 om te zien welke pagina's bezocht worden, hoe bezoekers bij ons terechtkomen en of de site goed werkt. Google Analytics plaatst daarvoor de cookies <code>_ga</code> en <code>_ga_*</code>, die maximaal 2 jaar bewaard worden. We gebruiken Google Analytics niet voor advertenties, Google-signalen staan uit en we koppelen de gegevens niet aan je naam of e-mailadres. Klik je op "Weigeren", dan laden we Google Analytics helemaal niet.</p>
+            <p>We onthouden je keuze 6 maanden. Daarna vragen we het opnieuw. Je kan je keuze altijd wijzigen of je toestemming intrekken via <a href="#" data-cookie-instellingen class="link-accent">Cookie-instellingen</a> (ook onderaan elke pagina).</p>
           </div>
 
           <div class="artikel">
@@ -413,4 +417,12 @@
         </div>
         <div class="col-md-4 text-center text-md-end">
           <p class="mb-1 small"><a href="mailto:info@bureau-x.be" class="footer-link">info@bureau-x.be</a></p>
-          <p class="mb-0 small"><a href="/privacy.html" class="footer-link" style="opacity:0.55;">Priv
+          <p class="mb-0 small"><a href="/privacy.html" class="footer-link" style="opacity:0.55;">Privacybeleid</a> &middot; <a href="#" data-cookie-instellingen class="footer-link" style="opacity:0.55;">Cookie-instellingen</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/shared/js/cookie-banner.ts"></script>
+</body>
+</html>
