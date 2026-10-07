@@ -9,6 +9,7 @@
  * review zelf wordt gewoon bewaard, ook als ze laag is.
  */
 import { schrijfReview } from './reviews.ts';
+import { isDemoCode } from './demo.ts';
 
 /** Tot en met deze score vragen we wat er beter kan. */
 export const LAGE_SCORE = 3;
@@ -37,12 +38,23 @@ function bouwVerbeterVeld(): HTMLTextAreaElement | null {
   return veld;
 }
 
-export function koppelReviewFormulier(ervaring: string): void {
+export function koppelReviewFormulier(ervaring: string, sessie?: string | null): void {
   const reviewBtn = document.getElementById('btn-review-verstuur') as HTMLButtonElement | null;
   const sterKnoppen = Array.from(
     document.querySelectorAll<HTMLButtonElement>('#review-sterren .ster'),
   );
   if (!reviewBtn || sterKnoppen.length === 0) return;
+
+  // Demo-sessies: reviews tellen niet mee en worden niet bewaard.
+  if (isDemoCode(sessie)) {
+    sterKnoppen.forEach((k) => (k.disabled = true));
+    reviewBtn.disabled = true;
+    const melding = document.createElement('p');
+    melding.className = 'review-demo';
+    melding.textContent = 'Demomodus: reviews worden niet bewaard.';
+    reviewBtn.insertAdjacentElement('beforebegin', melding);
+    return;
+  }
 
   let reviewRating = 0;
   const verbeterVeld = bouwVerbeterVeld();

@@ -19,4 +19,4 @@ if (new URLSearchParams(window.location.search).get('sessie') && lijst) {
 }
 
 // Review na de briefkaart, ook voor wie de tijd niet haalde.
-koppelReviewFormulier('kamer-14');
+koppelReviewFormulier('kamer-14', new URLSearchParams(window.location.search).get('sessie'));

@@ -4,6 +4,7 @@
  * komen binnen via `LobbyConfig`; de rest van de flow — code valideren,
  * rollen live tonen, claimen, terugkeer-banner — is identiek en leeft hier.
  */
+import { isDemoCode } from './demo.ts';
 import {
   zoekSessieCode,
   normaliseerSessieCode,
@@ -106,7 +107,8 @@ export function initLobby(config: LobbyConfig): void {
     stopRolListener();
     rollenUnsubscribe = luisterNaarRollen(code, (spelers) => {
       laatsteSpelers = spelers;
-      rolNamen.forEach((rol) => setRolStatus(rol, spelers[rol] === 'bezet'));
+      // In demomodus is elke rol altijd vrij (zie demo.ts).
+      rolNamen.forEach((rol) => setRolStatus(rol, !isDemoCode(code) && spelers[rol] === 'bezet'));
     });
   }
 
@@ -243,6 +245,12 @@ export function initLobby(config: LobbyConfig): void {
         rolFout.textContent = tekst;
         rolFout.classList.remove('verborgen');
       }
+    }
+
+    // Demo: geen rol claimen, zodat de sessie altijd opnieuw te tonen is.
+    if (isDemoCode(code)) {
+      naarSpelerPagina(rol, code);
+      return;
     }
 
     const blokkade = config.magClaimen?.(rol, laatsteSpelers) ?? null;

@@ -33,7 +33,7 @@ document.getElementById('btn-terug')?.addEventListener('click', () => {
 });
 
 // ── Review achterlaten (gedeeld formulier) ──
-koppelReviewFormulier('dua');
+koppelReviewFormulier('dua', sessie);
 
 // ── Resultaat delen ──
 let deelResttijd: string | null = null;

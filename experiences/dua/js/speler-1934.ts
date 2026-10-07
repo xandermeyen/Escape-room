@@ -8,6 +8,7 @@ import { luisterNaarStatus, bewaakSessieGesloten } from '../../../shared/js/sess
 import { requireEl, beoordeelAntwoord } from '../../../shared/js/utils.ts';
 import { registreerPoging, registreerVrijgaves, luisterNaarHints, puzzelUitHintBlok } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
+import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { DUA_HASHES, DUA_REGELS, DUA_VRIJGAVE, DUA_BIJNA_KLUIS } from './dua-config.ts';
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
@@ -27,6 +28,11 @@ const rol = new URLSearchParams(window.location.search).get('rol') ?? 'schrijver
 
 requireEl('sys-case').textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;
 requireEl('sys-rol').textContent = `1934 · ${rol === 'loper' ? 'De Loper' : 'De Schrijver'}`;
+
+// Demomodus: wisselen naar 2034 zonder lobby (zie demo.ts).
+koppelDemoModus(sessie, '1934', [
+  { label: '2034', href: `speler-2034.html?sessie=${encodeURIComponent(sessie)}&rol=archivaris` },
+]);
 
 // ── Lokale spiegel van de gedeelde state ──
 let dua: DuaState = {};

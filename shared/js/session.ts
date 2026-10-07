@@ -41,6 +41,8 @@ export interface MaakSessieOpties {
   ervaringsId?: string;
   aantalSpelers?: number;
   puzzelIds?: string[];
+  /** Demo-sessie (zie demo.ts): telt niet mee in speldata en statistieken. */
+  demo?: boolean;
 }
 
 export async function maakSessie(
@@ -52,6 +54,7 @@ export async function maakSessie(
     ervaringsId = 'kamer-14',
     aantalSpelers,
     puzzelIds = ['p1', 'p2', 'p3', 'p4', 'p5'],
+    demo,
   } = opties;
 
   const puzzels: Record<string, boolean> = {};
@@ -69,6 +72,7 @@ export async function maakSessie(
     timerGestart: null, // Wordt gezet door timer.ts zodra de eerste speler de game laadt
   };
   if (aantalSpelers) nieuw.aantalSpelers = aantalSpelers;
+  if (demo) nieuw.demo = true;
 
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   const result = await schrijf('maakSessie', runTransaction(sessieRef, (huidig) => {
@@ -151,6 +155,18 @@ export async function markeerGeopend(sessieCode: string): Promise<void> {
 export async function geefRollenVrij(sessieCode: string): Promise<void> {
   await authReady;
   await schrijf('geefRollenVrij', set(ref(db, `sessions/${sessieCode}/spelers`), null));
+}
+
+/**
+ * resetDemo (host): verwijdert de demo-sessie volledig en maakt ze opnieuw
+ * aan met demo: true. Twee stappen: eerst wissen, dan aanmaken, zodat er
+ * geen oude speldata, rollen of D.U.A.-toestand blijft hangen.
+ */
+export async function resetDemo(sessieCode: string, opties: MaakSessieOpties = {}): Promise<void> {
+  await authReady;
+  await schrijf('resetDemo', set(ref(db, `sessions/${sessieCode}`), null));
+  const ok = await maakSessie(sessieCode, { ...opties, demo: true });
+  if (!ok) throw new Error('Demo-sessie opnieuw aanmaken mislukt');
 }
 
 // Puzzel markeren als voltooid

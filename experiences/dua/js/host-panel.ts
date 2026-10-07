@@ -6,7 +6,7 @@
  * host-sessies-helpers, gefilterd op ervaringsId 'dua'.
  */
 import '../../../shared/js/sentry.ts';
-import { maakSessie } from '../../../shared/js/session.ts';
+import { maakSessie, resetDemo } from '../../../shared/js/session.ts';
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, update } from 'firebase/database';
 import { koppelHostAuth } from '../../../shared/js/host-auth.ts';
@@ -28,6 +28,7 @@ import {
 import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
 import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
+import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
 import { DUA_PUZZELS } from './dua-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 
@@ -39,6 +40,7 @@ declare global {
     deactiveer: (code: string) => void;
     keurGoed: (id: string) => void;
     toonDetails: (code: string) => void;
+    resetDemoSessie: () => void;
   }
 }
 
@@ -139,13 +141,15 @@ async function laadLijst(): Promise<void> {
     laden.style.display = 'none';
 
     // Gemiddelden per puzzel over alle sessies met speldata.
-    const alleStats = rijen
+    // Demo-sessies tellen niet mee in de statistieken.
+    const echteRijen = rijen.filter(r => !isDemoCode(r.code));
+    const alleStats = echteRijen
       .map(({ data }) => data.stats as SessieStats | undefined)
       .filter((st): st is SessieStats => !!st);
     // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
     // eslint-disable-next-line no-unsanitized/property
     requireEl('stats-overzicht').innerHTML = gemiddeldenHtml(alleStats, DUA_PUZZELS);
-    void werkVerdelingBij('dua', rijen.map(r => r.data));
+    void werkVerdelingBij('dua', echteRijen.map(r => r.data));
 
     if (rijen.length === 0) {
       geenMsg.style.display = 'block';
@@ -165,7 +169,7 @@ async function laadLijst(): Promise<void> {
 
         return `<tr>
           <td class="code-cel">
-            ${veiligeCode}
+            ${veiligeCode}${isDemoCode(code) ? ' <span class="badge-bezig">demo</span>' : ''}
             <button class="kopieer-knop" title="Kopieer code" onclick="kopieer('${veiligeCode}', this)">
               <i class="bi bi-copy"></i>
             </button>
@@ -242,6 +246,28 @@ window.keurGoed = async function (id) {
   } catch (err) {
     console.error('Goedkeuren mislukt:', err);
     alert('Goedkeuren mislukt: ' + foutTekst(err));
+  }
+};
+
+window.resetDemoSessie = async function () {
+  const code = DEMO_CODES['dua'];
+  const status = requireEl('status-demo');
+  const knop = requireEl<HTMLButtonElement>('btn-demo-reset');
+  if (!confirm(`Demo ${code} terugzetten naar het begin? Alle voortgang van de demo verdwijnt.`)) return;
+  knop.disabled = true;
+  try {
+    await resetDemo(code, {
+      ervaringsId: 'dua',
+      aantalSpelers: 4,
+      puzzelIds: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'],
+    });
+    toonStatus(status, `✓ ${code} staat klaar. Open de spelerpagina's hieronder.`, true);
+    void laadLijst();
+  } catch (err) {
+    console.error('Demo resetten mislukt:', err);
+    toonStatus(status, 'Demo resetten mislukt: ' + foutTekst(err), false);
+  } finally {
+    knop.disabled = false;
   }
 };
 

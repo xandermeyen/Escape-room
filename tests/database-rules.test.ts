@@ -436,4 +436,27 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       );
     });
   });
+
+  // ── Demomodus ───────────────────────────────────────────
+  describe('demo', () => {
+    it('alleen een beheerder zet een sessie in demomodus', async () => {
+      await assertFails(speler().ref(`sessions/${CODE}/demo`).set(true));
+      await assertSucceeds(host().ref(`sessions/${CODE}/demo`).set(true));
+    });
+
+    it('in een demo-sessie wordt geen speldata bewaard', async () => {
+      await seed(`sessions/${CODE}/demo`, true);
+      await assertFails(speler().ref(`sessions/${CODE}/stats/p1/start`).set(SV_NU));
+      await assertFails(speler().ref(`sessions/${CODE}/stats/p1/hints/a`).set(1));
+    });
+
+    it('een beheerder kan de demo wissen en opnieuw aanmaken', async () => {
+      await assertSucceeds(host().ref(`sessions/${CODE}`).set(null));
+      await assertSucceeds(
+        host()
+          .ref(`sessions/${CODE}`)
+          .set(basisSessie({ demo: true })),
+      );
+    });
+  });
 });

@@ -20,6 +20,7 @@ import {
   puzzelUitHintBlok,
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
+import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { KAMER14_INACTIEF, KAMER14_HULP_HTML, kamer14VrijgaveMelding } from './kamer14-hulp.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelEnvelopGeluid } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
@@ -46,6 +47,14 @@ const sessie = sessieUitUrl();
 // ── Browsernavigatie blokkeren ────────────────────────────
 // Wordt uitgeschakeld zodra de speler bewust naar einde.html gaat.
 const schakelGuardUit = installeerNavigatieGuard();
+
+// Demomodus: wisselen naar de andere speler zonder lobby (zie demo.ts).
+koppelDemoModus(
+  sessie,
+  'Speler B',
+  [{ label: 'Speler A', href: `speler-a.html?sessie=${encodeURIComponent(sessie)}` }],
+  schakelGuardUit,
+);
 
 // Timer starten (na sessie-definitie)
 initialiseerTimer(sessie, {

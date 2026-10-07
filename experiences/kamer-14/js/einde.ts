@@ -197,7 +197,7 @@ async function vulStats(): Promise<void> {
 }
 
 // ── Review achterlaten (gedeeld formulier) ────────────────
-koppelReviewFormulier('kamer-14');
+koppelReviewFormulier('kamer-14', sessie);
 
 // ── Resultaat delen ───────────────────────────────────────
 koppelDeelKnop('btn-deel-resultaat', () =>

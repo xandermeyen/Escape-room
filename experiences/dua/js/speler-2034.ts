@@ -14,6 +14,7 @@ import {
   puzzelUitHintBlok,
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
+import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { DUA_HASHES, DUA_REGELS, DUA_VRIJGAVE, DUA_BIJNA_ROUTE, beoordeelDoorslag } from './dua-config.ts';
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
@@ -33,6 +34,11 @@ const rol = new URLSearchParams(window.location.search).get('rol') ?? 'archivari
 requireEl('sys-case').textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;
 requireEl('sys-rol').textContent =
   `2034 · ${rol === 'restaurateur' ? 'De Restaurateur' : 'De Archivaris'}`;
+
+// Demomodus: wisselen naar 1934 zonder lobby (zie demo.ts).
+koppelDemoModus(sessie, '2034', [
+  { label: '1934', href: `speler-1934.html?sessie=${encodeURIComponent(sessie)}&rol=schrijver` },
+]);
 
 // Antwoord-hashes staan in dua-config.ts (nooit plain-text in de bundle).
 const HASH_WOORD = DUA_HASHES.woord ?? []; // P1

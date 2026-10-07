@@ -17,4 +17,4 @@ if (new URLSearchParams(window.location.search).get('sessie') && lijst) {
   blok.hidden = true;
 }
 
-koppelReviewFormulier('dua');
+koppelReviewFormulier('dua', new URLSearchParams(window.location.search).get('sessie'));

@@ -16,6 +16,7 @@
 import { db } from './firebase-config.ts';
 import { ref, get, set, runTransaction, serverTimestamp, increment } from 'firebase/database';
 import { authReady } from './auth.ts';
+import { isDemoCode } from './demo.ts';
 
 export interface PuzzelStat {
   start?: number;
@@ -32,7 +33,9 @@ export type Vrijgave = Record<string, string[]>;
 
 const statRef = (code: string, pad: string) => ref(db, `sessions/${code}/stats/${pad}`);
 
-async function stil(taak: () => Promise<unknown>): Promise<void> {
+async function stil(code: string, taak: () => Promise<unknown>): Promise<void> {
+  // Demo-sessies tellen niet mee in de speldata.
+  if (isDemoCode(code)) return;
   try {
     await authReady;
     await taak();
@@ -55,7 +58,7 @@ export function registreerPoging(
   puzzel: string,
   soort: 'fout' | 'bijna',
 ): Promise<void> {
-  return stil(() => set(statRef(code, `${puzzel}/${soort}`), increment(1)));
+  return stil(code, () => set(statRef(code, `${puzzel}/${soort}`), increment(1)));
 }
 
 /** Een geopende hintstap bewaren (alleen de hoogste stap per rol telt). */
@@ -65,7 +68,7 @@ export function registreerHint(
   rol: string,
   stap: number,
 ): Promise<void> {
-  return stil(() =>
+  return stil(code, () =>
     runTransaction(statRef(code, `${puzzel}/hints/${rol}`), (huidig: number | null) =>
       typeof huidig === 'number' && huidig >= stap ? undefined : stap,
     ),
@@ -74,7 +77,7 @@ export function registreerHint(
 
 /** Moment waarop een puzzel opgelost werd. */
 export function registreerOpgelost(code: string, puzzel: string): Promise<void> {
-  return stil(() => zetEenmalig(code, `${puzzel}/opgelost`));
+  return stil(code, () => zetEenmalig(code, `${puzzel}/opgelost`));
 }
 
 const startGezet = new Set<string>();
@@ -93,7 +96,7 @@ export function registreerVrijgaves(
     if (startGezet.has(sleutel)) continue;
     if (!vereist.every(v => status[v])) continue;
     startGezet.add(sleutel);
-    void stil(() => zetEenmalig(code, `${puzzel}/start`));
+    void stil(code, () => zetEenmalig(code, `${puzzel}/start`));
   }
 }
 
