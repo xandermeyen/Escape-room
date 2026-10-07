@@ -1,6 +1,7 @@
 import '../../../shared/js/sentry.ts';
 import { luisterNaarRapport, diendRapportIn, sluitSessie, haalTijden, type RapportInhoud } from '../../../shared/js/session.ts';
-import { antwoordKlopt, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { beoordeelAntwoord, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { KAMER14_ANTWOORD_HASHES, KAMER14_ANTWOORD_REGELS } from './kamer14-config.ts';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
@@ -31,20 +32,17 @@ function toonScherm(id: string): void {
 
 // ── Validatie helpers ─────────────────────────────────────
 // Antwoorden staan als SHA-256 hash in de bundle, niet als plain-text.
-// Zelfde aanpak als de puzzels in speler-a.ts / speler-b.ts.
-const GOEDE_HASHES: Record<string, string[]> = {
-  bestemming: ['0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9'],
-  wie:        ['c6d17a3613b9914e68707fcfac8410f097643bc5840681bb533030d73cbb18f8'],
-  tijdstip: [
-    // beide schrijfwijzen van het tijdstip zijn geldig
-    '89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82',
-    '27d40a0e226fb1e8e4ab8ebac2cb17f8de544c733db677ce556d0c9144a1c82d',
-  ],
-};
+// Zelfde hashes en normalisatie als de puzzels in speler-a.ts / speler-b.ts:
+// bestemming = P2, wie = P4, tijdstip = P5.
+const VELD_PUZZEL: Record<string, string> = { bestemming: 'p2', wie: 'p4', tijdstip: 'p5' };
 
-// Tijdstip normaliseren: spaties weg, 'u' en '.' worden ':'
-function normaliseerTijdstip(v: string): string {
-  return v.replace(/\s/g, '').replace(/[u.]/g, ':');
+function veldKlopt(veld: string, waarde: string): Promise<boolean> {
+  const puzzel = VELD_PUZZEL[veld] ?? '';
+  return beoordeelAntwoord(
+    waarde,
+    KAMER14_ANTWOORD_HASHES[puzzel] ?? [],
+    KAMER14_ANTWOORD_REGELS[puzzel],
+  ).then(oordeel => oordeel === 'juist');
 }
 
 function resetVeld(id: string): void {
@@ -64,10 +62,10 @@ function markeerFout(id: string): void {
 
 // ── Rapport indienen ──────────────────────────────────────
 async function diendIn(): Promise<void> {
-  const bestemming = (document.getElementById('r-bestemming') as HTMLInputElement).value.trim().toLowerCase();
-  const wie        = (document.getElementById('r-wie') as HTMLInputElement).value.trim().toLowerCase();
+  const bestemming = (document.getElementById('r-bestemming') as HTMLInputElement).value;
+  const wie        = (document.getElementById('r-wie') as HTMLInputElement).value;
   const vervoer    = (document.getElementById('r-vervoer') as HTMLInputElement).value.trim();
-  const tijdstip   = (document.getElementById('r-tijdstip') as HTMLInputElement).value.trim().toLowerCase();
+  const tijdstip   = (document.getElementById('r-tijdstip') as HTMLInputElement).value;
 
   // Reset
   ['bestemming', 'wie', 'vervoer', 'tijdstip'].forEach(resetVeld);
@@ -76,10 +74,10 @@ async function diendIn(): Promise<void> {
 
   let geldig = true;
 
-  if (!(await antwoordKlopt(bestemming, GOEDE_HASHES['bestemming'] ?? [])))            { markeerFout('bestemming'); geldig = false; }
-  if (!(await antwoordKlopt(wie, GOEDE_HASHES['wie'] ?? [])))                          { markeerFout('wie');        geldig = false; }
-  if (!vervoer)                                                                        { markeerFout('vervoer');    geldig = false; }
-  if (!(await antwoordKlopt(normaliseerTijdstip(tijdstip), GOEDE_HASHES['tijdstip'] ?? []))) { markeerFout('tijdstip'); geldig = false; }
+  if (!(await veldKlopt('bestemming', bestemming))) { markeerFout('bestemming'); geldig = false; }
+  if (!(await veldKlopt('wie', wie)))               { markeerFout('wie');        geldig = false; }
+  if (!vervoer)                                     { markeerFout('vervoer');    geldig = false; }
+  if (!(await veldKlopt('tijdstip', tijdstip)))     { markeerFout('tijdstip');   geldig = false; }
 
   if (!geldig) {
     if (validatieBericht) validatieBericht.style.display = 'block';

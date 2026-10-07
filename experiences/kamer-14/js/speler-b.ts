@@ -6,7 +6,11 @@ import {
   markeerVoltooid,
   installeerNavigatieGuard,
 } from '../../../shared/js/game.ts';
-import { KAMER14_ANTWOORD_HASHES, KAMER14_TIMER_WAARSCHUWINGEN } from './kamer14-config.ts';
+import {
+  KAMER14_ANTWOORD_HASHES,
+  KAMER14_ANTWOORD_REGELS,
+  KAMER14_TIMER_WAARSCHUWINGEN,
+} from './kamer14-config.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelEnvelopGeluid } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 
@@ -152,7 +156,8 @@ window.draaiOm = draaiOm;
       nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`,
       KAMER14_ANTWOORD_HASHES,
       () => puzzelVoltooid(sessie, puzzelNr),
-      'Niet correct. Overleg opnieuw met Speler A.'
+      'Niet correct. Overleg opnieuw met Speler A.',
+      KAMER14_ANTWOORD_REGELS,
     )
   );
   document.getElementById(`input-${nr}`)?.addEventListener('keydown', (e: KeyboardEvent) => {

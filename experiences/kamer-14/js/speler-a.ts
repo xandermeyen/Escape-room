@@ -6,7 +6,11 @@ import {
   markeerVoltooid,
   installeerNavigatieGuard,
 } from '../../../shared/js/game.ts';
-import { KAMER14_ANTWOORD_HASHES, KAMER14_TIMER_WAARSCHUWINGEN } from './kamer14-config.ts';
+import {
+  KAMER14_ANTWOORD_HASHES,
+  KAMER14_ANTWOORD_REGELS,
+  KAMER14_TIMER_WAARSCHUWINGEN,
+} from './kamer14-config.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 
@@ -137,7 +141,8 @@ function updateTabs(p: Record<string, boolean>): void {
       nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`,
       KAMER14_ANTWOORD_HASHES,
       () => puzzelVoltooid(sessie, puzzelNr),
-      'Niet correct. Overleg opnieuw met Speler B.'
+      'Niet correct. Overleg opnieuw met Speler B.',
+      KAMER14_ANTWOORD_REGELS,
     )
   );
   document.getElementById(`input-${nr}`)?.addEventListener('keydown', (e: KeyboardEvent) => {

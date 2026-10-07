@@ -50,12 +50,100 @@ export async function antwoordKlopt(waarde: string, hashes: string[]): Promise<b
   return hashes.includes(hex);
 }
 
+// ── Soepele antwoordcontrole ──────────────────────────────
+// Elke invoer gaat eerst door normaliseerInvoer (basisvorm), daarna optioneel
+// door een puzzel-eigen normaliseer() die er één vaste vorm van maakt. Pas
+// die vaste vorm wordt gehasht. Zo volstaat één hash per puzzel en staan er
+// nog steeds geen plain-text antwoorden in de broncode.
+
+/**
+ * normaliseerInvoer: basisvorm van een antwoord vóór het hashen.
+ * Kleine letters, accenten weg, leestekens worden een spatie (zodat
+ * "dinsdag,donderdag" twee woorden blijft), meerdere spaties worden één,
+ * en trim.
+ */
+export function normaliseerInvoer(waarde: string): string {
+  return waarde
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '') // accenten (combinerende tekens)
+    .replace(/\p{Cf}/gu, '') // onzichtbare tekens (zero-width e.d.)
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ') // leestekens → spatie
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Regels voor één puzzel. Alles is optioneel: zonder regel wordt enkel de
+ * basisvorm uit normaliseerInvoer gehasht.
+ */
+export interface AntwoordRegel {
+  /** Maakt van de basisvorm de vaste vorm die gehasht wordt (bv. "7u35" → "07:35"). */
+  normaliseer?: (basis: string) => string;
+  /**
+   * Extra kandidaten naast de invoer zelf, bv. alle varianten met één
+   * typfout. Elke kandidaat gaat nog door `normaliseer`.
+   */
+  varianten?: (basis: string) => string[];
+}
+
+export type Beoordeling = 'juist' | 'fout';
+
+/**
+ * beoordeelAntwoord: normaliseert `waarde`, hasht de vaste vorm (en eventuele
+ * varianten) en vergelijkt met `hashes`. Puur en zonder DOM, dus testbaar.
+ */
+export async function beoordeelAntwoord(
+  waarde: string,
+  hashes: string[],
+  regel: AntwoordRegel = {},
+): Promise<Beoordeling> {
+  const basis = normaliseerInvoer(waarde);
+  if (!basis) return 'fout';
+  const vasteVorm = regel.normaliseer ?? ((s: string) => s);
+
+  const kandidaten = new Set<string>([vasteVorm(basis)]);
+  for (const v of regel.varianten?.(basis) ?? []) {
+    const vorm = vasteVorm(normaliseerInvoer(v));
+    if (vorm) kandidaten.add(vorm);
+  }
+
+  const kandidaatHashes = await Promise.all([...kandidaten].map(sha256Hex));
+  return kandidaatHashes.some(h => hashes.includes(h)) ? 'juist' : 'fout';
+}
+
+/**
+ * eenTypfoutVarianten: alle schrijfwijzen die één bewerking van `woord`
+ * verschillen (letter weg, letter erbij, letter vervangen, twee buurletters
+ * omgewisseld). Zo kan "één letter verschil" aanvaard worden zonder het
+ * antwoord zelf in de broncode te zetten: we hashen de varianten van wat de
+ * speler typte en kijken of er één de juiste hash heeft.
+ */
+export function eenTypfoutVarianten(
+  woord: string,
+  alfabet = 'abcdefghijklmnopqrstuvwxyz ',
+): string[] {
+  const uit = new Set<string>();
+  for (let i = 0; i <= woord.length; i++) {
+    const links = woord.slice(0, i);
+    const rechts = woord.slice(i);
+    if (rechts) uit.add(links + rechts.slice(1)); // weglating
+    if (rechts.length > 1) uit.add(links + rechts[1] + rechts[0] + rechts.slice(2)); // omwisseling
+    for (const c of alfabet) {
+      if (rechts) uit.add(links + c + rechts.slice(1)); // vervanging
+      uit.add(links + c + rechts); // invoeging
+    }
+  }
+  uit.delete(woord);
+  return [...uit];
+}
+
 /**
  * controleerAntwoordHash
  * ──────────────────────────────────────────────────────────────────────────
- * Checks a puzzle answer by SHA-256 hashing the player's input and comparing
- * it against a set of pre-computed hashes. Plain-text answers are never stored
- * in the source — a player opening DevTools sees only hashes.
+ * Checks a puzzle answer by SHA-256 hashing the player's (normalised) input
+ * and comparing it against a set of pre-computed hashes. Plain-text answers
+ * are never stored in the source — a player opening DevTools sees only hashes.
  *
  * @param puzzelNr   - Key into `hashes` (e.g. 'p1')
  * @param inputId    - ID of the <input> element
@@ -64,6 +152,7 @@ export async function antwoordKlopt(waarde: string, hashes: string[]): Promise<b
  * @param hashes     - Map of puzzelNr → string[] of SHA-256 hex hashes
  * @param onJuist    - Called when the answer is correct
  * @param foutTekst  - Feedback text shown on a wrong answer
+ * @param regels     - Optional per-puzzle normalisation rules
  */
 export async function controleerAntwoordHash(
   puzzelNr: string,
@@ -73,14 +162,15 @@ export async function controleerAntwoordHash(
   hashes: Record<string, string[]>,
   onJuist: () => void,
   foutTekst: string,
+  regels: Record<string, AntwoordRegel> = {},
 ): Promise<void> {
   const input    = requireEl<HTMLInputElement>(inputId);
   const feedback = requireEl<HTMLElement>(feedbackId);
   const btn      = requireEl<HTMLButtonElement>(btnId);
-  const waarde   = input.value.trim().toLowerCase();
-  if (!waarde) return;
+  if (!normaliseerInvoer(input.value)) return;
 
-  if (await antwoordKlopt(waarde, hashes[puzzelNr] || [])) {
+  const oordeel = await beoordeelAntwoord(input.value, hashes[puzzelNr] || [], regels[puzzelNr]);
+  if (oordeel === 'juist') {
     input.classList.remove('fout');
     feedback.className   = 'puzzel-feedback correct';
     feedback.textContent = 'Correct — Firebase wordt bijgewerkt…';
