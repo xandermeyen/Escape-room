@@ -1,0 +1,171 @@
+/* Timer UI (klokknop, popup, waarschuwingen). Gedeeld door game.css en
+   kamer14.css. Gebruikt de --kleur-* variabelen van de pagina. */
+/* ══════════════════════════════════════════════
+   TIMER UI
+══════════════════════════════════════════════ */
+
+/* ── Klokknop (rechtsonder, altijd zichtbaar in het spel) ── */
+.timer-klok-knop {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  background: rgba(28, 26, 23, 0.92);
+  border: 1px solid var(--kleur-accent);
+  border-radius: 50%;
+  color: var(--kleur-accent-licht);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  backdrop-filter: blur(4px);
+}
+.timer-klok-knop:hover {
+  background: var(--kleur-accent);
+  color: var(--kleur-donker);
+}
+
+/* ── Tijdpopup ── */
+.timer-popup {
+  position: fixed;
+  bottom: 76px;
+  right: 24px;
+  width: 210px;
+  background: var(--kleur-donker);
+  border: 1px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 14px 16px;
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+.timer-popup.verborgen {
+  display: none;
+}
+
+.timer-popup-kop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.timer-popup-label {
+  font-family: var(--font-archief);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kleur-grijs);
+}
+.timer-popup-sluit {
+  background: none;
+  border: none;
+  color: var(--kleur-grijs);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.timer-popup-sluit:hover {
+  color: var(--kleur-rand);
+}
+
+.timer-tijd-display {
+  font-family: var(--font-archief);
+  font-size: 2rem;
+  letter-spacing: 0.12em;
+  color: var(--kleur-perkament);
+  text-align: center;
+  margin: 4px 0 8px;
+}
+.timer-popup-sub {
+  font-size: 0.74rem;
+  color: var(--kleur-grijs);
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Waarschuwingsbalken ── */
+.timer-waarschuwing {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(520px, 92vw);
+  background: rgba(28, 26, 23, 0.97);
+  border: 1px solid var(--kleur-accent);
+  border-left: 4px solid var(--kleur-accent);
+  border-radius: 2px;
+  padding: 14px 16px 14px 20px;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: schuifIn 0.4s ease;
+}
+.timer-waarschuwing-urgent {
+  border-color: #c0392b;
+  border-left-color: #c0392b;
+}
+.timer-waarschuwing-verdwijnen {
+  animation: schuifUit 0.5s ease forwards;
+}
+@keyframes schuifIn {
+  from {
+    opacity: 0;
+    top: 4px;
+  }
+  to {
+    opacity: 1;
+    top: 20px;
+  }
+}
+@keyframes schuifUit {
+  from {
+    opacity: 1;
+    top: 20px;
+  }
+  to {
+    opacity: 0;
+    top: 4px;
+  }
+}
+.timer-waarschuwing-inhoud {
+  flex: 1;
+}
+.timer-waarschuwing-titel {
+  font-family: var(--font-archief);
+  font-size: 0.82rem;
+  letter-spacing: 0.07em;
+  color: var(--kleur-accent-licht);
+  margin-bottom: 4px;
+}
+.timer-waarschuwing-urgent .timer-waarschuwing-titel {
+  color: #e74c3c;
+}
+.timer-waarschuwing-tekst {
+  font-size: 0.83rem;
+  color: var(--kleur-rand);
+  line-height: 1.55;
+}
+.timer-waarschuwing-sluit {
+  background: none;
+  border: none;
+  color: var(--kleur-grijs);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.timer-waarschuwing-sluit:hover {
+  color: var(--kleur-rand);
+}

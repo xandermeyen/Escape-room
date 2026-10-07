@@ -1,0 +1,136 @@
+/* Hulp tijdens het spel: knop "Hulp nodig?", hulpvenster, hint-tip,
+   verhaalmeldingen bij inactiviteit en vrijgavemeldingen.
+   Gebruikt de --kleur-* variabelen van de pagina (met terugvalwaarden). */
+
+.hulp-knop {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 100;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 22px;
+  border: 1px solid var(--kleur-accent, #8b6914);
+  background: rgba(20, 18, 15, 0.92);
+  color: var(--kleur-rand, #c8b99a);
+  font-family: var(--font-archief, 'Courier New', monospace);
+  font-size: 0.85rem;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.hulp-knop:hover,
+.hulp-knop:focus-visible {
+  background: var(--kleur-accent, #8b6914);
+  color: #fff;
+}
+
+.hulp-dialoog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border: 1px solid var(--kleur-accent, #8b6914);
+  border-radius: 4px;
+  background: var(--kleur-donker, #1c1a17);
+  color: var(--kleur-rand, #c8b99a);
+  padding: 20px 22px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.hulp-dialoog::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+.hulp-dialoog h2 {
+  font-family: var(--font-archief, 'Courier New', monospace);
+  font-size: 1.15rem;
+  margin: 0 0 12px;
+  color: var(--kleur-accent-licht, #c49a2a);
+}
+.hulp-dialoog h3 {
+  font-size: 0.95rem;
+  margin: 16px 0 4px;
+  color: var(--kleur-accent-licht, #c49a2a);
+}
+.hulp-dialoog p,
+.hulp-dialoog ul {
+  margin: 0 0 8px;
+}
+.hulp-dialoog a {
+  color: var(--kleur-accent-licht, #c49a2a);
+}
+.hulp-sluit {
+  margin-top: 14px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--kleur-accent, #8b6914);
+  background: transparent;
+  color: var(--kleur-rand, #c8b99a);
+  font-family: inherit;
+  cursor: pointer;
+}
+.hulp-sluit:hover,
+.hulp-sluit:focus-visible {
+  background: var(--kleur-accent, #8b6914);
+  color: #fff;
+}
+
+/* Na twee foute of bijna-pogingen: de hintknop licht op. */
+.hint-tip {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: var(--kleur-accent-licht, #c49a2a);
+}
+.hint-blok.hint-tip-actief .hint-knop {
+  border-style: solid;
+  border-color: var(--kleur-accent-licht, #c49a2a);
+  color: var(--kleur-accent-licht, #c49a2a);
+  animation: hintPuls 1.6s ease-in-out 3;
+}
+@keyframes hintPuls {
+  50% {
+    box-shadow: 0 0 0 4px rgba(196, 154, 42, 0.25);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hint-blok.hint-tip-actief .hint-knop {
+    animation: none;
+  }
+}
+
+/* Verhaalmelding en vrijgavemelding */
+.hulp-melding {
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  transform: translateX(-50%);
+  width: min(520px, calc(100vw - 32px));
+  z-index: 150;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: rgba(20, 18, 15, 0.97);
+  border: 1px solid var(--kleur-accent, #8b6914);
+  border-left: 4px solid var(--kleur-accent-licht, #c49a2a);
+  padding: 12px 14px 12px 16px;
+  color: var(--kleur-rand, #c8b99a);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.hulp-melding-titel {
+  font-family: var(--font-archief, 'Courier New', monospace);
+  color: var(--kleur-accent-licht, #c49a2a);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.hulp-melding-inhoud {
+  flex: 1;
+}
+.hulp-melding-sluit {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.2rem;
+  min-width: 32px;
+  min-height: 32px;
+  cursor: pointer;
+}

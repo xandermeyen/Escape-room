@@ -3,6 +3,8 @@
    1934: warm sepia (body.era-1934)
    2034: Bureau X-groen (body.era-2034)
 ══════════════════════════════════════════════════════════ */
+@import '../../../shared/css/hulp.css';
+
 :root {
   --d-papier:  #f5f0e8;
   --d-inkt:    #2b2620;
@@ -12,6 +14,14 @@
   --d-sepia-bg:     #2e2418;
   --d-sepia-papier: #efe2c4;
   --font: 'Special Elite', 'Courier New', monospace;
+
+  /* Gedeelde componenten (hulp.css) */
+  --kleur-donker:       #14100a;
+  --kleur-accent:       #b9974e;
+  --kleur-accent-licht: #d9b96e;
+  --kleur-rand:         #efe2c4;
+  --kleur-grijs:        #b8ab90;
+  --font-archief:       'Special Elite', 'Courier New', monospace;
 }
 
 * { box-sizing: border-box; }

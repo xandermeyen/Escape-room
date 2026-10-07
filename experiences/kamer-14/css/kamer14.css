@@ -1,3 +1,6 @@
+@import '../../../shared/css/timer.css';
+@import '../../../shared/css/hulp.css';
+
 :root {
   --k-bg:          #111a14;
   --k-bg-dark:     #0a110c;
@@ -11,6 +14,15 @@
   --k-tekst-grijs: #3a6040;
   --k-tekst-donker:#2e5035;
   --font:          'Courier New', 'Special Elite', monospace;
+
+  /* Gedeelde componenten (timer.css, hulp.css) in het groen van Kamer 14 */
+  --kleur-donker:       #0d150f;
+  --kleur-accent:       #3a7a48;
+  --kleur-accent-licht: #5aaa6a;
+  --kleur-rand:         #c8e0c0;
+  --kleur-grijs:        #8fb894;
+  --kleur-perkament:    #e3f0de;
+  --font-archief:       'Courier New', 'Special Elite', monospace;
 }
 
 *, *::before, *::after { box-sizing: border-box; }

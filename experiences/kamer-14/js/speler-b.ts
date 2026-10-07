@@ -19,6 +19,8 @@ import {
   luisterNaarHints,
   puzzelUitHintBlok,
 } from '../../../shared/js/speldata.ts';
+import { initHulp } from '../../../shared/js/hulp.ts';
+import { KAMER14_INACTIEF, KAMER14_HULP_HTML, kamer14VrijgaveMelding } from './kamer14-hulp.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelEnvelopGeluid } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 
@@ -61,6 +63,15 @@ bewaakSessieGesloten(sessie, () => {
 const sysCase = document.getElementById('sys-case');
 if (sysCase) sysCase.textContent = `Buurtdossier · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
 
+
+// ── Hulp: hint-tip, verhaalmeldingen, vrijgave en "Hulp nodig?" ──
+const hulp = initHulp({
+  hintBlokVoor: puzzel => `hint-${puzzel}-b`,
+  vrijgave: KAMER14_VRIJGAVE,
+  inactiefMeldingen: KAMER14_INACTIEF.b,
+  vrijgaveMelding: (oud, nieuw) => kamer14VrijgaveMelding('b', oud, nieuw),
+  hulpHtml: KAMER14_HULP_HTML,
+});
 
 // ── Tabnavigatie ──────────────────────────────────────────
 document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
@@ -170,6 +181,7 @@ window.draaiOm = draaiOm;
       'Niet correct. Overleg opnieuw met Speler A.',
       KAMER14_ANTWOORD_REGELS,
       oordeel => {
+        hulp.poging(nr, oordeel);
         if (oordeel !== 'juist') void registreerPoging(sessie, nr, oordeel);
       },
     )
@@ -186,6 +198,7 @@ const unsubscribe = luisterNaarStatus(sessie, (puzzels) => {
   updateVoortgang(p);
   updateTabs(p);
   registreerVrijgaves(sessie, p, KAMER14_VRIJGAVE);
+  hulp.status(p);
 });
 
 // ── Speldata: geopende hintstappen (Speler B) ──────────────
