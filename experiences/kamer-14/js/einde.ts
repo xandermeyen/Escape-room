@@ -33,8 +33,13 @@ function toonScherm(id: string): void {
 // ── Validatie helpers ─────────────────────────────────────
 // Antwoorden staan als SHA-256 hash in de bundle, niet als plain-text.
 // Zelfde hashes en normalisatie als de puzzels in speler-a.ts / speler-b.ts:
-// bestemming = P2, wie = P4, tijdstip = P5.
-const VELD_PUZZEL: Record<string, string> = { bestemming: 'p2', wie: 'p4', tijdstip: 'p5' };
+// bestemming = P2, wie = P4, tijdstip = P5; vervoer heeft een eigen regel.
+const VELD_PUZZEL: Record<string, string> = {
+  bestemming: 'p2',
+  wie: 'p4',
+  vervoer: 'vervoer',
+  tijdstip: 'p5',
+};
 
 function veldKlopt(veld: string, waarde: string): Promise<boolean> {
   const puzzel = VELD_PUZZEL[veld] ?? '';
@@ -76,7 +81,7 @@ async function diendIn(): Promise<void> {
 
   if (!(await veldKlopt('bestemming', bestemming))) { markeerFout('bestemming'); geldig = false; }
   if (!(await veldKlopt('wie', wie)))               { markeerFout('wie');        geldig = false; }
-  if (!vervoer)                                     { markeerFout('vervoer');    geldig = false; }
+  if (!(await veldKlopt('vervoer', vervoer)))       { markeerFout('vervoer');    geldig = false; }
   if (!(await veldKlopt('tijdstip', tijdstip)))     { markeerFout('tijdstip');   geldig = false; }
 
   if (!geldig) {

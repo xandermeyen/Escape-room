@@ -19,6 +19,8 @@ export const KAMER14_ANTWOORD_HASHES: Record<string, string[]> = {
   p3: ['7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451'],
   p4: ['91ada21b3f9f3b21939e6a7c3154c4f7cf002db220306095cb48010c84f4efaa'],
   p5: ['89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82'],
+  // Eindrapport, veld "vervoer" (geen puzzel, enkel in einde.html gecontroleerd)
+  vervoer: ['04e027e4990a203f4899f7e87c2d5ff6b9019e9565795619a59ce06c099560d4'],
 };
 
 // ── Normalizers per puzzel ────────────────────────────────
@@ -28,13 +30,23 @@ export const KAMER14_ANTWOORD_HASHES: Record<string, string[]> = {
 const WEEKDAGEN = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'];
 
 const DAG_AFKORTINGEN: Record<string, string> = {
-  ma: 'maandag', maa: 'maandag',
-  di: 'dinsdag', din: 'dinsdag', dins: 'dinsdag',
-  wo: 'woensdag', woe: 'woensdag', woen: 'woensdag',
-  do: 'donderdag', don: 'donderdag', dond: 'donderdag',
-  vr: 'vrijdag', vrij: 'vrijdag',
-  za: 'zaterdag', zat: 'zaterdag',
-  zo: 'zondag', zon: 'zondag',
+  ma: 'maandag',
+  maa: 'maandag',
+  di: 'dinsdag',
+  din: 'dinsdag',
+  dins: 'dinsdag',
+  wo: 'woensdag',
+  woe: 'woensdag',
+  woen: 'woensdag',
+  do: 'donderdag',
+  don: 'donderdag',
+  dond: 'donderdag',
+  vr: 'vrijdag',
+  vrij: 'vrijdag',
+  za: 'zaterdag',
+  zat: 'zaterdag',
+  zo: 'zondag',
+  zon: 'zondag',
 };
 
 const VULWOORDEN = new Set(['en', 'op', 'de', 'elke', 'iedere', 'telkens', 'of']);
@@ -63,9 +75,27 @@ export function normaliseerDagen(basis: string): string {
 }
 
 const GETALWOORDEN: Record<string, number> = {
-  nul: 0, een: 1, twee: 2, drie: 3, vier: 4, vijf: 5, zes: 6, zeven: 7, acht: 8, negen: 9,
-  tien: 10, elf: 11, twaalf: 12, dertien: 13, veertien: 14, vijftien: 15, zestien: 16,
-  zeventien: 17, achttien: 18, negentien: 19, twintig: 20,
+  nul: 0,
+  een: 1,
+  twee: 2,
+  drie: 3,
+  vier: 4,
+  vijf: 5,
+  zes: 6,
+  zeven: 7,
+  acht: 8,
+  negen: 9,
+  tien: 10,
+  elf: 11,
+  twaalf: 12,
+  dertien: 13,
+  veertien: 14,
+  vijftien: 15,
+  zestien: 16,
+  zeventien: 17,
+  achttien: 18,
+  negentien: 19,
+  twintig: 20,
 };
 
 /** P3: "5", "5 weken", "vijf", "vijf weken", "5w" → alleen het cijfer. */
@@ -108,6 +138,43 @@ export function normaliseerTijd(basis: string): string {
   return basis;
 }
 
+/**
+ * Vervoer (eindrapport): herkent een vervoermiddel in vrije tekst en geeft
+ * één vaste vorm per soort terug. Alle soorten staan erin (ook de foute),
+ * zodat deze lijst niet verklapt welke juist is: dat beslist de hash.
+ * "met de bus van De Lijn", "lijn 19", "autobus" → zelfde vorm.
+ * Noemt iemand twee soorten ("bus of trein"), dan telt het niet.
+ */
+const VERVOER_SOORTEN: Record<string, string[]> = {
+  bus: ['bus', 'autobus', 'bussen', 'busje', 'buslijn', 'lijnbus', 'belbus', 'lijn', 'delijn'],
+  trein: ['trein', 'nmbs', 'sncb', 'spoor', 'treinen'],
+  auto: ['auto', 'wagen', 'taxi', 'lift', 'carpool'],
+  fiets: ['fiets', 'velo', 'brommer', 'bromfiets', 'step'],
+  voet: ['voet', 'lopen', 'wandelen', 'stappen', 'gewandeld', 'gelopen'],
+  tram: ['tram', 'metro'],
+};
+
+/** Verschillen twee woorden hoogstens één letter (weg, erbij, anders, omgewisseld)? */
+function eenLetterVerschil(a: string, b: string): boolean {
+  if (a === b) return true;
+  if (Math.abs(a.length - b.length) > 1) return false;
+  return eenTypfoutVarianten(a).includes(b);
+}
+
+export function normaliseerVervoer(basis: string): string {
+  const gevonden = new Set<string>();
+  for (const woord of basis.split(' ')) {
+    for (const [soort, woorden] of Object.entries(VERVOER_SOORTEN)) {
+      // Typfouten per woord ("autbus", "ljn"), maar pas vanaf 3 letters.
+      const past = woorden.some(w =>
+        woord.length >= 3 ? eenLetterVerschil(woord, w) : woord === w,
+      );
+      if (past) gevonden.add(soort);
+    }
+  }
+  return gevonden.size === 1 ? ([...gevonden][0] ?? basis) : basis;
+}
+
 // ── "Dicht bij"-hashes (gedeeltelijke antwoorden) ─────────
 // Een fout antwoord waarvan een deel overeenkomt met een van deze hashes,
 // krijgt de melding "Je zit dicht bij het antwoord. Overleg nog eens."
@@ -148,6 +215,7 @@ export const KAMER14_ANTWOORD_REGELS: Record<string, AntwoordRegel> = {
     bijnaHashes: BIJNA_HASHES.p4,
     deelvormen: woorden,
   },
+  vervoer: { normaliseer: normaliseerVervoer },
   p5: {
     normaliseer: normaliseerTijd,
     bijnaHashes: BIJNA_HASHES.p5,
@@ -170,13 +238,15 @@ export const KAMER14_TIMER_WAARSCHUWINGEN: TimerWaarschuwing[] = [
   {
     minuten: 30,
     titel: 'Melding — halftime',
-    tekst: 'Het kantoor van An Vermeersch sluit om 17u00. U heeft nog 30 minuten om uw rapport in te dienen.',
+    tekst:
+      'Het kantoor van An Vermeersch sluit om 17u00. U heeft nog 30 minuten om uw rapport in te dienen.',
     urgent: false,
   },
   {
     minuten: 10,
     titel: '⚠ Dringend — nog 10 minuten',
-    tekst: 'Het intern dossier van Lena Bogaert wordt automatisch gesloten als er geen rapport is ingediend.',
+    tekst:
+      'Het intern dossier van Lena Bogaert wordt automatisch gesloten als er geen rapport is ingediend.',
     urgent: true,
   },
 ];
