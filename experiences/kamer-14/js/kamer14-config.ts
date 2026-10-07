@@ -16,7 +16,7 @@ import { eenTypfoutVarianten, type AntwoordRegel } from '../../../shared/js/util
 export const KAMER14_ANTWOORD_HASHES: Record<string, string[]> = {
   p1: ['6d95368648b569fb1fe2adced89be071011bb3f9f82abf498daf495cc213116e'],
   p2: ['0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9'],
-  p3: ['2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3'],
+  p3: ['7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451'],
   p4: ['91ada21b3f9f3b21939e6a7c3154c4f7cf002db220306095cb48010c84f4efaa'],
   p5: ['89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82'],
 };

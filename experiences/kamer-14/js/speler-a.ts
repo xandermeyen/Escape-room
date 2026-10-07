@@ -51,7 +51,7 @@ bewaakSessieGesloten(sessie, () => {
 
 // Casenummer tonen in systeembalk
 const sysCase = document.getElementById('sys-case');
-if (sysCase) sysCase.textContent = `Intern dossier · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
+if (sysCase) sysCase.textContent = `Intern dossier · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
 
 
 // ── Tabnavigatie ──────────────────────────────────────────

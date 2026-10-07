@@ -13,7 +13,7 @@ const sessie = sessieUitUrl();
 // Sessie tonen in systeembalk en meta
 const sysCaseRapport = document.getElementById('sys-case-rapport');
 if (sysCaseRapport) sysCaseRapport.textContent =
-  `Intern rapport · Ref. OPZ-2026-0506-LB · Sessie ${sessie}`;
+  `Intern rapport · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
 
 const rapportSessieLabel = document.getElementById('rapport-sessie-label');
 if (rapportSessieLabel) rapportSessieLabel.textContent = sessie;
