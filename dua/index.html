@@ -92,6 +92,11 @@
     .nav-links a:hover { color: var(--text); }
     .btn-nav { padding: .45rem 1.2rem; border: 1px solid var(--border-gold); background: transparent; color: var(--text-dim); font-family: var(--ff); font-size: .78rem; letter-spacing: .1em; cursor: pointer; text-decoration: none; transition: all .2s; }
     .btn-nav:hover { border-color: var(--gold-dim); color: var(--text); }
+    .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 0; z-index: 210; }
+    .nav-toggle span { width: 100%; height: 2px; background: var(--gold); transition: transform .3s ease, opacity .2s ease; }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* ── HERO: real image, split-screen ── */
     .hero { position: relative; height: 100vh; min-height: 640px; display: grid; grid-template-columns: 1.1fr 1fr; grid-template-rows: 100%; align-items: stretch; overflow: hidden; background: var(--bg); }
@@ -246,7 +251,12 @@
       .feit { border-bottom: 1px solid var(--border-gold); }
     }
     @media (max-width: 700px) {
-      .nav-links    { display: none; }
+      .nav-toggle { display: flex; }
+      .nav-links { position: fixed; top: 64px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: rgba(12,11,9,.98); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-gold); max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+      .nav-links.open { max-height: 320px; }
+      .nav-links li { width: 100%; }
+      .nav-links a { display: block; padding: 1.1rem 2rem; }
+      .nav-links .btn-nav { display: block; width: calc(100% - 4rem); margin: .5rem 2rem 1.1rem; text-align: center; }
       .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
       .brief-kaart  { transform: none !important; }
     }
@@ -261,12 +271,15 @@
          onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
     <span style="display:none;">Bureau X</span>
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="/#experiences">Experiences</a></li>
     <li><a href="#verhaal">De zaak</a></li>
     <li><a href="#spelen">Hoe het werkt</a></li>
     <li><a href="/" class="btn-nav">Terug naar Bureau X</a></li>
   </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- ── HERO ── -->
@@ -525,6 +538,23 @@ var navbar = document.getElementById('navbar');
 window.addEventListener('scroll', function () {
   navbar.classList.toggle('scrolled', window.scrollY > 50);
 }, { passive: true });
+
+var navToggle = document.getElementById('navToggle');
+var navLinksEl = document.getElementById('navLinks');
+if (navToggle && navLinksEl) {
+  navToggle.addEventListener('click', function () {
+    var isOpen = navLinksEl.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+  navLinksEl.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      navLinksEl.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
 
 // Scroll reveal
 var io = new IntersectionObserver(function (entries) {
