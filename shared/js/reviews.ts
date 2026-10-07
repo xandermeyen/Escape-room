@@ -1,6 +1,5 @@
 import { db } from './firebase-config.ts';
 import { ref, push, query, orderByChild, equalTo, get, serverTimestamp } from 'firebase/database';
-import { authReady } from './auth.ts';
 
 // Een review zoals een speler ze achterlaat op het eindscherm.
 export interface ReviewInzending {
@@ -27,6 +26,9 @@ export interface Review {
 // host-paneel. De databaseregels blokkeren goedgekeurd = true vanuit de
 // client, en het publiek kan alleen goedgekeurde reviews lezen.
 export async function schrijfReview(inzending: ReviewInzending): Promise<void> {
+  // Pas hier de anonieme login laden: de homepage leest enkel reviews en
+  // hoeft dus geen anonieme gebruiker aan te maken (en geen auth-bundel).
+  const { authReady } = await import('./auth.ts');
   await authReady;
   const data: Record<string, unknown> = {
     rating: Math.round(inzending.rating),

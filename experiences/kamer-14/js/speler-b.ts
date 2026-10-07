@@ -25,6 +25,7 @@ import {
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
+import { maakTabsToegankelijk, maakKlikbaar } from '../../../shared/js/toegankelijk.ts';
 import { KAMER14_INACTIEF, KAMER14_HULP_HTML, kamer14VrijgaveMelding } from './kamer14-hulp.ts';
 import {
   startAchtergrond,
@@ -210,6 +211,11 @@ window.draaiOm = draaiOm;
     if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
   });
 });
+
+// ── Toetsenbord: tabs en klikbare documenten ──────────────
+maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));
+const briefKaart = document.getElementById('brief-kaart');
+if (briefKaart) maakKlikbaar(briefKaart, 'Envelop omdraaien en de brief lezen');
 
 // ── Firebase live luisteren ───────────────────────────────
 const unsubscribe = luisterNaarStatus(sessie, puzzels => {

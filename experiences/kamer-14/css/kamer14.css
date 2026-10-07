@@ -11,8 +11,8 @@
   --k-accent-licht: #5aaa6a;
   --k-tekst: #c8e0c0;
   --k-tekst-mid: #7aaa80;
-  --k-tekst-grijs: #3a6040;
-  --k-tekst-donker: #2e5035;
+  --k-tekst-grijs: #7b9f80; /* contrast ≥ 4.5:1 op --k-bg */
+  --k-tekst-donker: #6f9575; /* contrast ≥ 4.5:1 op --k-bg */
   --font: 'Courier New', 'Special Elite', monospace;
 
   /* Gedeelde componenten (timer.css, hulp.css) in het groen van Kamer 14 */
@@ -31,7 +31,9 @@
   box-sizing: border-box;
 }
 
-body {
+/* html body: wint van de body-regel van Bootstrap (die later laadt en
+   anders een witte achtergrond en een ander lettertype zet). */
+html body {
   margin: 0;
   min-height: 100vh;
   background: var(--k-bg);
@@ -691,4 +693,28 @@ body {
 .einde-link-balk:hover {
   background: rgba(58, 122, 72, 0.18);
   color: var(--k-tekst);
+}
+
+/* ── Gsm (390 px): niets breder dan het scherm ── */
+@media (max-width: 600px) {
+  .systeembalk {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    padding: 8px 16px;
+  }
+  .sys-rechts {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+  .tabs {
+    padding: 0 8px;
+    flex-wrap: wrap; /* alle tabs zichtbaar, ook de vergrendelde */
+  }
+  .tab {
+    padding: 12px 12px;
+  }
+  .hint-knop,
+  .puzzel-btn {
+    min-height: 44px;
+  }
 }

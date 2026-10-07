@@ -10,6 +10,8 @@
     />
     <meta name="robots" content="noindex, follow" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
       rel="stylesheet"
@@ -38,7 +40,7 @@
         font-family: 'Special Elite', serif;
         font-size: 0.72rem;
         letter-spacing: 0.18em;
-        opacity: 0.4;
+        opacity: 0.75;
         text-transform: uppercase;
         margin-bottom: 0.5rem;
       }
@@ -86,7 +88,7 @@
         font-size: 0.62rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        opacity: 0.35;
+        opacity: 0.75;
         font-family: 'Special Elite', serif;
       }
 
@@ -119,7 +121,7 @@
         font-size: 0.65rem;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        opacity: 0.35;
+        opacity: 0.8;
         margin-bottom: 0.25rem;
       }
 
@@ -162,7 +164,7 @@
         font-size: 0.65rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        opacity: 0.4;
+        opacity: 0.8;
         padding: 0.5rem 1rem 0.5rem 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         font-weight: normal;
@@ -197,7 +199,7 @@
 
       .recht-omschrijving {
         font-size: 0.82rem;
-        opacity: 0.6;
+        opacity: 0.85;
         margin: 0;
         line-height: 1.6;
       }
@@ -210,7 +212,7 @@
       }
 
       .gba-blok p {
-        opacity: 0.72;
+        opacity: 0.95;
         margin: 0;
         line-height: 1.75;
       }
@@ -220,14 +222,20 @@
         padding-top: 1.5rem;
         border-top: 1px solid rgba(255, 255, 255, 0.06);
         font-size: 0.78rem;
-        opacity: 0.38;
+        opacity: 0.8;
         font-family: 'Special Elite', serif;
         letter-spacing: 0.06em;
         text-align: center;
       }
 
-      .link-accent {
-        color: inherit;
+      body code {
+        color: #f3c6d8; /* Bootstrap-roze is onleesbaar op donker */
+      }
+      body .footer-link {
+        color: #d9b56a;
+      }
+      body .link-accent {
+        color: #ffe0a0; /* leesbaar op de donkere achtergrond, wint van style.css */
         text-decoration: underline;
         text-underline-offset: 3px;
       }
@@ -436,6 +444,7 @@
                   href="https://policies.google.com/privacy"
                   target="_blank"
                   rel="noopener noreferrer"
+                  class="link-accent"
                   >privacybeleid</a
                 >
                 en de
@@ -443,6 +452,7 @@
                   href="https://policies.google.com/terms"
                   target="_blank"
                   rel="noopener noreferrer"
+                  class="link-accent"
                   >servicevoorwaarden</a
                 >
                 van Google zijn van toepassing. Geef je toestemming voor analytische cookies, dan
@@ -603,9 +613,9 @@
               <a href="mailto:info@bureau-x.be" class="footer-link">info@bureau-x.be</a>
             </p>
             <p class="mb-0 small">
-              <a href="/privacy.html" class="footer-link" style="opacity: 0.55">Privacybeleid</a>
+              <a href="/privacy.html" class="footer-link" style="opacity: 0.9">Privacybeleid</a>
               &middot;
-              <a href="#" data-cookie-instellingen class="footer-link" style="opacity: 0.55"
+              <a href="#" data-cookie-instellingen class="footer-link" style="opacity: 0.9"
                 >Cookie-instellingen</a
               >
             </p>

@@ -68,7 +68,7 @@ h3,
   margin: 0 10px;
 }
 .sys-case {
-  color: #7a6e55;
+  color: #a89a7c;
   letter-spacing: 0.06em;
 }
 .sys-rechts {
@@ -155,17 +155,19 @@ h3,
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--d-goud);
+  color: #e0c88f; /* vergrendeld, maar leesbaar: contrast ≥ 4.5:1 */
   font-family: var(--font);
   font-size: 12px;
-  opacity: 0.35;
+  border-style: dashed;
 }
 .pz.open {
   opacity: 1;
+  border-style: solid;
   background: rgba(185, 151, 78, 0.15);
 }
 .pz.af {
   opacity: 1;
+  border-style: solid;
   background: var(--d-goud);
   color: var(--d-groen);
 }
@@ -193,7 +195,7 @@ body.era-1934 .era-kop {
 }
 .era-sub {
   font-size: 13px;
-  color: #7a6e55;
+  color: #5f5440;
   font-style: italic;
   margin: 0 0 18px;
 }
@@ -233,13 +235,15 @@ body.era-1934 .stuk {
   font-family: var(--font);
 }
 .stuk.slot {
-  opacity: 0.45;
+  /* vergrendeld: grijs en gestreept, maar de tekst blijft leesbaar */
+  filter: grayscale(0.7);
+  border-style: dashed;
   pointer-events: none;
 }
 
 .hintje {
   font-size: 12px;
-  color: #8a7d63;
+  color: #655a43;
   font-style: italic;
 }
 .doorgedrukt {
@@ -295,7 +299,7 @@ body.era-1934 .stuk {
 }
 .d-knop.goud {
   background: var(--d-goud);
-  color: var(--d-groen);
+  color: #14100a;
 }
 .d-knop.klein {
   padding: 6px 13px;
@@ -310,7 +314,7 @@ body.era-1934 .stuk {
 .hint-verder {
   background: none;
   border: 1px dashed var(--d-goud);
-  color: #8a7d63;
+  color: #655a43;
   font-family: var(--font);
   font-size: 11px;
   padding: 4px 10px;
@@ -345,7 +349,7 @@ body.era-1934 .stuk {
 }
 .hamerslot .label {
   font-size: 11px;
-  color: #8a7d63;
+  color: #655a43;
 }
 .hamer {
   width: 44px;
@@ -406,7 +410,7 @@ body.era-1934 .stuk {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #8a7d63;
+  color: #655a43;
 }
 
 /* ── Kluis ── */
@@ -562,7 +566,7 @@ body.era-1934 .svg-kader {
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #8a7d63;
+  color: #655a43;
 }
 
 /* ── Lobby ── */
@@ -664,7 +668,7 @@ body.era-1934 .svg-kader {
 }
 .rol-tip {
   font-size: 12px;
-  color: #8a7d63;
+  color: #655a43;
   font-style: italic;
   margin-top: 16px;
 }
@@ -762,4 +766,20 @@ body.era-1934 .svg-kader {
   display: block;
   font-size: 13px;
   margin: 4px 0;
+}
+
+/* Toegankelijkheid: grotere klikdoelen en zichtbare focus */
+.review-sterren .ster {
+  min-width: 44px;
+  min-height: 44px;
+}
+.hamer {
+  padding: 0;
+  color: var(--d-inkt);
+}
+#typvel .lt:focus-visible,
+.klikbaar:focus-visible,
+[data-plek]:focus-visible {
+  outline: 3px solid var(--d-goud);
+  outline-offset: 2px;
 }

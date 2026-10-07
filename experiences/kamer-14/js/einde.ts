@@ -12,6 +12,7 @@ import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { speelStem } from './audio.ts';
+import { maakKlikbaar } from '../../../shared/js/toegankelijk.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
 
 // ── Sessie ophalen (redirect + stop als die ontbreekt) ────
@@ -142,6 +143,8 @@ document.getElementById('btn-indienen')?.addEventListener('click', diendIn);
 });
 
 // ── Postkaart omdraaien ───────────────────────────────────
+const postkaartEl = document.getElementById('postkaart');
+if (postkaartEl) maakKlikbaar(postkaartEl, 'Briefkaart omdraaien');
 let omgedraaid: boolean = false;
 
 document.getElementById('postkaart')?.addEventListener('click', () => {

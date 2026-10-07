@@ -116,10 +116,17 @@ function bouwHamers(): void {
     // Veilig: HAMER_SLOTS is een vaste constante, geen externe invoer.
     // eslint-disable-next-line no-unsanitized/property
     div.innerHTML = `<div class="label">vak ${HAMER_SLOTS[i]}</div>`;
-    const knop = document.createElement('div');
+    const knop = document.createElement('button');
+    knop.type = 'button';
     knop.className = `hamer${i === hamerSel ? ' gekozen' : ''}${hamersHersteld ? ' goedzo' : ''}`;
     knop.textContent = h;
-    knop.addEventListener('click', () => hamerKlik(i));
+    knop.setAttribute('aria-label', `Hamer ${h} in vak ${HAMER_SLOTS[i]}`);
+    knop.setAttribute('aria-pressed', String(i === hamerSel));
+    knop.addEventListener('click', () => {
+      hamerKlik(i);
+      // Na het herbouwen de focus op dezelfde plek houden.
+      document.querySelectorAll<HTMLButtonElement>('#hamerrij .hamer')[i]?.focus();
+    });
     div.appendChild(knop);
     rij.appendChild(div);
   });
@@ -156,19 +163,52 @@ bouwHamers();
 // ═══════════════════ P1b: DE BRIEF ═══════════════════
 let briefLetters: number[] = [];
 
+let typFocus = -1; // index van de letter met toetsenbordfocus
+
 function bouwTypvel(): void {
   const vel = requireEl('typvel');
   vel.innerHTML = '';
+  const eersteLetter = [...BRIEFTEKST].findIndex(ch => /[A-Z]/.test(ch));
   [...BRIEFTEKST].forEach((ch, i) => {
     const span = document.createElement('span');
     span.textContent = ch;
     if (/[A-Z]/.test(ch)) {
-      span.className = 'lt' + (briefLetters.includes(i) ? ' diep' : '');
-      span.addEventListener('click', () => kiesLetter(i));
+      const diep = briefLetters.includes(i);
+      span.className = 'lt' + (diep ? ' diep' : '');
+      span.dataset.i = String(i);
+      // Toetsenbord: één tabstop, pijltjes om te bewegen, Enter/spatie kiest.
+      span.setAttribute('role', 'button');
+      span.setAttribute('aria-pressed', String(diep));
+      span.setAttribute('tabindex', i === (typFocus >= 0 ? typFocus : eersteLetter) ? '0' : '-1');
+      span.addEventListener('click', () => {
+        typFocus = i;
+        kiesLetter(i);
+      });
     }
     vel.appendChild(span);
   });
 }
+
+document.getElementById('typvel')?.addEventListener('keydown', (e: KeyboardEvent) => {
+  const letters = [...document.querySelectorAll<HTMLElement>('#typvel .lt')];
+  const i = letters.indexOf(e.target as HTMLElement);
+  if (i < 0) return;
+  let doel = -1;
+  if (e.key === 'ArrowRight') doel = Math.min(letters.length - 1, i + 1);
+  else if (e.key === 'ArrowLeft') doel = Math.max(0, i - 1);
+  else if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    letters[i]?.click();
+    document.querySelector<HTMLElement>(`#typvel [data-i="${typFocus}"]`)?.focus();
+    return;
+  }
+  if (doel < 0) return;
+  e.preventDefault();
+  letters[i]?.setAttribute('tabindex', '-1');
+  letters[doel]?.setAttribute('tabindex', '0');
+  letters[doel]?.focus();
+  typFocus = Number(letters[doel]?.dataset.i ?? -1);
+});
 
 function kiesLetter(i: number): void {
   if (!hamersHersteld) {

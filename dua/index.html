@@ -66,11 +66,11 @@
         --bg-2: #131210;
         --bg-3: #1c1916;
         --gold: #c8a96e;
-        --gold-dim: #7a6035;
+        --gold-dim: #a8844a;
         --gold-bright: #d9bc84;
         --text: #e8dcc8;
         --text-dim: #9a8a76;
-        --text-faint: #5a4e44;
+        --text-faint: #9a8b7c; /* contrast ≥ 4.5:1 op de donkere achtergronden */
         --border-gold: #2e2718;
         --ff: 'Special Elite', serif;
 
@@ -291,7 +291,6 @@
         display: block;
         font-size: 0.56rem;
         letter-spacing: 0.18em;
-        opacity: 0.8;
       }
       .dua-over {
         font-family: var(--ff);
@@ -1469,8 +1468,11 @@
 
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label">Naam contactpersoon <span class="form-req">*</span></label>
+              <label class="form-label" for="boek-naam"
+                >Naam contactpersoon <span class="form-req">*</span></label
+              >
               <input
+                id="boek-naam"
                 class="form-input"
                 type="text"
                 name="naam"
@@ -1479,13 +1481,17 @@
               />
             </div>
             <div class="form-field">
-              <label class="form-label">Gewenste datum <span class="form-req">*</span></label>
-              <input class="form-input" type="date" name="datum" required />
+              <label class="form-label" for="boek-datum"
+                >Gewenste datum <span class="form-req">*</span></label
+              >
+              <input id="boek-datum" class="form-input" type="date" name="datum" required />
             </div>
           </div>
 
           <div class="form-field" style="margin-bottom: 1rem">
-            <label class="form-label">Aantal spelers <span class="form-req">*</span></label>
+            <label class="form-label" for="boek-email_speler_1"
+              >Aantal spelers <span class="form-req">*</span></label
+            >
             <div class="speler-keuze" id="spelerKeuze">
               <button type="button" class="speler-btn active" data-n="2">2</button>
               <button type="button" class="speler-btn" data-n="3">3</button>
@@ -1498,6 +1504,7 @@
             <div class="form-field" style="margin-bottom: 0.75rem">
               <label class="form-label">E-mail speler 1 <span class="form-req">*</span></label>
               <input
+                id="boek-email_speler_1"
                 class="form-input"
                 type="email"
                 name="email_speler_1"
@@ -1506,8 +1513,11 @@
               />
             </div>
             <div class="form-field" style="margin-bottom: 0.75rem">
-              <label class="form-label">E-mail speler 2 <span class="form-req">*</span></label>
+              <label class="form-label" for="boek-email_speler_2"
+                >E-mail speler 2 <span class="form-req">*</span></label
+              >
               <input
+                id="boek-email_speler_2"
                 class="form-input"
                 type="email"
                 name="email_speler_2"
@@ -1516,8 +1526,11 @@
               />
             </div>
             <div class="form-field email-extra" style="margin-bottom: 0.75rem; display: none">
-              <label class="form-label">E-mail speler 3 <span class="form-req">*</span></label>
+              <label class="form-label" for="boek-email_speler_3"
+                >E-mail speler 3 <span class="form-req">*</span></label
+              >
               <input
+                id="boek-email_speler_3"
                 class="form-input"
                 type="email"
                 name="email_speler_3"
@@ -1528,8 +1541,11 @@
               class="form-field email-extra email-extra-4"
               style="margin-bottom: 0.75rem; display: none"
             >
-              <label class="form-label">E-mail speler 4 <span class="form-req">*</span></label>
+              <label class="form-label" for="boek-email_speler_4"
+                >E-mail speler 4 <span class="form-req">*</span></label
+              >
               <input
+                id="boek-email_speler_4"
                 class="form-input"
                 type="email"
                 name="email_speler_4"

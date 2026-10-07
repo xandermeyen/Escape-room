@@ -5,6 +5,7 @@
  * rollen live tonen, claimen, terugkeer-banner — is identiek en leeft hier.
  */
 import { isDemoCode } from './demo.ts';
+import { maakKlikbaar } from './toegankelijk.ts';
 import {
   zoekSessieCode,
   normaliseerSessieCode,
@@ -286,6 +287,9 @@ export function initLobby(config: LobbyConfig): void {
   window.kiesRol = (rol: string) => {
     void kiesRol(rol);
   };
+
+  // Rolkaarten zijn divs met onclick: ook bedienbaar met het toetsenbord.
+  document.querySelectorAll<HTMLElement>('.rol-kaart').forEach(kaart => maakKlikbaar(kaart));
 
   koppelCodeInvoer(() => void valideerCode());
 

@@ -25,6 +25,7 @@ import {
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
+import { maakTabsToegankelijk } from '../../../shared/js/toegankelijk.ts';
 import { KAMER14_INACTIEF, KAMER14_HULP_HTML, kamer14VrijgaveMelding } from './kamer14-hulp.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
@@ -191,6 +192,9 @@ function updateTabs(p: Record<string, boolean>): void {
     if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
   });
 });
+
+// ── Toetsenbord: tabs en klikbare documenten ──────────────
+maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));
 
 // ── Firebase live luisteren ───────────────────────────────
 const unsubscribe = luisterNaarStatus(sessie, puzzels => {

@@ -1,218 +1,170 @@
 <div align="center">
-<br />
 
 <img src="./assets/img/bureau_x_logo.svg" alt="Bureau X" height="48" />
 
-<br />
-<br />
+**Online escape rooms voor twee tot vier spelers, elk op hun eigen scherm.**
 
-<p>
-Browser-based escape room experiences built around storytelling, atmosphere, and collaborative puzzle-solving.
-</p>
-
-<p>
-<a href="https://bureau-x.be">
-<img src="https://img.shields.io/badge/LIVE-bureau--x.be-black?style=for-the-badge" alt="Live" />
-</a>
-</p>
+[![CI](https://github.com/xandermeyen/Escape-room/actions/workflows/ci.yml/badge.svg)](https://github.com/xandermeyen/Escape-room/actions/workflows/ci.yml)
+[![Live](https://img.shields.io/badge/live-bureau--x.be-black)](https://bureau-x.be)
 
 </div>
 
----
+Bureau X is een online escape room die je met z'n tweeën (of met vier) speelt, terwijl je
+met elkaar belt. Elke speler krijgt een ander dossier en ziet dus andere stukken van het
+verhaal. Geen enkele puzzel los je alleen op: je moet voorlezen, vergelijken en overleggen.
 
-## About
+Ik bouwde dit naast mijn opleiding Graduaat Programmeren. Het draait live op
+[bureau-x.be](https://bureau-x.be) en wordt gespeeld door echte groepen, die via een
+boekingsformulier een sessiecode krijgen.
 
-Bureau X is a browser-based escape room platform. Each player receives a different dossier, follows a different trail, and sees a different side of the story. The only way to crack the case is to work together.
+| Homepage                                      | Kamer 14, Speler A (met hint)                                             |
+| --------------------------------------------- | ------------------------------------------------------------------------- |
+| ![Homepage](docs/screenshots/home.jpg)        | ![Kamer 14, Speler A](docs/screenshots/kamer14-speler-a.jpg)              |
+| **D.U.A., het tijdperk 1934**                 | **Kamerinspectie op gsm (390 px)**                                        |
+| ![D.U.A. 1934](docs/screenshots/dua-1934.jpg) | ![Kamerinspectie op gsm](docs/screenshots/kamer14-kamerinspectie-gsm.jpg) |
 
-No app. No downloads. Just a link and a story.
+## De twee experiences
 
-There are two experiences, sharing the same engine but with their own story, roles, and puzzles.
+**Kamer 14** speelt zich af in Geel, rond de eeuwenoude gezinsverpleging. Kostgangster Lena
+is verdwenen. Speler A heeft het dossier van het psychiatrisch centrum, Speler B het logboek
+van het gastgezin en de kamer van Lena. Samen zoeken ze uit waar ze heen ging, bij wie, en
+met welke bus. Vijf puzzels, 60 minuten, en een briefkaart als beloning.
 
-### Kamer 14
+**D.U.A.** gaat over de diefstal van _De Rechtvaardige Rechters_ in 1934. Eén kant speelt in
+1934 en verstopt een spoor, de andere kant speelt in 2034 en vindt wat er een eeuw later van
+over is. Wat 1934 verknoeit, merkt 2034 pas later. Twee tot vier spelers.
 
-Set inside the OPZ Geel psychiatric institution in Belgium, drawing from the real history of the _kostgangers_: people living with local families as part of a centuries-old community care tradition.
+## Zelf proberen (demo)
 
-One player reviews clinical records as an OPZ staff member (**Speler A**). The other steps into the neighbourhood, piecing together what the institution never wrote down (**Speler B**). Together they investigate the disappearance of Lena Bogaert. Two players.
+Elke experience heeft een vaste demo-sessie, zodat je het spel alleen kan tonen:
 
-### D.U.A.
+- Kamer 14: [`DEMO-K14`](https://bureau-x.be/experiences/kamer-14/?sessie=DEMO-K14)
+- D.U.A.: [`DEMO-DUA`](https://bureau-x.be/experiences/dua/?sessie=DEMO-DUA)
 
-A mystery that spans a century. One team works in **1934** (roles _Schrijver_ and _Loper_) and leaves a trail through coded letters, a station locker, and a hidden workroom. The other team works in **2034** as Bureau X archivists (roles _Archivaris_ and _Restaurateur_) and uncovers that same trail a hundred years later. Inspired by a real interbellum art theft, the two teams collaborate across time while the 1934 side works under rising police suspicion and time penalties. Two to four players.
+In demomodus staat bovenaan een balk om met één klik van rol te wisselen (Speler A en B, of
+1934 en 2034). Demo-sessies tellen niet mee in de statistieken en bewaren geen reviews. De
+host zet een demo vanuit het host-paneel met één knop terug naar het begin.
 
----
-
-## How the game works
-
-1. Players open the session link from their email (or a link shared by the host)
-2. Each player claims a role. Roles are claimed **atomically via Firebase transactions**, so two players can never grab the same role
-3. Players work through their documents, share discoveries, and solve puzzles together
-4. Puzzle progress syncs **live** across all screens
-5. Once all puzzles are solved, players submit a joint final report
-6. The session is automatically deactivated (`actief: false`) after the report is submitted or time runs out
-
-Puzzle answers are never stored in plain text: the source only contains SHA-256 hashes, so opening DevTools gives nothing away.
-
----
-
-## Booking & hosting
-
-Public bookings go through a Formspree form on the landing page. A Make.com scenario handles everything after submission:
-
-```
-Formspree form → Gmail (noreply@formspree.io) → Make.com watches Gmail
-  → HTTP PUT to Firebase REST API (creates session with unique code)
-  → Email (Combell SMTP) to all players with session link
-```
-
-The session link contains `?sessie=CODE` so players land directly on the role selection screen. The Make.com scenario runs every hour, so email confirmation arrives within ~60 minutes of booking.
-
-Hosts can also create and manage sessions directly from the **host panel** of each experience (email/password login), which lists live sessions, their progress, and lobby links.
-
----
-
-## Tech stack
-
-| Layer                | Technology                                            |
-| -------------------- | ----------------------------------------------------- |
-| Frontend             | HTML5, CSS3, TypeScript (ES modules, `strict` mode)   |
-| Build tool           | Vite                                                  |
-| Realtime backend     | Firebase Realtime Database                            |
-| Auth                 | Firebase Anonymous (players) + Email/Password (hosts) |
-| Styling              | Bootstrap 5, Bootstrap Icons, Google Fonts            |
-| Package manager      | pnpm                                                  |
-| Hosting              | GitHub Pages + custom domain                          |
-| CI/CD                | GitHub Actions                                        |
-| Linting / formatting | ESLint (typescript-eslint) + Prettier                 |
-| Error monitoring     | Sentry                                                |
-| Testing              | Vitest + jsdom                                        |
-| Booking forms        | Formspree (free plan)                                 |
-| Automation           | Make.com (free plan)                                  |
-| Transactional email  | Combell SMTP (`smtp-auth.mailprotect.be`, port 587)   |
-
----
-
-## Project structure
+## Architectuur
 
 ```
-escape-room/
-├── assets/img/                     # Logos, favicons, images
-├── css/                            # Landing page styles
-├── public/
-│   ├── icons.svg
-│   └── experiences/kamer-14/audio/ # Recorded voice lines (mp3)
-├── shared/
-│   ├── css/game.css                # Shared game design system
-│   └── js/
-│       ├── firebase-config.ts      # Firebase init (reads from .env)
-│       ├── auth.ts                 # Anonymous player login with retries (reports failures to Sentry)
-│       ├── session.ts              # Session CRUD (atomic create), role claiming, puzzle sync, deactivation watch
-│       ├── game.ts                 # Shared player-page logic (progress, nav guard)
-│       ├── timer.ts                # 60-min countdown, server-clock offset, per-experience warnings
-│       ├── utils.ts                # requireEl / sessieUitUrl / escHtml, answer hashing, hint helpers
-│       ├── verbinding.ts           # Visible "connection failed" banner + Sentry on write errors
-│       ├── reviews.ts              # Approved reviews (landing page)
-│       ├── review-form.ts          # Shared review form on both ending screens
-│       ├── lobby-ui.ts             # Shared lobby flow (validate, claim, live roles, resume banner)
-│       ├── tijd-voorbij.ts         # Shared "time-expired" logic
-│       ├── host-auth.ts            # Shared host email/password login
-│       ├── host-ui.ts              # Shared host UI helpers (status, copy, escaping)
-│       ├── host-sessies.ts         # Shared host session list (fetch, filter, table fragments)
-│       └── sentry.ts               # Sentry init (imported per page)
-├── experiences/
-│   ├── kamer-14/                   # OPZ Geel — 2 players (Speler A / B)
-│   │   ├── css/
-│   │   ├── index.html              # Lobby
-│   │   ├── speler-a.html / speler-b.html
-│   │   ├── einde.html              # Ending + report submission
-│   │   ├── host-panel.html         # Host session management
-│   │   ├── tijd-voorbij.html       # Time-expired screen
-│   │   └── js/                     # lobby, speler-a, speler-b, einde, tijd-voorbij, audio, host-panel
-│   └── dua/                        # D.U.A. — 2–4 players across 1934 / 2034
-│       ├── css/dua.css
-│       ├── index.html              # Lobby (4 roles)
-│       ├── speler-1934.html / speler-2034.html
-│       ├── einde.html
-│       ├── host-panel.html
-│       ├── tijd-voorbij.html
-│       └── js/                     # lobby, speler-1934, speler-2034, einde, dua-session, dua-ui, dua-audio, tijd-voorbij, host-panel
-├── js/landing-new.ts               # Landing page scripts
-├── kamer-14/index.html             # Kamer 14 info/booking page
-├── dua/index.html                  # D.U.A. info page
-├── tests/                          # Vitest unit tests (session, timer, utils, game, dua-session, shared-ui)
-├── firebase/database.rules.json    # Realtime Database security rules
-├── firebase.json                   # Firebase CLI config (points to the rules)
-├── docs/                           # make-scenario.md (booking automation), TECH-DEBT.md (audit)
-├── index.html                      # Homepage
-├── privacy.html
-├── eslint.config.js                # ESLint flat config
-├── .prettierrc.json                # Prettier config
-├── .gitattributes                  # Enforce LF line endings
-├── tsconfig.json
-├── vite.config.ts
-└── .github/workflows/
-    ├── ci.yml                      # Lint + typecheck + tests on every push and PR
-    ├── deploy.yml                  # Lint + tests + build, then deploy to GitHub Pages on push to main
-    └── deploy-rules.yml            # Manual deploy of Firebase rules (workflow_dispatch)
+Browser (Vite + TypeScript, statische pagina's)
+   │  realtime sync, anonieme login
+   ▼
+Firebase Realtime Database + Firebase Auth + App Check (reCAPTCHA v3)
+   ▲
+   │  sessie aanmaken (REST, ingelogd als beheerder)
+Make.com  ◄── Formspree-boekingsformulier ── speler
 ```
 
----
+| Onderdeel   | Keuze                                                                   |
+| ----------- | ----------------------------------------------------------------------- |
+| Frontend    | HTML, CSS, TypeScript (strict), Vite, Bootstrap 5                       |
+| Backend     | Firebase Realtime Database, Firebase Auth (anoniem + e-mail/wachtwoord) |
+| Beveiliging | Database-rules per veld, beheerders-lijst, Firebase App Check           |
+| Hosting     | GitHub Pages met eigen domein, deploy via GitHub Actions                |
+| Monitoring  | Sentry (alleen in productie)                                            |
+| Analytics   | Google Analytics 4 met Consent Mode, pas na toestemming                 |
+| Boekingen   | Formspree, Make.com, Combell SMTP                                       |
+| Kwaliteit   | Vitest, ESLint, Prettier, html-validate, rules-tests met de emulator    |
 
-## Local development
+Elke experience heeft dezelfde opbouw: een lobby (code en rol kiezen), een spelerpagina per
+rol, een eindscherm met rapport en review, een tijd-voorbij-scherm en een host-paneel. De
+gedeelde logica staat in `shared/js/` (sessies, timer, antwoordcontrole, speldata, hulp,
+demomodus, host-onderdelen), de verhaalspecifieke teksten en configuratie in
+`experiences/<naam>/js/`.
+
+## Ontwerpkeuzes
+
+**Gehashte antwoorden.** In de broncode staan geen antwoorden, alleen SHA-256-hashes. Wie de
+ontwikkelaarstools opent, vindt niets bruikbaars. De oplossing voor het tijd-voorbij-scherm
+staat gecodeerd in de bundel en verschijnt enkel als de sessie gesloten is.
+
+**Normalisatie vóór het hashen.** Spelers typen "dinsdag en donderdag", "Di, Do" of
+"donderdag dinsdag". Een normalisatiestap per puzzel maakt daar één vaste vorm van (dagen in
+weekvolgorde, "vijf weken" wordt 5, "7u35" en "07.35" worden 07:35, "met de bus van De Lijn"
+wordt een vervoermiddel), en pas die vorm wordt gehasht. Zo is de controle soepel zonder dat
+er een antwoord in de code staat. Eén typfout in een naam mag ook: de varianten van de invoer
+worden gehasht, niet die van het antwoord.
+
+**Bijna-meldingen.** Een gedeeltelijk juist antwoord (één van de twee dagen, het juiste uur
+met verkeerde minuten, de juiste plekken in de verkeerde volgorde) krijgt "Je zit dicht bij
+het antwoord". Ook die controle gebeurt op hashes van de deelvormen.
+
+**Nooit vastzitten.** Na twee mislukte pogingen licht de hintknop op. Na acht minuten zonder
+voortgang verschijnt een korte verhaalmelding die richting geeft. Na elke opgeloste puzzel
+staat er wat er vrijkwam en wat de andere speler nu heeft. De laatste hintstap is een sterke
+duw, geen antwoord. En er is altijd een knop "Hulp nodig?".
+
+**Database-rules als echte beveiliging.** Spelers loggen anoniem in. Ze mogen enkel bestaande
+sessies aanpassen, en per veld enkel wat het spel nodig heeft: een puzzel van `false` naar
+`true`, een rol één keer claimen, een rapport één keer indienen, tellers enkel met +1.
+Aanmaken, resetten en alle sessies lezen kan alleen een beheerder uit `beheerders/<uid>`,
+niet zomaar elk account met een wachtwoord. App Check weert verkeer dat niet van de site
+komt. Zie [docs/beveiliging.md](docs/beveiliging.md).
+
+**Speldata zonder persoonsgegevens.** Per puzzel worden de tijd, de foute en bijna-pogingen
+en de gebruikte hintstappen bewaard, enkel gekoppeld aan de sessiecode. Het host-paneel toont
+gemiddelden per puzzel en markeert de moeilijkste. Spelers zien op het eindscherm "sneller dan
+X% van de groepen", op basis van een anonieme lijst met tijden die alleen een beheerder kan
+schrijven.
+
+**Eerlijke reviews.** Een lage score wordt gewoon bewaard. Bij 1 tot 3 sterren vraagt het
+formulier kort wat beter kan; dat ziet alleen de host.
+
+**Toestemming voor cookies.** Google Analytics laadt pas na "Accepteren" (Consent Mode v2).
+Wie weigert, laadt het script helemaal niet.
+
+**Toegankelijkheid.** Tabs, kamerzones, rolkaarten, de typemachine en de stadsplannen werken
+met het toetsenbord (Tab, Enter/spatie, pijltjes, Escape). Kleuren halen minstens 4,5:1
+contrast. Klikdoelen op gsm zijn minstens 44 px.
+
+## Lighthouse
+
+Gemeten met Lighthouse 12 (gsm-profiel, gesimuleerde vertraging) op de productiebuild via
+`vite preview`. Firebase en Google Fonts waren in die testomgeving niet bereikbaar, wat de
+"best practices" (consolefouten) iets drukt.
+
+| Pagina            | Performance | Toegankelijkheid | Best practices | SEO |
+| ----------------- | ----------- | ---------------- | -------------- | --- |
+| Home              | 94          | 100              | 96             | 100 |
+| Kamer 14 (info)   | 100         | 100              | 96             | 100 |
+| Kamer 14 Speler A | 84          | 100              | 96             | 54  |
+
+De spelerpagina's staan bewust op `noindex`; daar komt de lage SEO-score vandaan. Ook de
+lobby's, de tweede spelerpagina, de eindschermen, alle D.U.A.-pagina's, het privacybeleid en
+het host-paneel halen 100 op toegankelijkheid.
+
+## Lokaal draaien
+
+Je hebt Node 22+ en pnpm nodig.
 
 ```bash
-git clone https://github.com/xandermeyen/Escape-room.git
-cd Escape-room
 pnpm install
+cp .env.example .env.development   # vul je eigen Firebase-config in
+pnpm dev                           # http://localhost:5173
 ```
 
-Create `.env.development` with a Firebase dev project:
+| Commando            | Wat het doet                                            |
+| ------------------- | ------------------------------------------------------- |
+| `pnpm test`         | Vitest-unittests (jsdom)                                |
+| `pnpm test:rules`   | Database-rules testen tegen de emulator (Java 21 nodig) |
+| `pnpm lint`         | ESLint, met een regel tegen onveilige `innerHTML`       |
+| `pnpm lint:html`    | Alle HTML-pagina's valideren                            |
+| `pnpm format:check` | Prettier-controle                                       |
+| `pnpm typecheck`    | TypeScript zonder build                                 |
+| `pnpm build`        | Productiebuild naar `dist/`                             |
 
-```
-VITE_FIREBASE_API_KEY=...
-VITE_FIREBASE_AUTH_DOMAIN=...
-VITE_FIREBASE_DATABASE_URL=...
-VITE_FIREBASE_PROJECT_ID=...
-VITE_FIREBASE_STORAGE_BUCKET=...
-VITE_FIREBASE_MESSAGING_SENDER_ID=...
-VITE_FIREBASE_APP_ID=...
-VITE_SENTRY_DSN=...
-```
+CI draait dit allemaal bij elke push. Een push naar `main` bouwt en deployt naar GitHub
+Pages. De database-rules deploy je apart, met de handmatige workflow "Firebase rules
+deployen".
 
-### Scripts
+## Meer documentatie
 
-```bash
-pnpm dev          # dev server at localhost:5173
-pnpm lint         # ESLint
-pnpm format       # Prettier (write)
-pnpm typecheck    # tsc --noEmit
-pnpm test         # run unit tests (Vitest)
-pnpm build        # type-check + production build
-```
+- [docs/beveiliging.md](docs/beveiliging.md): rules, beheerders, App Check en een testchecklist
+- [docs/make-scenario.md](docs/make-scenario.md): de boekingsautomatisering in Make.com
 
 ---
 
-## Code quality
-
-- **TypeScript `strict` mode** is on; missing DOM elements are caught early via a `requireEl()` helper instead of silent null-dereferences.
-- **ESLint + Prettier** enforce a consistent style. A `no-unsanitized` rule blocks unsafe `innerHTML` assignments to prevent XSS regressions in this multiplayer app.
-- **CI** (`ci.yml`) runs lint, type-check, and tests on every push and pull request. Deploys are gated on lint + tests passing.
-- **Resilient writes**: failed Firebase writes surface a visible "connection failed, reload" banner and are reported to Sentry, instead of failing silently.
-
----
-
-## Deployment
-
-Every push to `main` triggers a GitHub Actions build. Production Firebase credentials and the Sentry DSN are stored as repository secrets and injected into `.env` at build time. The build output is deployed to GitHub Pages automatically (after lint and tests pass).
-
----
-
-## Firebase security rules
-
-Sessions are write-protected. The rules enforce required fields on create, typed values (puzzle flags must be booleans, `timerGestart` a number or null, role values constrained), and `auth != null` for writes. Listing **all** sessions (used by the host panels) additionally requires an email/password login (`auth.provider === 'password'`); anonymous players can only read individual sessions.
-
-The rules are version-controlled in `firebase/database.rules.json` (with `firebase.json` pointing the Firebase CLI to them). They are deployed manually via the `deploy-rules.yml` workflow: open the Actions tab, pick "Firebase rules deployen" and run it. This needs a `FIREBASE_TOKEN` repository secret (from `npx firebase-tools login:ci`). A normal push to `main` never touches the live rules.
-
----
-
-## Author
-
-Built by Xander Meyen - [bureau-x.be](https://bureau-x.be)
+Lena Bogaert is een fictief personage. De gezinsverpleging in Geel, de diefstal van
+_De Rechtvaardige Rechters_ en de brieven van D.U.A. zijn echt.

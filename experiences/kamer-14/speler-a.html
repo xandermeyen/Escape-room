@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Kamer 14 - OPZ-dossier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
       rel="stylesheet"
@@ -199,11 +201,24 @@
         </div>
 
         <div style="margin: 14px 0 10px 0">
-          <img
-            src="../../assets/img/TekeningKerkV2.png"
-            alt="Tekening Lena Bogaert  -  stadsplein met kerktoren"
-            style="width: 100%; max-width: 420px; display: block; border: 1px solid var(--k-rand)"
-          />
+          <picture>
+            <source srcset="../../assets/img/TekeningKerkV2.webp" type="image/webp" />
+            <img
+              src="../../assets/img/TekeningKerkV2.png"
+              alt="Potloodtekening van Lena: een stadsplein met een gotische kerk, een achtzijdige spits boven een vierkante toren"
+              width="900"
+              height="600"
+              loading="lazy"
+              decoding="async"
+              style="
+                width: 100%;
+                height: auto;
+                max-width: 420px;
+                display: block;
+                border: 1px solid var(--k-rand);
+              "
+            />
+          </picture>
           <div
             style="
               font-size: 9px;
@@ -229,8 +244,13 @@
             <div style="margin: 10px 0 8px 0">
               <img
                 src="../../assets/img/kerk_foto.jpg"
-                alt="Grote Markt Diest  -  Sint-Sulpitiuskerk"
+                alt="Foto van de Grote Markt in Diest met de Sint-Sulpitiuskerk"
+                width="960"
+                height="640"
+                loading="lazy"
+                decoding="async"
                 style="
+                  height: auto;
                   width: 100%;
                   max-width: 310px;
                   display: block;
