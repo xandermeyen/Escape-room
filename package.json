@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:rules": "pnpm dlx firebase-tools@15 emulators:exec --only database --project demo-bureau-x \"vitest run tests/database-rules.test.ts\""
+    "test:rules": "pnpm dlx firebase-tools@15 emulators:exec --only database --project demo-bureau-x \"vitest run tests/database-rules.test.ts\"",
+    "lint:html": "html-validate \"*.html\" \"kamer-14/*.html\" \"dua/*.html\" \"experiences/**/*.html\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -21,6 +22,7 @@
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-no-unsanitized": "^4.1.5",
+    "html-validate": "^11.16.2",
     "jsdom": "^26.1.0",
     "prettier": "^3.8.4",
     "typescript": "~6.0.2",

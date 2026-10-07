@@ -1,0 +1,12 @@
+{
+  "extends": ["html-validate:standard"],
+  "rules": {
+    "no-inline-style": "off",
+    "no-trailing-whitespace": "off",
+    "void-style": "off",
+    "attribute-boolean-style": "off",
+    "doctype-style": "off",
+    "no-conditional-comment": "off",
+    "long-title": "off"
+  }
+}

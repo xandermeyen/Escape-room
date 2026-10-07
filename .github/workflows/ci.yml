@@ -1,4 +1,4 @@
-name: CI (lint, types, tests)
+name: CI
 
 on:
   push:
@@ -34,6 +34,15 @@ jobs:
 
       - name: Tests draaien
         run: pnpm test
+
+      - name: Opmaak controleren (Prettier)
+        run: pnpm format:check
+
+      - name: HTML valideren
+        run: pnpm lint:html
+
+      - name: Bouwen
+        run: pnpm build
 
   rules:
     name: Firebase rules (emulator)
