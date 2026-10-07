@@ -5,7 +5,11 @@
  */
 import '../../../shared/js/sentry.ts';
 import { luisterNaarStatus, bewaakSessieGesloten } from '../../../shared/js/session.ts';
-import { requireEl } from '../../../shared/js/utils.ts';
+import { requireEl, beoordeelAntwoord } from '../../../shared/js/utils.ts';
+import { registreerPoging, registreerVrijgaves, luisterNaarHints, puzzelUitHintBlok } from '../../../shared/js/speldata.ts';
+import { initHulp } from '../../../shared/js/hulp.ts';
+import { DUA_HASHES, DUA_REGELS, DUA_VRIJGAVE, DUA_BIJNA_KLUIS } from './dua-config.ts';
+import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
   luisterDua, zetZegel, zetBrief, gomBrief, zetKluisNummer,
   zetVerstopPlek, zetPin1934, zetBrief14, verhoogVerdenking,
@@ -13,7 +17,8 @@ import {
 } from './dua-session.ts';
 import {
   melding, startDuaTimer, koppelMeta, tekenVoortgang, ontgrendeld,
-  duaHint, koppelMuteKnop, koppelEasterEggs, leesSessie, type PuzzelStatus,
+  duaHint, koppelMuteKnop, koppelEasterEggs, leesSessie, maakSvgToegankelijk,
+  type PuzzelStatus,
 } from './dua-ui.ts';
 import { fx, koppelTypgeluid } from './dua-audio.ts';
 
@@ -27,6 +32,22 @@ requireEl('sys-rol').textContent = `1934 · ${rol === 'loper' ? 'De Loper' : 'De
 let dua: DuaState = {};
 let puzzels: PuzzelStatus = {};
 let toezichtVerscherpt = false;
+
+// ── Hulp: hint-tip, verhaalmeldingen, vrijgave en "Hulp nodig?" ──
+const hulp = initHulp({
+  hintBlokVoor: puzzel =>
+    ({ p1: 'hint-p1a', p2: 'hint-p2a', p4: 'hint-p4a', p5: 'hint-p5a' } as Record<string, string>)[puzzel] ?? null,
+  vrijgave: DUA_VRIJGAVE,
+  inactiefMeldingen: DUA_INACTIEF['1934'],
+  vrijgaveMelding: (oud, nieuw) => duaVrijgaveMelding('1934', oud, nieuw),
+  hulpHtml: DUA_HULP_HTML,
+});
+
+// ── Speldata: geopende hintstappen van 1934 ──
+luisterNaarHints(sessie, blokId => {
+  const puzzel = puzzelUitHintBlok(blokId);
+  return puzzel ? { puzzel, rol: '1934' } : null;
+});
 
 // ── Hints globaal voor onclick ──
 declare global {
@@ -177,8 +198,19 @@ const wachterVeilig = (): boolean => wachterPos >= 65;
 document.getElementById('btn-deponeer')?.addEventListener('click', async () => {
   if (!puzzels['p1']) { fx.fout(); melding('Eerst de brief (P1): zonder belofte op papier heeft een kluis geen zin.'); return; }
   if (dua.kluisNummer) { melding(`Het paneel ligt al in kluis ${dua.kluisNummer}.`); return; }
-  const v = requireEl<HTMLInputElement>('kluis-keuze').value.trim();
+  const v = requireEl<HTMLInputElement>('kluis-keuze').value.replace(/\D/g, '');
   if (!/^\d{2}$/.test(v)) { fx.fout(); melding('Twee cijfers.'); return; }
+  // Eerst het nummer: een verkeerde kluis zou 2034 later laten vastlopen.
+  const oordeel = await beoordeelAntwoord(v, DUA_HASHES.kluis ?? [], DUA_REGELS.kluis);
+  if (oordeel !== 'juist') {
+    fx.fout();
+    hulp.poging('p2', oordeel);
+    void registreerPoging(sessie, 'p2', oordeel);
+    melding(oordeel === 'bijna'
+      ? DUA_BIJNA_KLUIS
+      : 'Dat nummer past niet bij de belofte in de brief. Lees ze nog eens: één meer dan het aantal brieven dat het bisdom telt.');
+    return;
+  }
   if (!wachterVeilig()) {
     await verhoogVerdenking(sessie, 15);
     fx.fluitje();
@@ -315,6 +347,11 @@ luisterNaarStatus(sessie, (p) => {
   const hadP5 = !!puzzels['p5'];
   puzzels = p;
   tekenVoortgang(p);
+  registreerVrijgaves(sessie, p, DUA_VRIJGAVE);
+  hulp.status(p);
+  // Na P1 is een nieuw vel niet meer nodig.
+  const gom = document.getElementById('btn-gom');
+  if (gom) gom.hidden = !!p['p1'];
   // P5 net opgelost → kerkklok + brief 14 tonen
   if (!hadP5 && p['p5']) {
     fx.kerkklok(5);
@@ -326,6 +363,7 @@ luisterNaarStatus(sessie, (p) => {
 });
 
 // ═══════════════════ OPSTART ═══════════════════
+maakSvgToegankelijk('#kamer [data-plek], #kaart-1934 [data-plek]');
 koppelMuteKnop();
 koppelTypgeluid();
 koppelEasterEggs(sessie);

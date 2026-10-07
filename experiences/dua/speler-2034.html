@@ -70,7 +70,7 @@
       <div id="doorslag-vraag" style="display:none;margin-top:10px">
         <p>Sommige letters zijn dieper doorgedrukt. Welk woord vormen ze?</p>
         <div style="display:flex;gap:8px">
-          <input class="d-input" id="ant-woord" maxlength="8"
+          <input class="d-input" id="ant-woord" maxlength="12" aria-label="Woord in de doorslag"
             style="max-width:200px;font-size:19px;letter-spacing:4px;text-align:center" autocomplete="off" />
           <button class="d-knop klein" id="btn-woord">Lees</button>
         </div>
@@ -79,7 +79,7 @@
         <button class="hint-knop" onclick="duaHintKlik('hint-p1')">Hint vragen</button>
         <div class="hint-stap verborgen">» De doorgedrukte letters lees je in de volgorde waarin ze in de brief staan.</div>
         <div class="hint-stap verborgen">» Het zijn er vijf, en samen vormen ze een plek waar je iets in bewaart.</div>
-        <div class="hint-stap verborgen">» Oplossing: het woord hoort KLUIS te zijn. Staat er iets anders, dan moet 1934 een nieuw vel typen.</div>
+        <div class="hint-stap verborgen">» Een plek in een station waar je je bagage veilig achterlaat, in vijf letters. Staat er iets anders op de doorslag, dan moet 1934 een nieuw vel typen.</div>
         <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p1')">Nog een hint</button>
       </div>
     </div>
@@ -92,8 +92,13 @@
         <div class="kluis" style="margin-top:10px">
           <div class="draaiknop" id="draaiknop"><div class="wijzer"></div></div>
           <div>
-            <div class="kluis-display" id="kluis-display">__</div>
-            <p class="hintje" style="margin-top:8px">Klik: volgend cijfer. Dubbelklik: cijfer bevestigen.<br />Twee cijfers, dan beslist het slot.</p>
+            <div class="kluis-display" id="kluis-display" aria-live="polite">__</div>
+            <div class="kluis-knoppen">
+              <button type="button" class="d-knop klein" id="btn-draai-terug" aria-label="Vorig cijfer">−</button>
+              <button type="button" class="d-knop klein" id="btn-draai" aria-label="Volgend cijfer">+</button>
+              <button type="button" class="d-knop klein" id="btn-cijfer-ok">Bevestig cijfer</button>
+            </div>
+            <p class="hintje" style="margin-top:8px">Draai met − en +, bevestig elk cijfer apart.<br />Twee cijfers, dan beslist het slot.</p>
           </div>
         </div>
       </div>
@@ -101,7 +106,7 @@
         <button class="hint-knop" onclick="duaHintKlik('hint-p2')">Hint vragen</button>
         <div class="hint-stap verborgen">» Het eerste cijfer staat nog op het ticket. Het tweede zit in de brief zelf.</div>
         <div class="hint-stap verborgen">» "Eén meer dan het aantal brieven dat u telt." Het bisdom telde wat aankwam, en brief XIII kwam nooit aan.</div>
-        <div class="hint-stap verborgen">» Oplossing: twaalf ontvangen brieven plus één. Draai het eerste cijfer, bevestig, draai het tweede, bevestig.</div>
+        <div class="hint-stap verborgen">» Het bisdom ontving de brieven I tot en met XII. Tel er één bij op. Draai elk cijfer en bevestig het apart.</div>
         <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p2')">Nog een hint</button>
       </div>
     </div>
@@ -126,7 +131,7 @@
         de straatverlichting was gedoofd." Eén getuige liegt dus. En 1934 stond erbij: vraag het hen.</p>
       <p style="margin:10px 0 6px">Zonenummers van de route, in volgorde:</p>
       <div style="display:flex;gap:8px">
-        <input class="d-input" id="ant-route" maxlength="4" placeholder="????"
+        <input class="d-input" id="ant-route" maxlength="12" placeholder="????" inputmode="numeric" aria-label="Zonenummers van de route"
           style="max-width:160px;font-size:22px;letter-spacing:8px;text-align:center" autocomplete="off" />
         <button class="d-knop klein" id="btn-route">Controleer</button>
       </div>
@@ -134,7 +139,7 @@
         <button class="hint-knop" onclick="duaHintKlik('hint-p3')">Hint vragen</button>
         <div class="hint-stap verborgen">» Vergelijk wat de buurman zegt met het weerbericht in de krant.</div>
         <div class="hint-stap verborgen">» Volle maan bij zwaar bewolkt en aardedonker? De buurman liegt; schrap het westportaal. Vraag 1934 naar de echte volgorde.</div>
-        <div class="hint-stap verborgen">» Oplossing: sacristie (3), kooromgang (1), Vijdkapel (9), zijdeur (4).</div>
+        <div class="hint-stap verborgen">» Schrap de buurman. Neem de andere drie getuigen in volgorde van tijd en zoek bij elke plek het nummer op de plattegrond. Bij de laatste getuige horen twee plekken.</div>
         <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p3')">Nog een hint</button>
       </div>
     </div>
@@ -162,13 +167,13 @@
           <rect class="klikbaar" data-plek="bureau" x="110" y="120" width="140" height="60" fill="#8a6f4d" stroke="#3f3324" stroke-width="2"/>
           <text x="148" y="155" font-size="12" fill="#f5f0e8" style="pointer-events:none">BUREAU</text>
           <circle class="klikbaar" data-plek="vensterbank" cx="395" cy="55" r="20" fill="#d8c98e" stroke="#3f3324" stroke-width="2"/>
-          <text x="368" y="92" font-size="10" fill="#3f3324" style="pointer-events:none">vensterbank</text>
+          <text x="368" y="92" font-size="10" fill="#3f3324" style="pointer-events:none">VENSTERBANK</text>
           <rect class="klikbaar" data-plek="schouw" x="270" y="40" width="70" height="140" fill="#9c8468" stroke="#3f3324" stroke-width="2"/>
           <text x="280" y="115" font-size="11" fill="#f5f0e8" style="pointer-events:none">SCHOUW</text>
           <rect class="klikbaar" data-plek="boekenrek" x="110" y="25" width="140" height="55" fill="#7a6248" stroke="#3f3324" stroke-width="2"/>
           <text x="138" y="58" font-size="11" fill="#f5f0e8" style="pointer-events:none">BOEKENREK</text>
           <rect class="klikbaar" data-plek="vloerplank" x="355" y="150" width="90" height="30" fill="#b3a07c" stroke="#3f3324" stroke-width="2"/>
-          <text x="358" y="170" font-size="10" fill="#2b2620" style="pointer-events:none">losse vloerplank</text>
+          <text x="368" y="170" font-size="10" fill="#2b2620" style="pointer-events:none">VLOERPLANK</text>
         </svg>
         <p class="hintje" id="museum-status"></p>
       </div>
@@ -176,7 +181,7 @@
         <button class="hint-knop" onclick="duaHintKlik('hint-p4b')">Hint vragen</button>
         <div class="hint-stap verborgen">» Het verslag zegt waar de politie zocht. Daar ligt het dus niet (meer).</div>
         <div class="hint-stap verborgen">» Vraag 1934 letterlijk waar ze het mapje lieten. Praten mag, dit is geen geheim.</div>
-        <div class="hint-stap verborgen">» Oplossing: klik de plek die 1934 koos. Was dat bureau, kast of boekenrek, dan is het mapje verloren en moet 1934 opnieuw.</div>
+        <div class="hint-stap verborgen">» Klik op dezelfde plek die 1934 koos. Koos 1934 een plek uit het huiszoekingsverslag, dan ligt het mapje er niet meer en moet 1934 opnieuw naar binnen.</div>
         <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p4b')">Nog een hint</button>
       </div>
     </div>
@@ -215,7 +220,7 @@
         <button class="hint-knop" onclick="duaHintKlik('hint-p5')">Hint vragen</button>
         <div class="hint-stap verborgen">» Herlees de beroemde zin. Waar komt het publiek elke dag, zonder iets te zien?</div>
         <div class="hint-stap verborgen">» Het stadsarchief vertelt welke gebouwen doorzocht of verbouwd werden. Eén plek bleef altijd open en werd nooit ontruimd.</div>
-        <div class="hint-stap verborgen">» Oplossing: de plek waar het allemaal begon. Verstopt in het volle zicht.</div>
+        <div class="hint-stap verborgen">» De plek waar het allemaal begon. Verstopt in het volle zicht.</div>
         <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p5')">Nog een hint</button>
       </div>
     </div>

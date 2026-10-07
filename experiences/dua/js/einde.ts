@@ -12,6 +12,15 @@ import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { haalEinde } from './dua-session.ts';
 import { fx } from './dua-audio.ts';
+import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
+
+/** Zo lang wachten we op de andere kant voor we de review toch tonen. */
+const MAX_WACHT_MS = 3 * 60 * 1000;
+let wachtVerlopen = false;
+setTimeout(() => {
+  wachtVerlopen = true;
+  void vernieuw();
+}, MAX_WACHT_MS);
 
 const AANTAL_EGGS = 6;
 
@@ -56,6 +65,15 @@ async function vernieuw(): Promise<void> {
 
   const wacht = requireEl('wacht-status');
   if (!data.brief14Klaar || !data.rapportIngediend) {
+    if (wachtVerlopen) {
+      // De andere kant haakte af of is nog bezig: niemand blijft eindeloos
+      // wachten. De teksten verschijnen alsnog zodra ze binnenkomen.
+      wacht.textContent =
+        'De andere kant is nog bezig. Jullie kunnen alvast verder lezen en een review achterlaten.';
+      document.getElementById('einde-onthulling')?.classList.remove('verborgen');
+      document.getElementById('einde-review')?.classList.remove('verborgen');
+      return;
+    }
     wacht.textContent = !data.brief14Klaar
       ? 'Wachten op 1934: de veertiende brief is nog niet verzegeld…'
       : 'Wachten op 2034: het rapport is nog niet ingediend…';
@@ -76,6 +94,13 @@ async function vernieuw(): Promise<void> {
   if (data.timerGestart && data.rapportTijdstip) {
     const duur = Math.max(0, data.rapportTijdstip - data.timerGestart);
     resttijd = formateerTijd(Math.max(0, TIJDSLIMIET_MS - (data.meta.strafMs || 0) - duur));
+    // "Sneller dan X% van de groepen", als er genoeg afgeronde sessies zijn.
+    const tekst = prestatieTekst(percentielSneller(duur, await haalDuren('dua')));
+    const prestatie = document.getElementById('einde-prestatie');
+    if (tekst && prestatie) {
+      prestatie.textContent = tekst;
+      prestatie.hidden = false;
+    }
   }
   // Veilig: alle interpolaties zijn numerieke spelstatus of geformatteerde tijd,
   // geen vrije spelertekst.

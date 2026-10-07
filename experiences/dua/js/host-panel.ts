@@ -19,7 +19,16 @@ import {
   datumHtml,
   lobbyLinkHtml,
 } from '../../../shared/js/host-sessies.ts';
-import { haalReviews, keurReviewGoed, reviewKaartHtml } from '../../../shared/js/host-reviews.ts';
+import {
+  haalReviews,
+  keurReviewGoed,
+  reviewKaartHtml,
+  reviewSamenvattingHtml,
+} from '../../../shared/js/host-reviews.ts';
+import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
+import type { SessieStats } from '../../../shared/js/speldata.ts';
+import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
+import { DUA_PUZZELS } from './dua-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 
 declare global {
@@ -29,8 +38,16 @@ declare global {
     kopieer: (tekst: string, knop?: HTMLElement) => void;
     deactiveer: (code: string) => void;
     keurGoed: (id: string) => void;
+    toonDetails: (code: string) => void;
   }
 }
+
+// Stijl voor de speldata-tabellen (gedeeld met het Kamer 14-paneel).
+const statsStijl = document.createElement('style');
+statsStijl.textContent = HOST_STATS_CSS;
+document.head.appendChild(statsStijl);
+
+const ROLLEN = { '1934': '1934', '2034': '2034' };
 
 koppelHostAuth(() => {
   void verversCode();
@@ -121,6 +138,15 @@ async function laadLijst(): Promise<void> {
     const rijen = await haalSessies((d) => d.ervaringsId === 'dua');
     laden.style.display = 'none';
 
+    // Gemiddelden per puzzel over alle sessies met speldata.
+    const alleStats = rijen
+      .map(({ data }) => data.stats as SessieStats | undefined)
+      .filter((st): st is SessieStats => !!st);
+    // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
+    // eslint-disable-next-line no-unsanitized/property
+    requireEl('stats-overzicht').innerHTML = gemiddeldenHtml(alleStats, DUA_PUZZELS);
+    void werkVerdelingBij('dua', rijen.map(r => r.data));
+
     if (rijen.length === 0) {
       geenMsg.style.display = 'block';
       return;
@@ -160,7 +186,14 @@ async function laadLijst(): Promise<void> {
                 </button>`
                 : ''
             }
+            <button class="kopieer-knop" title="Speldata van deze sessie" aria-expanded="false"
+              aria-controls="detail-${veiligeCode}" onclick="toonDetails('${veiligeCode}')">
+              <i class="bi bi-bar-chart"></i>
+            </button>
           </td>
+        </tr>
+        <tr class="detail-rij" id="detail-${veiligeCode}" hidden>
+          <td colspan="7">${statsDetailHtml(data.stats as SessieStats | undefined, DUA_PUZZELS, ROLLEN)}</td>
         </tr>`;
       })
       .join('');
@@ -191,9 +224,10 @@ async function laadReviews(): Promise<void> {
       return;
     }
 
-    // Veilig: reviewKaartHtml escaped tekst/naam zelf.
+    // Veilig: reviewKaartHtml escaped tekst/naam/verbeterpunt zelf; de
+    // samenvatting bevat enkel getallen.
     // eslint-disable-next-line no-unsanitized/property
-    lijst.innerHTML = rijen.map(reviewKaartHtml).join('');
+    lijst.innerHTML = reviewSamenvattingHtml(rijen) + rijen.map(reviewKaartHtml).join('');
     lijst.style.display = 'block';
   } catch (err) {
     console.error(err);
@@ -209,6 +243,15 @@ window.keurGoed = async function (id) {
     console.error('Goedkeuren mislukt:', err);
     alert('Goedkeuren mislukt: ' + foutTekst(err));
   }
+};
+
+window.toonDetails = function (code) {
+  const rij = document.getElementById(`detail-${code}`);
+  if (!rij) return;
+  rij.hidden = !rij.hidden;
+  document
+    .querySelector(`[aria-controls="detail-${CSS.escape(code)}"]`)
+    ?.setAttribute('aria-expanded', String(!rij.hidden));
 };
 
 // ── Deactiveer ──

@@ -159,6 +159,35 @@ export function koppelEasterEggs(code: string): void {
   });
 }
 
+// ── Klikbare SVG-plekken bedienbaar met het toetsenbord ─────
+const PLEK_NAMEN: Record<string, string> = {
+  kast: 'Kast',
+  bureau: 'Bureau',
+  vensterbank: 'Vensterbank',
+  schouw: 'Schouw',
+  boekenrek: 'Boekenrek',
+  vloerplank: 'Losse vloerplank',
+  sintbaafs: 'Sint-Baafskathedraal',
+  belfort: 'Belfort',
+  station: 'Sint-Pietersstation',
+  gravensteen: 'Gravensteen',
+};
+
+/** Tab-focus, een naam voor schermlezers en Enter/spatie als klik. */
+export function maakSvgToegankelijk(selector: string): void {
+  document.querySelectorAll<SVGElement>(selector).forEach(el => {
+    const plek = el.getAttribute('data-plek') ?? '';
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-label', PLEK_NAMEN[plek] ?? plek);
+    el.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+  });
+}
+
 // ── Sessiecode uit de URL (zoals kamer-14) ──────────────────
 // Redirect naar de lobby en gooit als de code ontbreekt, zodat de rest van
 // de pagina niet verder draait tegen een niet-bestaande sessie.

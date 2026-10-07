@@ -71,6 +71,13 @@
         <button class="d-knop klein" id="btn-gom">Nieuw vel</button>
       </div>
       <p class="hintje" id="brief-status" style="margin-top:8px">Nog 5 letters te kiezen.</p>
+      <div class="hint-blok" id="hint-p1a">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p1a')">Hint vragen</button>
+        <div class="hint-stap verborgen">» Elk vak heeft een letter. Klik twee hamers na elkaar aan om ze te wisselen, tot elke hamer in het vak met zijn eigen letter hangt.</div>
+        <div class="hint-stap verborgen">» Welk woord heeft 2034 nodig? Kijk naar jullie volgende opdracht (②): waar laat de Loper het paneel achter?</div>
+        <div class="hint-stap verborgen">» Het woord is de plek in een station waar reizigers hun bagage achterlaten. Zoek die vijf letters in leesvolgorde in de brief en klik ze aan.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p1a')">Nog een hint</button>
+      </div>
     </div>
 
     <!-- ② Noordstation -->
@@ -83,11 +90,18 @@
       <div class="wachterbaan"><div class="wachter" id="wachter"></div></div>
       <div class="baanlabels"><span>◉ wachter dichtbij: gevaar</span><span>perron</span><span>buiten zicht: veilig</span></div>
       <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
-        <input class="d-input" id="kluis-keuze" maxlength="2" placeholder="__"
+        <input class="d-input" id="kluis-keuze" maxlength="2" placeholder="__" inputmode="numeric" aria-label="Kluisnummer"
           style="max-width:90px;font-size:24px;letter-spacing:8px;text-align:center" autocomplete="off" />
         <button class="d-knop klein" id="btn-deponeer">Deponeer nu</button>
       </div>
       <p class="hintje" id="kluis-status" style="margin-top:8px">Luister naar de voetstappen.</p>
+      <div class="hint-blok" id="hint-p2a">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p2a')">Hint vragen</button>
+        <div class="hint-stap verborgen">» Kies eerst het nummer. Deponeer pas als de wachter rechts op de baan loopt, buiten zicht.</div>
+        <div class="hint-stap verborgen">» De brief belooft: één meer dan het aantal brieven dat het bisdom telt. Brief XII is de laatste die aankomt.</div>
+        <div class="hint-stap verborgen">» Twaalf brieven kwamen aan bij het bisdom. Tel er één bij op, en wacht tot de wachter helemaal rechts loopt.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p2a')">Nog een hint</button>
+      </div>
     </div>
 
     <!-- ③ Route -->
@@ -114,13 +128,13 @@
           <rect class="klikbaar" data-plek="bureau" x="110" y="120" width="140" height="60" fill="#8a6f4d" stroke="#3f3324" stroke-width="2"/>
           <text x="148" y="155" font-size="12" fill="#f5f0e8" style="pointer-events:none">BUREAU</text>
           <circle class="klikbaar" data-plek="vensterbank" cx="395" cy="55" r="20" fill="#d8c98e" stroke="#3f3324" stroke-width="2"/>
-          <text x="368" y="92" font-size="10" fill="#3f3324" style="pointer-events:none">vensterbank</text>
+          <text x="368" y="92" font-size="10" fill="#3f3324" style="pointer-events:none">VENSTERBANK</text>
           <rect class="klikbaar" data-plek="schouw" x="270" y="40" width="70" height="140" fill="#9c8468" stroke="#3f3324" stroke-width="2"/>
           <text x="280" y="115" font-size="11" fill="#f5f0e8" style="pointer-events:none">SCHOUW</text>
           <rect class="klikbaar" data-plek="boekenrek" x="110" y="25" width="140" height="55" fill="#7a6248" stroke="#3f3324" stroke-width="2"/>
           <text x="138" y="58" font-size="11" fill="#f5f0e8" style="pointer-events:none">BOEKENREK</text>
           <rect class="klikbaar" data-plek="vloerplank" x="355" y="150" width="90" height="30" fill="#b3a07c" stroke="#3f3324" stroke-width="2"/>
-          <text x="358" y="170" font-size="10" fill="#2b2620" style="pointer-events:none">losse vloerplank</text>
+          <text x="368" y="170" font-size="10" fill="#2b2620" style="pointer-events:none">VLOERPLANK</text>
         </svg>
         <p class="hintje" id="kamer-status">Vind eerst de sleutel.</p>
       </div>
@@ -128,7 +142,7 @@
         <button class="hint-knop" onclick="duaHintKlik('hint-p4a')">Hint vragen</button>
         <div class="hint-stap verborgen">» "Waar het licht valt." Waar valt licht een kamer binnen?</div>
         <div class="hint-stap verborgen">» De sleutel ligt op de vensterbank. Verstop het mapje daarna NIET waar de politie gaat zoeken; 2034 heeft het verslag.</div>
-        <div class="hint-stap verborgen">» Oplossing: sleutel op de vensterbank; veilig verstoppen kan alleen in de schouw of onder de losse vloerplank.</div>
+        <div class="hint-stap verborgen">» De sleutel ligt waar het zonlicht binnenvalt. Verstop het mapje op een plek die niet in het huiszoekingsverslag van 2034 staat.</div>
         <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p4a')">Nog een hint</button>
       </div>
     </div>
@@ -154,6 +168,13 @@
         <text x="52" y="162" font-size="10" fill="#3f3324">Gravensteen</text>
       </svg>
       <p class="hintje" id="pin-status"></p>
+      <div class="hint-blok" id="hint-p5a">
+        <button class="hint-knop" onclick="duaHintKlik('hint-p5a')">Hint vragen</button>
+        <div class="hint-stap verborgen">» De zin zegt: een plek waar altijd publiek komt, zodat niemand er ongemerkt iets kan weghalen.</div>
+        <div class="hint-stap verborgen">» Vraag 2034 wat er in de twintigste eeuw met het Belfort, het Gravensteen en het station gebeurde.</div>
+        <div class="hint-stap verborgen">» Eén gebouw bleef honderd jaar open voor het publiek en werd nooit leeggehaald. Daar begon ook alles, in april 1934.</div>
+        <button class="hint-verder verborgen" onclick="duaHintKlik('hint-p5a')">Nog een hint</button>
+      </div>
     </div>
 
     <!-- Finale: de veertiende brief -->

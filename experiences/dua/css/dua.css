@@ -279,6 +279,8 @@ body.era-1934 .stuk { background: #f7ecd2; border-color: #b3a07c; }
 
 /* ── Kluis ── */
 .kluis { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.kluis-knoppen { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.kluis-knoppen .d-knop { min-width: 44px; min-height: 44px; }
 .draaiknop {
   width: 130px;
   height: 130px;
@@ -492,3 +494,7 @@ body.era-1934 .svg-kader { background: #efe2c4; border-color: #b3a07c; }
   .papier { margin: 10px 8px 50px; padding: 20px 14px; }
   .systeembalk { justify-content: center; }
 }
+
+/* Oplossing op het tijd-voorbij-scherm */
+.oplossing-lijst { margin: 0; padding-left: 1.2rem; line-height: 1.7; }
+.review-verbeter-label { display: block; font-size: 13px; margin: 4px 0; }
