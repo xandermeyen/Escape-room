@@ -101,10 +101,11 @@ export async function zetBrief(code: string, letters: number[]): Promise<void> {
   }));
 }
 
+// Nieuw vel: alleen zolang P1 nog niet opgelost is. Een opgeloste puzzel
+// gaat nooit terug naar false (database.rules.json dwingt dat ook af).
 export async function gomBrief(code: string): Promise<void> {
   await authReady;
   await schrijf('gomBrief', update(duaRef(code), { brief: { letters: '', verstuurd: false } }));
-  await schrijf('gomBrief p1', set(ref(db, `sessions/${code}/puzzels/p1`), false));
 }
 
 export async function zetKluisNummer(code: string, nummer: string): Promise<void> {

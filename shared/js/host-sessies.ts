@@ -4,8 +4,8 @@
  * de tabelopbouw (bolletjes, statusbadge, datum) stond eerder dubbel in
  * kamer-14/host-panel.ts en dua/host-panel.ts.
  *
- * Let op: het lezen van de volledige sessielijst vereist de host-leesregel
- * (`auth.provider === 'password'`) in firebase/database.rules.json.
+ * Let op: het lezen van de volledige sessielijst mag alleen een beheerder
+ * (`beheerders/<uid>` in firebase/database.rules.json).
  */
 import { db } from './firebase-config.ts';
 import { ref, get } from 'firebase/database';

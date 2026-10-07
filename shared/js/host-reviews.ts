@@ -1,14 +1,9 @@
 /**
  * host-reviews.ts — gedeelde reviewlijst-logica voor de host-panels.
  *
- * Voorheen kon een review enkel goedgekeurd worden door in de Firebase
- * Realtime Database-console het veld `goedgekeurd` manueel op `true` te
- * zetten. Dat vereist een ingelogde host (`auth.provider === 'password'`),
- * zowel voor het bijwerken hier als in firebase/database.rules.json.
- *
- * Let op: de rules-wijziging die dit toelaat moet apart gedeployed worden
- * via de "Firebase rules deployen"-workflow (handmatig, niet automatisch
- * bij een push naar main).
+ * Alle reviews lezen en goedkeuren mag alleen een beheerder
+ * (`beheerders/<uid>` in firebase/database.rules.json). Het publiek ziet
+ * enkel goedgekeurde reviews.
  */
 import { db } from './firebase-config.ts';
 import { ref, get, update } from 'firebase/database';

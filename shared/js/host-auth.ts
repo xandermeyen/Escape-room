@@ -1,15 +1,25 @@
 /**
  * host-auth.ts — gedeelde e-mail/wachtwoord-login voor de host-panels.
  *
- * Dit was de gevoeligste client-code van het project en stond eerder als
- * ongetypt inline script in beide host-panel.html-bestanden. Nu één getypte,
- * gedeelde implementatie.
+ * Een host is niet zomaar "iemand met een wachtwoordaccount": dat kan in
+ * principe iedereen aanmaken met de publieke API-key. Een host moet ook in
+ * `beheerders/<uid>` staan (alleen via de Firebase-console te zetten).
+ * database.rules.json dwingt hetzelfde af; deze check zorgt er enkel voor
+ * dat een niet-beheerder een duidelijke melding krijgt in plaats van een
+ * leeg paneel vol permission-denied-fouten.
  *
  * Verwacht in de HTML: #login-scherm, #admin-inhoud, #email-invoer,
  * #ww-invoer, #login-knop, #login-fout.
  */
-import { app } from './firebase-config.ts';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { app, db } from './firebase-config.ts';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  type User,
+} from 'firebase/auth';
+import { ref, get } from 'firebase/database';
 import { requireEl } from './utils.ts';
 
 declare global {
@@ -19,38 +29,72 @@ declare global {
   }
 }
 
+const FOUT_LOGIN = 'Ongeldig e-mailadres of wachtwoord.';
+const FOUT_GEEN_BEHEERDER = 'Dit account heeft geen beheerdersrechten.';
+
+/** Staat deze gebruiker in beheerders/? Faalt veilig naar false. */
+export async function isBeheerder(uid: string): Promise<boolean> {
+  try {
+    const snap = await get(ref(db, `beheerders/${uid}`));
+    return snap.val() === true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Bepaalt of `user` het paneel mag zien. Een anonieme speler (bv. iemand die
+ * in dezelfde browser net Kamer 14 speelde) telt nooit als host.
+ */
+export async function magHostPaneelZien(user: User | null): Promise<boolean> {
+  if (!user || user.isAnonymous) return false;
+  return isBeheerder(user.uid);
+}
+
 /**
  * Koppelt login/logout en wisselt tussen loginscherm en admin-inhoud.
- *
- * `onIngelogd` wordt pas aangeroepen zodra Firebase bevestigt dat er een
- * ingelogde host is (auth.provider === 'password'). Sessiedata ophalen vóór
- * dat moment geeft een permission-denied, want de database-rules eisen
- * `auth != null` voor het lezen van de volledige sessielijst — en
- * onAuthStateChanged meldt zich pas na een async check, niet meteen bij
- * paginalaad.
+ * `onIngelogd` loopt pas zodra bevestigd is dat de gebruiker beheerder is.
  */
 export function koppelHostAuth(onIngelogd?: () => void): void {
   const auth = getAuth(app);
   const loginScherm = requireEl('login-scherm');
   const adminInhoud = requireEl('admin-inhoud');
+  const fout = requireEl('login-fout');
 
-  onAuthStateChanged(auth, (user) => {
-    loginScherm.style.display = user ? 'none' : 'flex';
-    adminInhoud.style.display = user ? 'block' : 'none';
-    if (user) onIngelogd?.();
+  function toonLogin(): void {
+    loginScherm.style.display = 'flex';
+    adminInhoud.style.display = 'none';
+  }
+
+  onAuthStateChanged(auth, async user => {
+    const toegelaten = await magHostPaneelZien(user);
+    if (!toegelaten) {
+      toonLogin();
+      if (user && !user.isAnonymous) {
+        // Wel ingelogd, maar geen beheerder: uitloggen en zeggen waarom.
+        fout.textContent = FOUT_GEEN_BEHEERDER;
+        fout.style.display = 'block';
+        requireEl<HTMLButtonElement>('login-knop').disabled = false;
+        void signOut(auth);
+      }
+      return;
+    }
+    loginScherm.style.display = 'none';
+    adminInhoud.style.display = 'block';
+    onIngelogd?.();
   });
 
   async function login(): Promise<void> {
     const email = requireEl<HTMLInputElement>('email-invoer').value.trim();
     const ww = requireEl<HTMLInputElement>('ww-invoer').value;
     const knop = requireEl<HTMLButtonElement>('login-knop');
-    const fout = requireEl('login-fout');
     knop.disabled = true;
     fout.style.display = 'none';
     try {
       await signInWithEmailAndPassword(auth, email, ww);
     } catch {
       // Geen detail tonen: ongeldige login mag niet verklappen wat er misging.
+      fout.textContent = FOUT_LOGIN;
       fout.style.display = 'block';
       knop.disabled = false;
     }

@@ -34,3 +34,33 @@ jobs:
 
       - name: Tests draaien
         run: pnpm test
+
+  rules:
+    name: Firebase rules (emulator)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pnpm installeren
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Node.js instellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Java instellen (nodig voor de Database-emulator)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Dependencies installeren
+        run: pnpm install --frozen-lockfile
+
+      - name: Rules testen tegen de emulator
+        run: pnpm test:rules

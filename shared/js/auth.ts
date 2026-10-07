@@ -17,10 +17,9 @@ import * as Sentry from '@sentry/browser';
  * op als "moet steeds opnieuw inloggen" en af en toe een permission-denied
  * op het host-panel.
  *
- * De promise resolveert ALTIJD — ook als de login mislukt — zodat het spel
- * blijft werken zolang de database-rules nog soepel staan. Pas wanneer de
- * rules `auth != null` eisen, is een werkende Anonymous-provider in Firebase
- * noodzakelijk.
+ * De promise resolveert ALTIJD, ook als de login mislukt, zodat de pagina
+ * laadt. De database-rules eisen `auth != null` voor elke schrijfactie, dus
+ * de Anonymous-provider moet in Firebase aanstaan.
  *
  * Faalt de login, dan melden we dat naar Sentry (niet alleen de console) en
  * blijft `authGelukt` op false staan. De eerste geweigerde schrijfactie toont

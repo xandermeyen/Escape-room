@@ -6,7 +6,7 @@ toegang verliest, of je het opnieuw moet opbouwen, is dit het referentiepunt.
 
 > Scenario: **"Mail versturen met sessiecode"** (Make zone `eu1.make.com`)
 > Ingevuld vanuit de blueprint-export. Connectie-credentials (Gmail-login,
-> SMTP-login, Firebase auth-secret) staan hier bewust **niet** in.
+> SMTP-login, wachtwoord van het Make-account) staan hier bewust **niet** in.
 
 ---
 
@@ -17,6 +17,7 @@ De modulevolgorde in het Make-canvas (van links naar rechts):
 ```
 1.  Gmail        : Watch emails         (trigger: mail van noreply@formspree.io)
 12. Tools        : Set variable         (sessiecode genereren)
+14. HTTP         : Make a request (POST)(inloggen met het Make-account → idToken)
 2.  HTTP         : Make a request (PUT) (sessie aanmaken in Firebase REST API)
 7.  Text parser  : Match pattern        (e-mail speler 1 uit de mailbody)
 8.  Text parser  : Match pattern        (naam uit de mailbody)
@@ -78,17 +79,47 @@ Dit valt binnen wat de Firebase-rules eisen voor een sessiesleutel
 
 ---
 
+## Module 14: HTTP > Make a request (POST, inloggen)
+
+Sinds oktober 2026 mag alleen een beheerder sessies aanmaken (zie
+[beveiliging.md](beveiliging.md)). Make logt daarom bij elke run in met een
+eigen account `make@bureau-x.be`, waarvan de uid in `beheerders/` staat.
+
+- Methode: `POST`
+- URL:
+
+```
+https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=<VITE_FIREBASE_API_KEY>
+```
+
+- Body content type: JSON (raw)
+- Parse response: ja
+- Stop on HTTP error: ja
+- Body:
+
+```json
+{ "email": "make@bureau-x.be", "password": "<wachtwoord>", "returnSecureToken": true }
+```
+
+Het antwoord bevat `idToken` (één uur geldig, ruim genoeg voor één run).
+
+> Zet het wachtwoord niet in git. In Make kan je het in een
+> "Data store" of als verborgen variabele bewaren.
+
+---
+
 ## Module 2: HTTP > Make a request (PUT, sessie aanmaken)
 
 - Methode: `PUT`
 - URL:
 
 ```
-https://bureau-x-default-rtdb.europe-west1.firebasedatabase.app/sessions/{{12.sessieCode}}.json?auth=<firebase-auth-secret>
+https://bureau-x-default-rtdb.europe-west1.firebasedatabase.app/sessions/{{12.sessieCode}}.json?auth={{14.data.idToken}}
 ```
 
-- Authenticatie: de auth gebeurt via de `?auth=`-querystring (Firebase database
-  secret). De module zelf staat op "No authentication".
+- Authenticatie: de `?auth=`-querystring bevat het ID-token uit module 14. De
+  oude legacy database secret wordt niet meer gebruikt; verwijder die in de
+  Firebase-console (Projectinstellingen > Service accounts > Database secrets).
 - Body content type: JSON, als raw JSON-string ingevoerd
 - Stop on HTTP error: ja
 - Body:
@@ -113,9 +144,13 @@ gezet zodra de eerste speler laadt.
 > Wijzigt het datamodel, dan moeten deze PUT-body, `maakSessie()` en de rules samen
 > mee.
 >
-> Veiligheid: de `<firebase-auth-secret>` staat in de echte module in platte tekst
-> in de URL. Behandel de blueprint-export als gevoelig en roteer de secret als die
-> ergens publiek terecht is gekomen.
+> Veiligheid: het wachtwoord van het Make-account staat in module 14. Behandel de
+> blueprint-export als gevoelig en wijzig het wachtwoord als het ergens publiek
+> terecht is gekomen.
+>
+> App Check: zodra enforcement voor de Realtime Database aanstaat, weigert
+> Firebase deze REST-call (een ID-token is geen App Check-token). Zie
+> [beveiliging.md](beveiliging.md#7-app-check-recaptcha-v3).
 
 ---
 
@@ -185,5 +220,5 @@ Make.com kan het scenario als blueprint (JSON) exporteren
 export naast dit document, bijvoorbeeld als `docs/make-scenario.blueprint.json`,
 zodat het scenario herbouwbaar is.
 
-> Maskeer voor het committen de `?auth=`-secret in de HTTP-module en eventuele
-> andere geheimen. De rest van de blueprint is veilig te bewaren.
+> Maskeer voor het committen het wachtwoord in module 14 en eventuele andere
+> geheimen. De rest van de blueprint is veilig te bewaren.

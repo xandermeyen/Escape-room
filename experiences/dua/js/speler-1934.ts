@@ -140,6 +140,7 @@ document.getElementById('btn-verstuur')?.addEventListener('click', async () => {
 });
 
 document.getElementById('btn-gom')?.addEventListener('click', async () => {
+  if (puzzels['p1']) { melding('2034 heeft de brief al gelezen. Een nieuw vel is niet meer nodig.'); return; }
   briefLetters = [];
   fx.lade();
   await gomBrief(sessie);
