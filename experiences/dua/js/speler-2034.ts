@@ -4,8 +4,19 @@
  * Antwoorden staan als SHA-256 hash in de bundle (zelfde aanpak als kamer-14).
  */
 import '../../../shared/js/sentry.ts';
-import { luisterNaarStatus, puzzelVoltooid, sluitSessie, bewaakSessieGesloten } from '../../../shared/js/session.ts';
-import { antwoordKlopt, requireEl, escHtml, beoordeelAntwoord, type Beoordeling } from '../../../shared/js/utils.ts';
+import {
+  luisterNaarStatus,
+  puzzelVoltooid,
+  sluitSessie,
+  bewaakSessieGesloten,
+} from '../../../shared/js/session.ts';
+import {
+  antwoordKlopt,
+  requireEl,
+  escHtml,
+  beoordeelAntwoord,
+  type Beoordeling,
+} from '../../../shared/js/utils.ts';
 import {
   registreerPoging,
   registreerOpgelost,
@@ -15,15 +26,36 @@ import {
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
-import { DUA_HASHES, DUA_REGELS, DUA_VRIJGAVE, DUA_BIJNA_ROUTE, beoordeelDoorslag } from './dua-config.ts';
+import {
+  DUA_HASHES,
+  DUA_REGELS,
+  DUA_VRIJGAVE,
+  DUA_BIJNA_ROUTE,
+  beoordeelDoorslag,
+} from './dua-config.ts';
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
-  luisterDua, zetVerstopPlek, zetPin1934, verhoogVerdenking,
-  dienDuaRapportIn, zetBadge, BRIEFTEKST, DOORZOCHT, type DuaState,
+  luisterDua,
+  zetVerstopPlek,
+  zetPin1934,
+  verhoogVerdenking,
+  dienDuaRapportIn,
+  zetBadge,
+  BRIEFTEKST,
+  DOORZOCHT,
+  type DuaState,
 } from './dua-session.ts';
 import {
-  melding, startDuaTimer, koppelMeta, tekenVoortgang, ontgrendeld,
-  duaHint, koppelMuteKnop, koppelEasterEggs, leesSessie, maakSvgToegankelijk,
+  melding,
+  startDuaTimer,
+  koppelMeta,
+  tekenVoortgang,
+  ontgrendeld,
+  duaHint,
+  koppelMuteKnop,
+  koppelEasterEggs,
+  leesSessie,
+  maakSvgToegankelijk,
   type PuzzelStatus,
 } from './dua-ui.ts';
 import { fx, koppelTypgeluid } from './dua-audio.ts';
@@ -48,7 +80,12 @@ const HASH_PLEK = DUA_HASHES.plek ?? []; // P5 overleeft de eeuw
 // ── Hulp: hint-tip, verhaalmeldingen, vrijgave en "Hulp nodig?" ──
 const hulp = initHulp({
   hintBlokVoor: puzzel =>
-    ({ p1: 'hint-p1', p2: 'hint-p2', p3: 'hint-p3', p4: 'hint-p4b', p5: 'hint-p5' } as Record<string, string>)[puzzel] ?? null,
+    (
+      ({ p1: 'hint-p1', p2: 'hint-p2', p3: 'hint-p3', p4: 'hint-p4b', p5: 'hint-p5' }) as Record<
+        string,
+        string
+      >
+    )[puzzel] ?? null,
   vrijgave: DUA_VRIJGAVE,
   inactiefMeldingen: DUA_INACTIEF['2034'],
   vrijgaveMelding: (oud, nieuw) => duaVrijgaveMelding('2034', oud, nieuw),
@@ -76,7 +113,9 @@ let dua: DuaState = {};
 let puzzels: PuzzelStatus = {};
 
 declare global {
-  interface Window { duaHintKlik: (blokId: string) => void; }
+  interface Window {
+    duaHintKlik: (blokId: string) => void;
+  }
 }
 window.duaHintKlik = (blokId: string) => duaHint(sessie, blokId);
 
@@ -95,20 +134,26 @@ document.getElementById('btn-zegel-bevestig')?.addEventListener('click', async (
   await voltooi(0);
   requireEl('zegel-actie').style.display = 'none';
   document.getElementById('s-zegel')?.classList.add('klaar');
-  melding('De handdruk is compleet. Zo werkt dit spel: wat 1934 doet, vinden jullie. Aan het werk.');
+  melding(
+    'De handdruk is compleet. Zo werkt dit spel: wat 1934 doet, vinden jullie. Aan het werk.',
+  );
 });
 
 // ═══════════════════ P1: DE DOORSLAG ═══════════════════
 function briefWoord(): string {
   const letters = (dua.brief?.letters ?? '').split(',').filter(Boolean).map(Number);
-  return letters.sort((a, b) => a - b).map(i => BRIEFTEKST[i]).join('');
+  return letters
+    .sort((a, b) => a - b)
+    .map(i => BRIEFTEKST[i])
+    .join('');
 }
 
 function tekenDoorslag(): void {
   const inhoud = requireEl('doorslag-inhoud');
   const vraag = requireEl('doorslag-vraag');
   if (!dua.brief?.verstuurd) {
-    inhoud.innerHTML = '<p class="hintje">Er ligt hier nog niets. In 1934 is de brief nog niet getypt…</p>';
+    inhoud.innerHTML =
+      '<p class="hintje">Er ligt hier nog niets. In 1934 is de brief nog niet getypt…</p>';
     vraag.style.display = 'none';
     return;
   }
@@ -131,7 +176,11 @@ function tekenDoorslag(): void {
 }
 
 document.getElementById('btn-woord')?.addEventListener('click', async () => {
-  if (!dua.brief?.verstuurd) { fx.fout(); melding('Er is nog geen doorslag. 1934 moet eerst typen.'); return; }
+  if (!dua.brief?.verstuurd) {
+    fx.fout();
+    melding('Er is nog geen doorslag. 1934 moet eerst typen.');
+    return;
+  }
   const input = requireEl<HTMLInputElement>('ant-woord');
   const woord = briefWoord().toLowerCase();
   const oordeel = beoordeelDoorslag(input.value, woord);
@@ -141,9 +190,11 @@ document.getElementById('btn-woord')?.addEventListener('click', async () => {
     poging('p1', oordeel);
     input.classList.add('fout');
     setTimeout(() => input.classList.remove('fout'), 1500);
-    melding(oordeel === 'bijna'
-      ? 'Je zit er vlak naast. Kijk letter per letter naar de doorgedrukte letters.'
-      : 'Dat staat er niet. Kijk beter naar de doorgedrukte letters.');
+    melding(
+      oordeel === 'bijna'
+        ? 'Je zit er vlak naast. Kijk letter per letter naar de doorgedrukte letters.'
+        : 'Dat staat er niet. Kijk beter naar de doorgedrukte letters.',
+    );
     return;
   }
   if (await antwoordKlopt(woord, HASH_WOORD)) {
@@ -153,7 +204,9 @@ document.getElementById('btn-woord')?.addEventListener('click', async () => {
   } else {
     fx.fout();
     poging('p1', 'fout');
-    melding(`De doorslag spelt "${woord.toUpperCase()}". Dat betekent niets. 1934 zal opnieuw moeten typen (nieuw vel).`);
+    melding(
+      `De doorslag spelt "${woord.toUpperCase()}". Dat betekent niets. 1934 zal opnieuw moeten typen (nieuw vel).`,
+    );
   }
 });
 
@@ -183,7 +236,8 @@ function tekenTicket(): void {
 
 function toonDraai(): void {
   requireEl('draaiknop').style.transform = `rotate(${draaiHoek}deg)`;
-  requireEl('kluis-display').textContent = (kluisInvoer || '') + draaiCijfer + (kluisInvoer ? '' : '_');
+  requireEl('kluis-display').textContent =
+    (kluisInvoer || '') + draaiCijfer + (kluisInvoer ? '' : '_');
 }
 
 function draai(stap: 1 | -1): void {
@@ -223,7 +277,11 @@ document.getElementById('btn-cijfer-ok')?.addEventListener('click', async () => 
 
 // ═══════════════════ P3: DE GETUIGEN ═══════════════════
 document.getElementById('btn-route')?.addEventListener('click', async () => {
-  if (!puzzels['p1']) { fx.fout(); melding('Eerst P1: zonder de brief weet niemand waarnaar te zoeken.'); return; }
+  if (!puzzels['p1']) {
+    fx.fout();
+    melding('Eerst P1: zonder de brief weet niemand waarnaar te zoeken.');
+    return;
+  }
   const input = requireEl<HTMLInputElement>('ant-route');
   const oordeel = await beoordeelAntwoord(input.value, HASH_ROUTE, DUA_REGELS.route);
   if (oordeel === 'juist') {
@@ -236,9 +294,11 @@ document.getElementById('btn-route')?.addEventListener('click', async () => {
     poging('p3', oordeel);
     input.classList.add('fout');
     setTimeout(() => input.classList.remove('fout'), 1500);
-    melding(oordeel === 'bijna'
-      ? DUA_BIJNA_ROUTE
-      : 'Die route klopt niet. Wie liegt er, en wat zag 1934 echt?');
+    melding(
+      oordeel === 'bijna'
+        ? DUA_BIJNA_ROUTE
+        : 'Die route klopt niet. Wie liegt er, en wat zag 1934 echt?',
+    );
   }
 });
 
@@ -246,7 +306,11 @@ document.getElementById('btn-route')?.addEventListener('click', async () => {
 document.querySelectorAll<SVGElement>('#museum-spel [data-plek]').forEach(el => {
   el.addEventListener('click', async () => {
     if (puzzels['p4'] || !ontgrendeld(puzzels, 4)) return;
-    if (!dua.verstopPlek) { fx.fout(); melding('1934 heeft nog niets verstopt. Letterlijk niets te vinden.'); return; }
+    if (!dua.verstopPlek) {
+      fx.fout();
+      melding('1934 heeft nog niets verstopt. Letterlijk niets te vinden.');
+      return;
+    }
     const plek = el.getAttribute('data-plek');
     if (!plek) return;
     if (plek !== dua.verstopPlek) {
@@ -256,9 +320,12 @@ document.querySelectorAll<SVGElement>('#museum-spel [data-plek]').forEach(el => 
       return;
     }
     if (DOORZOCHT.includes(plek)) {
-      fx.fout(); fx.fluitje();
+      fx.fout();
+      fx.fluitje();
       poging('p4', 'fout');
-      melding('Het verslag loog niet: hier zocht de politie in december 1934. Het mapje is toen in beslag genomen. 1934 moet opnieuw, op een veiligere plek. Verdenking +15%');
+      melding(
+        'Het verslag loog niet: hier zocht de politie in december 1934. Het mapje is toen in beslag genomen. 1934 moet opnieuw, op een veiligere plek. Verdenking +15%',
+      );
       await verhoogVerdenking(sessie, 15);
       await zetVerstopPlek(sessie, null);
       return;
@@ -266,7 +333,9 @@ document.querySelectorAll<SVGElement>('#museum-spel [data-plek]').forEach(el => 
     el.style.fill = '#2a523f';
     fx.kerkklok(4, true);
     await voltooi(4);
-    melding('P4 opgelost: het mapje overleefde de huiszoeking. Doorslagen van dertien brieven en een laatste notitie.');
+    melding(
+      'P4 opgelost: het mapje overleefde de huiszoeking. Doorslagen van dertien brieven en een laatste notitie.',
+    );
   });
 });
 
@@ -274,8 +343,15 @@ document.querySelectorAll<SVGElement>('#museum-spel [data-plek]').forEach(el => 
 document.getElementById('kaart-2034')?.addEventListener('click', async (e: Event) => {
   if (puzzels['p5'] || !ontgrendeld(puzzels, 5)) return;
   const doel = (e.target as Element).getAttribute?.('data-plek');
-  if (!doel) { fx.fout(); return; }
-  if (!dua.pin1934) { fx.fout(); melding('1934 heeft het paneel nog niet verstopt. Er valt niets te vinden.'); return; }
+  if (!doel) {
+    fx.fout();
+    return;
+  }
+  if (!dua.pin1934) {
+    fx.fout();
+    melding('1934 heeft het paneel nog niet verstopt. Er valt niets te vinden.');
+    return;
+  }
   if (doel !== dua.pin1934) {
     fx.fout();
     poging('p5', 'fout');
@@ -283,9 +359,12 @@ document.getElementById('kaart-2034')?.addEventListener('click', async (e: Event
     return;
   }
   if (!(await antwoordKlopt(doel, HASH_PLEK))) {
-    fx.fout(); fx.fluitje();
+    fx.fout();
+    fx.fluitje();
     poging('p5', 'fout');
-    melding('Jullie vonden de plek… maar daar bleef niets bewaard: alles werd in de loop van de eeuw gerestaureerd, ontruimd of verbouwd. Het paneel is verloren. 1934 moet een betere plek kiezen. Verdenking +15%');
+    melding(
+      'Jullie vonden de plek… maar daar bleef niets bewaard: alles werd in de loop van de eeuw gerestaureerd, ontruimd of verbouwd. Het paneel is verloren. 1934 moet een betere plek kiezen. Verdenking +15%',
+    );
     await verhoogVerdenking(sessie, 15);
     await zetPin1934(sessie, null);
     return;
@@ -298,7 +377,11 @@ document.getElementById('kaart-2034')?.addEventListener('click', async (e: Event
 // ═══════════════════ FINALE: HET RAPPORT ═══════════════════
 document.getElementById('btn-rapport')?.addEventListener('click', async () => {
   const tekst = requireEl<HTMLTextAreaElement>('rapport').value.trim();
-  if (tekst.length < 20) { fx.fout(); melding('Een conclusie van Bureau X telt minstens een paar zinnen.'); return; }
+  if (tekst.length < 20) {
+    fx.fout();
+    melding('Een conclusie van Bureau X telt minstens een paar zinnen.');
+    return;
+  }
   const knop = requireEl<HTMLButtonElement>('btn-rapport');
   knop.disabled = true;
   try {
@@ -344,14 +427,14 @@ document.getElementById('briefkaart')?.addEventListener('click', () => {
 });
 
 // ═══════════════════ LIVE SYNC ═══════════════════
-luisterDua(sessie, (nieuw) => {
+luisterDua(sessie, nieuw => {
   dua = nieuw;
   tekenZegel();
   tekenDoorslag();
   tekenTicket();
 });
 
-luisterNaarStatus(sessie, (p) => {
+luisterNaarStatus(sessie, p => {
   puzzels = p;
   tekenVoortgang(p);
   registreerVrijgaves(sessie, p, DUA_VRIJGAVE);

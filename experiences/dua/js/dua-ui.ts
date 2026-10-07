@@ -5,7 +5,12 @@
  */
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, onValue } from 'firebase/database';
-import { formateerTijd, TIJDSLIMIET_MS, zorgStartTijd, serverNu } from '../../../shared/js/timer.ts';
+import {
+  formateerTijd,
+  TIJDSLIMIET_MS,
+  zorgStartTijd,
+  serverNu,
+} from '../../../shared/js/timer.ts';
 import { volgendHint, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { telHint, zetBadge, type DuaMeta } from './dua-session.ts';
 import { fx, isGedempt, wisselGeluid } from './dua-audio.ts';
@@ -19,7 +24,9 @@ export function melding(tekst: string): void {
   m.textContent = tekst;
   m.style.display = 'block';
   if (meldingTimer) clearTimeout(meldingTimer);
-  meldingTimer = setTimeout(() => { m.style.display = 'none'; }, 4800);
+  meldingTimer = setTimeout(() => {
+    m.style.display = 'none';
+  }, 4800);
 }
 
 // ── Timer met tijdstraf uit dua/meta/strafMs ────────────────
@@ -58,7 +65,7 @@ export async function startDuaTimer(code: string): Promise<void> {
 // ── Verdenking & meta (live) ────────────────────────────────
 // Callback zodat pagina's kunnen reageren (bv. snellere wachter).
 export function koppelMeta(code: string, callback?: (meta: DuaMeta) => void): void {
-  onValue(ref(db, `sessions/${code}/dua/meta`), (snap) => {
+  onValue(ref(db, `sessions/${code}/dua/meta`), snap => {
     const meta: DuaMeta = snap.val() ?? { verdenking: 0, strafMs: 0, hints: 0 };
     const vorigeStraf = strafMs;
     strafMs = meta.strafMs || 0;
@@ -100,7 +107,9 @@ export function tekenVoortgang(p: PuzzelStatus): void {
 export function duaHint(code: string, blokId: string): void {
   volgendHint(blokId);
   fx.fluister();
-  telHint(code).catch(() => { /* teller is nice-to-have */ });
+  telHint(code).catch(() => {
+    /* teller is nice-to-have */
+  });
 }
 
 // ── Geluidsknop ─────────────────────────────────────────────
@@ -118,7 +127,18 @@ export function koppelMuteKnop(): void {
 export function koppelEasterEggs(code: string): void {
   let buffer = '';
   let telBuffer = '';
-  const KONAMI = ['ARROWUP','ARROWUP','ARROWDOWN','ARROWDOWN','ARROWLEFT','ARROWRIGHT','ARROWLEFT','ARROWRIGHT','B','A'];
+  const KONAMI = [
+    'ARROWUP',
+    'ARROWUP',
+    'ARROWDOWN',
+    'ARROWDOWN',
+    'ARROWLEFT',
+    'ARROWRIGHT',
+    'ARROWLEFT',
+    'ARROWRIGHT',
+    'B',
+    'A',
+  ];
   let kPos = 0;
 
   document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -130,7 +150,9 @@ export function koppelEasterEggs(code: string): void {
       if (s) {
         s.style.display = 'flex';
         fx.fluister();
-        setTimeout(() => { s.style.display = 'none'; }, 900);
+        setTimeout(() => {
+          s.style.display = 'none';
+        }, 900);
       }
       zetBadge(code, 'door-u-aangesteld');
       melding('Insigne gevonden: Door U Aangesteld');
@@ -153,7 +175,11 @@ export function koppelEasterEggs(code: string): void {
     telBuffer = (telBuffer + e.key).slice(-4);
     if (telBuffer === '1180') {
       fx.telefoon();
-      setTimeout(() => melding('Een krakende stem: "De Rechters reizen niet. Zij kijken al jaren op u neer."'), 1300);
+      setTimeout(
+        () =>
+          melding('Een krakende stem: "De Rechters reizen niet. Zij kijken al jaren op u neer."'),
+        1300,
+      );
       zetBadge(code, 'gent-1180');
     }
   });

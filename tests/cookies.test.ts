@@ -26,7 +26,8 @@ function gtagOproepen(): unknown[][] {
 
 beforeEach(() => {
   localStorage.clear();
-  document.body.innerHTML = '<footer><a href="#" data-cookie-instellingen>Cookie-instellingen</a></footer>';
+  document.body.innerHTML =
+    '<footer><a href="#" data-cookie-instellingen>Cookie-instellingen</a></footer>';
   document.head.innerHTML = '';
   delete window.dataLayer;
   delete window.gtag;

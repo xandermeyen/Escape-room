@@ -33,17 +33,16 @@ function getCtx(): AudioContext {
   return _ctx;
 }
 
-
 // ── Geluidseffecten ───────────────────────────────────────
 
 function speelTonen(tonen: [number, number, number][], volume = 0.2): void {
   const c = getCtx();
   tonen.forEach(([freq, vertraging, duur]) => {
-    const osc  = c.createOscillator();
+    const osc = c.createOscillator();
     const gain = c.createGain();
     osc.connect(gain);
     gain.connect(c.destination);
-    osc.type            = 'sine';
+    osc.type = 'sine';
     osc.frequency.value = freq;
     const t = c.currentTime + vertraging;
     gain.gain.setValueAtTime(0, t);
@@ -56,13 +55,15 @@ function speelTonen(tonen: [number, number, number][], volume = 0.2): void {
 
 /** Tab of document vrijgegeven — drie oplopende tonen. */
 export function speelUnlock(): void {
-  speelTonen([
-    [523, 0,    0.35],
-    [659, 0.13, 0.40],
-    [784, 0.26, 0.50],
-  ], 0.18);
+  speelTonen(
+    [
+      [523, 0, 0.35],
+      [659, 0.13, 0.4],
+      [784, 0.26, 0.5],
+    ],
+    0.18,
+  );
 }
-
 
 // ── Achtergrondsfeer ──────────────────────────────────────
 /**
@@ -107,30 +108,30 @@ interface AchtergrondPreset {
 const PRESETS: Record<string, AchtergrondPreset> = {
   a: {
     ruisLagen: [
-      { freq:  65, Q: 2.0, gain: 0.012 },  // Diep gebromm (HVAC)
-      { freq: 100, Q: 6.0, gain: 0.007 },  // Elektrische brom (50 Hz net × 2)
-      { freq: 960, Q: 3.5, gain: 0.004 },  // Fluorescentiezoem (hoge harmonische)
+      { freq: 65, Q: 2.0, gain: 0.012 }, // Diep gebromm (HVAC)
+      { freq: 100, Q: 6.0, gain: 0.007 }, // Elektrische brom (50 Hz net × 2)
+      { freq: 960, Q: 3.5, gain: 0.004 }, // Fluorescentiezoem (hoge harmonische)
     ],
-    drone:  { freq: 55, gain: 0.006 },      // Diepe gebouwdrone (sinusgolf)
-    lfo:    { freq: 0.08, depth: 0.035 },   // Subtiele fluorescentieflikkering
+    drone: { freq: 55, gain: 0.006 }, // Diepe gebouwdrone (sinusgolf)
+    lfo: { freq: 0.08, depth: 0.035 }, // Subtiele fluorescentieflikkering
     fadeIn: 14,
     master: 0.95,
   },
   b: {
     ruisLagen: [
-      { freq: 180, Q: 1.5, gain: 0.009 },  // Warme kamerlucht (lageband)
-      { freq: 420, Q: 2.5, gain: 0.005 },  // Aanwezigheid middenband
-      { freq: 700, Q: 4.0, gain: 0.002 },  // Zachte luchtstroom (raam)
+      { freq: 180, Q: 1.5, gain: 0.009 }, // Warme kamerlucht (lageband)
+      { freq: 420, Q: 2.5, gain: 0.005 }, // Aanwezigheid middenband
+      { freq: 700, Q: 4.0, gain: 0.002 }, // Zachte luchtstroom (raam)
     ],
-    drone:  null,                            // Geen drone — warm en open
-    lfo:    { freq: 0.04, depth: 0.055 },   // Trage "ademhaling" van de ruimte
+    drone: null, // Geen drone — warm en open
+    lfo: { freq: 0.04, depth: 0.055 }, // Trage "ademhaling" van de ruimte
     fadeIn: 10,
-    master: 0.80,
+    master: 0.8,
   },
 };
 
-let _achtergrondActief: boolean                     = false;
-let _achtergrondMasterGain: GainNode | null         = null;
+let _achtergrondActief: boolean = false;
+let _achtergrondMasterGain: GainNode | null = null;
 let _achtergrondSources: AudioScheduledSourceNode[] = [];
 
 /**
@@ -141,7 +142,7 @@ export function startAchtergrond(type: 'a' | 'b' = 'a'): void {
   if (_achtergrondActief) return;
   _achtergrondActief = true;
 
-  const c      = getCtx();
+  const c = getCtx();
   const preset = PRESETS[type] ?? PRESETS['a'];
 
   // Master gain — vervaagt in over fadeIn seconden
@@ -149,19 +150,16 @@ export function startAchtergrond(type: 'a' | 'b' = 'a'): void {
   const masterGain = c.createGain();
   _achtergrondMasterGain = masterGain;
   masterGain.gain.setValueAtTime(0, c.currentTime);
-  masterGain.gain.linearRampToValueAtTime(
-    preset.master,
-    c.currentTime + preset.fadeIn
-  );
+  masterGain.gain.linearRampToValueAtTime(preset.master, c.currentTime + preset.fadeIn);
   masterGain.connect(c.destination);
 
   // LFO — subtiele modulatie voor leven in het geluid
   if (preset.lfo) {
-    const lfo     = c.createOscillator();
+    const lfo = c.createOscillator();
     const lfoGain = c.createGain();
-    lfo.type             = 'sine';
-    lfo.frequency.value  = preset.lfo.freq;
-    lfoGain.gain.value   = preset.lfo.depth;
+    lfo.type = 'sine';
+    lfo.frequency.value = preset.lfo.freq;
+    lfoGain.gain.value = preset.lfo.depth;
     lfo.connect(lfoGain);
     lfoGain.connect(masterGain.gain);
     lfo.start();
@@ -171,20 +169,20 @@ export function startAchtergrond(type: 'a' | 'b' = 'a'): void {
   // Ruislagen — gefilterde witte ruis geeft de ruimte zijn kleur
   preset.ruisLagen.forEach(({ freq, Q, gain }) => {
     const bufferSize = c.sampleRate * 2;
-    const buffer     = c.createBuffer(1, bufferSize, c.sampleRate);
-    const data       = buffer.getChannelData(0);
+    const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+    const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
 
-    const source  = c.createBufferSource();
+    const source = c.createBufferSource();
     source.buffer = buffer;
-    source.loop   = true;
+    source.loop = true;
 
-    const filter           = c.createBiquadFilter();
-    filter.type            = 'bandpass';
+    const filter = c.createBiquadFilter();
+    filter.type = 'bandpass';
     filter.frequency.value = freq;
-    filter.Q.value         = Q;
+    filter.Q.value = Q;
 
-    const layerGain      = c.createGain();
+    const layerGain = c.createGain();
     layerGain.gain.value = gain;
 
     source.connect(filter);
@@ -196,10 +194,10 @@ export function startAchtergrond(type: 'a' | 'b' = 'a'): void {
 
   // Optionele sinusdrone (alleen OPZ — geeft het gebouw een zware aanwezigheid)
   if (preset.drone) {
-    const osc       = c.createOscillator();
+    const osc = c.createOscillator();
     const droneGain = c.createGain();
-    osc.type             = 'sine';
-    osc.frequency.value  = preset.drone.freq;
+    osc.type = 'sine';
+    osc.frequency.value = preset.drone.freq;
     droneGain.gain.value = preset.drone.gain;
     osc.connect(droneGain);
     droneGain.connect(masterGain);
@@ -221,12 +219,11 @@ export function stopAchtergrond(): void {
         /* bron was al gestopt */
       }
     });
-    _achtergrondSources     = [];
-    _achtergrondMasterGain  = null;
-    _achtergrondActief      = false;
+    _achtergrondSources = [];
+    _achtergrondMasterGain = null;
+    _achtergrondActief = false;
   }, 3500);
 }
-
 
 // ── Voice lines ───────────────────────────────────────────
 
@@ -251,18 +248,18 @@ export function speelEnvelopGeluid(): void {
   const duur = 0.28;
   const bufferSize = Math.floor(c.sampleRate * duur);
   const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
-  const data   = buffer.getChannelData(0);
+  const data = buffer.getChannelData(0);
   for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
 
   const source = c.createBufferSource();
   source.buffer = buffer;
 
-  const filter           = c.createBiquadFilter();
-  filter.type            = 'highpass';
+  const filter = c.createBiquadFilter();
+  filter.type = 'highpass';
   filter.frequency.value = 1800;
 
   const gain = c.createGain();
-  const t    = c.currentTime;
+  const t = c.currentTime;
   gain.gain.setValueAtTime(0, t);
   gain.gain.linearRampToValueAtTime(0.14, t + 0.018);
   gain.gain.exponentialRampToValueAtTime(0.0001, t + duur);
@@ -273,7 +270,6 @@ export function speelEnvelopGeluid(): void {
   source.start(t);
   source.stop(t + duur + 0.05);
 }
-
 
 // ── Verhaalfragmenten na puzzeloplossing ──────────────────
 /**
@@ -286,7 +282,7 @@ export function speelEnvelopGeluid(): void {
  * Scripts staan in: Kamer_story/naratie_scripts.md
  */
 type SpelerType = 'a' | 'b';
-type PuzzelNr   = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
+type PuzzelNr = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
 
 // Per puzzel een vast verhaalfragment, ingesproken door het
 // personage van de eigen kant (A: An Vermeersch, B: Katrijn).

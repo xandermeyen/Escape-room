@@ -21,10 +21,18 @@ export function toonVerbindingsfout(): void {
   balk.setAttribute('role', 'alert');
   balk.textContent = 'Verbinding mislukt. Herlaad de pagina om verder te spelen.';
   balk.style.cssText = [
-    'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:9999',
-    'background:#b3261e', 'color:#fff', 'padding:12px 16px',
-    'font-family:system-ui,-apple-system,sans-serif', 'font-size:15px',
-    'text-align:center', 'box-shadow:0 2px 8px rgba(0,0,0,.3)',
+    'position:fixed',
+    'top:0',
+    'left:0',
+    'right:0',
+    'z-index:9999',
+    'background:#b3261e',
+    'color:#fff',
+    'padding:12px 16px',
+    'font-family:system-ui,-apple-system,sans-serif',
+    'font-size:15px',
+    'text-align:center',
+    'box-shadow:0 2px 8px rgba(0,0,0,.3)',
   ].join(';');
   document.body.appendChild(balk);
 }

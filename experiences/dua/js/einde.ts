@@ -81,11 +81,15 @@ async function vernieuw(): Promise<void> {
   }
 
   // Beide klaar → onthulling + stats + reviewformulier
-  wacht.textContent = 'De brief uit 1934 en het rapport uit 2034 liggen naast elkaar. Jullie waren D.U.A. Allebei. Altijd al.';
+  wacht.textContent =
+    'De brief uit 1934 en het rapport uit 2034 liggen naast elkaar. Jullie waren D.U.A. Allebei. Altijd al.';
   document.getElementById('einde-onthulling')?.classList.remove('verborgen');
   document.getElementById('einde-review')?.classList.remove('verborgen');
 
-  if (!klokGeluid) { klokGeluid = true; fx.kerkklok(5, true); }
+  if (!klokGeluid) {
+    klokGeluid = true;
+    fx.kerkklok(5, true);
+  }
   if (statsGetoond) return;
   statsGetoond = true;
 
@@ -118,5 +122,9 @@ async function vernieuw(): Promise<void> {
 }
 
 // Live: vernieuw zodra brief14 of rapport binnenkomt
-onValue(ref(db, `sessions/${sessie}/dua/brief14`), () => { vernieuw(); });
-onValue(ref(db, `sessions/${sessie}/rapport/ingediend`), () => { vernieuw(); });
+onValue(ref(db, `sessions/${sessie}/dua/brief14`), () => {
+  vernieuw();
+});
+onValue(ref(db, `sessions/${sessie}/rapport/ingediend`), () => {
+  vernieuw();
+});

@@ -7,7 +7,7 @@ import { leesGoedgekeurdeReviews, type Review } from '../shared/js/reviews.ts';
 // marquee verborgen (geen verzonnen reviews).
 const ERVARING_LABELS: Record<string, string> = {
   'kamer-14': 'Kamer 14',
-  'dua': 'D.U.A.',
+  dua: 'D.U.A.',
 };
 
 function escapeHtml(s: string): string {
@@ -27,19 +27,23 @@ function sterrenHtml(rating: number): string {
 function reviewKaart(r: Review): string {
   const naam = r.naam ? escapeHtml(r.naam) : 'Anonieme speler';
   const exp = escapeHtml(ERVARING_LABELS[r.ervaring] ?? r.ervaring);
-  return `<div class="review-card reveal visible">`
-    + `<div class="review-quote">&ldquo;</div>`
-    + `<div class="review-stars">${sterrenHtml(r.rating)}</div>`
-    + `<p class="review-text">${escapeHtml(r.tekst)}</p>`
-    + `<div class="review-author">${naam}</div>`
-    + `<div class="review-exp">${exp}</div></div>`;
+  return (
+    `<div class="review-card reveal visible">` +
+    `<div class="review-quote">&ldquo;</div>` +
+    `<div class="review-stars">${sterrenHtml(r.rating)}</div>` +
+    `<p class="review-text">${escapeHtml(r.tekst)}</p>` +
+    `<div class="review-author">${naam}</div>` +
+    `<div class="review-exp">${exp}</div></div>`
+  );
 }
 
 function marqueeItem(r: Review): string {
   const naam = r.naam ? escapeHtml(r.naam) : 'Anonieme speler';
   const kort = r.tekst.length > 90 ? r.tekst.slice(0, 88).trim() + '…' : r.tekst;
-  return `<div class="marquee-item"><span class="stars">${sterrenHtml(r.rating)}</span>`
-    + `"${escapeHtml(kort)}" &middot; ${naam}</div>`;
+  return (
+    `<div class="marquee-item"><span class="stars">${sterrenHtml(r.rating)}</span>` +
+    `"${escapeHtml(kort)}" &middot; ${naam}</div>`
+  );
 }
 
 // ── RICH RESULTS: review-sterren voor Google ───────────────────
@@ -48,12 +52,12 @@ function marqueeItem(r: Review): string {
 // dus client-side JSON-LD telt mee voor rich results.
 const EXPERIENCE_URLS: Record<string, string> = {
   'kamer-14': 'https://bureau-x.be/kamer-14/',
-  'dua': 'https://bureau-x.be/dua/',
+  dua: 'https://bureau-x.be/dua/',
 };
 
 function injecteerRatingSchema(reviews: Review[]): void {
   for (const [ervaring, url] of Object.entries(EXPERIENCE_URLS)) {
-    const subset = reviews.filter((r) => r.ervaring === ervaring);
+    const subset = reviews.filter(r => r.ervaring === ervaring);
     if (subset.length === 0) continue;
     const gemiddelde = subset.reduce((som, r) => som + r.rating, 0) / subset.length;
 
@@ -122,7 +126,7 @@ console.log(
   '%cBUREAU X — INTERN ARCHIEF',
   'font-family: monospace; font-size: 14px; letter-spacing: 2px; color: #c8a96e;',
   '\n\nJe zoekt op plekken waar anderen niet kijken. Goede reflex, speurder.' +
-  '\nHet archief reageert op haar naam. Typ die maar eens.'
+    '\nHet archief reageert op haar naam. Typ die maar eens.',
 );
 
 let buf = '';
@@ -152,8 +156,13 @@ document.addEventListener('keydown', (e: KeyboardEvent) => {
         <p class="easter-sluiten">Klik om dit archiefstuk terug te leggen.</p>
       </div>`;
 
-    const sluit = () => { el.remove(); document.removeEventListener('keydown', onEsc); };
-    const onEsc = (ev: KeyboardEvent) => { if (ev.key === 'Escape') sluit(); };
+    const sluit = () => {
+      el.remove();
+      document.removeEventListener('keydown', onEsc);
+    };
+    const onEsc = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') sluit();
+    };
 
     el.addEventListener('click', sluit);
     document.addEventListener('keydown', onEsc);

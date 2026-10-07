@@ -1,5 +1,9 @@
 import '../../../shared/js/sentry.ts';
-import { luisterNaarStatus, puzzelVoltooid, bewaakSessieGesloten } from '../../../shared/js/session.ts';
+import {
+  luisterNaarStatus,
+  puzzelVoltooid,
+  bewaakSessieGesloten,
+} from '../../../shared/js/session.ts';
 import { controleerAntwoordHash, sessieUitUrl } from '../../../shared/js/utils.ts';
 import {
   updateVoortgang,
@@ -22,7 +26,12 @@ import {
 import { initHulp } from '../../../shared/js/hulp.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { KAMER14_INACTIEF, KAMER14_HULP_HTML, kamer14VrijgaveMelding } from './kamer14-hulp.ts';
-import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelEnvelopGeluid } from './audio.ts';
+import {
+  startAchtergrond,
+  speelUnlock,
+  speelVerhaalFragment,
+  speelEnvelopGeluid,
+} from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 
 let _audioGestart: boolean = false;
@@ -33,7 +42,7 @@ const _fragmentenAfgespeeld: Set<string> = new Set();
 // Fragmenten alleen spelen voor puzzels die tijdens DEZE sessie opgelost worden,
 // niet voor puzzels die al opgelost waren vóór het laden van de pagina.
 const _paginaLaadtijd: number = Date.now();
-const WACHT_NA_LADEN: number  = 4000; // ms
+const WACHT_NA_LADEN: number = 4000; // ms
 
 function zorgVoorAudio(): void {
   if (_audioGestart) return;
@@ -72,7 +81,6 @@ bewaakSessieGesloten(sessie, () => {
 const sysCase = document.getElementById('sys-case');
 if (sysCase) sysCase.textContent = `Buurtdossier · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
 
-
 // ── Hulp: hint-tip, verhaalmeldingen, vrijgave en "Hulp nodig?" ──
 const hulp = initHulp({
   hintBlokVoor: puzzel => `hint-${puzzel}-b`,
@@ -93,7 +101,6 @@ document.querySelectorAll('.tab:not(.slot)').forEach(tab => {
     document.getElementById(`panel-${doel}`)?.classList.add('actief');
   });
 });
-
 
 // Geeft een vergrendelde tab vrij: speelt het unlock-geluid, toont het label
 // en koppelt de klik die deze tab plus zijn paneel activeert.
@@ -131,7 +138,7 @@ function updateTabs(p: Record<string, boolean>): void {
   }
 
   // ── Verhaalfragmenten na puzzeloplossing ─────────────────
-  (['p1','p2','p3','p4','p5'] as const).forEach(nr => {
+  (['p1', 'p2', 'p3', 'p4', 'p5'] as const).forEach(nr => {
     if (p[nr] && !_fragmentenAfgespeeld.has(nr)) {
       _fragmentenAfgespeeld.add(nr);
       if (Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
@@ -142,22 +149,24 @@ function updateTabs(p: Record<string, boolean>): void {
   });
 
   // Voltooide puzzels markeren als verborgen
-  ['p1','p2','p3','p4','p5'].forEach((nr, i) => {
+  ['p1', 'p2', 'p3', 'p4', 'p5'].forEach((nr, i) => {
     if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
   });
 
   // Eindelink tonen als alle puzzels opgelost zijn
   if (p['p5'] && !document.getElementById('einde-link')) {
-    const balk     = document.createElement('a');
-    balk.id        = 'einde-link';
-    balk.href      = `einde.html?sessie=${sessie}`;
+    const balk = document.createElement('a');
+    balk.id = 'einde-link';
+    balk.href = `einde.html?sessie=${sessie}`;
     balk.className = 'einde-link-balk';
-    balk.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
-    balk.addEventListener('click', () => { schakelGuardUit(); });
+    balk.innerHTML =
+      '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
+    balk.addEventListener('click', () => {
+      schakelGuardUit();
+    });
     document.querySelector('.tabs')?.insertAdjacentElement('afterend', balk);
   }
 }
-
 
 // ── Prikbord: brief omdraaien ─────────────────────────────
 function draaiOm(): void {
@@ -176,12 +185,14 @@ declare global {
 
 window.draaiOm = draaiOm;
 
-
-['p1','p2','p3','p4','p5'].forEach(nr => {
+['p1', 'p2', 'p3', 'p4', 'p5'].forEach(nr => {
   const puzzelNr = parseInt(nr.replace('p', ''));
   document.getElementById(`btn-${nr}`)?.addEventListener('click', () =>
     controleerAntwoordHash(
-      nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`,
+      nr,
+      `input-${nr}`,
+      `feedback-${nr}`,
+      `btn-${nr}`,
       KAMER14_ANTWOORD_HASHES,
       () => {
         void puzzelVoltooid(sessie, puzzelNr);
@@ -193,16 +204,15 @@ window.draaiOm = draaiOm;
         hulp.poging(nr, oordeel);
         if (oordeel !== 'juist') void registreerPoging(sessie, nr, oordeel);
       },
-    )
+    ),
   );
   document.getElementById(`input-${nr}`)?.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
   });
 });
 
-
 // ── Firebase live luisteren ───────────────────────────────
-const unsubscribe = luisterNaarStatus(sessie, (puzzels) => {
+const unsubscribe = luisterNaarStatus(sessie, puzzels => {
   const p = puzzels || {};
   updateVoortgang(p);
   updateTabs(p);

@@ -1,13 +1,5 @@
 import { db } from './firebase-config.ts';
-import {
-  ref,
-  set,
-  get,
-  update,
-  onValue,
-  serverTimestamp,
-  runTransaction,
-} from "firebase/database";
+import { ref, set, get, update, onValue, serverTimestamp, runTransaction } from 'firebase/database';
 import { authReady } from './auth.ts';
 import { schrijf } from './verbinding.ts';
 
@@ -75,10 +67,13 @@ export async function maakSessie(
   if (demo) nieuw.demo = true;
 
   const sessieRef = ref(db, `sessions/${sessieCode}`);
-  const result = await schrijf('maakSessie', runTransaction(sessieRef, (huidig) => {
-    if (huidig !== null) return; // bestaat al → transactie afbreken
-    return nieuw;
-  }));
+  const result = await schrijf(
+    'maakSessie',
+    runTransaction(sessieRef, huidig => {
+      if (huidig !== null) return; // bestaat al → transactie afbreken
+      return nieuw;
+    }),
+  );
   return result.committed;
 }
 
@@ -103,7 +98,7 @@ export async function valideerSessie(sessieCode: string): Promise<boolean> {
   // code kan sowieso niet bestaan (zie database.rules.json).
   if (!GELDIGE_CODE.test(sessieCode)) return false;
   const sessieRef = ref(db, `sessions/${sessieCode}`);
-  const snapshot  = await get(sessieRef);
+  const snapshot = await get(sessieRef);
 
   if (!snapshot.exists()) return false;
   return snapshot.val().actief === true;
@@ -119,9 +114,7 @@ export async function zoekSessieCode(invoer: string): Promise<string | null> {
   const code = normaliseerSessieCode(invoer);
   const kandidaten = [code];
   if (!code.includes('-')) {
-    const metKoppelteken = code
-      .replace(/([A-Z])(?=\d)/g, '$1-')
-      .replace(/(\d)(?=[A-Z])/g, '$1-');
+    const metKoppelteken = code.replace(/([A-Z])(?=\d)/g, '$1-').replace(/(\d)(?=[A-Z])/g, '$1-');
     if (metKoppelteken !== code) kandidaten.push(metKoppelteken);
   }
   for (const kandidaat of kandidaten) {
@@ -185,7 +178,7 @@ export function luisterNaarStatus(
   callback: (puzzels: PuzzelStatus) => void,
 ): () => void {
   const puzzelsRef = ref(db, `sessions/${sessieCode}/puzzels`);
-  return onValue(puzzelsRef, (snapshot) => {
+  return onValue(puzzelsRef, snapshot => {
     callback(snapshot.val() || {});
   });
 }
@@ -194,11 +187,14 @@ export function luisterNaarStatus(
 export async function diendRapportIn(sessieCode: string, inhoud: RapportInhoud): Promise<void> {
   await authReady;
   const rapportRef = ref(db, `sessions/${sessieCode}/rapport`);
-  await schrijf('diendRapportIn', update(rapportRef, {
-    ingediend: true,
-    inhoud: inhoud,
-    tijdstip: serverTimestamp(),
-  }));
+  await schrijf(
+    'diendRapportIn',
+    update(rapportRef, {
+      ingediend: true,
+      inhoud: inhoud,
+      tijdstip: serverTimestamp(),
+    }),
+  );
 }
 
 // Luisteren naar rapport (voor briefkaart reveal)
@@ -208,7 +204,7 @@ export function luisterNaarRapport(
   callback: (rapport: RapportData) => void,
 ): () => void {
   const rapportRef = ref(db, `sessions/${sessieCode}/rapport`);
-  return onValue(rapportRef, (snapshot) => {
+  return onValue(rapportRef, snapshot => {
     callback(snapshot.val() || {});
   });
 }
@@ -217,15 +213,12 @@ export function luisterNaarRapport(
 // (of was ze dat al bij het laden), dan vuurt `opGesloten`. Een natuurlijk
 // einde — rapport ingediend, waarna de spelers zelf sluiten — telt niet als
 // onderbreking. Geeft de unsubscribe-functie terug.
-export function bewaakSessieGesloten(
-  sessieCode: string,
-  opGesloten: () => void,
-): () => void {
+export function bewaakSessieGesloten(sessieCode: string, opGesloten: () => void): () => void {
   const actiefRef = ref(db, `sessions/${sessieCode}/actief`);
-  return onValue(actiefRef, (snapshot) => {
+  return onValue(actiefRef, snapshot => {
     if (snapshot.val() !== false) return;
     get(ref(db, `sessions/${sessieCode}/rapport/ingediend`))
-      .then((r) => {
+      .then(r => {
         if (r.val() !== true) opGesloten();
       })
       .catch(() => opGesloten());
@@ -259,10 +252,13 @@ export async function haalTijden(sessieCode: string): Promise<SessieTijden> {
 export async function claimRol(sessieCode: string, rol: string): Promise<boolean> {
   await authReady;
   const rolRef = ref(db, `sessions/${sessieCode}/spelers/${rol}`);
-  const result = await schrijf('claimRol', runTransaction(rolRef, (huidig) => {
-    if (huidig !== null) return; // undefined = transaction afgebroken
-    return 'bezet';
-  }));
+  const result = await schrijf(
+    'claimRol',
+    runTransaction(rolRef, huidig => {
+      if (huidig !== null) return; // undefined = transaction afgebroken
+      return 'bezet';
+    }),
+  );
   return result.committed;
 }
 
@@ -273,7 +269,7 @@ export function luisterNaarRollen(
   callback: (spelers: SpelersStatus) => void,
 ): () => void {
   const spelersRef = ref(db, `sessions/${sessieCode}/spelers`);
-  return onValue(spelersRef, (snapshot) => {
+  return onValue(spelersRef, snapshot => {
     callback(snapshot.val() || {});
   });
 }

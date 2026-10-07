@@ -11,7 +11,13 @@ function audio(): AudioContext {
   return ctx;
 }
 
-function toon(freq: number, duur: number, type: OscillatorType = 'sine', vol = 0.15, when = 0): void {
+function toon(
+  freq: number,
+  duur: number,
+  type: OscillatorType = 'sine',
+  vol = 0.15,
+  when = 0,
+): void {
   if (gedempt) return;
   const c = audio();
   const o = c.createOscillator();
@@ -43,18 +49,50 @@ function ruis(duur = 0.2, vol = 0.08, when = 0): void {
 }
 
 export const fx = {
-  typmachine(): void { ruis(0.03, 0.10); toon(2400, 0.02, 'square', 0.03); },
-  typDiep(): void    { ruis(0.05, 0.16); toon(1600, 0.04, 'square', 0.06); },
-  lade(): void       { ruis(0.35, 0.12); },
-  klik(): void       { toon(1800, 0.03, 'square', 0.05); },
-  fout(): void       { toon(160, 0.3, 'sawtooth', 0.08); },
-  voetstap(): void   { ruis(0.06, 0.10); toon(90, 0.05, 'sine', 0.10); },
-  fluitje(): void    { toon(2200, 0.5, 'sine', 0.12); toon(2400, 0.4, 'sine', 0.10, 0.15); },
-  blaat(): void      { [0, 0.18, 0.36].forEach((w, i) => toon(740 - i * 40, 0.14, 'sawtooth', 0.06, w)); },
-  fluister(): void   { ruis(1.0, 0.05); },
-  hartslag(): void   { toon(55, 0.12, 'sine', 0.25); toon(55, 0.10, 'sine', 0.18, 0.22); },
-  telefoon(): void   { [0, 0.5].forEach(w => { toon(440, 0.35, 'sine', 0.1, w); toon(480, 0.35, 'sine', 0.1, w); }); },
-  stoom(): void      { ruis(0.8, 0.07); },
+  typmachine(): void {
+    ruis(0.03, 0.1);
+    toon(2400, 0.02, 'square', 0.03);
+  },
+  typDiep(): void {
+    ruis(0.05, 0.16);
+    toon(1600, 0.04, 'square', 0.06);
+  },
+  lade(): void {
+    ruis(0.35, 0.12);
+  },
+  klik(): void {
+    toon(1800, 0.03, 'square', 0.05);
+  },
+  fout(): void {
+    toon(160, 0.3, 'sawtooth', 0.08);
+  },
+  voetstap(): void {
+    ruis(0.06, 0.1);
+    toon(90, 0.05, 'sine', 0.1);
+  },
+  fluitje(): void {
+    toon(2200, 0.5, 'sine', 0.12);
+    toon(2400, 0.4, 'sine', 0.1, 0.15);
+  },
+  blaat(): void {
+    [0, 0.18, 0.36].forEach((w, i) => toon(740 - i * 40, 0.14, 'sawtooth', 0.06, w));
+  },
+  fluister(): void {
+    ruis(1.0, 0.05);
+  },
+  hartslag(): void {
+    toon(55, 0.12, 'sine', 0.25);
+    toon(55, 0.1, 'sine', 0.18, 0.22);
+  },
+  telefoon(): void {
+    [0, 0.5].forEach(w => {
+      toon(440, 0.35, 'sine', 0.1, w);
+      toon(480, 0.35, 'sine', 0.1, w);
+    });
+  },
+  stoom(): void {
+    ruis(0.8, 0.07);
+  },
   // dof = 2034: dezelfde klok, maar verder weg
   kerkklok(slagen: number, dof = false): void {
     for (let i = 0; i < slagen; i++) {

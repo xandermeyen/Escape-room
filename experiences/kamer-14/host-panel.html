@@ -1,276 +1,550 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>Kamer 14 - Host</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Kamer 14 - Host</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="../../shared/css/game.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="../../shared/css/game.css" />
 
-  <style>
-    body { background: #1a1a1a; color: #e8e0d0; min-height: 100vh; padding: 2rem 1rem; }
+    <style>
+      body {
+        background: #1a1a1a;
+        color: #e8e0d0;
+        min-height: 100vh;
+        padding: 2rem 1rem;
+      }
 
-    .admin-header {
-      display: flex; align-items: center; gap: 1rem;
-      border-bottom: 1px solid #444; padding-bottom: 1rem; margin-bottom: 2rem;
-    }
-    .admin-header img { height: 28px; opacity: 0.8; }
-    .admin-header h1 { font-family: 'Special Elite', serif; font-size: 1.4rem; margin: 0; color: #c9b99a; }
-    .badge-admin {
-      background: #8b3a3a; color: #fff; font-size: 0.65rem;
-      padding: 2px 8px; border-radius: 3px; letter-spacing: 1px; text-transform: uppercase;
-    }
+      .admin-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border-bottom: 1px solid #444;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+      }
+      .admin-header img {
+        height: 28px;
+        opacity: 0.8;
+      }
+      .admin-header h1 {
+        font-family: 'Special Elite', serif;
+        font-size: 1.4rem;
+        margin: 0;
+        color: #c9b99a;
+      }
+      .badge-admin {
+        background: #8b3a3a;
+        color: #fff;
+        font-size: 0.65rem;
+        padding: 2px 8px;
+        border-radius: 3px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
 
-    .kaart {
-      background: #252525; border: 1px solid #3a3a3a; border-radius: 6px;
-      padding: 1.5rem; margin-bottom: 1.5rem;
-    }
-    .kaart-titel {
-      font-family: 'Special Elite', serif; font-size: 1rem;
-      color: #c9b99a; margin-bottom: 1rem; letter-spacing: 0.5px;
-    }
+      .kaart {
+        background: #252525;
+        border: 1px solid #3a3a3a;
+        border-radius: 6px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .kaart-titel {
+        font-family: 'Special Elite', serif;
+        font-size: 1rem;
+        color: #c9b99a;
+        margin-bottom: 1rem;
+        letter-spacing: 0.5px;
+      }
 
-    .code-gegenereerd {
-      font-family: monospace; font-size: 1.8rem; letter-spacing: 4px;
-      color: #e8e0d0; background: #1a1a1a; border: 1px dashed #555;
-      border-radius: 4px; padding: 0.75rem 1.5rem; display: inline-block;
-      margin-bottom: 1rem;
-    }
+      .code-gegenereerd {
+        font-family: monospace;
+        font-size: 1.8rem;
+        letter-spacing: 4px;
+        color: #e8e0d0;
+        background: #1a1a1a;
+        border: 1px dashed #555;
+        border-radius: 4px;
+        padding: 0.75rem 1.5rem;
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
 
-    .btn-admin {
-      background: #8b3a3a; color: #fff; border: none;
-      padding: 0.5rem 1.2rem; border-radius: 4px; font-size: 0.9rem; cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-admin:hover { background: #a04040; color: #fff; }
-    .btn-admin:disabled { opacity: 0.5; cursor: not-allowed; }
+      .btn-admin {
+        background: #8b3a3a;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-admin:hover {
+        background: #a04040;
+        color: #fff;
+      }
+      .btn-admin:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
 
-    .btn-sec {
-      background: transparent; color: #aaa; border: 1px solid #444;
-      padding: 0.5rem 1.2rem; border-radius: 4px; font-size: 0.9rem; cursor: pointer;
-    }
-    .btn-sec:hover { border-color: #888; color: #e8e0d0; }
+      .btn-sec {
+        background: transparent;
+        color: #aaa;
+        border: 1px solid #444;
+        padding: 0.5rem 1.2rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+      .btn-sec:hover {
+        border-color: #888;
+        color: #e8e0d0;
+      }
 
-    .sessie-tabel { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    .sessie-tabel th {
-      text-align: left; color: #888; font-weight: normal; font-size: 0.75rem;
-      text-transform: uppercase; letter-spacing: 1px; padding: 0 0.5rem 0.75rem;
-      border-bottom: 1px solid #333;
-    }
-    .sessie-tabel td { padding: 0.7rem 0.5rem; border-bottom: 1px solid #2a2a2a; vertical-align: middle; }
-    .sessie-tabel tr:last-child td { border-bottom: none; }
-    .sessie-tabel tr:hover td { background: #2a2a2a; }
+      .sessie-tabel {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+      }
+      .sessie-tabel th {
+        text-align: left;
+        color: #888;
+        font-weight: normal;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0 0.5rem 0.75rem;
+        border-bottom: 1px solid #333;
+      }
+      .sessie-tabel td {
+        padding: 0.7rem 0.5rem;
+        border-bottom: 1px solid #2a2a2a;
+        vertical-align: middle;
+      }
+      .sessie-tabel tr:last-child td {
+        border-bottom: none;
+      }
+      .sessie-tabel tr:hover td {
+        background: #2a2a2a;
+      }
 
-    .code-cel { font-family: monospace; font-size: 1rem; letter-spacing: 2px; color: #c9b99a; }
+      .code-cel {
+        font-family: monospace;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        color: #c9b99a;
+      }
 
-    .puzzel-bollen { display: flex; gap: 4px; align-items: center; }
-    .bol { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #444; }
-    .bol.klaar { background: #4a7c4a; border-color: #4a7c4a; }
-    .bol.open  { background: #2a2a2a; }
+      .puzzel-bollen {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .bol {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 1px solid #444;
+      }
+      .bol.klaar {
+        background: #4a7c4a;
+        border-color: #4a7c4a;
+      }
+      .bol.open {
+        background: #2a2a2a;
+      }
 
-    .badge-actief   { background: #2a4a2a; color: #7dc47d; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
-    .badge-klaar    { background: #4a3a00; color: #c9a84c; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
-    .badge-bezig    { background: #3a3a2a; color: #c9b99a; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
-    .badge-inactief { background: #3a2a2a; color: #888;    font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
-    .badge-verlopen { background: #4a2a1a; color: #d08a5a; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; }
+      .badge-actief {
+        background: #2a4a2a;
+        color: #7dc47d;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 3px;
+      }
+      .badge-klaar {
+        background: #4a3a00;
+        color: #c9a84c;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 3px;
+      }
+      .badge-bezig {
+        background: #3a3a2a;
+        color: #c9b99a;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 3px;
+      }
+      .badge-inactief {
+        background: #3a2a2a;
+        color: #888;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 3px;
+      }
+      .badge-verlopen {
+        background: #4a2a1a;
+        color: #d08a5a;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 3px;
+      }
 
-    .link-input {
-      background: #1a1a1a; border: 1px solid #333; color: #888;
-      border-radius: 3px; padding: 2px 6px; font-family: monospace;
-      font-size: 0.75rem; width: 200px; vertical-align: middle;
-    }
+      .link-input {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        color: #888;
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-family: monospace;
+        font-size: 0.75rem;
+        width: 200px;
+        vertical-align: middle;
+      }
 
-    .kopieer-knop {
-      background: none; border: none; color: #666; cursor: pointer; padding: 2px 6px;
-      border-radius: 3px; transition: color 0.15s;
-    }
-    .kopieer-knop:hover { color: #c9b99a; }
+      .kopieer-knop {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        padding: 2px 6px;
+        border-radius: 3px;
+        transition: color 0.15s;
+      }
+      .kopieer-knop:hover {
+        color: #c9b99a;
+      }
 
-    .status-bericht {
-      padding: 0.6rem 1rem; border-radius: 4px; font-size: 0.85rem; margin-top: 1rem; display: none;
-    }
-    .status-ok   { background: #2a4a2a; color: #7dc47d; }
-    .status-fout { background: #4a2a2a; color: #c47d7d; }
+      .status-bericht {
+        padding: 0.6rem 1rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        margin-top: 1rem;
+        display: none;
+      }
+      .status-ok {
+        background: #2a4a2a;
+        color: #7dc47d;
+      }
+      .status-fout {
+        background: #4a2a2a;
+        color: #c47d7d;
+      }
 
-    .code-invoer-admin {
-      background: #1a1a1a; border: 1px solid #444; color: #e8e0d0;
-      border-radius: 4px; padding: 0.5rem 0.75rem; font-family: monospace;
-      font-size: 1rem; letter-spacing: 2px; width: 180px; text-transform: uppercase;
-    }
-    .code-invoer-admin:focus { outline: none; border-color: #8b3a3a; }
+      .code-invoer-admin {
+        background: #1a1a1a;
+        border: 1px solid #444;
+        color: #e8e0d0;
+        border-radius: 4px;
+        padding: 0.5rem 0.75rem;
+        font-family: monospace;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        width: 180px;
+        text-transform: uppercase;
+      }
+      .code-invoer-admin:focus {
+        outline: none;
+        border-color: #8b3a3a;
+      }
 
-    .laden { color: #666; font-size: 0.85rem; }
-    .geen-sessies { color: #555; font-size: 0.85rem; text-align: center; padding: 2rem; }
-    .geen-reviews { color: #555; font-size: 0.85rem; text-align: center; padding: 2rem; }
+      .laden {
+        color: #666;
+        font-size: 0.85rem;
+      }
+      .geen-sessies {
+        color: #555;
+        font-size: 0.85rem;
+        text-align: center;
+        padding: 2rem;
+      }
+      .geen-reviews {
+        color: #555;
+        font-size: 0.85rem;
+        text-align: center;
+        padding: 2rem;
+      }
 
-    .review-kaart {
-      background: #1a1a1a; border: 1px solid #333; border-radius: 5px;
-      padding: 1rem 1.2rem; margin-bottom: 0.9rem;
-    }
-    .review-kaart:last-child { margin-bottom: 0; }
+      .review-kaart {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 5px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 0.9rem;
+      }
+      .review-kaart:last-child {
+        margin-bottom: 0;
+      }
 
-    .terug-link {
-      color: #666; font-size: 0.8rem; text-decoration: none;
-      transition: color 0.2s;
-    }
-    .terug-link:hover { color: #c9b99a; }
-  </style>
-</head>
-<body>
-
-  <!-- LOGINSCHERM -->
-  <div id="login-scherm" style="
-    position:fixed; inset:0; background:#1a1a1a;
-    display:flex; align-items:center; justify-content:center; z-index:9999;">
-    <div style="text-align:center; color:#e8e0d0; font-family:'Special Elite',serif; width:280px;">
-      <div style="font-size:1.1rem; letter-spacing:0.1em; margin-bottom:1.5rem; color:#c9b99a;">
-        Bureau X · Host-toegang
-      </div>
-      <input id="email-invoer" type="email" placeholder="E-mailadres"
-        style="background:#252525; border:1px solid #444; color:#e8e0d0;
-               padding:0.6rem 1rem; border-radius:4px; font-size:1rem;
-               outline:none; width:100%; margin-bottom:0.75rem; box-sizing:border-box;"
-        onkeydown="if(event.key==='Enter') login()" />
-      <input id="ww-invoer" type="password" placeholder="Wachtwoord"
-        style="background:#252525; border:1px solid #444; color:#e8e0d0;
-               padding:0.6rem 1rem; border-radius:4px; font-size:1rem;
-               outline:none; width:100%; box-sizing:border-box;"
-        onkeydown="if(event.key==='Enter') login()" />
-      <br><br>
-      <button id="login-knop" onclick="login()"
-        style="background:#8b3a3a; color:#fff; border:none;
-               padding:0.5rem 1.5rem; border-radius:4px; cursor:pointer;
-               font-family:'Special Elite',serif; font-size:0.9rem; letter-spacing:0.05em; width:100%;">
-        Inloggen
-      </button>
-      <div id="login-fout" style="color:#c47d7d; margin-top:1rem; font-size:0.85rem; display:none;">
-        Ongeldig e-mailadres of wachtwoord.
-      </div>
-      <div style="margin-top:1.5rem;">
-        <a href="../../index.html" class="terug-link">
-          <i class="bi bi-arrow-left me-1"></i>Terug naar home
-        </a>
+      .terug-link {
+        color: #666;
+        font-size: 0.8rem;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .terug-link:hover {
+        color: #c9b99a;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LOGINSCHERM -->
+    <div
+      id="login-scherm"
+      style="
+        position: fixed;
+        inset: 0;
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      "
+    >
+      <div
+        style="
+          text-align: center;
+          color: #e8e0d0;
+          font-family: 'Special Elite', serif;
+          width: 280px;
+        "
+      >
+        <div
+          style="font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 1.5rem; color: #c9b99a"
+        >
+          Bureau X · Host-toegang
+        </div>
+        <input
+          id="email-invoer"
+          type="email"
+          placeholder="E-mailadres"
+          style="
+            background: #252525;
+            border: 1px solid #444;
+            color: #e8e0d0;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            width: 100%;
+            margin-bottom: 0.75rem;
+            box-sizing: border-box;
+          "
+          onkeydown="if (event.key === 'Enter') login();"
+        />
+        <input
+          id="ww-invoer"
+          type="password"
+          placeholder="Wachtwoord"
+          style="
+            background: #252525;
+            border: 1px solid #444;
+            color: #e8e0d0;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+          "
+          onkeydown="if (event.key === 'Enter') login();"
+        />
+        <br /><br />
+        <button
+          id="login-knop"
+          onclick="login()"
+          style="
+            background: #8b3a3a;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Special Elite', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            width: 100%;
+          "
+        >
+          Inloggen
+        </button>
+        <div
+          id="login-fout"
+          style="color: #c47d7d; margin-top: 1rem; font-size: 0.85rem; display: none"
+        >
+          Ongeldig e-mailadres of wachtwoord.
+        </div>
+        <div style="margin-top: 1.5rem">
+          <a href="../../index.html" class="terug-link">
+            <i class="bi bi-arrow-left me-1"></i>Terug naar home
+          </a>
+        </div>
       </div>
     </div>
-  </div>
 
-
-  <!-- ADMIN INHOUD -->
-  <div id="admin-inhoud" style="display:none;">
-    <div style="max-width: 780px; margin: 0 auto;">
-
-      <!-- Header -->
-      <div class="admin-header">
-        <img src="../../assets/img/bureau_x_logo_dark.svg" alt="Bureau X" />
-        <h1>Kamer 14</h1>
-        <span class="badge-admin">Host</span>
-        <a href="../../index.html" class="btn-sec ms-auto me-2" style="font-size:0.8rem; text-decoration:none;">
-          <i class="bi bi-house me-1"></i>Home
-        </a>
-        <button onclick="window.uitloggen()" class="btn-sec" style="font-size:0.8rem;">
-          <i class="bi bi-box-arrow-right me-1"></i>Uitloggen
-        </button>
-      </div>
-
-      <!-- Nieuwe sessie aanmaken -->
-      <div class="kaart">
-        <div class="kaart-titel"><i class="bi bi-plus-circle me-2"></i>Nieuwe sessie aanmaken</div>
-
-        <div class="mb-3">
-          <div class="code-gegenereerd" id="gegenereerde-code">- - -</div>
-          <button class="btn-sec ms-2" onclick="genereerCode()">
-            <i class="bi bi-arrow-clockwise me-1"></i>Andere code
+    <!-- ADMIN INHOUD -->
+    <div id="admin-inhoud" style="display: none">
+      <div style="max-width: 780px; margin: 0 auto">
+        <!-- Header -->
+        <div class="admin-header">
+          <img src="../../assets/img/bureau_x_logo_dark.svg" alt="Bureau X" />
+          <h1>Kamer 14</h1>
+          <span class="badge-admin">Host</span>
+          <a
+            href="../../index.html"
+            class="btn-sec ms-auto me-2"
+            style="font-size: 0.8rem; text-decoration: none"
+          >
+            <i class="bi bi-house me-1"></i>Home
+          </a>
+          <button onclick="window.uitloggen()" class="btn-sec" style="font-size: 0.8rem">
+            <i class="bi bi-box-arrow-right me-1"></i>Uitloggen
           </button>
         </div>
 
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <span style="color:#888; font-size:0.85rem;">Of voer zelf een code in:</span>
-          <input type="text" id="eigen-code" class="code-invoer-admin" placeholder="bv. TEST01" maxlength="20" />
-        </div>
+        <!-- Nieuwe sessie aanmaken -->
+        <div class="kaart">
+          <div class="kaart-titel">
+            <i class="bi bi-plus-circle me-2"></i>Nieuwe sessie aanmaken
+          </div>
 
-        <button class="btn-admin mt-2" id="btn-aanmaken" onclick="maakSessieAan()">
-          <i class="bi bi-check2 me-2"></i>Sessie aanmaken
-        </button>
+          <div class="mb-3">
+            <div class="code-gegenereerd" id="gegenereerde-code">- - -</div>
+            <button class="btn-sec ms-2" onclick="genereerCode()">
+              <i class="bi bi-arrow-clockwise me-1"></i>Andere code
+            </button>
+          </div>
 
-        <div class="status-bericht" id="status-aanmaken"></div>
-      </div>
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span style="color: #888; font-size: 0.85rem">Of voer zelf een code in:</span>
+            <input
+              type="text"
+              id="eigen-code"
+              class="code-invoer-admin"
+              placeholder="bv. TEST01"
+              maxlength="20"
+            />
+          </div>
 
-      <!-- Demo -->
-      <div class="kaart">
-        <div class="kaart-titel"><i class="bi bi-easel me-2"></i>Demo voor een docent of werkgever</div>
-        <p style="color:#999; font-size:0.85rem; margin-bottom:0.75rem;">
-          Vaste code <code style="color:#c9b99a;">DEMO-K14</code>. Telt niet mee in de speldata, de statistieken
-          of de reviews. Op de spelerpagina's wissel je met één klik van rol.
-        </p>
-        <div class="d-flex flex-wrap gap-2 align-items-center">
-          <button class="btn-admin" id="btn-demo-reset" onclick="resetDemoSessie()">
-            <i class="bi bi-arrow-counterclockwise me-2"></i>Demo resetten
+          <button class="btn-admin mt-2" id="btn-aanmaken" onclick="maakSessieAan()">
+            <i class="bi bi-check2 me-2"></i>Sessie aanmaken
           </button>
-          <a class="btn-sec" href="/experiences/kamer-14/speler-a.html?sessie=DEMO-K14" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Open als Speler A</a>
-          <a class="btn-sec" href="/experiences/kamer-14/speler-b.html?sessie=DEMO-K14" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Open als Speler B</a>
-          <a class="btn-sec" href="/experiences/kamer-14/?sessie=DEMO-K14" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Lobby</a>
+
+          <div class="status-bericht" id="status-aanmaken"></div>
         </div>
-        <div class="status-bericht" id="status-demo"></div>
+
+        <!-- Demo -->
+        <div class="kaart">
+          <div class="kaart-titel">
+            <i class="bi bi-easel me-2"></i>Demo voor een docent of werkgever
+          </div>
+          <p style="color: #999; font-size: 0.85rem; margin-bottom: 0.75rem">
+            Vaste code <code style="color: #c9b99a">DEMO-K14</code>. Telt niet mee in de speldata,
+            de statistieken of de reviews. Op de spelerpagina's wissel je met één klik van rol.
+          </p>
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <button class="btn-admin" id="btn-demo-reset" onclick="resetDemoSessie()">
+              <i class="bi bi-arrow-counterclockwise me-2"></i>Demo resetten
+            </button>
+            <a
+              class="btn-sec"
+              href="/experiences/kamer-14/speler-a.html?sessie=DEMO-K14"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="text-decoration: none"
+              >Open als Speler A</a
+            >
+            <a
+              class="btn-sec"
+              href="/experiences/kamer-14/speler-b.html?sessie=DEMO-K14"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="text-decoration: none"
+              >Open als Speler B</a
+            >
+            <a
+              class="btn-sec"
+              href="/experiences/kamer-14/?sessie=DEMO-K14"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="text-decoration: none"
+              >Lobby</a
+            >
+          </div>
+          <div class="status-bericht" id="status-demo"></div>
+        </div>
+
+        <!-- Speldata: gemiddelden per puzzel -->
+        <div class="kaart">
+          <div class="kaart-titel">
+            <i class="bi bi-bar-chart me-2"></i>Puzzelstatistieken (alle sessies)
+          </div>
+          <div id="stats-overzicht" class="tabel-scroll"><div class="laden">Laden…</div></div>
+        </div>
+
+        <!-- Sessie-overzicht -->
+        <div class="kaart">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="kaart-titel mb-0"><i class="bi bi-list-ul me-2"></i>Sessie-overzicht</div>
+            <button
+              class="btn-sec"
+              style="font-size: 0.8rem; padding: 3px 10px"
+              onclick="verversLijst()"
+            >
+              <i class="bi bi-arrow-clockwise me-1"></i>Verversen
+            </button>
+          </div>
+
+          <div class="laden" id="laden-label">Laden…</div>
+
+          <div class="tabel-scroll">
+            <table class="sessie-tabel" id="sessie-tabel" style="display: none">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Aangemaakt</th>
+                  <th>Geopend</th>
+                  <th>Puzzels</th>
+                  <th>Rapport</th>
+                  <th>Status</th>
+                  <th>Lobby-link</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="sessie-tbody"></tbody>
+            </table>
+          </div>
+
+          <div class="geen-sessies" id="geen-sessies" style="display: none">
+            Nog geen Kamer 14-sessies aangemaakt.
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="kaart">
+          <div class="kaart-titel"><i class="bi bi-star me-2"></i>Reviews</div>
+
+          <div class="laden" id="reviews-laden">Laden…</div>
+          <div id="reviews-lijst" style="display: none"></div>
+          <div class="geen-reviews" id="geen-reviews" style="display: none">
+            Nog geen reviews voor Kamer 14.
+          </div>
+        </div>
       </div>
+      <!-- /max-width wrapper -->
+    </div>
+    <!-- /admin-inhoud -->
 
-      <!-- Speldata: gemiddelden per puzzel -->
-      <div class="kaart">
-        <div class="kaart-titel"><i class="bi bi-bar-chart me-2"></i>Puzzelstatistieken (alle sessies)</div>
-        <div id="stats-overzicht" class="tabel-scroll"><div class="laden">Laden…</div></div>
-      </div>
-
-      <!-- Sessie-overzicht -->
-      <div class="kaart">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="kaart-titel mb-0"><i class="bi bi-list-ul me-2"></i>Sessie-overzicht</div>
-          <button class="btn-sec" style="font-size:0.8rem; padding:3px 10px;" onclick="verversLijst()">
-            <i class="bi bi-arrow-clockwise me-1"></i>Verversen
-          </button>
-        </div>
-
-        <div class="laden" id="laden-label">Laden…</div>
-
-        <div class="tabel-scroll">
-        <table class="sessie-tabel" id="sessie-tabel" style="display:none;">
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Aangemaakt</th>
-              <th>Geopend</th>
-              <th>Puzzels</th>
-              <th>Rapport</th>
-              <th>Status</th>
-              <th>Lobby-link</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="sessie-tbody"></tbody>
-        </table>
-        </div>
-
-        <div class="geen-sessies" id="geen-sessies" style="display:none;">
-          Nog geen Kamer 14-sessies aangemaakt.
-        </div>
-      </div>
-
-      <!-- Reviews -->
-      <div class="kaart">
-        <div class="kaart-titel"><i class="bi bi-star me-2"></i>Reviews</div>
-
-        <div class="laden" id="reviews-laden">Laden…</div>
-        <div id="reviews-lijst" style="display:none;"></div>
-        <div class="geen-reviews" id="geen-reviews" style="display:none;">
-          Nog geen reviews voor Kamer 14.
-        </div>
-      </div>
-
-    </div><!-- /max-width wrapper -->
-  </div><!-- /admin-inhoud -->
-
-  <script type="module" src="./js/host-panel.ts"></script>
-  <script type="module" src="/src/bootstrap.ts"></script>
-</body>
+    <script type="module" src="./js/host-panel.ts"></script>
+    <script type="module" src="/src/bootstrap.ts"></script>
+  </body>
 </html>

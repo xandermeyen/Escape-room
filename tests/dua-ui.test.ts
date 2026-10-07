@@ -3,13 +3,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // ── Firebase mocks (dua-ui.ts en zijn imports gebruiken deze) ─────────────────
 
 vi.mock('firebase/database', () => ({
-  ref:             vi.fn((_db: unknown, path: string) => ({ path })),
-  set:             vi.fn(() => Promise.resolve()),
-  get:             vi.fn(),
-  update:          vi.fn(() => Promise.resolve()),
-  onValue:         vi.fn(() => vi.fn()),
+  ref: vi.fn((_db: unknown, path: string) => ({ path })),
+  set: vi.fn(() => Promise.resolve()),
+  get: vi.fn(),
+  update: vi.fn(() => Promise.resolve()),
+  onValue: vi.fn(() => vi.fn()),
   serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
-  runTransaction:  vi.fn(),
+  runTransaction: vi.fn(),
 }));
 
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {}, app: {} }));
@@ -55,9 +55,7 @@ describe('ontgrendeld', () => {
 
 describe('tekenVoortgang', () => {
   beforeEach(() => {
-    document.body.innerHTML = [1, 2, 3, 4, 5]
-      .map((i) => `<div id="pz${i}"></div>`)
-      .join('');
+    document.body.innerHTML = [1, 2, 3, 4, 5].map(i => `<div id="pz${i}"></div>`).join('');
   });
 
   const heeft = (i: number, klasse: string) =>

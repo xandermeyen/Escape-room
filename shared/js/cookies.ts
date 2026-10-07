@@ -129,7 +129,8 @@ function verwijderGaCookies(): void {
   for (const naam of namen) {
     for (const domein of domeinen) {
       document.cookie =
-        `${naam}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/` + (domein ? `; domain=${domein}` : '');
+        `${naam}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/` +
+        (domein ? `; domain=${domein}` : '');
     }
   }
 }

@@ -24,13 +24,30 @@ const BESTANDEN = [
 ];
 
 const MAANDEN: Record<string, number> = {
-  jan: 0, feb: 1, mrt: 2, maa: 2, apr: 3, mei: 4, jun: 5,
-  jul: 6, aug: 7, sep: 8, okt: 9, nov: 10, dec: 11,
+  jan: 0,
+  feb: 1,
+  mrt: 2,
+  maa: 2,
+  apr: 3,
+  mei: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  okt: 9,
+  nov: 10,
+  dec: 11,
 };
 
 // getDay(): 0 = zondag
 const WEEKDAG_NR: Record<string, number> = {
-  zo: 0, ma: 1, di: 2, wo: 3, do: 4, vr: 5, za: 6,
+  zo: 0,
+  ma: 1,
+  di: 2,
+  wo: 3,
+  do: 4,
+  vr: 5,
+  za: 6,
 };
 
 function leesTekst(bestand: string): string {
@@ -97,7 +114,7 @@ describe('Kamer 14: datums in het verhaal', () => {
 describe('Kamer 14: kasoverzicht en P3', () => {
   const html = readFileSync(resolve(MAP, 'speler-b.html'), 'utf8');
   const kas = html.slice(html.indexOf('id="panel-kas"'), html.indexOf('<!-- Puzzel 3 -->'));
-  const rijen = [...kas.matchAll(/<tr[^>]*><td>(\d{1,2}) (\w+)<\/td><td>€(\d+)<\/td>/g)];
+  const rijen = [...kas.matchAll(/<tr[^>]*>\s*<td>(\d{1,2}) (\w+)<\/td>\s*<td>€(\d+)<\/td>/g)];
 
   it('heeft geen rijen op of na de dag van de verdwijning (6 mei)', () => {
     expect(rijen.length).toBeGreaterThan(0);

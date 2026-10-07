@@ -47,7 +47,7 @@ export function koppelReviewFormulier(ervaring: string, sessie?: string | null):
 
   // Demo-sessies: reviews tellen niet mee en worden niet bewaard.
   if (isDemoCode(sessie)) {
-    sterKnoppen.forEach((k) => (k.disabled = true));
+    sterKnoppen.forEach(k => (k.disabled = true));
     reviewBtn.disabled = true;
     const melding = document.createElement('p');
     melding.className = 'review-demo';

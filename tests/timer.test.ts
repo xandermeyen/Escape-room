@@ -3,10 +3,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 // ── Firebase mocks (timer.ts importeert deze) ─────────────────────────────────
 
 vi.mock('firebase/database', () => ({
-  ref:             vi.fn(),
-  get:             vi.fn(),
-  set:             vi.fn(),
-  onValue:         vi.fn(() => vi.fn()),
+  ref: vi.fn(),
+  get: vi.fn(),
+  set: vi.fn(),
+  onValue: vi.fn(() => vi.fn()),
   serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
 }));
 
@@ -39,8 +39,8 @@ describe('formateerTijd', () => {
   });
 
   it('formatteert seconden altijd met twee cijfers', () => {
-    expect(formateerTijd(9_000)).toBe('00:09');   // 9 seconden
-    expect(formateerTijd(65_000)).toBe('01:05');  // 1 min + 5 sec
+    expect(formateerTijd(9_000)).toBe('00:09'); // 9 seconden
+    expect(formateerTijd(65_000)).toBe('01:05'); // 1 min + 5 sec
   });
 
   it('formatteert minuten altijd met twee cijfers', () => {
@@ -66,7 +66,6 @@ describe('formateerTijd', () => {
   });
 });
 
-
 // ── Timer-gedrag (initialiseerTimer + tick) ───────────────────────────────────
 //
 // Deze tests laden timer.ts telkens vers (vi.resetModules) zodat de module-state
@@ -74,7 +73,7 @@ describe('formateerTijd', () => {
 // mocks via vi.doMock zodat get/set per test te sturen zijn.
 
 const UUR_MS = 60 * 60 * 1000;
-const START  = 1_000_000; // niet-nul starttijd (timer.ts bailt bij een falsy starttijd)
+const START = 1_000_000; // niet-nul starttijd (timer.ts bailt bij een falsy starttijd)
 
 interface TimerMod {
   initialiseerTimer: (code: string) => Promise<void>;
@@ -95,19 +94,19 @@ async function laadTimer(bestaat: boolean, startTijd: number = START): Promise<T
   // Eerste get(): bestaat de starttijd al?
   getMock.mockResolvedValueOnce({
     exists: () => bestaat,
-    val:    () => (bestaat ? startTijd : null),
+    val: () => (bestaat ? startTijd : null),
   });
   // Tweede get(): de (eventueel net gezette) starttijd teruglezen.
   getMock.mockResolvedValueOnce({
     exists: () => true,
-    val:    () => startTijd,
+    val: () => startTijd,
   });
 
   vi.doMock('firebase/database', () => ({
-    ref:             vi.fn((_db: unknown, path: string) => ({ path })),
-    get:             getMock,
-    set:             setMock,
-    onValue:         vi.fn(() => vi.fn()),
+    ref: vi.fn((_db: unknown, path: string) => ({ path })),
+    get: getMock,
+    set: setMock,
+    onValue: vi.fn(() => vi.fn()),
     serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
   }));
   vi.doMock('../shared/js/firebase-config.ts', () => ({ db: {} }));

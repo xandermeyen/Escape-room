@@ -15,7 +15,7 @@ import {
 
 /** Wisselt het actieve .scherm naar `id` en scrollt naar boven. */
 export function activeerScherm(id: string): void {
-  document.querySelectorAll('.scherm').forEach((s) => s.classList.remove('actief'));
+  document.querySelectorAll('.scherm').forEach(s => s.classList.remove('actief'));
   document.getElementById(id)?.classList.add('actief');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -105,10 +105,10 @@ export function initLobby(config: LobbyConfig): void {
     const code = sessionStorage.getItem('sessieCode');
     if (!code) return;
     stopRolListener();
-    rollenUnsubscribe = luisterNaarRollen(code, (spelers) => {
+    rollenUnsubscribe = luisterNaarRollen(code, spelers => {
       laatsteSpelers = spelers;
       // In demomodus is elke rol altijd vrij (zie demo.ts).
-      rolNamen.forEach((rol) => setRolStatus(rol, !isDemoCode(code) && spelers[rol] === 'bezet'));
+      rolNamen.forEach(rol => setRolStatus(rol, !isDemoCode(code) && spelers[rol] === 'bezet'));
     });
   }
 

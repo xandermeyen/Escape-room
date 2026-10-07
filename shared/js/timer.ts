@@ -10,13 +10,7 @@
  */
 
 import { db } from './firebase-config.ts';
-import {
-  ref,
-  get,
-  set,
-  onValue,
-  serverTimestamp,
-} from "firebase/database";
+import { ref, get, set, onValue, serverTimestamp } from 'firebase/database';
 import { authReady } from './auth.ts';
 import { schrijf } from './verbinding.ts';
 
@@ -24,7 +18,7 @@ import { schrijf } from './verbinding.ts';
 export const TIJDSLIMIET_MS = 60 * 60 * 1000; // 60 minuten
 
 export interface TimerWaarschuwing {
-  minuten: number;   // toon zodra er ≤ dit aantal minuten rest
+  minuten: number; // toon zodra er ≤ dit aantal minuten rest
   titel: string;
   tekst: string;
   urgent: boolean;
@@ -68,7 +62,7 @@ let offsetGekoppeld = false;
 export function koppelServerTijd(): void {
   if (offsetGekoppeld) return;
   offsetGekoppeld = true;
-  onValue(ref(db, '.info/serverTimeOffset'), (snap) => {
+  onValue(ref(db, '.info/serverTimeOffset'), snap => {
     serverOffsetMs = typeof snap.val() === 'number' ? snap.val() : 0;
   });
 }
@@ -110,7 +104,10 @@ export async function zorgStartTijd(sessieCode: string): Promise<number | null> 
  * Zet de starttijd in Firebase (enkel als die er nog niet is)
  * en start de lokale aftelling.
  */
-export async function initialiseerTimer(sessieCode: string, opties: TimerOpties = {}): Promise<void> {
+export async function initialiseerTimer(
+  sessieCode: string,
+  opties: TimerOpties = {},
+): Promise<void> {
   huidigeCode = sessieCode;
   huidigeOpties = opties;
   waarschuwingGetoond.clear();

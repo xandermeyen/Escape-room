@@ -41,13 +41,13 @@ function isTijdelijkeFout(err: unknown): boolean {
   return typeof code === 'string' && TIJDELIJKE_FOUTEN.has(code);
 }
 
-const wacht = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const wacht = (ms: number) => new Promise(r => setTimeout(r, ms));
 
 /** Wacht op de eerste (async) auth-statuscheck van Firebase en geeft de dan geldende gebruiker terug. */
 function wachtOpEersteAuthState(): Promise<User | null> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     let opgehaald = false;
-    const stop = onAuthStateChanged(auth, (user) => {
+    const stop = onAuthStateChanged(auth, user => {
       if (opgehaald) return;
       opgehaald = true;
       resolve(user);

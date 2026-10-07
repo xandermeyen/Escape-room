@@ -23,7 +23,7 @@ export async function haalSessies(
   const snap = await get(ref(db, 'sessions'));
   const rijen: SessieRij[] = [];
   if (snap.exists()) {
-    snap.forEach((kind) => {
+    snap.forEach(kind => {
       const d = kind.val();
       if (d && typeof d === 'object' && filter(d as Record<string, unknown>)) {
         rijen.push({ code: kind.key ?? '', data: d as Record<string, unknown> });
@@ -37,13 +37,13 @@ export async function haalSessies(
 /** Aantal opgeloste puzzels binnen `ids`. */
 export function aantalOpgelost(data: Record<string, unknown>, ids: string[]): number {
   const p = (data.puzzels as Record<string, unknown>) || {};
-  return ids.filter((id) => p[id]).length;
+  return ids.filter(id => p[id]).length;
 }
 
 /** Voortgangsbolletjes als HTML (alleen vaste markup). */
 export function puzzelBollenHtml(data: Record<string, unknown>, ids: string[]): string {
   const p = (data.puzzels as Record<string, unknown>) || {};
-  return ids.map((id) => `<div class="bol ${p[id] ? 'klaar' : 'open'}"></div>`).join('');
+  return ids.map(id => `<div class="bol ${p[id] ? 'klaar' : 'open'}"></div>`).join('');
 }
 
 /** Na hoeveel tijd een sessie die nog op actief staat als verlopen telt. */

@@ -137,7 +137,7 @@ async function laadLijst(): Promise<void> {
   geenMsg.style.display = 'none';
 
   try {
-    const rijen = await haalSessies((d) => d.ervaringsId === 'dua');
+    const rijen = await haalSessies(d => d.ervaringsId === 'dua');
     laden.style.display = 'none';
 
     // Gemiddelden per puzzel over alle sessies met speldata.
@@ -149,7 +149,10 @@ async function laadLijst(): Promise<void> {
     // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
     // eslint-disable-next-line no-unsanitized/property
     requireEl('stats-overzicht').innerHTML = gemiddeldenHtml(alleStats, DUA_PUZZELS);
-    void werkVerdelingBij('dua', echteRijen.map(r => r.data));
+    void werkVerdelingBij(
+      'dua',
+      echteRijen.map(r => r.data),
+    );
 
     if (rijen.length === 0) {
       geenMsg.style.display = 'block';
@@ -253,7 +256,8 @@ window.resetDemoSessie = async function () {
   const code = DEMO_CODES['dua'];
   const status = requireEl('status-demo');
   const knop = requireEl<HTMLButtonElement>('btn-demo-reset');
-  if (!confirm(`Demo ${code} terugzetten naar het begin? Alle voortgang van de demo verdwijnt.`)) return;
+  if (!confirm(`Demo ${code} terugzetten naar het begin? Alle voortgang van de demo verdwijnt.`))
+    return;
   knop.disabled = true;
   try {
     await resetDemo(code, {

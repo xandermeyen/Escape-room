@@ -6,19 +6,40 @@
 import '../../../shared/js/sentry.ts';
 import { luisterNaarStatus, bewaakSessieGesloten } from '../../../shared/js/session.ts';
 import { requireEl, beoordeelAntwoord } from '../../../shared/js/utils.ts';
-import { registreerPoging, registreerVrijgaves, luisterNaarHints, puzzelUitHintBlok } from '../../../shared/js/speldata.ts';
+import {
+  registreerPoging,
+  registreerVrijgaves,
+  luisterNaarHints,
+  puzzelUitHintBlok,
+} from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { DUA_HASHES, DUA_REGELS, DUA_VRIJGAVE, DUA_BIJNA_KLUIS } from './dua-config.ts';
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
-  luisterDua, zetZegel, zetBrief, gomBrief, zetKluisNummer,
-  zetVerstopPlek, zetPin1934, zetBrief14, verhoogVerdenking,
-  BRIEFTEKST, type DuaState,
+  luisterDua,
+  zetZegel,
+  zetBrief,
+  gomBrief,
+  zetKluisNummer,
+  zetVerstopPlek,
+  zetPin1934,
+  zetBrief14,
+  verhoogVerdenking,
+  BRIEFTEKST,
+  type DuaState,
 } from './dua-session.ts';
 import {
-  melding, startDuaTimer, koppelMeta, tekenVoortgang, ontgrendeld,
-  duaHint, koppelMuteKnop, koppelEasterEggs, leesSessie, maakSvgToegankelijk,
+  melding,
+  startDuaTimer,
+  koppelMeta,
+  tekenVoortgang,
+  ontgrendeld,
+  duaHint,
+  koppelMuteKnop,
+  koppelEasterEggs,
+  leesSessie,
+  maakSvgToegankelijk,
   type PuzzelStatus,
 } from './dua-ui.ts';
 import { fx, koppelTypgeluid } from './dua-audio.ts';
@@ -42,7 +63,9 @@ let toezichtVerscherpt = false;
 // ── Hulp: hint-tip, verhaalmeldingen, vrijgave en "Hulp nodig?" ──
 const hulp = initHulp({
   hintBlokVoor: puzzel =>
-    ({ p1: 'hint-p1a', p2: 'hint-p2a', p4: 'hint-p4a', p5: 'hint-p5a' } as Record<string, string>)[puzzel] ?? null,
+    (
+      ({ p1: 'hint-p1a', p2: 'hint-p2a', p4: 'hint-p4a', p5: 'hint-p5a' }) as Record<string, string>
+    )[puzzel] ?? null,
   vrijgave: DUA_VRIJGAVE,
   inactiefMeldingen: DUA_INACTIEF['1934'],
   vrijgaveMelding: (oud, nieuw) => duaVrijgaveMelding('1934', oud, nieuw),
@@ -57,7 +80,9 @@ luisterNaarHints(sessie, blokId => {
 
 // ── Hints globaal voor onclick ──
 declare global {
-  interface Window { duaHintKlik: (blokId: string) => void; }
+  interface Window {
+    duaHintKlik: (blokId: string) => void;
+  }
 }
 window.duaHintKlik = (blokId: string) => duaHint(sessie, blokId);
 
@@ -117,7 +142,8 @@ function hamerKlik(i: number): void {
     if (hamers.every((h, j) => h === HAMER_SLOTS[j])) {
       hamersHersteld = true;
       document.getElementById('s-hamers')?.classList.add('klaar');
-      requireEl('hamer-status').textContent = 'Mechaniek hersteld. De machine wacht op de Schrijver.';
+      requireEl('hamer-status').textContent =
+        'Mechaniek hersteld. De machine wacht op de Schrijver.';
       document.getElementById('s-brief')?.classList.remove('slot');
       fx.kerkklok(1);
       melding('De typemachine doet het weer.');
@@ -145,29 +171,52 @@ function bouwTypvel(): void {
 }
 
 function kiesLetter(i: number): void {
-  if (!hamersHersteld) { fx.fout(); melding('De typemachine is stuk. Herstel eerst de letterhamers.'); return; }
+  if (!hamersHersteld) {
+    fx.fout();
+    melding('De typemachine is stuk. Herstel eerst de letterhamers.');
+    return;
+  }
   if (dua.brief?.verstuurd) return;
   const idx = briefLetters.indexOf(i);
-  if (idx > -1) { briefLetters.splice(idx, 1); fx.klik(); }
-  else if (briefLetters.length < 5) { briefLetters.push(i); fx.typDiep(); }
-  else { fx.fout(); }
+  if (idx > -1) {
+    briefLetters.splice(idx, 1);
+    fx.klik();
+  } else if (briefLetters.length < 5) {
+    briefLetters.push(i);
+    fx.typDiep();
+  } else {
+    fx.fout();
+  }
   bouwTypvel();
-  requireEl('brief-status').textContent = briefLetters.length < 5
-    ? `Nog ${5 - briefLetters.length} letters te kiezen.`
-    : 'Vijf letters gekozen. Sla door wanneer je zeker bent.';
+  requireEl('brief-status').textContent =
+    briefLetters.length < 5
+      ? `Nog ${5 - briefLetters.length} letters te kiezen.`
+      : 'Vijf letters gekozen. Sla door wanneer je zeker bent.';
 }
 bouwTypvel();
 
 document.getElementById('btn-verstuur')?.addEventListener('click', async () => {
-  if (!hamersHersteld) { fx.fout(); melding('Eerst de machine herstellen.'); return; }
-  if (briefLetters.length !== 5) { fx.fout(); melding('Vijf letters. Niet meer, niet minder.'); return; }
-  fx.typmachine(); fx.lade();
+  if (!hamersHersteld) {
+    fx.fout();
+    melding('Eerst de machine herstellen.');
+    return;
+  }
+  if (briefLetters.length !== 5) {
+    fx.fout();
+    melding('Vijf letters. Niet meer, niet minder.');
+    return;
+  }
+  fx.typmachine();
+  fx.lade();
   await zetBrief(sessie, briefLetters);
   melding('Doorslag gemaakt. In 2034 ligt er nu een brief in het archief.');
 });
 
 document.getElementById('btn-gom')?.addEventListener('click', async () => {
-  if (puzzels['p1']) { melding('2034 heeft de brief al gelezen. Een nieuw vel is niet meer nodig.'); return; }
+  if (puzzels['p1']) {
+    melding('2034 heeft de brief al gelezen. Een nieuw vel is niet meer nodig.');
+    return;
+  }
   briefLetters = [];
   fx.lade();
   await gomBrief(sessie);
@@ -192,8 +241,14 @@ let wachterDir = 1;
 setInterval(() => {
   const snelheid = toezichtVerscherpt ? 2.6 : 1.6;
   wachterPos += wachterDir * snelheid;
-  if (wachterPos >= 96) { wachterPos = 96; wachterDir = -1; }
-  if (wachterPos <= 2)  { wachterPos = 2;  wachterDir = 1; }
+  if (wachterPos >= 96) {
+    wachterPos = 96;
+    wachterDir = -1;
+  }
+  if (wachterPos <= 2) {
+    wachterPos = 2;
+    wachterDir = 1;
+  }
   const w = document.getElementById('wachter');
   if (w) w.style.left = `${wachterPos}%`;
   if (wachterPos < 30 && Math.random() < 0.25 && !dua.kluisNummer) fx.voetstap();
@@ -202,29 +257,44 @@ setInterval(() => {
 const wachterVeilig = (): boolean => wachterPos >= 65;
 
 document.getElementById('btn-deponeer')?.addEventListener('click', async () => {
-  if (!puzzels['p1']) { fx.fout(); melding('Eerst de brief (P1): zonder belofte op papier heeft een kluis geen zin.'); return; }
-  if (dua.kluisNummer) { melding(`Het paneel ligt al in kluis ${dua.kluisNummer}.`); return; }
+  if (!puzzels['p1']) {
+    fx.fout();
+    melding('Eerst de brief (P1): zonder belofte op papier heeft een kluis geen zin.');
+    return;
+  }
+  if (dua.kluisNummer) {
+    melding(`Het paneel ligt al in kluis ${dua.kluisNummer}.`);
+    return;
+  }
   const v = requireEl<HTMLInputElement>('kluis-keuze').value.replace(/\D/g, '');
-  if (!/^\d{2}$/.test(v)) { fx.fout(); melding('Twee cijfers.'); return; }
+  if (!/^\d{2}$/.test(v)) {
+    fx.fout();
+    melding('Twee cijfers.');
+    return;
+  }
   // Eerst het nummer: een verkeerde kluis zou 2034 later laten vastlopen.
   const oordeel = await beoordeelAntwoord(v, DUA_HASHES.kluis ?? [], DUA_REGELS.kluis);
   if (oordeel !== 'juist') {
     fx.fout();
     hulp.poging('p2', oordeel);
     void registreerPoging(sessie, 'p2', oordeel);
-    melding(oordeel === 'bijna'
-      ? DUA_BIJNA_KLUIS
-      : 'Dat nummer past niet bij de belofte in de brief. Lees ze nog eens: één meer dan het aantal brieven dat het bisdom telt.');
+    melding(
+      oordeel === 'bijna'
+        ? DUA_BIJNA_KLUIS
+        : 'Dat nummer past niet bij de belofte in de brief. Lees ze nog eens: één meer dan het aantal brieven dat het bisdom telt.',
+    );
     return;
   }
   if (!wachterVeilig()) {
     await verhoogVerdenking(sessie, 15);
     fx.fluitje();
     melding('⚠ De perronwachter zag je bij de kluizen rommelen. Verdenking +15%');
-    requireEl('kluis-status').textContent = 'Betrapt. Wacht tot hij écht buiten zicht is (rechts op de baan).';
+    requireEl('kluis-status').textContent =
+      'Betrapt. Wacht tot hij écht buiten zicht is (rechts op de baan).';
     return;
   }
-  fx.stoom(); fx.lade();
+  fx.stoom();
+  fx.lade();
   await zetKluisNummer(sessie, v);
   melding(`Paneel gedeponeerd in kluis ${v}. Het ticket reist naar 2034, half onleesbaar.`);
 });
@@ -243,7 +313,10 @@ let kamerTijd = 0;
 let sleutelGevonden = false;
 
 document.getElementById('btn-kamer')?.addEventListener('click', () => {
-  if (dua.verstopPlek) { melding(`Het mapje is al verstopt (${dua.verstopPlek}). Nu is het aan 2034.`); return; }
+  if (dua.verstopPlek) {
+    melding(`Het mapje is al verstopt (${dua.verstopPlek}). Nu is het aan 2034.`);
+    return;
+  }
   kamerActief = true;
   sleutelGevonden = false;
   kamerTijd = toezichtVerscherpt ? 60 : 90;
@@ -259,7 +332,9 @@ document.getElementById('btn-kamer')?.addEventListener('click', () => {
       kamerUit();
       await verhoogVerdenking(sessie, 10);
       fx.fluitje();
-      melding('⚠ De politie staat voor de deur. Wegwezen, zonder iets te verstoppen. Verdenking +10%');
+      melding(
+        '⚠ De politie staat voor de deur. Wegwezen, zonder iets te verstoppen. Verdenking +10%',
+      );
     }
   }, 1000);
 });
@@ -285,7 +360,8 @@ document.querySelectorAll<SVGElement>('#kamer [data-plek]').forEach(el => {
           'De sleutel, in het late zonlicht. Kies nu de bergplaats voor het mapje. Kies goed: één kans.';
       } else {
         fx.fout();
-        requireEl('kamer-status').textContent = 'Niets. De seconden tikken. "Waar het licht valt..."';
+        requireEl('kamer-status').textContent =
+          'Niets. De seconden tikken. "Waar het licht valt..."';
       }
       return;
     }
@@ -315,9 +391,19 @@ function tekenKamer(): void {
 // ═══════════════════ P5: DE BERGPLAATS ═══════════════════
 document.getElementById('kaart-1934')?.addEventListener('click', async (e: Event) => {
   const doel = (e.target as Element).getAttribute?.('data-plek');
-  if (!doel) { fx.fout(); return; }
-  if (dua.pin1934) { melding('De keuze is gemaakt. Vraag 2034 om te zoeken.'); return; }
-  if (!puzzels['p4']) { fx.fout(); melding('Nog niet. Eerst moet het mapje (P4) veilig de eeuw door.'); return; }
+  if (!doel) {
+    fx.fout();
+    return;
+  }
+  if (dua.pin1934) {
+    melding('De keuze is gemaakt. Vraag 2034 om te zoeken.');
+    return;
+  }
+  if (!puzzels['p4']) {
+    fx.fout();
+    melding('Nog niet. Eerst moet het mapje (P4) veilig de eeuw door.');
+    return;
+  }
   fx.lade();
   await zetPin1934(sessie, doel);
   melding('Het paneel is verstopt. Spreek er met niemand over. Behalve in raadsels.');
@@ -333,14 +419,18 @@ function tekenPin(): void {
 // ═══════════════════ FINALE: BRIEF 14 ═══════════════════
 document.getElementById('btn-brief14')?.addEventListener('click', async () => {
   const tekst = requireEl<HTMLTextAreaElement>('brief14').value.trim();
-  if (tekst.length < 20) { fx.fout(); melding('Een brief die honderd jaar moet overleven, verdient meer woorden.'); return; }
+  if (tekst.length < 20) {
+    fx.fout();
+    melding('Een brief die honderd jaar moet overleven, verdient meer woorden.');
+    return;
+  }
   fx.typmachine();
   await zetBrief14(sessie, tekst);
   window.location.href = `einde.html?sessie=${encodeURIComponent(sessie)}&era=1934`;
 });
 
 // ═══════════════════ LIVE SYNC ═══════════════════
-luisterDua(sessie, (nieuw) => {
+luisterDua(sessie, nieuw => {
   dua = nieuw;
   tekenZegel();
   tekenBrief();
@@ -349,7 +439,7 @@ luisterDua(sessie, (nieuw) => {
   tekenPin();
 });
 
-luisterNaarStatus(sessie, (p) => {
+luisterNaarStatus(sessie, p => {
   const hadP5 = !!puzzels['p5'];
   puzzels = p;
   tekenVoortgang(p);
@@ -373,7 +463,9 @@ maakSvgToegankelijk('#kamer [data-plek], #kaart-1934 [data-plek]');
 koppelMuteKnop();
 koppelTypgeluid();
 koppelEasterEggs(sessie);
-koppelMeta(sessie, (meta) => { toezichtVerscherpt = (meta.verdenking || 0) >= 50; });
+koppelMeta(sessie, meta => {
+  toezichtVerscherpt = (meta.verdenking || 0) >= 50;
+});
 startDuaTimer(sessie);
 
 // Host kan de sessie deactiveren → naar het tijd-voorbij-scherm

@@ -159,12 +159,12 @@ gezet zodra de eerste speler laadt.
 Vier regex-parsers, elk op `{{1.fullTextBody}}`, niet-globaal (eerste match),
 hoofdletter-ongevoelig. Elk geeft zijn match terug als `$1`.
 
-| Module | Haalt eruit | Pattern |
-|---|---|---|
-| 7  | E-mail speler 1 | `([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})` |
-| 8  | Naam            | `naam:[\r\n]+([^\r\n]+)` |
-| 9  | Datum           | `datum:[\r\n]+([^\r\n]+)` |
-| 13 | E-mail speler 2 | `email_speler_2:[\r\n]+([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})` |
+| Module | Haalt eruit     | Pattern                                                                    |
+| ------ | --------------- | -------------------------------------------------------------------------- |
+| 7      | E-mail speler 1 | `([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})`                       |
+| 8      | Naam            | `naam:[\r\n]+([^\r\n]+)`                                                   |
+| 9      | Datum           | `datum:[\r\n]+([^\r\n]+)`                                                  |
+| 13     | E-mail speler 2 | `email_speler_2:[\r\n]+([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})` |
 
 Wat dit zegt over het Formspree-mailformaat: de body bevat labels op een eigen
 regel met de waarde op de volgende regel, o.a. `naam:`, `datum:` en
@@ -172,6 +172,7 @@ regel met de waarde op de volgende regel, o.a. `naam:`, `datum:` en
 de body voorkomt (= speler 1).
 
 > Twee kanttekeningen:
+>
 > - Module 8 (naam) wordt wel geparset maar **niet gebruikt** in de mail (zie
 >   module 10). Ofwel naam toevoegen aan de template, ofwel deze parser verwijderen.
 > - Module 7 vertrouwt erop dat het eerste e-mailadres in de body dat van speler 1

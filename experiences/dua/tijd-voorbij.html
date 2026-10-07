@@ -1,61 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>D.U.A. - De lijn valt stil</title>
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="css/dua.css" />
-</head>
-<body class="era-2034">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>D.U.A. - De lijn valt stil</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="css/dua.css" />
+  </head>
+  <body class="era-2034">
+    <div class="lobby-wrap">
+      <span class="d-stempel">Onopgelost</span>
+      <h2 class="se">De lijn valt stil.</h2>
+      <p class="lobby-verhaal">
+        Zestig minuten, en geen seconde meer. De lijn tussen 1934 en 2034 is dood, maar het spoor is
+        niet koud: alles wat jullie vonden, hoort bij het verhaal.
+      </p>
 
-  <div class="lobby-wrap">
-    <span class="d-stempel">Onopgelost</span>
-    <h2 class="se">De lijn valt stil.</h2>
-    <p class="lobby-verhaal">
-      Zestig minuten, en geen seconde meer. De lijn tussen 1934 en 2034 is dood,
-      maar het spoor is niet koud: alles wat jullie vonden, hoort bij het verhaal.
-    </p>
-
-    <div class="stuk" id="oplossing-blok">
-      <h3>Hoe het had kunnen lopen</h3>
-      <ol id="oplossing-lijst" class="oplossing-lijst"></ol>
-    </div>
-
-    <p class="lobby-verhaal">
-      Bedankt om mee te zoeken. Het echte onderzoek loopt al sinds 10 april 1934 en ook daar
-      vond niemand het paneel. Jullie zitten in goed gezelschap.
-    </p>
-
-    <div class="stuk" id="einde-review">
-      <h3>Hoe was het?</h3>
-      <p class="hintje">Optioneel. We lezen elke review zelf.</p>
-      <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
-        <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
-        <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
-        <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
-        <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
-        <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+      <div class="stuk" id="oplossing-blok">
+        <h3>Hoe het had kunnen lopen</h3>
+        <ol id="oplossing-lijst" class="oplossing-lijst"></ol>
       </div>
-      <textarea id="review-tekst" class="d-input" rows="3" maxlength="500" aria-label="Jullie review"
-        placeholder="Wat vonden jullie van D.U.A.?"></textarea>
-      <input id="review-naam" class="d-input" type="text" maxlength="40" aria-label="Naam (optioneel)" placeholder="Naam (optioneel)" />
-      <p class="review-fout" id="review-fout">Kies een aantal sterren en schrijf een korte review.</p>
-      <button class="d-knop" id="btn-review-verstuur">Review versturen</button>
-      <p class="review-dank" id="review-dank">Bedankt voor jullie review!</p>
-    </div>
 
-    <p class="lobby-verhaal hintje">
-      Dossier 1934/RR · heropend en weer gesloten · Bureau X
-    </p>
-    <p>
-      <a class="d-knop goud" href="/dua/#boek">Nog eens spelen? Boek een nieuwe sessie</a>
-      <a class="d-knop" href="/">← Terug naar de website</a>
-    </p>
-  </div>
-  <script type="module" src="js/tijd-voorbij.ts"></script>
-  <script type="module" src="/src/bootstrap.ts"></script>
-</body>
+      <p class="lobby-verhaal">
+        Bedankt om mee te zoeken. Het echte onderzoek loopt al sinds 10 april 1934 en ook daar vond
+        niemand het paneel. Jullie zitten in goed gezelschap.
+      </p>
+
+      <div class="stuk" id="einde-review">
+        <h3>Hoe was het?</h3>
+        <p class="hintje">Optioneel. We lezen elke review zelf.</p>
+        <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
+          <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
+          <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+        </div>
+        <textarea
+          id="review-tekst"
+          class="d-input"
+          rows="3"
+          maxlength="500"
+          aria-label="Jullie review"
+          placeholder="Wat vonden jullie van D.U.A.?"
+        ></textarea>
+        <input
+          id="review-naam"
+          class="d-input"
+          type="text"
+          maxlength="40"
+          aria-label="Naam (optioneel)"
+          placeholder="Naam (optioneel)"
+        />
+        <p class="review-fout" id="review-fout">
+          Kies een aantal sterren en schrijf een korte review.
+        </p>
+        <button class="d-knop" id="btn-review-verstuur">Review versturen</button>
+        <p class="review-dank" id="review-dank">Bedankt voor jullie review!</p>
+      </div>
+
+      <p class="lobby-verhaal hintje">Dossier 1934/RR · heropend en weer gesloten · Bureau X</p>
+      <p>
+        <a class="d-knop goud" href="/dua/#boek">Nog eens spelen? Boek een nieuwe sessie</a>
+        <a class="d-knop" href="/">← Terug naar de website</a>
+      </p>
+    </div>
+    <script type="module" src="js/tijd-voorbij.ts"></script>
+    <script type="module" src="/src/bootstrap.ts"></script>
+  </body>
 </html>

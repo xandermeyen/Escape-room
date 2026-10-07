@@ -3,13 +3,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // ── Firebase mocks (session.ts importeert deze) ───────────────────────────────
 
 vi.mock('firebase/database', () => ({
-  ref:             vi.fn((_db: unknown, path: string) => ({ path })),
-  set:             vi.fn(() => Promise.resolve()),
-  get:             vi.fn(),
-  update:          vi.fn(() => Promise.resolve()),
-  onValue:         vi.fn(() => vi.fn()),
+  ref: vi.fn((_db: unknown, path: string) => ({ path })),
+  set: vi.fn(() => Promise.resolve()),
+  get: vi.fn(),
+  update: vi.fn(() => Promise.resolve()),
+  onValue: vi.fn(() => vi.fn()),
   serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
-  runTransaction:  vi.fn(),
+  runTransaction: vi.fn(),
 }));
 
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {} }));
@@ -23,7 +23,12 @@ import {
   markeerGeopend,
   geefRollenVrij,
 } from '../shared/js/session.ts';
-import { isVerlopen, statusBadgeHtml, geopendHtml, VERLOOPT_NA_MS } from '../shared/js/host-sessies.ts';
+import {
+  isVerlopen,
+  statusBadgeHtml,
+  geopendHtml,
+  VERLOOPT_NA_MS,
+} from '../shared/js/host-sessies.ts';
 
 const getMock = get as unknown as ReturnType<typeof vi.fn>;
 const setMock = set as unknown as ReturnType<typeof vi.fn>;
@@ -34,7 +39,10 @@ function bestaandeSessies(...codes: string[]) {
   getMock.mockImplementation(({ path }: { path: string }) => {
     const code = path.replace('sessions/', '');
     const bestaat = codes.includes(code);
-    return Promise.resolve({ exists: () => bestaat, val: () => (bestaat ? { actief: true } : null) });
+    return Promise.resolve({
+      exists: () => bestaat,
+      val: () => (bestaat ? { actief: true } : null),
+    });
   });
 }
 
@@ -129,21 +137,23 @@ describe('isVerlopen / statusBadgeHtml', () => {
 
   it('telt een actieve sessie van meer dan 24 uur oud als verlopen', () => {
     expect(isVerlopen({ actief: true, aangemaakt: oud }, nu)).toBe(true);
-    expect(statusBadgeHtml({ actief: true, aangemaakt: oud }, 0, 5, { toonVerlopen: true, nu })).toContain(
-      'Verlopen',
-    );
+    expect(
+      statusBadgeHtml({ actief: true, aangemaakt: oud }, 0, 5, { toonVerlopen: true, nu }),
+    ).toContain('Verlopen');
   });
 
   it('laat recente, inactieve en ingediende sessies met rust', () => {
     expect(isVerlopen({ actief: true, aangemaakt: recent }, nu)).toBe(false);
     expect(isVerlopen({ actief: false, aangemaakt: oud }, nu)).toBe(false);
-    expect(isVerlopen({ actief: true, aangemaakt: oud, rapport: { ingediend: true } }, nu)).toBe(false);
+    expect(isVerlopen({ actief: true, aangemaakt: oud, rapport: { ingediend: true } }, nu)).toBe(
+      false,
+    );
   });
 
   it('toont Voltooid boven Verlopen', () => {
-    expect(statusBadgeHtml({ actief: true, aangemaakt: oud }, 5, 5, { toonVerlopen: true, nu })).toContain(
-      'Voltooid',
-    );
+    expect(
+      statusBadgeHtml({ actief: true, aangemaakt: oud }, 5, 5, { toonVerlopen: true, nu }),
+    ).toContain('Voltooid');
   });
 
   it('toont geen Verlopen zonder de optie (D.U.A.-paneel blijft ongewijzigd)', () => {

@@ -28,7 +28,7 @@ export function sessieUitUrl(redirectNaar = 'index.html'): string {
 export function escHtml(s: string): string {
   return s.replace(
     /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c,
+    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c,
   );
 }
 
@@ -38,7 +38,8 @@ export function escHtml(s: string): string {
 export async function sha256Hex(waarde: string): Promise<string> {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(waarde));
   return Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2, '0')).join('');
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 /**
@@ -184,22 +185,23 @@ export async function controleerAntwoordHash(
   regels: Record<string, AntwoordRegel> = {},
   opOordeel?: (oordeel: Beoordeling) => void,
 ): Promise<void> {
-  const input    = requireEl<HTMLInputElement>(inputId);
+  const input = requireEl<HTMLInputElement>(inputId);
   const feedback = requireEl<HTMLElement>(feedbackId);
-  const btn      = requireEl<HTMLButtonElement>(btnId);
+  const btn = requireEl<HTMLButtonElement>(btnId);
   if (!normaliseerInvoer(input.value)) return;
 
   const oordeel = await beoordeelAntwoord(input.value, hashes[puzzelNr] || [], regels[puzzelNr]);
   opOordeel?.(oordeel);
   if (oordeel === 'juist') {
     input.classList.remove('fout');
-    feedback.className   = 'puzzel-feedback correct';
+    feedback.className = 'puzzel-feedback correct';
     feedback.textContent = 'Correct — Firebase wordt bijgewerkt…';
     btn.disabled = true;
     onJuist();
   } else {
     input.classList.add('fout');
-    feedback.className   = oordeel === 'bijna' ? 'puzzel-feedback fout bijna' : 'puzzel-feedback fout';
+    feedback.className =
+      oordeel === 'bijna' ? 'puzzel-feedback fout bijna' : 'puzzel-feedback fout';
     feedback.textContent = oordeel === 'bijna' ? BIJNA_TEKST : foutTekst || 'Niet correct.';
     setTimeout(() => input.classList.remove('fout'), 1500);
   }
@@ -209,7 +211,7 @@ export function volgendHint(blokId: string): void {
   const blok = document.getElementById(blokId);
   if (!blok) return;
 
-  const stappen  = blok.querySelectorAll<HTMLElement>('.hint-stap');
+  const stappen = blok.querySelectorAll<HTMLElement>('.hint-stap');
   const knopMeer = blok.querySelector<HTMLElement>('.hint-verder');
   const knopOpen = blok.querySelector<HTMLElement>('.hint-knop');
 
@@ -217,9 +219,7 @@ export function volgendHint(blokId: string): void {
     if (stap.classList.contains('verborgen')) {
       stap.classList.remove('verborgen');
       // Laat speldata en hulpmeldingen weten welke stap geopend werd.
-      document.dispatchEvent(
-        new CustomEvent('hint-geopend', { detail: { blokId, stap: i + 1 } }),
-      );
+      document.dispatchEvent(new CustomEvent('hint-geopend', { detail: { blokId, stap: i + 1 } }));
 
       // Verberg de initiële "Hint aanvragen"-knop
       knopOpen?.classList.add('verborgen');

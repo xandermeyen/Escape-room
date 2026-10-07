@@ -1,181 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>Kamer 14 - Dossier Gesloten</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Kamer 14 - Dossier Gesloten</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="../../shared/css/game.css" />
-</head>
-<body>
-
-  <div class="container-smal">
-
-    <!-- ── Logo ── -->
-    <div class="text-center mb-4 pt-2">
-      <img src="../../assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="30" />
-    </div>
-
-    <!-- ── Fase 1: Dossiersluiting ── -->
-    <div id="fase-sluiting">
-
-      <div class="text-center mb-3">
-        <div class="dossier-label">Intern dossier  -  OPZ Geel</div>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="../../shared/css/game.css" />
+  </head>
+  <body>
+    <div class="container-smal">
+      <!-- ── Logo ── -->
+      <div class="text-center mb-4 pt-2">
+        <img src="../../assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="30" />
       </div>
 
-      <div class="gesloten-blok">
-
-        <div class="gesloten-ref">Ref. OPZ-2025-0506-LB · Bogaert, Lena · 6 mei 2025</div>
-
-        <div class="text-center mb-4">
-          <span class="gesloten-stempel">Gesloten</span>
+      <!-- ── Fase 1: Dossiersluiting ── -->
+      <div id="fase-sluiting">
+        <div class="text-center mb-3">
+          <div class="dossier-label">Intern dossier - OPZ Geel</div>
         </div>
 
-        <div class="gesloten-tekst">
-          <p>
-            De onderzoekstijd van <strong>60 minuten</strong> is verstreken.
-            Er werd geen intern rapport ingediend over de afwezigheid van
-            kostgangster <strong>Lena Bogaert</strong>.
-          </p>
-          <p>
-            Het dossier wordt overgedragen aan de afdeling Beheer.
-            De politie wordt op de hoogte gesteld.
-          </p>
-          <p class="tekst-grijs">
-            Kostgangsters en kostgangers kan hun vrijheid niet ontnomen worden.
-            Lena heeft het recht om te gaan en te komen. Maar zonder rapport
-            blijft de bestemming officieel onbekend.
-          </p>
-        </div>
+        <div class="gesloten-blok">
+          <div class="gesloten-ref">Ref. OPZ-2025-0506-LB · Bogaert, Lena · 6 mei 2025</div>
 
-        <div class="gesloten-ondertekening">
-          <em> -  An Vermeersch, Maatschappelijk Werkster OPZ Geel, 6 mei 2025</em>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- ── Fase 2: Nieuwe post (verschijnt na 4 sec) ── -->
-    <div id="nieuwe-post-notif" class="nieuwe-post-notif verborgen" onclick="toonBriefkaart()" role="button" tabindex="0">
-      <div class="nieuwe-post-icoon">
-        <i class="bi bi-envelope-fill"></i>
-      </div>
-      <div class="nieuwe-post-inhoud">
-        <div class="nieuwe-post-titel">Nieuwe post ontvangen</div>
-        <div class="nieuwe-post-sub">Woensdag 7 mei &nbsp;·&nbsp; afzender: Diest</div>
-      </div>
-      <span class="nieuwe-post-open">Openen <i class="bi bi-chevron-right"></i></span>
-    </div>
-
-    <!-- ── Fase 3: Briefkaart (verborgen tot geklikt) ── -->
-    <div id="briefkaart-blok" class="briefkaart-blok verborgen">
-
-      <div class="briefkaart">
-
-        <!-- Voorkant (sfeer) -->
-        <div class="briefkaart-voorkant">
-          <div>
-            <div class="briefkaart-locatienaam">Grote Markt · Diest</div>
-            <div class="briefkaart-kerk-beschrijving">Sint-Sulpitiuskerk, gotisch, 15e eeuw</div>
+          <div class="text-center mb-4">
+            <span class="gesloten-stempel">Gesloten</span>
           </div>
-          <div class="briefkaart-poststempel">Diest<br/>6 mei<br/>2025</div>
+
+          <div class="gesloten-tekst">
+            <p>
+              De onderzoekstijd van <strong>60 minuten</strong> is verstreken. Er werd geen intern
+              rapport ingediend over de afwezigheid van kostgangster <strong>Lena Bogaert</strong>.
+            </p>
+            <p>
+              Het dossier wordt overgedragen aan de afdeling Beheer. De politie wordt op de hoogte
+              gesteld.
+            </p>
+            <p class="tekst-grijs">
+              Kostgangsters en kostgangers kan hun vrijheid niet ontnomen worden. Lena heeft het
+              recht om te gaan en te komen. Maar zonder rapport blijft de bestemming officieel
+              onbekend.
+            </p>
+          </div>
+
+          <div class="gesloten-ondertekening">
+            <em> - An Vermeersch, Maatschappelijk Werkster OPZ Geel, 6 mei 2025</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Fase 2: Nieuwe post (verschijnt na 4 sec) ── -->
+      <div
+        id="nieuwe-post-notif"
+        class="nieuwe-post-notif verborgen"
+        onclick="toonBriefkaart()"
+        role="button"
+        tabindex="0"
+      >
+        <div class="nieuwe-post-icoon">
+          <i class="bi bi-envelope-fill"></i>
+        </div>
+        <div class="nieuwe-post-inhoud">
+          <div class="nieuwe-post-titel">Nieuwe post ontvangen</div>
+          <div class="nieuwe-post-sub">Woensdag 7 mei &nbsp;·&nbsp; afzender: Diest</div>
+        </div>
+        <span class="nieuwe-post-open">Openen <i class="bi bi-chevron-right"></i></span>
+      </div>
+
+      <!-- ── Fase 3: Briefkaart (verborgen tot geklikt) ── -->
+      <div id="briefkaart-blok" class="briefkaart-blok verborgen">
+        <div class="briefkaart">
+          <!-- Voorkant (sfeer) -->
+          <div class="briefkaart-voorkant">
+            <div>
+              <div class="briefkaart-locatienaam">Grote Markt · Diest</div>
+              <div class="briefkaart-kerk-beschrijving">Sint-Sulpitiuskerk, gotisch, 15e eeuw</div>
+            </div>
+            <div class="briefkaart-poststempel">Diest<br />6 mei<br />2025</div>
+          </div>
+
+          <!-- Achterkant: Lena's bericht -->
+          <div class="briefkaart-achterkant">
+            <p>Lieve Katrijn en kinderen,</p>
+            <p>
+              Ik heb Marie gevonden. Ze woont boven een bloemenzaak. We hebben thee gedronken en ze
+              huilde een beetje. Ik ook.
+            </p>
+            <p>Ik kom donderdag terug voor het ontbijt. Ik heb de sleutel bij mij.</p>
+            <p class="briefkaart-ondertekening">- Lena</p>
+          </div>
         </div>
 
-        <!-- Achterkant: Lena's bericht -->
-        <div class="briefkaart-achterkant">
-          <p>Lieve Katrijn en kinderen,</p>
-          <p>
-            Ik heb Marie gevonden. Ze woont boven een bloemenzaak.
-            We hebben thee gedronken en ze huilde een beetje. Ik ook.
+        <!-- Eindmelding: positief, met de oplossing -->
+        <div class="eindmelding">
+          <p class="eindmelding-hoofd">Het dossier sluit, maar Lena is veilig.</p>
+          <p class="eindmelding-sub">Ze vond zelf wat ze zocht.</p>
+        </div>
+
+        <div class="oplossing-blok" id="oplossing-blok">
+          <h2 class="oplossing-titel">Hoe alle sporen samenkwamen</h2>
+          <ol class="oplossing-lijst" id="oplossing-lijst"></ol>
+          <p class="oplossing-slot">
+            Bedankt om mee te zoeken naar Lena. Elk spoor dat jullie vonden, hoorde bij haar
+            verhaal.
           </p>
-          <p>
-            Ik kom donderdag terug voor het ontbijt.
-            Ik heb de sleutel bij mij.
+        </div>
+
+        <!-- Review: na de briefkaart, ook voor groepen die niet klaar raakten -->
+        <div class="review-blok" id="slot-review">
+          <p class="review-blok-titel">Hoe was het?</p>
+          <p class="review-blok-sub">Optioneel. We lezen elke review zelf.</p>
+          <div
+            class="review-sterren"
+            id="review-sterren"
+            role="radiogroup"
+            aria-label="Beoordeling"
+          >
+            <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
+            <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
+            <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
+            <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
+            <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+          </div>
+          <label for="review-tekst" class="visually-hidden">Jullie review</label>
+          <textarea
+            id="review-tekst"
+            class="review-veld"
+            rows="3"
+            maxlength="500"
+            placeholder="Wat vonden jullie van Kamer 14?"
+          ></textarea>
+          <label for="review-naam" class="visually-hidden">Naam (optioneel)</label>
+          <input
+            id="review-naam"
+            class="review-veld"
+            type="text"
+            maxlength="40"
+            placeholder="Naam (optioneel)"
+          />
+          <p class="review-fout" id="review-fout">
+            Kies een aantal sterren en schrijf een korte review.
           </p>
-          <p class="briefkaart-ondertekening"> -  Lena</p>
+          <button class="btn btn-game" id="btn-review-verstuur">Review versturen</button>
+          <p class="review-dank" id="review-dank">Bedankt voor jullie review!</p>
         </div>
 
-      </div>
-
-      <!-- Eindmelding: positief, met de oplossing -->
-      <div class="eindmelding">
-        <p class="eindmelding-hoofd">Het dossier sluit, maar Lena is veilig.</p>
-        <p class="eindmelding-sub">Ze vond zelf wat ze zocht.</p>
-      </div>
-
-      <div class="oplossing-blok" id="oplossing-blok">
-        <h2 class="oplossing-titel">Hoe alle sporen samenkwamen</h2>
-        <ol class="oplossing-lijst" id="oplossing-lijst"></ol>
-        <p class="oplossing-slot">
-          Bedankt om mee te zoeken naar Lena. Elk spoor dat jullie vonden, hoorde bij haar verhaal.
-        </p>
-      </div>
-
-      <!-- Review: na de briefkaart, ook voor groepen die niet klaar raakten -->
-      <div class="review-blok" id="slot-review">
-        <p class="review-blok-titel">Hoe was het?</p>
-        <p class="review-blok-sub">Optioneel. We lezen elke review zelf.</p>
-        <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
-          <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
-          <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+        <div class="text-center mt-4 mb-5 d-flex flex-column gap-2 align-items-center">
+          <a href="/kamer-14/#boek" class="btn btn-game">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Nog eens spelen? Boek een nieuwe sessie
+          </a>
+          <a href="/" class="btn btn-terug">Terug naar de website</a>
         </div>
-        <label for="review-tekst" class="visually-hidden">Jullie review</label>
-        <textarea id="review-tekst" class="review-veld" rows="3" maxlength="500" placeholder="Wat vonden jullie van Kamer 14?"></textarea>
-        <label for="review-naam" class="visually-hidden">Naam (optioneel)</label>
-        <input id="review-naam" class="review-veld" type="text" maxlength="40" placeholder="Naam (optioneel)" />
-        <p class="review-fout" id="review-fout">Kies een aantal sterren en schrijf een korte review.</p>
-        <button class="btn btn-game" id="btn-review-verstuur">Review versturen</button>
-        <p class="review-dank" id="review-dank">Bedankt voor jullie review!</p>
       </div>
-
-      <div class="text-center mt-4 mb-5 d-flex flex-column gap-2 align-items-center">
-        <a href="/kamer-14/#boek" class="btn btn-game">
-          <i class="bi bi-arrow-counterclockwise me-2"></i>Nog eens spelen? Boek een nieuwe sessie
-        </a>
-        <a href="/" class="btn btn-terug">Terug naar de website</a>
-      </div>
-
     </div>
+    <!-- /container-smal -->
 
-  </div><!-- /container-smal -->
-
-  <script>
-    // Toon "nieuwe post" notificatie na 4 seconden
-    setTimeout(() => {
-      const notif = document.getElementById('nieuwe-post-notif');
-      notif.classList.remove('verborgen');
-
-      // Ook toegankelijk via toetsenbord
-      notif.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') toonBriefkaart();
-      });
-    }, 4000);
-
-    function toonBriefkaart() {
-      document.getElementById('nieuwe-post-notif').style.display = 'none';
-      document.getElementById('briefkaart-blok').classList.remove('verborgen');
-
-      // Scroll soepel naar briefkaart
+    <script>
+      // Toon "nieuwe post" notificatie na 4 seconden
       setTimeout(() => {
-        document.getElementById('briefkaart-blok').scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+        const notif = document.getElementById('nieuwe-post-notif');
+        notif.classList.remove('verborgen');
+
+        // Ook toegankelijk via toetsenbord
+        notif.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') toonBriefkaart();
         });
-      }, 100);
-    }
+      }, 4000);
 
-    // Maak toonBriefkaart globaal beschikbaar
-    window.toonBriefkaart = toonBriefkaart;
-  </script>
+      function toonBriefkaart() {
+        document.getElementById('nieuwe-post-notif').style.display = 'none';
+        document.getElementById('briefkaart-blok').classList.remove('verborgen');
 
-  <script type="module" src="/src/bootstrap.ts"></script>
-  <script type="module" src="./js/tijd-voorbij.ts"></script>
-</body>
+        // Scroll soepel naar briefkaart
+        setTimeout(() => {
+          document.getElementById('briefkaart-blok').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }, 100);
+      }
+
+      // Maak toonBriefkaart globaal beschikbaar
+      window.toonBriefkaart = toonBriefkaart;
+    </script>
+
+    <script type="module" src="/src/bootstrap.ts"></script>
+    <script type="module" src="./js/tijd-voorbij.ts"></script>
+  </body>
 </html>

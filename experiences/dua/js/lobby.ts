@@ -26,18 +26,18 @@ initLobby({
     archivaris: { pagina: 'speler-2034.html', naam: 'De Archivaris (2034)' },
     restaurateur: { pagina: 'speler-2034.html', naam: 'De Restaurateur (2034)' },
   },
-  naValidatie: async (code) => {
+  naValidatie: async code => {
     await initDua(code); // dua-node klaarzetten (idempotent)
     aantalSpelers = (await haalAantalSpelers(code).catch(() => null)) ?? 4;
   },
   magClaimen: (rol, spelers) => {
-    const bezet = Object.keys(ERA).filter((r) => spelers[r] === 'bezet');
+    const bezet = Object.keys(ERA).filter(r => spelers[r] === 'bezet');
     if (bezet.length >= aantalSpelers) {
       return 'Alle plaatsen van deze sessie zijn al ingenomen.';
     }
     // Er moet minstens één onderzoeker in elk tijdperk staan.
     const andereEra = ERA[rol] === '1934' ? '2034' : '1934';
-    const andereEraBezet = bezet.some((r) => ERA[r] === andereEra);
+    const andereEraBezet = bezet.some(r => ERA[r] === andereEra);
     const plaatsenOver = aantalSpelers - bezet.length - 1;
     if (!andereEraBezet && plaatsenOver < 1) {
       return `Houd deze plek vrij: er moet minstens één speler in ${andereEra} staan.`;

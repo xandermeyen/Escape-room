@@ -30,13 +30,13 @@ There are two experiences, sharing the same engine but with their own story, rol
 
 ### Kamer 14
 
-Set inside the OPZ Geel psychiatric institution in Belgium, drawing from the real history of the *kostgangers*: people living with local families as part of a centuries-old community care tradition.
+Set inside the OPZ Geel psychiatric institution in Belgium, drawing from the real history of the _kostgangers_: people living with local families as part of a centuries-old community care tradition.
 
 One player reviews clinical records as an OPZ staff member (**Speler A**). The other steps into the neighbourhood, piecing together what the institution never wrote down (**Speler B**). Together they investigate the disappearance of Lena Bogaert. Two players.
 
 ### D.U.A.
 
-A mystery that spans a century. One team works in **1934** (roles *Schrijver* and *Loper*) and leaves a trail through coded letters, a station locker, and a hidden workroom. The other team works in **2034** as Bureau X archivists (roles *Archivaris* and *Restaurateur*) and uncovers that same trail a hundred years later. Inspired by a real interbellum art theft, the two teams collaborate across time while the 1934 side works under rising police suspicion and time penalties. Two to four players.
+A mystery that spans a century. One team works in **1934** (roles _Schrijver_ and _Loper_) and leaves a trail through coded letters, a station locker, and a hidden workroom. The other team works in **2034** as Bureau X archivists (roles _Archivaris_ and _Restaurateur_) and uncovers that same trail a hundred years later. Inspired by a real interbellum art theft, the two teams collaborate across time while the 1934 side works under rising police suspicion and time penalties. Two to four players.
 
 ---
 
@@ -71,22 +71,22 @@ Hosts can also create and manage sessions directly from the **host panel** of ea
 
 ## Tech stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | HTML5, CSS3, TypeScript (ES modules, `strict` mode) |
-| Build tool | Vite |
-| Realtime backend | Firebase Realtime Database |
-| Auth | Firebase Anonymous (players) + Email/Password (hosts) |
-| Styling | Bootstrap 5, Bootstrap Icons, Google Fonts |
-| Package manager | pnpm |
-| Hosting | GitHub Pages + custom domain |
-| CI/CD | GitHub Actions |
-| Linting / formatting | ESLint (typescript-eslint) + Prettier |
-| Error monitoring | Sentry |
-| Testing | Vitest + jsdom |
-| Booking forms | Formspree (free plan) |
-| Automation | Make.com (free plan) |
-| Transactional email | Combell SMTP (`smtp-auth.mailprotect.be`, port 587) |
+| Layer                | Technology                                            |
+| -------------------- | ----------------------------------------------------- |
+| Frontend             | HTML5, CSS3, TypeScript (ES modules, `strict` mode)   |
+| Build tool           | Vite                                                  |
+| Realtime backend     | Firebase Realtime Database                            |
+| Auth                 | Firebase Anonymous (players) + Email/Password (hosts) |
+| Styling              | Bootstrap 5, Bootstrap Icons, Google Fonts            |
+| Package manager      | pnpm                                                  |
+| Hosting              | GitHub Pages + custom domain                          |
+| CI/CD                | GitHub Actions                                        |
+| Linting / formatting | ESLint (typescript-eslint) + Prettier                 |
+| Error monitoring     | Sentry                                                |
+| Testing              | Vitest + jsdom                                        |
+| Booking forms        | Formspree (free plan)                                 |
+| Automation           | Make.com (free plan)                                  |
+| Transactional email  | Combell SMTP (`smtp-auth.mailprotect.be`, port 587)   |
 
 ---
 

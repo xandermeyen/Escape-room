@@ -66,8 +66,14 @@ const LOBBY_PAD = '/experiences/kamer-14/';
 function nieuweCode(): string {
   const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   const cijfers = '23456789';
-  const deel1 = Array.from({ length: 3 }, () => letters[Math.floor(Math.random() * letters.length)]).join('');
-  const deel2 = Array.from({ length: 3 }, () => cijfers[Math.floor(Math.random() * cijfers.length)]).join('');
+  const deel1 = Array.from(
+    { length: 3 },
+    () => letters[Math.floor(Math.random() * letters.length)],
+  ).join('');
+  const deel2 = Array.from(
+    { length: 3 },
+    () => cijfers[Math.floor(Math.random() * cijfers.length)],
+  ).join('');
   return `${deel1}-${deel2}`;
 }
 
@@ -125,7 +131,7 @@ async function laadLijst(): Promise<void> {
 
   try {
     // Sessies zonder ervaringsId zijn oudere Kamer 14-sessies (o.a. Make.com).
-    const rijen = await haalSessies((d) => (d.ervaringsId ?? 'kamer-14') === 'kamer-14');
+    const rijen = await haalSessies(d => (d.ervaringsId ?? 'kamer-14') === 'kamer-14');
     laden.style.display = 'none';
 
     // Gemiddelden per puzzel over alle sessies met speldata.
@@ -256,7 +262,8 @@ window.resetDemoSessie = async function () {
   const code = DEMO_CODES['kamer-14'];
   const status = requireEl('status-demo');
   const knop = requireEl<HTMLButtonElement>('btn-demo-reset');
-  if (!confirm(`Demo ${code} terugzetten naar het begin? Alle voortgang van de demo verdwijnt.`)) return;
+  if (!confirm(`Demo ${code} terugzetten naar het begin? Alle voortgang van de demo verdwijnt.`))
+    return;
   knop.disabled = true;
   try {
     await resetDemo(code, { ervaringsId: 'kamer-14' });

@@ -3,13 +3,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // ── Firebase mocks (session.ts importeert deze) ───────────────────────────────
 
 vi.mock('firebase/database', () => ({
-  ref:             vi.fn((_db: unknown, path: string) => ({ path })),
-  set:             vi.fn(() => Promise.resolve()),
-  get:             vi.fn(),
-  update:          vi.fn(() => Promise.resolve()),
-  onValue:         vi.fn(() => vi.fn()),
+  ref: vi.fn((_db: unknown, path: string) => ({ path })),
+  set: vi.fn(() => Promise.resolve()),
+  get: vi.fn(),
+  update: vi.fn(() => Promise.resolve()),
+  onValue: vi.fn(() => vi.fn()),
   serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
-  runTransaction:  vi.fn(),
+  runTransaction: vi.fn(),
 }));
 
 vi.mock('../shared/js/firebase-config.ts', () => ({
@@ -32,12 +32,12 @@ import {
 } from '../shared/js/session.ts';
 
 // Korte alias zodat de tests de mocks kunnen sturen
-const getMock            = get            as unknown as ReturnType<typeof vi.fn>;
-const setMock            = set            as unknown as ReturnType<typeof vi.fn>;
-const updateMock         = update         as unknown as ReturnType<typeof vi.fn>;
-const onValueMock        = onValue        as unknown as ReturnType<typeof vi.fn>;
+const getMock = get as unknown as ReturnType<typeof vi.fn>;
+const setMock = set as unknown as ReturnType<typeof vi.fn>;
+const updateMock = update as unknown as ReturnType<typeof vi.fn>;
+const onValueMock = onValue as unknown as ReturnType<typeof vi.fn>;
 const runTransactionMock = runTransaction as unknown as ReturnType<typeof vi.fn>;
-const refMock            = ref            as unknown as ReturnType<typeof vi.fn>;
+const refMock = ref as unknown as ReturnType<typeof vi.fn>;
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -84,10 +84,12 @@ describe('puzzelVoltooid', () => {
 
 describe('claimRol', () => {
   it('gebruikt runTransaction en claimt een vrije rol', async () => {
-    runTransactionMock.mockImplementation(async (_ref: unknown, updater: (h: unknown) => unknown) => {
-      const nieuw = updater(null);
-      return { committed: nieuw !== undefined };
-    });
+    runTransactionMock.mockImplementation(
+      async (_ref: unknown, updater: (h: unknown) => unknown) => {
+        const nieuw = updater(null);
+        return { committed: nieuw !== undefined };
+      },
+    );
 
     const ok = await claimRol('ABC', 'spelerA');
 
@@ -96,10 +98,12 @@ describe('claimRol', () => {
   });
 
   it('weigert een rol die al bezet is', async () => {
-    runTransactionMock.mockImplementation(async (_ref: unknown, updater: (h: unknown) => unknown) => {
-      const nieuw = updater('bezet');
-      return { committed: nieuw !== undefined };
-    });
+    runTransactionMock.mockImplementation(
+      async (_ref: unknown, updater: (h: unknown) => unknown) => {
+        const nieuw = updater('bezet');
+        return { committed: nieuw !== undefined };
+      },
+    );
 
     const ok = await claimRol('ABC', 'spelerA');
 
@@ -139,9 +143,9 @@ describe('diendRapportIn', () => {
   it('roept update aan met ingediend: true op het rapportpad', async () => {
     await diendRapportIn('ABC', {
       bestemming: 'Diest',
-      wie:        'Marie',
-      vervoer:    'trein',
-      tijdstip:   '07:35',
+      wie: 'Marie',
+      vervoer: 'trein',
+      tijdstip: '07:35',
     });
 
     expect(refMock).toHaveBeenCalledWith({}, 'sessions/ABC/rapport');
@@ -255,7 +259,12 @@ describe('maakSessie', () => {
     expect(nieuw.ervaringsId).toBe('dua');
     expect(nieuw.aantalSpelers).toBe(3);
     expect(nieuw.puzzels).toEqual({
-      p0: false, p1: false, p2: false, p3: false, p4: false, p5: false,
+      p0: false,
+      p1: false,
+      p2: false,
+      p3: false,
+      p4: false,
+      p5: false,
     });
   });
 });
@@ -306,7 +315,7 @@ describe('bewaakSessieGesloten', () => {
 
     actiefCb({ val: () => false });
     // De get-promise moet eerst afgehandeld zijn
-    await new Promise((r) => setTimeout(r, 0));
+    await new Promise(r => setTimeout(r, 0));
     expect(opGesloten).not.toHaveBeenCalled();
   });
 });

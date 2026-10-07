@@ -55,7 +55,17 @@ const GEVALLEN: Record<string, { juist: string[]; bijna: string[]; fout: string[
     fout: ['geel', 'turnhout', 'hasselt', 'diest geel'],
   },
   p3: {
-    juist: ['7', 'zeven', 'Zeven', '7 weken', 'zeven weken', '07', '7w', '7 wk', 'een week of zeven'],
+    juist: [
+      '7',
+      'zeven',
+      'Zeven',
+      '7 weken',
+      'zeven weken',
+      '07',
+      '7w',
+      '7 wk',
+      'een week of zeven',
+    ],
     bijna: ['6', '8', 'acht', 'zes weken'],
     fout: ['5', '9', '70', 'tien', 'veel'],
   },

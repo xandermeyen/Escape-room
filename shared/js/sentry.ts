@@ -16,9 +16,9 @@ const dsn = import.meta.env.VITE_SENTRY_DSN as string | undefined;
 if (dsn && import.meta.env.PROD) {
   Sentry.init({
     dsn,
-    environment: import.meta.env.MODE,   // 'production' of 'development'
-    tracesSampleRate: 0,                  // geen performance monitoring
-    replaysSessionSampleRate: 0,          // geen session replay
+    environment: import.meta.env.MODE, // 'production' of 'development'
+    tracesSampleRate: 0, // geen performance monitoring
+    replaysSessionSampleRate: 0, // geen session replay
     ignoreErrors: [
       // Bekende Firebase Auth-eigenaardigheid op Safari/iOS: de interne
       // IndexedDB-polling voor multi-tab auth-sync loopt soms nog net op

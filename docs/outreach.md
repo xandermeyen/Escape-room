@@ -7,15 +7,15 @@ Volgorde = prioriteit. Alles hieronder is gratis.
 
 ## 1. Directories & reviewsites (eerst doen)
 
-| Waar | Waarom | Actie |
-|---|---|---|
-| [escapetalk.nl](https://escapetalk.nl) | Grootste escape-reviewsite van NL/BE, heeft een aparte categorie "online escape rooms". Spelers zoeken hier actief. | Vraag een vermelding aan via hun contactformulier; vraag spelers daarna om daar te reviewen. |
-| [escaperooms.nl](https://escaperooms.nl) | Idem, groot bereik in Nederland. | Vermelding aanvragen (online categorie). |
-| [escaperoomsbelgie.be](https://escaperoomsbelgie.be) | Belgisch overzicht. | Vermelding aanvragen. |
-| [online-escape-room.nl](https://online-escape-room.nl) e.a. lijstjes | "Gratis online escape room" is een veelgezocht lijstjes-onderwerp. | Google op "gratis online escape room lijst" en mail de top-10 blogs (template C hieronder). |
-| Reddit [r/escaperooms](https://reddit.com/r/escaperooms) | Er is een terugkerende "online escape rooms" megathread/wiki. | Voeg Bureau X toe / post een korte introductie (geen spam-toon; vermeld dat het gratis en Nederlandstalig is). |
-| Facebook-groepen "Escape Room Enthousiastelingen België" / "Escape rooms Nederland" | Direct de doelgroep. | Eén nette post per groep + reageer op "tips voor online room?"-vragen. |
-| [Tripadvisor](https://tripadvisor.be) | Kan voor online experiences; levert reviews met domein-autoriteit. | Bedrijfsvermelding aanmaken (categorie "Escape Games"). |
+| Waar                                                                                | Waarom                                                                                                              | Actie                                                                                                          |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [escapetalk.nl](https://escapetalk.nl)                                              | Grootste escape-reviewsite van NL/BE, heeft een aparte categorie "online escape rooms". Spelers zoeken hier actief. | Vraag een vermelding aan via hun contactformulier; vraag spelers daarna om daar te reviewen.                   |
+| [escaperooms.nl](https://escaperooms.nl)                                            | Idem, groot bereik in Nederland.                                                                                    | Vermelding aanvragen (online categorie).                                                                       |
+| [escaperoomsbelgie.be](https://escaperoomsbelgie.be)                                | Belgisch overzicht.                                                                                                 | Vermelding aanvragen.                                                                                          |
+| [online-escape-room.nl](https://online-escape-room.nl) e.a. lijstjes                | "Gratis online escape room" is een veelgezocht lijstjes-onderwerp.                                                  | Google op "gratis online escape room lijst" en mail de top-10 blogs (template C hieronder).                    |
+| Reddit [r/escaperooms](https://reddit.com/r/escaperooms)                            | Er is een terugkerende "online escape rooms" megathread/wiki.                                                       | Voeg Bureau X toe / post een korte introductie (geen spam-toon; vermeld dat het gratis en Nederlandstalig is). |
+| Facebook-groepen "Escape Room Enthousiastelingen België" / "Escape rooms Nederland" | Direct de doelgroep.                                                                                                | Eén nette post per groep + reageer op "tips voor online room?"-vragen.                                         |
+| [Tripadvisor](https://tripadvisor.be)                                               | Kan voor online experiences; levert reviews met domein-autoriteit.                                                  | Bedrijfsvermelding aanmaken (categorie "Escape Games").                                                        |
 
 **Tip:** gratis zijn is jullie sterkste argument — lijstjesmakers nemen gratis rooms vrijwel altijd op.
 
@@ -36,11 +36,13 @@ Volgorde = prioriteit. Alles hieronder is gratis.
 ## 3. Pers (lokale angle werkt)
 
 ### Angle A — Geel (Kamer 14)
+
 > "Gratis online escape room laat spelers de unieke Geelse gezinsverpleging beleven"
 
 Doelen: Nieuwsblad regio Kempen, Gazet van Antwerpen (Kempen), HLN Geel, RTV (regionale tv Kempen), Radio 2 Antwerpen.
 
 ### Angle B — Gent (D.U.A.)
+
 > "Online escape room laat je de diefstal van De Rechtvaardige Rechters 'oplossen' — in 1934 én 2034 tegelijk"
 
 Doelen: Nieuwsblad/HLN Gent, AVS (regionale tv), Radio 2 Oost-Vlaanderen.
@@ -54,9 +56,10 @@ Doelen: Nieuwsblad/HLN Gent, AVS (regionale tv), Radio 2 Oost-Vlaanderen.
 >
 > Ik ben Xander Meyen en ik bouwde bureau-x.be: gratis online escape rooms
 > over echte Belgische verhalen. [Kamer 14 speelt zich af binnen de Geelse
-> gezinsverpleging, de eeuwenoude traditie van het OPZ / D.U.A. laat twee
-> teams de diefstal van De Rechtvaardige Rechters onderzoeken — één team in
-> 1934, één in 2034].
+>
+> > gezinsverpleging, de eeuwenoude traditie van het OPZ / D.U.A. laat twee
+> > teams de diefstal van De Rechtvaardige Rechters onderzoeken — één team in
+> > 1934, één in 2034].
 >
 > Spelers spelen thuis, in de browser, volledig gratis. Sinds de lancering
 > speelden al [X] teams.

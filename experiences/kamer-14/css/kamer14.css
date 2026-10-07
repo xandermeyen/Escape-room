@@ -2,38 +2,45 @@
 @import '../../../shared/css/hulp.css';
 
 :root {
-  --k-bg:          #111a14;
-  --k-bg-dark:     #0a110c;
-  --k-bg-panel:    #0d150f;
-  --k-rand:        #1a2e1c;
-  --k-rand-mid:    #1e3022;
-  --k-accent:      #3a7a48;
-  --k-accent-licht:#5aaa6a;
-  --k-tekst:       #c8e0c0;
-  --k-tekst-mid:   #7aaa80;
+  --k-bg: #111a14;
+  --k-bg-dark: #0a110c;
+  --k-bg-panel: #0d150f;
+  --k-rand: #1a2e1c;
+  --k-rand-mid: #1e3022;
+  --k-accent: #3a7a48;
+  --k-accent-licht: #5aaa6a;
+  --k-tekst: #c8e0c0;
+  --k-tekst-mid: #7aaa80;
   --k-tekst-grijs: #3a6040;
-  --k-tekst-donker:#2e5035;
-  --font:          'Courier New', 'Special Elite', monospace;
+  --k-tekst-donker: #2e5035;
+  --font: 'Courier New', 'Special Elite', monospace;
 
   /* Gedeelde componenten (timer.css, hulp.css) in het groen van Kamer 14 */
-  --kleur-donker:       #0d150f;
-  --kleur-accent:       #3a7a48;
+  --kleur-donker: #0d150f;
+  --kleur-accent: #3a7a48;
   --kleur-accent-licht: #5aaa6a;
-  --kleur-rand:         #c8e0c0;
-  --kleur-grijs:        #8fb894;
-  --kleur-perkament:    #e3f0de;
-  --font-archief:       'Courier New', 'Special Elite', monospace;
+  --kleur-rand: #c8e0c0;
+  --kleur-grijs: #8fb894;
+  --kleur-perkament: #e3f0de;
+  --font-archief: 'Courier New', 'Special Elite', monospace;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
   min-height: 100vh;
   background: var(--k-bg);
   background-image: repeating-linear-gradient(
-    0deg, transparent, transparent 28px,
-    rgba(58,122,72,0.03) 28px, rgba(58,122,72,0.03) 29px
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(58, 122, 72, 0.03) 28px,
+    rgba(58, 122, 72, 0.03) 29px
   );
   font-family: var(--font);
   color: var(--k-tekst);
@@ -57,13 +64,20 @@ body {
   color: var(--k-accent-licht);
   text-transform: uppercase;
 }
-.sys-sep { color: var(--k-rand-mid); margin: 0 10px; }
+.sys-sep {
+  color: var(--k-rand-mid);
+  margin: 0 10px;
+}
 .sys-case {
   font-size: 12px;
   color: var(--k-tekst-donker);
   letter-spacing: 0.08em;
 }
-.sys-rechts { display: flex; align-items: center; gap: 14px; }
+.sys-rechts {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
 .sys-speler {
   font-size: 12px;
   color: var(--k-tekst-grijs);
@@ -133,9 +147,15 @@ body {
   border-radius: 2px;
   transition: background 0.4s;
 }
-.vp-klaar  { background: var(--k-accent); }
-.vp-bezig  { background: var(--k-accent-licht); }
-.vp-open   { background: var(--k-rand); }
+.vp-klaar {
+  background: var(--k-accent);
+}
+.vp-bezig {
+  background: var(--k-accent-licht);
+}
+.vp-open {
+  background: var(--k-rand);
+}
 
 /* ── Tabs ── */
 .tabs {
@@ -158,13 +178,18 @@ body {
   transition: color 0.2s;
   user-select: none;
 }
-.tab:hover:not(.slot) { color: var(--k-tekst-grijs); }
+.tab:hover:not(.slot) {
+  color: var(--k-tekst-grijs);
+}
 .tab.actief {
   color: var(--k-accent-licht);
   border-bottom-color: var(--k-accent);
   background: var(--k-bg);
 }
-.tab.slot { color: var(--k-rand-mid); cursor: default; }
+.tab.slot {
+  color: var(--k-rand-mid);
+  cursor: default;
+}
 .tab.nieuw-doc::after {
   content: ' ●';
   font-size: 8px;
@@ -172,14 +197,27 @@ body {
   animation: dotPuls 1.4s ease-in-out 3;
 }
 @keyframes dotPuls {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.2; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
 }
 
 /* ── Content ── */
-.content-wrapper { flex: 1; overflow-y: auto; }
-.tab-panel { display: none; padding: 22px 24px; }
-.tab-panel.actief { display: block; }
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+}
+.tab-panel {
+  display: none;
+  padding: 22px 24px;
+}
+.tab-panel.actief {
+  display: block;
+}
 
 .doc-label {
   font-size: 11px;
@@ -217,7 +255,7 @@ body {
 .notitie {
   border-left: 3px solid var(--k-accent);
   padding: 12px 16px;
-  background: rgba(58,122,72,0.05);
+  background: rgba(58, 122, 72, 0.05);
   margin: 12px 0;
   font-size: 13px;
   color: var(--k-tekst-mid);
@@ -232,8 +270,8 @@ body {
 
 /* Melding */
 .melding {
-  background: rgba(58,122,72,0.07);
-  border: 1px solid rgba(58,122,72,0.2);
+  background: rgba(58, 122, 72, 0.07);
+  border: 1px solid rgba(58, 122, 72, 0.2);
   border-left: 3px solid var(--k-accent);
   padding: 12px 16px;
   margin-top: 16px;
@@ -297,8 +335,12 @@ body {
   width: 220px;
   transition: border-color 0.2s;
 }
-.puzzel-input:focus { border-bottom-color: var(--k-accent-licht); }
-.puzzel-input.fout { border-bottom-color: #7a3030; }
+.puzzel-input:focus {
+  border-bottom-color: var(--k-accent-licht);
+}
+.puzzel-input.fout {
+  border-bottom-color: #7a3030;
+}
 .puzzel-btn {
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -309,11 +351,22 @@ body {
   padding: 7px 16px;
   cursor: pointer;
   font-family: var(--font);
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
-.puzzel-btn:hover { background: var(--k-accent); color: var(--k-bg); }
-.puzzel-btn:disabled { opacity: 0.4; cursor: default; }
-.puzzel-btn:disabled:hover { background: transparent; color: var(--k-accent-licht); }
+.puzzel-btn:hover {
+  background: var(--k-accent);
+  color: var(--k-bg);
+}
+.puzzel-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.puzzel-btn:disabled:hover {
+  background: transparent;
+  color: var(--k-accent-licht);
+}
 .puzzel-feedback {
   font-size: 12px;
   margin-top: 8px;
@@ -325,11 +378,21 @@ body {
   animation: feedbackVerschijn 0.2s ease;
 }
 @keyframes feedbackVerschijn {
-  from { opacity: 0; transform: translateY(-3px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.puzzel-feedback.correct { color: var(--k-accent-licht); }
-.puzzel-feedback.fout    { color: #7a4040; }
+.puzzel-feedback.correct {
+  color: var(--k-accent-licht);
+}
+.puzzel-feedback.fout {
+  color: #7a4040;
+}
 .puzzel-voltooid {
   font-size: 12px;
   color: var(--k-accent-licht);
@@ -341,7 +404,9 @@ body {
 }
 
 /* ── Utility ── */
-.verborgen { display: none !important; }
+.verborgen {
+  display: none !important;
+}
 
 /* ── Progressieve hints ── */
 .hint-blok {
@@ -357,7 +422,9 @@ body {
   padding: 6px 14px;
   cursor: pointer;
   font-family: var(--font);
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 .hint-knop:hover {
   border-color: var(--k-accent);
@@ -392,7 +459,9 @@ body {
   padding: 3px 0;
   cursor: pointer;
   font-family: var(--font);
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
 }
 .hint-verder:hover {
   color: var(--k-accent-licht);
@@ -403,8 +472,14 @@ body {
 .prikbord {
   background: #6b4f1a;
   background-image:
-    radial-gradient(ellipse at 25% 30%, rgba(255,220,120,0.08) 0%, transparent 60%),
-    repeating-linear-gradient(45deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 10px);
+    radial-gradient(ellipse at 25% 30%, rgba(255, 220, 120, 0.08) 0%, transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.04) 0px,
+      rgba(0, 0, 0, 0.04) 1px,
+      transparent 1px,
+      transparent 10px
+    );
   border: 5px solid #3e2c08;
   border-radius: 3px;
   padding: 28px 24px;
@@ -421,7 +496,7 @@ body {
   background: #f9f5e8;
   padding: 10px 12px;
   max-width: 130px;
-  box-shadow: 2px 3px 7px rgba(0,0,0,0.45);
+  box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.45);
   font-family: 'Special Elite', 'Courier New', monospace;
   font-size: 11px;
   color: #2a2010;
@@ -444,7 +519,7 @@ body {
   border: 1px solid #ddd8c0;
   padding: 10px 12px;
   max-width: 130px;
-  box-shadow: 2px 3px 7px rgba(0,0,0,0.4);
+  box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.4);
   font-family: 'Courier New', monospace;
   font-size: 10px;
   color: #2a2010;
@@ -467,14 +542,21 @@ body {
   font-family: 'Special Elite', 'Courier New', monospace;
   padding: 16px 20px;
   max-width: 260px;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
   transform: rotate(-2.5deg);
   cursor: pointer;
-  transition: transform 0.35s ease, box-shadow 0.2s;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.2s;
   position: relative;
 }
-.brief-kaart:hover { transform: rotate(-1deg) scale(1.02); box-shadow: 6px 6px 14px rgba(0,0,0,0.55); }
-.brief-kaart.omgedraaid { transform: rotate(1.5deg); }
+.brief-kaart:hover {
+  transform: rotate(-1deg) scale(1.02);
+  box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.55);
+}
+.brief-kaart.omgedraaid {
+  transform: rotate(1.5deg);
+}
 .brief-kaart::before {
   content: '●';
   position: absolute;
@@ -485,13 +567,23 @@ body {
   font-size: 16px;
 }
 .brief-voorkant,
-.brief-achterkant { font-size: 13px; line-height: 1.85; color: #2a2010; }
-.brief-achterkant { display: none; }
-.brief-kaart.omgedraaid .brief-voorkant  { display: none; }
-.brief-kaart.omgedraaid .brief-achterkant { display: block; }
+.brief-achterkant {
+  font-size: 13px;
+  line-height: 1.85;
+  color: #2a2010;
+}
+.brief-achterkant {
+  display: none;
+}
+.brief-kaart.omgedraaid .brief-voorkant {
+  display: none;
+}
+.brief-kaart.omgedraaid .brief-achterkant {
+  display: block;
+}
 .brief-instructie {
   font-size: 10px;
-  color: rgba(0,0,0,0.4);
+  color: rgba(0, 0, 0, 0.4);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-top: 10px;
@@ -518,22 +610,36 @@ body {
 .polaroid {
   background: #ede8d8;
   padding: 10px 10px 32px;
-  box-shadow: 4px 5px 12px rgba(0,0,0,0.65);
+  box-shadow: 4px 5px 12px rgba(0, 0, 0, 0.65);
   width: 148px;
   flex-shrink: 0;
   position: relative;
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
   z-index: 1;
 }
-.polaroid:nth-child(1) { transform: rotate(-2.5deg); }
-.polaroid:nth-child(2) { transform: rotate(1.8deg);  }
-.polaroid:nth-child(3) { transform: rotate(-1deg);   }
-.polaroid:nth-child(4) { transform: rotate(2.5deg);  }
-.polaroid:nth-child(5) { transform: rotate(-1.5deg); }
-.polaroid:nth-child(6) { transform: rotate(1deg);    }
+.polaroid:nth-child(1) {
+  transform: rotate(-2.5deg);
+}
+.polaroid:nth-child(2) {
+  transform: rotate(1.8deg);
+}
+.polaroid:nth-child(3) {
+  transform: rotate(-1deg);
+}
+.polaroid:nth-child(4) {
+  transform: rotate(2.5deg);
+}
+.polaroid:nth-child(5) {
+  transform: rotate(-1.5deg);
+}
+.polaroid:nth-child(6) {
+  transform: rotate(1deg);
+}
 .polaroid:hover {
   transform: rotate(0deg) scale(1.07);
-  box-shadow: 6px 8px 20px rgba(0,0,0,0.8);
+  box-shadow: 6px 8px 20px rgba(0, 0, 0, 0.8);
   z-index: 10;
 }
 .polaroid-foto {
@@ -568,7 +674,7 @@ body {
 /* ── Einde-link balk (verschijnt na p5) ── */
 .einde-link-balk {
   display: block;
-  background: rgba(58,122,72,0.08);
+  background: rgba(58, 122, 72, 0.08);
   border-bottom: 1px solid var(--k-accent);
   padding: 11px 24px;
   font-size: 12px;
@@ -576,11 +682,13 @@ body {
   color: var(--k-accent-licht);
   text-decoration: none;
   text-align: center;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
   animation: fadeIn 0.5s ease;
   flex-shrink: 0;
 }
 .einde-link-balk:hover {
-  background: rgba(58,122,72,0.18);
+  background: rgba(58, 122, 72, 0.18);
   color: var(--k-tekst);
 }

@@ -1,5 +1,11 @@
 import '../../../shared/js/sentry.ts';
-import { luisterNaarRapport, diendRapportIn, sluitSessie, haalTijden, type RapportInhoud } from '../../../shared/js/session.ts';
+import {
+  luisterNaarRapport,
+  diendRapportIn,
+  sluitSessie,
+  haalTijden,
+  type RapportInhoud,
+} from '../../../shared/js/session.ts';
 import { beoordeelAntwoord, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { KAMER14_ANTWOORD_HASHES, KAMER14_ANTWOORD_REGELS } from './kamer14-config.ts';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
@@ -13,12 +19,11 @@ const sessie = sessieUitUrl();
 
 // Sessie tonen in systeembalk en meta
 const sysCaseRapport = document.getElementById('sys-case-rapport');
-if (sysCaseRapport) sysCaseRapport.textContent =
-  `Intern rapport · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
+if (sysCaseRapport)
+  sysCaseRapport.textContent = `Intern rapport · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
 
 const rapportSessieLabel = document.getElementById('rapport-sessie-label');
 if (rapportSessieLabel) rapportSessieLabel.textContent = sessie;
-
 
 // ── Scherm-overgangen ─────────────────────────────────────
 function toonScherm(id: string): void {
@@ -29,7 +34,6 @@ function toonScherm(id: string): void {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 }
-
 
 // ── Validatie helpers ─────────────────────────────────────
 // Antwoorden staan als SHA-256 hash in de bundle, niet als plain-text.
@@ -52,26 +56,25 @@ function veldKlopt(veld: string, waarde: string): Promise<boolean> {
 }
 
 function resetVeld(id: string): void {
-  const input    = document.getElementById(`r-${id}`);
-  const foutMsg  = document.getElementById(`fout-${id}`);
-  if (input)   input.classList.remove('fout');
+  const input = document.getElementById(`r-${id}`);
+  const foutMsg = document.getElementById(`fout-${id}`);
+  if (input) input.classList.remove('fout');
   if (foutMsg) foutMsg.style.display = 'none';
 }
 
 function markeerFout(id: string): void {
-  const input    = document.getElementById(`r-${id}`);
-  const foutMsg  = document.getElementById(`fout-${id}`);
-  if (input)   input.classList.add('fout');
+  const input = document.getElementById(`r-${id}`);
+  const foutMsg = document.getElementById(`fout-${id}`);
+  if (input) input.classList.add('fout');
   if (foutMsg) foutMsg.style.display = 'block';
 }
-
 
 // ── Rapport indienen ──────────────────────────────────────
 async function diendIn(): Promise<void> {
   const bestemming = (document.getElementById('r-bestemming') as HTMLInputElement).value;
-  const wie        = (document.getElementById('r-wie') as HTMLInputElement).value;
-  const vervoer    = (document.getElementById('r-vervoer') as HTMLInputElement).value.trim();
-  const tijdstip   = (document.getElementById('r-tijdstip') as HTMLInputElement).value;
+  const wie = (document.getElementById('r-wie') as HTMLInputElement).value;
+  const vervoer = (document.getElementById('r-vervoer') as HTMLInputElement).value.trim();
+  const tijdstip = (document.getElementById('r-tijdstip') as HTMLInputElement).value;
 
   // Reset
   ['bestemming', 'wie', 'vervoer', 'tijdstip'].forEach(resetVeld);
@@ -80,10 +83,22 @@ async function diendIn(): Promise<void> {
 
   let geldig = true;
 
-  if (!(await veldKlopt('bestemming', bestemming))) { markeerFout('bestemming'); geldig = false; }
-  if (!(await veldKlopt('wie', wie)))               { markeerFout('wie');        geldig = false; }
-  if (!(await veldKlopt('vervoer', vervoer)))       { markeerFout('vervoer');    geldig = false; }
-  if (!(await veldKlopt('tijdstip', tijdstip)))     { markeerFout('tijdstip');   geldig = false; }
+  if (!(await veldKlopt('bestemming', bestemming))) {
+    markeerFout('bestemming');
+    geldig = false;
+  }
+  if (!(await veldKlopt('wie', wie))) {
+    markeerFout('wie');
+    geldig = false;
+  }
+  if (!(await veldKlopt('vervoer', vervoer))) {
+    markeerFout('vervoer');
+    geldig = false;
+  }
+  if (!(await veldKlopt('tijdstip', tijdstip))) {
+    markeerFout('tijdstip');
+    geldig = false;
+  }
 
   if (!geldig) {
     if (validatieBericht) validatieBericht.style.display = 'block';
@@ -97,9 +112,9 @@ async function diendIn(): Promise<void> {
 
   const inhoud: RapportInhoud = {
     bestemming: (document.getElementById('r-bestemming') as HTMLInputElement).value.trim(),
-    wie:        (document.getElementById('r-wie') as HTMLInputElement).value.trim(),
+    wie: (document.getElementById('r-wie') as HTMLInputElement).value.trim(),
     vervoer,
-    tijdstip:   (document.getElementById('r-tijdstip') as HTMLInputElement).value.trim(),
+    tijdstip: (document.getElementById('r-tijdstip') as HTMLInputElement).value.trim(),
   };
 
   try {
@@ -126,7 +141,6 @@ document.getElementById('btn-indienen')?.addEventListener('click', diendIn);
   });
 });
 
-
 // ── Postkaart omdraaien ───────────────────────────────────
 let omgedraaid: boolean = false;
 
@@ -139,11 +153,13 @@ document.getElementById('postkaart')?.addEventListener('click', () => {
   }
 
   const hint = document.getElementById('briefkaart-hint');
-  const btn  = document.getElementById('btn-sluit-dossier') as HTMLButtonElement | null;
+  const btn = document.getElementById('btn-sluit-dossier') as HTMLButtonElement | null;
 
   if (omgedraaid) {
     if (hint) hint.textContent = 'Klik opnieuw om de voorkant te zien';
-    setTimeout(() => { if (btn) btn.style.display = 'inline-block'; }, 750);
+    setTimeout(() => {
+      if (btn) btn.style.display = 'inline-block';
+    }, 750);
   } else {
     if (hint) hint.textContent = 'Klik op de briefkaart om ze om te draaien';
   }
@@ -156,7 +172,6 @@ document.getElementById('btn-sluit-dossier')?.addEventListener('click', () => {
 document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
   window.location.href = '../../index.html';
 });
-
 
 // ── Eindstatistieken ──────────────────────────────────────
 // Onderzoekstijd en marge worden berekend uit timerGestart en
@@ -172,13 +187,13 @@ async function vulStats(): Promise<void> {
     const { timerGestart, rapportTijdstip } = await haalTijden(sessie);
     if (!timerGestart || !rapportTijdstip) return; // geen data, blok blijft verborgen
 
-    const duurMs  = Math.max(0, rapportTijdstip - timerGestart);
+    const duurMs = Math.max(0, rapportTijdstip - timerGestart);
     const margeMs = Math.max(0, TIJDSLIMIET_MS - duurMs);
     deelDuur = formateerTijd(duurMs);
 
-    const duurEl  = document.getElementById('stat-onderzoekstijd');
+    const duurEl = document.getElementById('stat-onderzoekstijd');
     const margeEl = document.getElementById('stat-resttijd');
-    if (duurEl)  duurEl.textContent  = formateerTijd(duurMs);
+    if (duurEl) duurEl.textContent = formateerTijd(duurMs);
     if (margeEl) margeEl.textContent = formateerTijd(margeMs);
 
     const blok = document.getElementById('slot-stats');
@@ -206,9 +221,8 @@ koppelDeelKnop('btn-deel-resultaat', () =>
     : 'Wij losten Kamer 14 op 🕵️ Gratis online escape room over de Geelse gezinsverpleging: https://bureau-x.be/kamer-14/',
 );
 
-
 // ── Firebase: luisteren naar rapport-status ───────────────
-luisterNaarRapport(sessie, (rapport) => {
+luisterNaarRapport(sessie, rapport => {
   if (rapport?.ingediend) {
     toonScherm('scherm-briefkaart');
     vulStats();
