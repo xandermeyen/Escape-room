@@ -7,7 +7,7 @@
  * tellen als Kamer 14.
  */
 import '../../../shared/js/sentry.ts';
-import { maakSessie } from '../../../shared/js/session.ts';
+import { maakSessie, geefRollenVrij } from '../../../shared/js/session.ts';
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, update } from 'firebase/database';
 import { koppelHostAuth } from '../../../shared/js/host-auth.ts';
@@ -18,6 +18,7 @@ import {
   puzzelBollenHtml,
   statusBadgeHtml,
   datumHtml,
+  geopendHtml,
   lobbyLinkHtml,
 } from '../../../shared/js/host-sessies.ts';
 import { haalReviews, keurReviewGoed, reviewKaartHtml } from '../../../shared/js/host-reviews.ts';
@@ -31,6 +32,7 @@ declare global {
     laadLijst: () => void;
     kopieer: (tekst: string, knop?: HTMLElement) => void;
     deactiveer: (code: string) => void;
+    rollenVrij: (code: string) => void;
     keurGoed: (id: string) => void;
   }
 }
@@ -134,14 +136,22 @@ async function laadLijst(): Promise<void> {
             </button>
           </td>
           <td style="color:#666; font-size:0.8rem;">${datumHtml(data)}</td>
+          <td style="color:#666; font-size:0.8rem;">${geopendHtml(data)}</td>
           <td>
             <div class="puzzel-bollen">${puzzelBollenHtml(data, PUZZELS)}</div>
             <span style="color:#666; font-size:0.75rem;">${aantalKlaar}/${PUZZELS.length}</span>
           </td>
           <td>${rapportBadge}</td>
-          <td>${statusBadgeHtml(data, aantalKlaar, PUZZELS.length)}</td>
+          <td>${statusBadgeHtml(data, aantalKlaar, PUZZELS.length, { toonVerlopen: true })}</td>
           <td>${lobbyLinkHtml(LOBBY_PAD, code)}</td>
           <td>
+            ${
+              data.actief && data.spelers
+                ? `<button class="kopieer-knop" title="Rollen vrijgeven (speler zit vast op 'rol al bezet')" onclick="rollenVrij('${veiligeCode}')" style="color:#555;">
+                    <i class="bi bi-people"></i>
+                  </button>`
+                : ''
+            }
             ${
               data.actief
                 ? `<button class="kopieer-knop" title="Deactiveer sessie" onclick="deactiveer('${veiligeCode}')" style="color:#555;">
@@ -219,6 +229,22 @@ window.deactiveer = async function (code) {
     void laadLijst();
   } catch (err) {
     console.error('Deactiveer mislukt:', err);
+  }
+};
+
+window.rollenVrij = async function (code) {
+  if (
+    !confirm(
+      `Rollen van sessie ${code} vrijgeven? Gebruik dit als een speler op een ander toestel verder wil en "rol al bezet" ziet. Spelers die al in het spel zitten, blijven gewoon spelen.`,
+    )
+  )
+    return;
+  try {
+    await geefRollenVrij(code);
+    void laadLijst();
+  } catch (err) {
+    console.error('Rollen vrijgeven mislukt:', err);
+    alert('Rollen vrijgeven mislukt: ' + foutTekst(err));
   }
 };
 

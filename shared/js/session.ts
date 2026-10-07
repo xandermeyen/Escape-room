@@ -78,13 +78,79 @@ export async function maakSessie(
   return result.committed;
 }
 
+// ── Sessiecode normaliseren ───────────────────────────────
+// Codes komen vaak via copy-paste uit een e-mail: met spaties, een lang
+// streepje (–) of onzichtbare tekens. Die maken we hier gelijk, zodat een
+// geldige code niet als "ongeldig" wordt geweigerd.
+const GELDIGE_CODE = /^[A-Z0-9-]{3,20}$/;
+
+export function normaliseerSessieCode(invoer: string): string {
+  return invoer
+    .normalize('NFKC')
+    .replace(/\p{Cf}/gu, '') // zero-width e.d.
+    .replace(/\s+/g, '') // ook spaties midden in de code
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, '-') // streepjes → koppelteken
+    .toUpperCase();
+}
+
 // Sessie valideren bij inloggen
 export async function valideerSessie(sessieCode: string): Promise<boolean> {
+  // Een punt, #, $, [ of / in het pad laat Firebase een fout gooien; zo'n
+  // code kan sowieso niet bestaan (zie database.rules.json).
+  if (!GELDIGE_CODE.test(sessieCode)) return false;
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   const snapshot  = await get(sessieRef);
 
   if (!snapshot.exists()) return false;
   return snapshot.val().actief === true;
+}
+
+/**
+ * zoekSessieCode: normaliseert de invoer en zoekt de actieve sessie.
+ * Wie het koppelteken vergeet ("ABC234" i.p.v. "ABC-234"), wordt ook
+ * gevonden: we proberen dan ook de vorm met een koppelteken op elke
+ * overgang tussen letters en cijfers. Geeft de echte code terug, of null.
+ */
+export async function zoekSessieCode(invoer: string): Promise<string | null> {
+  const code = normaliseerSessieCode(invoer);
+  const kandidaten = [code];
+  if (!code.includes('-')) {
+    const metKoppelteken = code
+      .replace(/([A-Z])(?=\d)/g, '$1-')
+      .replace(/(\d)(?=[A-Z])/g, '$1-');
+    if (metKoppelteken !== code) kandidaten.push(metKoppelteken);
+  }
+  for (const kandidaat of kandidaten) {
+    if (await valideerSessie(kandidaat)) return kandidaat;
+  }
+  return null;
+}
+
+/**
+ * markeerGeopend: bewaart het moment waarop een code de lobby voor het
+ * eerst opent (sessions/<code>/geopendOp). Faalt stil: dit is statistiek
+ * voor het host-paneel en mag een speler nooit blokkeren, ook niet zolang
+ * de nieuwe database-regel nog niet gedeployed is.
+ */
+export async function markeerGeopend(sessieCode: string): Promise<void> {
+  try {
+    await authReady;
+    const geopendRef = ref(db, `sessions/${sessieCode}/geopendOp`);
+    const snap = await get(geopendRef);
+    if (snap.exists()) return;
+    await set(geopendRef, serverTimestamp());
+  } catch (err) {
+    console.warn('geopendOp bewaren mislukt:', err);
+  }
+}
+
+/**
+ * geefRollenVrij (host): maakt alle rollen van een sessie weer vrij. Voor
+ * een groep die op een ander toestel verder wil en op "rol al bezet" botst.
+ */
+export async function geefRollenVrij(sessieCode: string): Promise<void> {
+  await authReady;
+  await schrijf('geefRollenVrij', set(ref(db, `sessions/${sessieCode}/spelers`), null));
 }
 
 // Puzzel markeren als voltooid

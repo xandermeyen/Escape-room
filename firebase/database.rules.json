@@ -11,6 +11,7 @@
         "ervaringsId":    { ".validate": "newData.isString()" },
         "aantalSpelers":  { ".validate": "newData.isNumber()" },
         "timerGestart":   { ".validate": "newData.isNumber() || newData.val() == null" },
+        "geopendOp":      { ".validate": "newData.isNumber()" },
         "puzzels": {
           "$p": { ".validate": "$p.matches(/^p[0-5]$/) && newData.isBoolean()" }
         },

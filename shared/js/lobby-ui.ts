@@ -4,7 +4,13 @@
  * komen binnen via `LobbyConfig`; de rest van de flow — code valideren,
  * rollen live tonen, claimen, terugkeer-banner — is identiek en leeft hier.
  */
-import { valideerSessie, claimRol, luisterNaarRollen } from './session.ts';
+import {
+  zoekSessieCode,
+  normaliseerSessieCode,
+  markeerGeopend,
+  claimRol,
+  luisterNaarRollen,
+} from './session.ts';
 
 /** Wisselt het actieve .scherm naar `id` en scrollt naar boven. */
 export function activeerScherm(id: string): void {
@@ -75,7 +81,8 @@ export function initLobby(config: LobbyConfig): void {
   let laatsteSpelers: Record<string, string> = {};
 
   // ── Sessiecode uit URL ──
-  const urlSessie = new URLSearchParams(window.location.search).get('sessie')?.toUpperCase() ?? null;
+  const urlRuw = new URLSearchParams(window.location.search).get('sessie');
+  const urlSessie = urlRuw ? normaliseerSessieCode(urlRuw) : null;
   if (urlSessie) sessionStorage.setItem('sessieCode', urlSessie);
 
   // ── Schermen ──
@@ -174,7 +181,7 @@ export function initLobby(config: LobbyConfig): void {
     const fout = document.querySelector<HTMLElement>('#scherm-code .code-fout');
     const knop = document.querySelector<HTMLButtonElement>('#scherm-code .btn-game');
     const knopTekst = knop?.innerHTML ?? '';
-    const code = input.value.trim().toUpperCase();
+    const code = normaliseerSessieCode(input.value);
 
     function toonFout(tekst: string): void {
       input.classList.add('invoer-fout');
@@ -195,13 +202,15 @@ export function initLobby(config: LobbyConfig): void {
     }
 
     try {
-      const geldig = await valideerSessie(code);
-      if (!geldig) {
+      const gevonden = await zoekSessieCode(code);
+      if (!gevonden) {
         toonFout('Ongeldige of inactieve code. Controleer je e-mail.');
         return;
       }
-      sessionStorage.setItem('sessieCode', code);
-      await config.naValidatie?.(code);
+      input.value = gevonden;
+      sessionStorage.setItem('sessieCode', gevonden);
+      void markeerGeopend(gevonden);
+      await config.naValidatie?.(gevonden);
       input.classList.remove('invoer-fout');
       fout?.classList.add('verborgen');
       toonScherm('scherm-rol');
@@ -273,11 +282,25 @@ export function initLobby(config: LobbyConfig): void {
   koppelCodeInvoer(() => void valideerCode());
 
   // ── Begin-knop: sla over naar rolkeuze als code al in URL zat ──
+  // Faalt de controle (bv. geen netwerk), dan belandt de speler op het
+  // codescherm met de code al ingevuld, in plaats van op een knop die
+  // niets lijkt te doen.
   document.getElementById('btn-begin')?.addEventListener('click', async () => {
-    if (urlSessie && (await valideerSessie(urlSessie))) {
-      await config.naValidatie?.(urlSessie);
-      toonScherm('scherm-rol');
-      return;
+    if (urlSessie) {
+      try {
+        const gevonden = await zoekSessieCode(urlSessie);
+        if (gevonden) {
+          sessionStorage.setItem('sessieCode', gevonden);
+          void markeerGeopend(gevonden);
+          await config.naValidatie?.(gevonden);
+          toonScherm('scherm-rol');
+          return;
+        }
+      } catch (err) {
+        console.error('Firebase fout:', err);
+      }
+      const input = document.getElementById('sessieCodeInput') as HTMLInputElement | null;
+      if (input) input.value = urlSessie;
     }
     toonScherm('scherm-code');
   });
