@@ -171,6 +171,7 @@ export function eenTypfoutVarianten(
  * @param onJuist    - Called when the answer is correct
  * @param foutTekst  - Feedback text shown on a wrong answer
  * @param regels     - Optional per-puzzle normalisation rules
+ * @param opOordeel  - Optional callback with the verdict (speldata, hulpmeldingen)
  */
 export async function controleerAntwoordHash(
   puzzelNr: string,
@@ -181,6 +182,7 @@ export async function controleerAntwoordHash(
   onJuist: () => void,
   foutTekst: string,
   regels: Record<string, AntwoordRegel> = {},
+  opOordeel?: (oordeel: Beoordeling) => void,
 ): Promise<void> {
   const input    = requireEl<HTMLInputElement>(inputId);
   const feedback = requireEl<HTMLElement>(feedbackId);
@@ -188,6 +190,7 @@ export async function controleerAntwoordHash(
   if (!normaliseerInvoer(input.value)) return;
 
   const oordeel = await beoordeelAntwoord(input.value, hashes[puzzelNr] || [], regels[puzzelNr]);
+  opOordeel?.(oordeel);
   if (oordeel === 'juist') {
     input.classList.remove('fout');
     feedback.className   = 'puzzel-feedback correct';
@@ -210,9 +213,13 @@ export function volgendHint(blokId: string): void {
   const knopMeer = blok.querySelector<HTMLElement>('.hint-verder');
   const knopOpen = blok.querySelector<HTMLElement>('.hint-knop');
 
-  for (const stap of stappen) {
+  for (const [i, stap] of [...stappen].entries()) {
     if (stap.classList.contains('verborgen')) {
       stap.classList.remove('verborgen');
+      // Laat speldata en hulpmeldingen weten welke stap geopend werd.
+      document.dispatchEvent(
+        new CustomEvent('hint-geopend', { detail: { blokId, stap: i + 1 } }),
+      );
 
       // Verberg de initiële "Hint aanvragen"-knop
       knopOpen?.classList.add('verborgen');

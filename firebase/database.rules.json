@@ -15,7 +15,7 @@
           ".validate": "newData.isNumber()"
         },
         "actief": {
-          ".write": "auth != null && newData.val() === false",
+          ".write": "auth != null && newData.val() === false && root.child('sessions').child($sessie).child('aangemaakt').exists()",
           ".validate": "newData.isBoolean()"
         },
         "ervaringsId": {
@@ -25,36 +25,36 @@
           ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 8"
         },
         "timerGestart": {
-          ".write": "auth != null && !data.exists() && newData.val() === now",
+          ".write": "auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists()",
           ".validate": "newData.isNumber()"
         },
         "geopendOp": {
-          ".write": "auth != null && !data.exists() && newData.val() === now",
+          ".write": "auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists()",
           ".validate": "newData.isNumber()"
         },
         "puzzels": {
           "$p": {
-            ".write": "auth != null && newData.isBoolean() && (newData.val() === true || !data.exists() || data.val() === false)",
+            ".write": "auth != null && newData.isBoolean() && (newData.val() === true || !data.exists() || data.val() === false) && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "$p.matches(/^p[0-5]$/) && newData.isBoolean()"
           }
         },
         "spelers": {
           "$rol": {
-            ".write": "auth != null && !data.exists() && newData.val() === 'bezet'",
+            ".write": "auth != null && !data.exists() && newData.val() === 'bezet' && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "$rol.matches(/^[a-z]{1,16}$/) && newData.isString() && newData.val().length <= 16"
           }
         },
         "rapport": {
           "ingediend": {
-            ".write": "auth != null && data.val() !== true && newData.val() === true",
+            ".write": "auth != null && data.val() !== true && newData.val() === true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.isBoolean()"
           },
           "tijdstip": {
-            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.val() === now",
+            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.isNumber()"
           },
           "inhoud": {
-            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.exists()",
+            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             "$veld": {
               ".validate": "$veld.matches(/^(bestemming|wie|vervoer|tijdstip|conclusie)$/) && newData.isString() && newData.val().length <= 4000"
             }
@@ -64,13 +64,13 @@
           }
         },
         "dua": {
-          ".write": "auth != null && !data.exists() && newData.exists()",
+          ".write": "auth != null && !data.exists() && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
           "p0zegel": {
-            ".write": "auth != null && newData.val() === true",
+            ".write": "auth != null && newData.val() === true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.isBoolean()"
           },
           "brief": {
-            ".write": "auth != null && newData.exists() && root.child('sessions').child($sessie).child('puzzels').child('p1').val() !== true",
+            ".write": "auth != null && newData.exists() && root.child('sessions').child($sessie).child('puzzels').child('p1').val() !== true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.hasChildren(['letters', 'verstuurd'])",
             "letters": {
               ".validate": "newData.isString() && newData.val().matches(/^[0-9,]{0,32}$/)"
@@ -83,19 +83,19 @@
             }
           },
           "kluisNummer": {
-            ".write": "auth != null && !data.exists() && newData.exists()",
+            ".write": "auth != null && !data.exists() && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.isString() && newData.val().matches(/^[0-9]{2}$/)"
           },
           "verstopPlek": {
-            ".write": "auth != null && root.child('sessions').child($sessie).child('puzzels').child('p4').val() !== true",
+            ".write": "auth != null && root.child('sessions').child($sessie).child('puzzels').child('p4').val() !== true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.isString() && newData.val().matches(/^(kast|bureau|schouw|boekenrek|vloerplank)$/)"
           },
           "pin1934": {
-            ".write": "auth != null && root.child('sessions').child($sessie).child('puzzels').child('p5').val() !== true",
+            ".write": "auth != null && root.child('sessions').child($sessie).child('puzzels').child('p5').val() !== true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.isString() && newData.val().matches(/^(sintbaafs|belfort|station|gravensteen|leie)$/)"
           },
           "brief14": {
-            ".write": "auth != null && newData.exists() && data.child('klaar').val() !== true",
+            ".write": "auth != null && newData.exists() && data.child('klaar').val() !== true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.hasChildren(['tekst', 'klaar'])",
             "tekst": {
               ".validate": "newData.isString() && newData.val().length <= 4000"
@@ -108,7 +108,7 @@
             }
           },
           "meta": {
-            ".write": "auth != null && newData.exists()",
+            ".write": "auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
             ".validate": "newData.hasChildren(['verdenking', 'strafMs', 'hints'])",
             "verdenking": {
               ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
@@ -125,12 +125,42 @@
           },
           "badges": {
             "$badge": {
-              ".write": "auth != null && newData.val() === true",
+              ".write": "auth != null && newData.val() === true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
               ".validate": "$badge.matches(/^[a-z0-9-]{1,32}$/) && newData.isBoolean()"
             }
           },
           "$other": {
             ".validate": false
+          }
+        },
+        "stats": {
+          "$p": {
+            ".validate": "$p.matches(/^p[0-5]$/)",
+            "start": {
+              ".write": "$p.matches(/^p[0-5]$/) && auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+              ".validate": "newData.isNumber()"
+            },
+            "opgelost": {
+              ".write": "$p.matches(/^p[0-5]$/) && auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+              ".validate": "newData.isNumber()"
+            },
+            "fout": {
+              ".write": "$p.matches(/^p[0-5]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000 && (!data.exists() || newData.val() === data.val() + 1)"
+            },
+            "bijna": {
+              ".write": "$p.matches(/^p[0-5]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000 && (!data.exists() || newData.val() === data.val() + 1)"
+            },
+            "hints": {
+              "$rol": {
+                ".write": "$p.matches(/^p[0-5]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+                ".validate": "$rol.matches(/^[a-z0-9]{1,8}$/) && newData.isNumber() && newData.val() >= 1 && newData.val() <= 10 && (!data.exists() || newData.val() >= data.val())"
+              }
+            },
+            "$other": {
+              ".validate": false
+            }
           }
         },
         "$other": {

@@ -38,7 +38,15 @@ describe('controleerAntwoordHash', () => {
     (document.getElementById('inp') as HTMLInputElement).value = 'foutantwoord';
 
     const onJuist = vi.fn();
-    await controleerAntwoordHash('p1', 'inp', 'fb', 'btn', { p1: ['abc'] }, onJuist, 'Niet correct.');
+    await controleerAntwoordHash(
+      'p1',
+      'inp',
+      'fb',
+      'btn',
+      { p1: ['abc'] },
+      onJuist,
+      'Niet correct.',
+    );
 
     expect(onJuist).not.toHaveBeenCalled();
   });
@@ -46,7 +54,15 @@ describe('controleerAntwoordHash', () => {
   it('toont foutTekst bij fout antwoord', async () => {
     (document.getElementById('inp') as HTMLInputElement).value = 'foutantwoord';
 
-    await controleerAntwoordHash('p1', 'inp', 'fb', 'btn', { p1: ['abc'] }, vi.fn(), 'Probeer opnieuw.');
+    await controleerAntwoordHash(
+      'p1',
+      'inp',
+      'fb',
+      'btn',
+      { p1: ['abc'] },
+      vi.fn(),
+      'Probeer opnieuw.',
+    );
 
     expect(document.getElementById('fb')!.textContent).toBe('Probeer opnieuw.');
   });
@@ -108,7 +124,6 @@ describe('controleerAntwoordHash', () => {
     expect((document.getElementById('btn') as HTMLButtonElement).disabled).toBe(true);
   });
 });
-
 
 // ── volgendHint ───────────────────────────────────────────────────────────────
 
@@ -189,5 +204,68 @@ describe('volgendHint', () => {
     volgendHint('blok');
 
     expect(document.querySelector('.hint-stap')!.classList.contains('verborgen')).toBe(false);
+  });
+});
+
+// ── Haakjes voor speldata en hulpmeldingen ────────────────────────────────────
+
+describe('controleerAntwoordHash: opOordeel', () => {
+  beforeEach(() => {
+    document.body.innerHTML = `<input id="inp" value="" /><div id="fb"></div><button id="btn"></button>`;
+  });
+
+  it('geeft het oordeel door, ook bij een fout antwoord', async () => {
+    (document.getElementById('inp') as HTMLInputElement).value = 'fout';
+    const opOordeel = vi.fn();
+    await controleerAntwoordHash(
+      'p1',
+      'inp',
+      'fb',
+      'btn',
+      { p1: ['abc'] },
+      vi.fn(),
+      'Fout',
+      {},
+      opOordeel,
+    );
+    expect(opOordeel).toHaveBeenCalledWith('fout');
+  });
+
+  it('roept niets aan bij een lege invoer', async () => {
+    const opOordeel = vi.fn();
+    await controleerAntwoordHash(
+      'p1',
+      'inp',
+      'fb',
+      'btn',
+      { p1: ['abc'] },
+      vi.fn(),
+      'Fout',
+      {},
+      opOordeel,
+    );
+    expect(opOordeel).not.toHaveBeenCalled();
+  });
+});
+
+describe('volgendHint: hint-geopend', () => {
+  it('meldt welke stap van welk blok geopend werd', () => {
+    document.body.innerHTML = `
+      <div id="hint-p2-b">
+        <button class="hint-knop"></button>
+        <div class="hint-stap verborgen">1</div>
+        <div class="hint-stap verborgen">2</div>
+        <button class="hint-verder verborgen"></button>
+      </div>`;
+    const gezien: unknown[] = [];
+    const luister = (e: Event) => gezien.push((e as CustomEvent).detail);
+    document.addEventListener('hint-geopend', luister);
+    volgendHint('hint-p2-b');
+    volgendHint('hint-p2-b');
+    document.removeEventListener('hint-geopend', luister);
+    expect(gezien).toEqual([
+      { blokId: 'hint-p2-b', stap: 1 },
+      { blokId: 'hint-p2-b', stap: 2 },
+    ]);
   });
 });

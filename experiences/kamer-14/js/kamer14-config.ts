@@ -155,6 +155,16 @@ export const KAMER14_ANTWOORD_REGELS: Record<string, AntwoordRegel> = {
   },
 };
 
+// ── Vrijgave (voor de speldata) ───────────────────────────
+// Welke puzzels opgelost moeten zijn voor een puzzel vrijkomt voor de groep.
+export const KAMER14_VRIJGAVE: Record<string, string[]> = {
+  p1: [],
+  p2: ['p1'],
+  p3: ['p1'],
+  p4: ['p2', 'p3'],
+  p5: ['p4'],
+};
+
 // ── Timer-waarschuwingen in de verhaalwereld van Kamer 14 ─
 export const KAMER14_TIMER_WAARSCHUWINGEN: TimerWaarschuwing[] = [
   {

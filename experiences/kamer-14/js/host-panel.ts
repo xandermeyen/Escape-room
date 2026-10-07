@@ -23,6 +23,8 @@ import {
 } from '../../../shared/js/host-sessies.ts';
 import { haalReviews, keurReviewGoed, reviewKaartHtml } from '../../../shared/js/host-reviews.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
+import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
+import type { SessieStats } from '../../../shared/js/speldata.ts';
 
 declare global {
   interface Window {
@@ -34,8 +36,16 @@ declare global {
     deactiveer: (code: string) => void;
     rollenVrij: (code: string) => void;
     keurGoed: (id: string) => void;
+    toonDetails: (code: string) => void;
   }
 }
+
+// Stijl voor de speldata-tabellen (gedeeld met het D.U.A.-paneel).
+const statsStijl = document.createElement('style');
+statsStijl.textContent = HOST_STATS_CSS;
+document.head.appendChild(statsStijl);
+
+const ROLLEN = { a: 'A', b: 'B' };
 
 koppelHostAuth(() => {
   void laadLijst();
@@ -110,6 +120,14 @@ async function laadLijst(): Promise<void> {
     const rijen = await haalSessies((d) => (d.ervaringsId ?? 'kamer-14') === 'kamer-14');
     laden.style.display = 'none';
 
+    // Gemiddelden per puzzel over alle sessies met speldata.
+    const alleStats = rijen
+      .map(({ data }) => data.stats as SessieStats | undefined)
+      .filter((st): st is SessieStats => !!st);
+    // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
+    // eslint-disable-next-line no-unsanitized/property
+    requireEl('stats-overzicht').innerHTML = gemiddeldenHtml(alleStats, PUZZELS);
+
     if (rijen.length === 0) {
       geenMsg.style.display = 'block';
       return;
@@ -159,7 +177,14 @@ async function laadLijst(): Promise<void> {
                   </button>`
                 : ''
             }
+            <button class="kopieer-knop" title="Speldata van deze sessie" aria-expanded="false"
+              aria-controls="detail-${veiligeCode}" onclick="toonDetails('${veiligeCode}')">
+              <i class="bi bi-bar-chart"></i>
+            </button>
           </td>
+        </tr>
+        <tr class="detail-rij" id="detail-${veiligeCode}" hidden>
+          <td colspan="8">${statsDetailHtml(data.stats as SessieStats | undefined, PUZZELS, ROLLEN)}</td>
         </tr>`;
       })
       .join('');
@@ -207,6 +232,15 @@ window.keurGoed = async function (id) {
     console.error('Goedkeuren mislukt:', err);
     alert('Goedkeuren mislukt: ' + foutTekst(err));
   }
+};
+
+window.toonDetails = function (code) {
+  const rij = document.getElementById(`detail-${code}`);
+  if (!rij) return;
+  rij.hidden = !rij.hidden;
+  document
+    .querySelector(`[aria-controls="detail-${CSS.escape(code)}"]`)
+    ?.setAttribute('aria-expanded', String(!rij.hidden));
 };
 
 window.verversLijst = function () {

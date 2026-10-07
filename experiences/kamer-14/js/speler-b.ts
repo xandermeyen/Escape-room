@@ -10,7 +10,15 @@ import {
   KAMER14_ANTWOORD_HASHES,
   KAMER14_ANTWOORD_REGELS,
   KAMER14_TIMER_WAARSCHUWINGEN,
+  KAMER14_VRIJGAVE,
 } from './kamer14-config.ts';
+import {
+  registreerPoging,
+  registreerOpgelost,
+  registreerVrijgaves,
+  luisterNaarHints,
+  puzzelUitHintBlok,
+} from '../../../shared/js/speldata.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment, speelEnvelopGeluid } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 
@@ -155,9 +163,15 @@ window.draaiOm = draaiOm;
     controleerAntwoordHash(
       nr, `input-${nr}`, `feedback-${nr}`, `btn-${nr}`,
       KAMER14_ANTWOORD_HASHES,
-      () => puzzelVoltooid(sessie, puzzelNr),
+      () => {
+        void puzzelVoltooid(sessie, puzzelNr);
+        void registreerOpgelost(sessie, nr);
+      },
       'Niet correct. Overleg opnieuw met Speler A.',
       KAMER14_ANTWOORD_REGELS,
+      oordeel => {
+        if (oordeel !== 'juist') void registreerPoging(sessie, nr, oordeel);
+      },
     )
   );
   document.getElementById(`input-${nr}`)?.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -171,5 +185,12 @@ const unsubscribe = luisterNaarStatus(sessie, (puzzels) => {
   const p = puzzels || {};
   updateVoortgang(p);
   updateTabs(p);
+  registreerVrijgaves(sessie, p, KAMER14_VRIJGAVE);
+});
+
+// ── Speldata: geopende hintstappen (Speler B) ──────────────
+luisterNaarHints(sessie, blokId => {
+  const puzzel = puzzelUitHintBlok(blokId);
+  return puzzel ? { puzzel, rol: 'b' } : null;
 });
 window.addEventListener('pagehide', unsubscribe);

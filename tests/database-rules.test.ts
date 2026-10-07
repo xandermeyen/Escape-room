@@ -154,6 +154,11 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       await assertSucceeds(speler().ref(`sessions/${CODE}/puzzels/p0`).set(false));
     });
 
+    it('niet in een sessie die niet bestaat', async () => {
+      await assertFails(speler().ref('sessions/BESTAAT-NIET/puzzels/p1').set(true));
+      await assertFails(speler().ref('sessions/BESTAAT-NIET/stats/p1/fout').set(1));
+    });
+
     it('alleen p0 tot p5 en alleen booleans', async () => {
       await assertFails(speler().ref(`sessions/${CODE}/puzzels/p9`).set(true));
       await assertFails(speler().ref(`sessions/${CODE}/puzzels/p2`).set('ja'));
@@ -221,6 +226,50 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
           .ref(`sessions/${CODE}/rapport`)
           .update({ ...rapport, inhoud: { iets: 'x' } }),
       );
+    });
+  });
+
+  // ── Speldata ────────────────────────────────────────────
+  describe('speldata', () => {
+    const pad = `sessions/${CODE}/stats/p1`;
+
+    it('start en opgelost: één keer, met servertijd', async () => {
+      await assertFails(speler().ref(`${pad}/start`).set(123));
+      await assertSucceeds(speler().ref(`${pad}/start`).set(SV_NU));
+      await assertFails(speler().ref(`${pad}/start`).set(SV_NU));
+      await assertSucceeds(speler().ref(`${pad}/opgelost`).set(SV_NU));
+    });
+
+    it('tellers gaan per 1 omhoog, nooit omlaag of met sprongen', async () => {
+      await assertSucceeds(
+        speler()
+          .ref(`${pad}/fout`)
+          .set({ '.sv': { increment: 1 } }),
+      );
+      await assertSucceeds(
+        speler()
+          .ref(`${pad}/fout`)
+          .set({ '.sv': { increment: 1 } }),
+      );
+      await assertFails(speler().ref(`${pad}/fout`).set(50));
+      await assertFails(speler().ref(`${pad}/fout`).set(1));
+      await assertFails(speler().ref(`${pad}/fout`).remove());
+    });
+
+    it('hintstappen per rol: alleen stijgend, maximaal 10', async () => {
+      await assertSucceeds(speler().ref(`${pad}/hints/a`).set(2));
+      await assertFails(speler().ref(`${pad}/hints/a`).set(1));
+      await assertFails(speler().ref(`${pad}/hints/b`).set(11));
+      await assertFails(speler().ref(`${pad}/hints/Rol-X`).set(1));
+    });
+
+    it('geen onbekende velden of puzzels', async () => {
+      await assertFails(speler().ref(`${pad}/naam`).set('Jan'));
+      await assertFails(speler().ref(`sessions/${CODE}/stats/p9/start`).set(SV_NU));
+    });
+
+    it('zonder login geen speldata', async () => {
+      await assertFails(anoniemLoos().ref(`${pad}/start`).set(SV_NU));
     });
   });
 

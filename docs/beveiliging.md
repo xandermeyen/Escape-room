@@ -41,6 +41,21 @@ Wat een speler mag (zie `firebase/database.rules.json`):
 - Niets verwijderen, behalve de D.U.A.-verstopplek en -pin zolang die puzzel nog
   open staat (2034 wist ze als 1934 een slechte plek koos).
 
+## Speldata
+
+Per sessie bewaart het spel in `sessions/<code>/stats/<puzzel>` hoe lang een
+puzzel duurde, hoeveel foute en bijna-juiste pogingen er waren en welke
+hintstap elke rol opende. Geen namen of e-mailadressen, enkel de sessiecode.
+
+| Veld                | Regel                                        |
+| ------------------- | -------------------------------------------- |
+| `start`, `opgelost` | één keer, alleen servertijd                  |
+| `fout`, `bijna`     | alleen +1 (ServerValue.increment), max. 1000 |
+| `hints/<rol>`       | 1 tot 10, alleen stijgend                    |
+
+Elke schrijfregel van een speler eist bovendien dat de sessie al bestaat
+(`aangemaakt` is gezet), zodat niemand losse nepsessies kan aanmaken.
+
 ## Uitrol: volgorde is belangrijk
 
 Doe dit in deze volgorde, anders kan Make.com geen sessies meer aanmaken of
