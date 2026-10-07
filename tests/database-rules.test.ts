@@ -392,6 +392,14 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       await assertSucceeds(host().ref('reviews/r1/goedgekeurd').set(true));
     });
 
+    it('een lage review mag een verbeterpunt bevatten', async () => {
+      await assertSucceeds(
+        speler()
+          .ref('reviews/r3')
+          .set({ ...review, rating: 2, verbeter: 'P3 was vaag' }),
+      );
+    });
+
     it('publiek ziet alleen goedgekeurde reviews', async () => {
       await seed('reviews/r1', review);
       await assertFails(anoniemLoos().ref('reviews').get());
@@ -399,6 +407,33 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
         anoniemLoos().ref('reviews').orderByChild('goedgekeurd').equalTo(true).get(),
       );
       await assertSucceeds(host().ref('reviews').get());
+    });
+  });
+
+  // ── Verdeling (sneller dan X%) ──────────────────────────
+  describe('verdeling', () => {
+    const verdeling = { duren: [1_200_000, 1_800_000], bijgewerkt: SV_NU };
+
+    it('iedereen mag de tijden lezen', async () => {
+      await assertSucceeds(anoniemLoos().ref('verdeling/kamer-14').get());
+    });
+
+    it('alleen een beheerder zet de tijden klaar', async () => {
+      await assertFails(speler().ref('verdeling/kamer-14').set(verdeling));
+      await assertSucceeds(host().ref('verdeling/kamer-14').set(verdeling));
+    });
+
+    it('enkel getallen, geen sessiecodes', async () => {
+      await assertFails(
+        host()
+          .ref('verdeling/kamer-14')
+          .set({ duren: { 'ABC-234': 1200000 }, bijgewerkt: SV_NU }),
+      );
+      await assertFails(
+        host()
+          .ref('verdeling/kamer-14')
+          .set({ ...verdeling, codes: 'ABC-234' }),
+      );
     });
   });
 });

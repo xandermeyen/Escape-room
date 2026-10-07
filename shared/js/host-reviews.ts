@@ -20,7 +20,7 @@ export async function haalReviews(ervaring: string): Promise<ReviewRij[]> {
   const snap = await get(ref(db, 'reviews'));
   const rijen: ReviewRij[] = [];
   if (snap.exists()) {
-    snap.forEach((kind) => {
+    snap.forEach(kind => {
       const d = kind.val() as Review | null;
       if (d && d.ervaring === ervaring) {
         rijen.push({ id: kind.key ?? '', data: d });
@@ -34,6 +34,15 @@ export async function haalReviews(ervaring: string): Promise<ReviewRij[]> {
 /** Keurt een review goed zodat ze op de website verschijnt. */
 export async function keurReviewGoed(id: string): Promise<void> {
   await update(ref(db, `reviews/${id}`), { goedgekeurd: true });
+}
+
+/** Samenvatting voor bovenaan de reviewlijst. Lage scores worden apart geteld, niet verborgen. */
+export function reviewSamenvattingHtml(rijen: ReviewRij[], lageScore = 3): string {
+  if (rijen.length === 0) return '';
+  const gem = rijen.reduce((t, r) => t + r.data.rating, 0) / rijen.length;
+  const laag = rijen.filter(r => r.data.rating <= lageScore).length;
+  const open = rijen.filter(r => !r.data.goedgekeurd).length;
+  return `<p class="review-samenvatting">Gemiddeld <strong>${gem.toFixed(1)} ★</strong> uit ${rijen.length} review${rijen.length === 1 ? '' : 's'} · ${laag} met een lage score (≤ ${lageScore}) · ${open} nog niet goedgekeurd</p>`;
 }
 
 /** Sterren als tekst (★★★★☆), geen markup nodig. */
@@ -61,7 +70,12 @@ export function reviewKaartHtml(rij: ReviewRij): string {
         <i class="bi bi-check2 me-1"></i>Goedkeuren
       </button>`;
 
-  return `<div class="review-kaart">
+  const verbeter = data.verbeter
+    ? `<p style="margin:0.5rem 0 0; color:#d8b48a; font-size:0.85rem;"><strong>Wat kan beter:</strong> ${escHtml(data.verbeter)}</p>`
+    : '';
+  const laag = data.rating <= 3 ? ' style="border-color:#8b3a3a;"' : '';
+
+  return `<div class="review-kaart"${laag}>
     <div class="d-flex justify-content-between align-items-start">
       <div>
         <div style="color:#c9a84c; letter-spacing:2px;">${sterrenTekst(data.rating)}</div>
@@ -70,5 +84,6 @@ export function reviewKaartHtml(rij: ReviewRij): string {
       ${actie}
     </div>
     <p style="margin:0.6rem 0 0; color:#ddd; font-size:0.9rem;">${escHtml(data.tekst)}</p>
+    ${verbeter}
   </div>`;
 }

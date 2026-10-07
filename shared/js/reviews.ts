@@ -4,10 +4,11 @@ import { authReady } from './auth.ts';
 
 // Een review zoals een speler ze achterlaat op het eindscherm.
 export interface ReviewInzending {
-  rating: number;        // 1 t/m 5
+  rating: number; // 1 t/m 5
   tekst: string;
-  naam?: string;         // optioneel
-  ervaring: string;      // bv. 'kamer-14' of 'dua'
+  naam?: string; // optioneel
+  verbeter?: string; // optioneel, bij een lage score; enkel voor het host-paneel
+  ervaring: string; // bv. 'kamer-14' of 'dua'
 }
 
 // Een review zoals ze uit de database komt en op de site getoond wordt.
@@ -15,6 +16,7 @@ export interface Review {
   rating: number;
   tekst: string;
   naam?: string;
+  verbeter?: string;
   ervaring: string;
   tijdstip: number;
   goedgekeurd: boolean;
@@ -38,6 +40,8 @@ export async function schrijfReview(inzending: ReviewInzending): Promise<void> {
 
   const naam = inzending.naam?.trim().slice(0, 40);
   if (naam) data.naam = naam;
+  const verbeter = inzending.verbeter?.trim().slice(0, 500);
+  if (verbeter) data.verbeter = verbeter;
 
   await push(ref(db, 'reviews'), data);
 }
@@ -49,7 +53,7 @@ export async function leesGoedgekeurdeReviews(max = 12): Promise<Review[]> {
   if (!snapshot.exists()) return [];
 
   const reviews: Review[] = [];
-  snapshot.forEach((kind) => {
+  snapshot.forEach(kind => {
     const v = kind.val() as Review;
     if (v && typeof v.tekst === 'string' && typeof v.rating === 'number') {
       reviews.push(v);

@@ -21,7 +21,13 @@ import {
   geopendHtml,
   lobbyLinkHtml,
 } from '../../../shared/js/host-sessies.ts';
-import { haalReviews, keurReviewGoed, reviewKaartHtml } from '../../../shared/js/host-reviews.ts';
+import {
+  haalReviews,
+  keurReviewGoed,
+  reviewKaartHtml,
+  reviewSamenvattingHtml,
+} from '../../../shared/js/host-reviews.ts';
+import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
@@ -128,6 +134,13 @@ async function laadLijst(): Promise<void> {
     // eslint-disable-next-line no-unsanitized/property
     requireEl('stats-overzicht').innerHTML = gemiddeldenHtml(alleStats, PUZZELS);
 
+    // Tijden van afgeronde sessies klaarzetten voor "sneller dan X%" op het
+    // eindscherm (spelers kunnen de sessielijst zelf niet lezen).
+    void werkVerdelingBij(
+      'kamer-14',
+      rijen.map(r => r.data),
+    );
+
     if (rijen.length === 0) {
       geenMsg.style.display = 'block';
       return;
@@ -214,9 +227,10 @@ async function laadReviews(): Promise<void> {
       return;
     }
 
-    // Veilig: reviewKaartHtml escaped tekst/naam zelf.
+    // Veilig: reviewKaartHtml escaped tekst/naam/verbeterpunt zelf; de
+    // samenvatting bevat enkel getallen.
     // eslint-disable-next-line no-unsanitized/property
-    lijst.innerHTML = rijen.map(reviewKaartHtml).join('');
+    lijst.innerHTML = reviewSamenvattingHtml(rijen) + rijen.map(reviewKaartHtml).join('');
     lijst.style.display = 'block';
   } catch (err) {
     console.error(err);

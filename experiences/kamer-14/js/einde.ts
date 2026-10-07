@@ -6,6 +6,7 @@ import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { speelStem } from './audio.ts';
+import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
 
 // ── Sessie ophalen (redirect + stop als die ontbreekt) ────
 const sessie = sessieUitUrl();
@@ -182,6 +183,14 @@ async function vulStats(): Promise<void> {
 
     const blok = document.getElementById('slot-stats');
     if (blok) blok.style.display = 'flex';
+
+    // "Sneller dan X% van de groepen", als er genoeg afgeronde sessies zijn.
+    const tekst = prestatieTekst(percentielSneller(duurMs, await haalDuren('kamer-14')));
+    const prestatie = document.getElementById('slot-prestatie');
+    if (tekst && prestatie) {
+      prestatie.textContent = tekst;
+      prestatie.hidden = false;
+    }
   } catch (err) {
     console.error('Eindstatistieken laden mislukt:', err);
   }

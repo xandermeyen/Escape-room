@@ -3,8 +3,39 @@
  * Verwacht in de HTML: #review-sterren met .ster-knoppen (data-waarde 1–5),
  * #review-tekst, #review-naam, #review-fout, #review-dank en
  * #btn-review-verstuur. Ontbreken die elementen, dan doet dit niets.
+ *
+ * Bij een lage score (1 tot 3 sterren) verschijnt een extra, optioneel veld
+ * "Wat kan beter?". Dat komt enkel in het host-paneel, nooit op de site. De
+ * review zelf wordt gewoon bewaard, ook als ze laag is.
  */
 import { schrijfReview } from './reviews.ts';
+
+/** Tot en met deze score vragen we wat er beter kan. */
+export const LAGE_SCORE = 3;
+
+/** Maakt het verbeterveld aan onder het reviewtekstveld (één keer). */
+function bouwVerbeterVeld(): HTMLTextAreaElement | null {
+  const bestaand = document.getElementById('review-verbeter') as HTMLTextAreaElement | null;
+  if (bestaand) return bestaand;
+  const tekstVeld = document.getElementById('review-tekst');
+  if (!tekstVeld) return null;
+  const blok = document.createElement('div');
+  blok.id = 'review-verbeter-blok';
+  blok.hidden = true;
+  const label = document.createElement('label');
+  label.htmlFor = 'review-verbeter';
+  label.className = 'review-verbeter-label';
+  label.textContent = 'Wat kan beter? Optioneel, dit lezen enkel wij.';
+  const veld = document.createElement('textarea');
+  veld.id = 'review-verbeter';
+  veld.rows = 3;
+  veld.maxLength = 500;
+  veld.className = tekstVeld.className;
+  veld.placeholder = 'Bv. een puzzel die onduidelijk was, of iets dat niet werkte';
+  blok.append(label, veld);
+  tekstVeld.insertAdjacentElement('afterend', blok);
+  return veld;
+}
 
 export function koppelReviewFormulier(ervaring: string): void {
   const reviewBtn = document.getElementById('btn-review-verstuur') as HTMLButtonElement | null;
@@ -14,16 +45,22 @@ export function koppelReviewFormulier(ervaring: string): void {
   if (!reviewBtn || sterKnoppen.length === 0) return;
 
   let reviewRating = 0;
+  const verbeterVeld = bouwVerbeterVeld();
 
   function tekenSterren(): void {
     sterKnoppen.forEach((knop, i) => {
       const actief = i < reviewRating;
       knop.textContent = actief ? '★' : '☆';
       knop.classList.toggle('actief', actief);
+      knop.setAttribute('aria-checked', String(i + 1 === reviewRating));
     });
+    const blok = document.getElementById('review-verbeter-blok');
+    if (blok) blok.hidden = !(reviewRating > 0 && reviewRating <= LAGE_SCORE);
   }
 
-  sterKnoppen.forEach((knop) => {
+  sterKnoppen.forEach(knop => {
+    knop.setAttribute('role', 'radio');
+    knop.setAttribute('aria-checked', 'false');
     knop.addEventListener('click', () => {
       reviewRating = Number(knop.dataset.waarde);
       tekenSterren();
@@ -36,6 +73,7 @@ export function koppelReviewFormulier(ervaring: string): void {
     const fout = document.getElementById('review-fout');
     const tekst = tekstVeld?.value.trim() ?? '';
     const naam = naamVeld?.value.trim() ?? '';
+    const verbeter = reviewRating <= LAGE_SCORE ? (verbeterVeld?.value.trim() ?? '') : '';
 
     if (reviewRating < 1 || tekst.length < 3) {
       if (fout) {
@@ -54,12 +92,14 @@ export function koppelReviewFormulier(ervaring: string): void {
         rating: reviewRating,
         tekst,
         naam: naam || undefined,
+        verbeter: verbeter || undefined,
         ervaring,
       });
 
-      sterKnoppen.forEach((k) => (k.disabled = true));
+      sterKnoppen.forEach(k => (k.disabled = true));
       if (tekstVeld) tekstVeld.disabled = true;
       if (naamVeld) naamVeld.disabled = true;
+      if (verbeterVeld) verbeterVeld.disabled = true;
       reviewBtn.style.display = 'none';
 
       const dank = document.getElementById('review-dank');

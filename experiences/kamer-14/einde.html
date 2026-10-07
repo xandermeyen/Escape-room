@@ -449,6 +449,20 @@
       color: var(--k-tekst-grijs);
     }
 
+    .slot-prestatie {
+      font-size: 13px;
+      color: var(--k-accent-licht);
+      letter-spacing: 0.04em;
+      margin: 4px 0 0;
+    }
+    .review-verbeter-label {
+      display: block;
+      text-align: left;
+      font-size: 11px;
+      color: var(--k-tekst-mid);
+      margin-bottom: 4px;
+    }
+
     /* ── Review achterlaten ── */
     .slot-review {
       max-width: 420px;
@@ -714,6 +728,7 @@
         <div class="slot-stat"><b id="stat-resttijd">--:--</b><span>Marge</span></div>
         <div class="slot-stat"><b>5/5</b><span>Puzzels opgelost</span></div>
       </div>
+      <p class="slot-prestatie" id="slot-prestatie" hidden></p>
 
       <button class="slot-review-btn" id="btn-deel-resultaat" style="margin-top:14px;">
         Deel jullie resultaat

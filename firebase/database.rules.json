@@ -193,6 +193,27 @@
           ".write": "auth != null && root.child('beheerders').child(auth.uid).val() === true",
           ".validate": "newData.isBoolean() && (newData.val() === false || root.child('beheerders').child(auth.uid).val() === true)"
         },
+        "verbeter": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "verdeling": {
+      "$ervaring": {
+        ".read": true,
+        ".write": "auth != null && root.child('beheerders').child(auth.uid).val() === true",
+        ".validate": "$ervaring.matches(/^[a-z0-9-]{1,24}$/) && newData.hasChild('bijgewerkt')",
+        "duren": {
+          "$i": {
+            ".validate": "$i.matches(/^[0-9]{1,5}$/) && newData.isNumber() && newData.val() > 0 && newData.val() <= 7200000"
+          }
+        },
+        "bijgewerkt": {
+          ".validate": "newData.isNumber()"
+        },
         "$other": {
           ".validate": false
         }

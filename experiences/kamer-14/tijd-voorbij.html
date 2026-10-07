@@ -101,17 +101,45 @@
 
       </div>
 
-      <!-- Eindmelding -->
+      <!-- Eindmelding: positief, met de oplossing -->
       <div class="eindmelding">
-        <p class="eindmelding-hoofd">U heeft het onderzoek niet opgelost.</p>
-        <p class="eindmelding-sub">Lena had dat zelf al gedaan.</p>
+        <p class="eindmelding-hoofd">Het dossier sluit, maar Lena is veilig.</p>
+        <p class="eindmelding-sub">Ze vond zelf wat ze zocht.</p>
       </div>
 
-      <!-- Opnieuw proberen -->
-      <div class="text-center mt-4 mb-5">
-        <a href="index.html" class="btn btn-game">
-          <i class="bi bi-arrow-counterclockwise me-2"></i>Probeer opnieuw
+      <div class="oplossing-blok" id="oplossing-blok">
+        <h2 class="oplossing-titel">Hoe alle sporen samenkwamen</h2>
+        <ol class="oplossing-lijst" id="oplossing-lijst"></ol>
+        <p class="oplossing-slot">
+          Bedankt om mee te zoeken naar Lena. Elk spoor dat jullie vonden, hoorde bij haar verhaal.
+        </p>
+      </div>
+
+      <!-- Review: na de briefkaart, ook voor groepen die niet klaar raakten -->
+      <div class="review-blok" id="slot-review">
+        <p class="review-blok-titel">Hoe was het?</p>
+        <p class="review-blok-sub">Optioneel. We lezen elke review zelf.</p>
+        <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
+          <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
+          <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
+          <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+        </div>
+        <label for="review-tekst" class="visually-hidden">Jullie review</label>
+        <textarea id="review-tekst" class="review-veld" rows="3" maxlength="500" placeholder="Wat vonden jullie van Kamer 14?"></textarea>
+        <label for="review-naam" class="visually-hidden">Naam (optioneel)</label>
+        <input id="review-naam" class="review-veld" type="text" maxlength="40" placeholder="Naam (optioneel)" />
+        <p class="review-fout" id="review-fout">Kies een aantal sterren en schrijf een korte review.</p>
+        <button class="btn btn-game" id="btn-review-verstuur">Review versturen</button>
+        <p class="review-dank" id="review-dank">Bedankt voor jullie review!</p>
+      </div>
+
+      <div class="text-center mt-4 mb-5 d-flex flex-column gap-2 align-items-center">
+        <a href="/kamer-14/#boek" class="btn btn-game">
+          <i class="bi bi-arrow-counterclockwise me-2"></i>Nog eens spelen? Boek een nieuwe sessie
         </a>
+        <a href="/" class="btn btn-terug">Terug naar de website</a>
       </div>
 
     </div>

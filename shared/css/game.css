@@ -426,6 +426,88 @@ body {
   color: var(--kleur-accent-licht);
 }
 
+/* Oplossing en review op het tijd-voorbij-scherm */
+.oplossing-blok {
+  margin: 20px 0 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--kleur-middel);
+  background: rgba(255, 255, 255, 0.03);
+}
+.oplossing-titel {
+  font-family: var(--font-archief);
+  font-size: 1rem;
+  color: var(--kleur-accent-licht);
+  margin: 0 0 10px;
+}
+.oplossing-lijst {
+  margin: 0 0 12px;
+  padding-left: 1.2rem;
+  color: var(--kleur-rand);
+  line-height: 1.7;
+}
+.oplossing-slot {
+  margin: 0;
+  color: var(--kleur-perkament);
+}
+.review-blok {
+  max-width: 440px;
+  margin: 24px auto 0;
+  text-align: center;
+}
+.review-blok-titel {
+  font-family: var(--font-archief);
+  color: var(--kleur-perkament);
+  margin-bottom: 2px;
+}
+.review-blok-sub {
+  font-size: 0.8rem;
+  color: var(--kleur-grijs);
+}
+.review-blok .review-sterren {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.review-blok .ster {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--kleur-rand);
+  cursor: pointer;
+}
+.review-blok .ster.actief {
+  color: var(--kleur-accent-licht);
+}
+.review-veld {
+  width: 100%;
+  background: var(--kleur-middel);
+  border: 1px solid var(--kleur-grijs);
+  color: var(--kleur-perkament);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+.review-verbeter-label {
+  display: block;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--kleur-rand);
+  margin-bottom: 4px;
+}
+.review-blok .review-fout {
+  display: none;
+  color: #e07a6a;
+  font-size: 0.85rem;
+}
+.review-blok .review-dank {
+  display: none;
+  color: var(--kleur-accent-licht);
+  margin-top: 8px;
+}
+
 /* ── Terugkeer-banner in de lobby ── */
 .rol-hervat {
   display: flex;
