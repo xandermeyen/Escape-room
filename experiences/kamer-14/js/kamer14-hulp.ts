@@ -33,7 +33,7 @@ export const KAMER14_INACTIEF: Record<Kamer14Rol, Record<string, Melding>> = {
     p5: {
       titel: 'Notitie An Vermeersch',
       tekst:
-        'Wanneer zat Lena nog aan tafel, en wanneer was ze weg? Speler B weet het. De dienstregeling doet de rest.',
+        'Wanneer verliet Lena het huis? Speler B weet het. Vergeet niet dat ze nog naar de halte moest wandelen.',
     },
   },
   b: {
@@ -59,7 +59,7 @@ export const KAMER14_INACTIEF: Record<Kamer14Rol, Record<string, Melding>> = {
     p5: {
       titel: 'Katrijn',
       tekst:
-        'Om zeven uur zat ze nog aan tafel. Een klein uur later was ze weg. Hoe geraak je zo snel in Diest?',
+        'Rond kwart over zeven hoorde ik de voordeur. Ik dacht dat ze ging wandelen. Speler A weet hoe ver de bushalte is.',
     },
   },
 };

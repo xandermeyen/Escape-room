@@ -123,6 +123,89 @@ describe('Kamer 14: geen markeringen in de documenten', () => {
   });
 });
 
+// ── P1 en P5: het antwoord volgt uit meerdere bronnen ─────────────────────────
+
+describe('Kamer 14: P1 vraagt om het patroon zelf te zien', () => {
+  const logboek = () =>
+    tekst('speler-b.html').split('Huishoudlogboek - bijgehouden')[1]?.split('Overleg met')[0] ?? '';
+
+  /** Rijen "Di 15 apr · ... verwacht (terug) 11u00 · teruggekeerd 14u15". */
+  const retours = () =>
+    [
+      ...logboek().matchAll(
+        /\b(Ma|Di|Wo|Do|Vr) \d+ \w+ · [^·]+ · verwacht (?:terug )?(\d+)u(\d\d) · teruggekeerd (\d+)u(\d\d)/g,
+      ),
+    ].map(m => ({
+      dag: m[1] ?? '',
+      verschil: Number(m[4]) * 60 + Number(m[5]) - (Number(m[2]) * 60 + Number(m[3])),
+    }));
+
+  it('het logboek bevat ook gewone dagen waarop Lena op tijd terug was', () => {
+    const dagen = new Set(retours().map(r => r.dag));
+    expect(dagen).toEqual(new Set(['Ma', 'Di', 'Wo', 'Do']));
+    expect(retours().filter(r => r.dag === 'Ma' || r.dag === 'Wo').length).toBeGreaterThanOrEqual(
+      4,
+    );
+  });
+
+  it('enkel de dagen met een groot verschil vormen het juiste antwoord', async () => {
+    const laat = [
+      ...new Set(
+        retours()
+          .filter(r => r.verschil > 60)
+          .map(r => r.dag),
+      ),
+    ];
+    const volledig: Record<string, string> = { Di: 'dinsdag', Do: 'donderdag' };
+    const invoer = laat.map(d => volledig[d] ?? d).join(' en ');
+    expect(
+      await beoordeelAntwoord(invoer, KAMER14_ANTWOORD_HASHES.p1 ?? [], KAMER14_ANTWOORD_REGELS.p1),
+    ).toBe('juist');
+  });
+});
+
+describe('Kamer 14: P5 volgt uit vertrek, wandeltijd en dienstregeling', () => {
+  const p5 = (invoer: string) =>
+    beoordeelAntwoord(invoer, KAMER14_ANTWOORD_HASHES.p5 ?? [], KAMER14_ANTWOORD_REGELS.p5);
+
+  const minuten = (u: string) => {
+    const [h, m] = u.split(':').map(Number);
+    return (h ?? 0) * 60 + (m ?? 0);
+  };
+
+  /** Vertrektijden Geel Markt uit Bijlage D. */
+  const bussen = () =>
+    [...lees('speler-a.html').matchAll(/<td>Geel Markt<\/td>\s*<td>(\d\d:\d\d)<\/td>/g)].map(
+      m => m[1] ?? '',
+    );
+
+  it('de bronnen staan verspreid over beide spelers', () => {
+    expect(tekst('speler-b.html')).toMatch(/Lena at mee om 07u00/);
+    expect(tekst('speler-b.html')).toMatch(/kwart over zeven hoorde ik de voordeur/);
+    expect(tekst('speler-b.html')).toContain('05:47');
+    expect(tekst('speler-a.html')).toMatch(/kwartier wandelen van de Gasthuisstraat/);
+    // Speler B ziet de dienstregeling niet
+    expect(tekst('speler-b.html')).not.toMatch(/07:35|07:20/);
+  });
+
+  it('vertrek plus wandeltijd geeft de juiste bus', async () => {
+    const aanDeHalte = minuten('07:15') + 15;
+    const bus = bussen().find(b => minuten(b) >= aanDeHalte) ?? '';
+    expect(await p5(bus)).toBe('juist');
+  });
+
+  it('zonder de wandeltijd kies je een andere bus', async () => {
+    const bus = bussen().find(b => minuten(b) >= minuten('07:15')) ?? '';
+    expect(await p5(bus)).not.toBe('juist');
+  });
+
+  it('de dagpas van 05:47 wijst naar een bus die het ontbijt uitsluit', async () => {
+    const bus = bussen().find(b => minuten(b) >= minuten('05:47')) ?? '';
+    expect(minuten(bus)).toBeLessThan(minuten('07:00'));
+    expect(await p5(bus)).not.toBe('juist');
+  });
+});
+
 // ── Gelijke vragen en consistente feiten ──────────────────────────────────────
 
 describe('Kamer 14: consistentie', () => {
