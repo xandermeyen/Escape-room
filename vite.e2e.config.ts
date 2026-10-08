@@ -17,7 +17,7 @@ export default mergeConfig(
       alias: [
         {
           find: /^firebase\/(app|auth|database|app-check)$/,
-          replacement: resolve(__dirname, 'e2e/fake-firebase/$1.ts'),
+          replacement: resolve(import.meta.dirname, 'e2e/fake-firebase/$1.ts'),
         },
       ],
     },

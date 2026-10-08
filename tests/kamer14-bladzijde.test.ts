@@ -125,15 +125,15 @@ describe('P6: hints verwijzen naar echte strookranden', () => {
 });
 
 describe('P6: in de pagina', () => {
-  let bijJuist: ReturnType<typeof vi.fn>;
-  let bijFout: ReturnType<typeof vi.fn>;
+  let bijJuist: ReturnType<typeof vi.fn<() => void>>;
+  let bijFout: ReturnType<typeof vi.fn<() => void>>;
 
   const start = (rol: 'a' | 'b') => {
     document.body.innerHTML = `
       <ol id="lijst"></ol><button id="knop">Bevestig</button><div id="feedback"></div>
       <div id="volledig" hidden></div>`;
-    bijJuist = vi.fn();
-    bijFout = vi.fn();
+    bijJuist = vi.fn<() => void>();
+    bijFout = vi.fn<() => void>();
     initBladzijde({
       rol,
       lijst: document.getElementById('lijst')!,
