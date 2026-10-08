@@ -32,24 +32,9 @@ import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
 import { KAMER14_PUZZELS } from './kamer14-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
+import { koppelActies } from '../../../shared/js/acties.ts';
 import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
-
-declare global {
-  interface Window {
-    genereerCode: () => void;
-    maakSessieAan: () => void;
-    verversLijst: () => void;
-    laadLijst: () => void;
-    kopieer: (tekst: string, knop?: HTMLElement) => void;
-    deactiveer: (code: string) => void;
-    rollenVrij: (code: string) => void;
-    keurGoed: (id: string) => void;
-    toonDetails: (code: string) => void;
-    resetDemoSessie: () => void;
-    sluitVerlopen: () => void;
-  }
-}
 
 // Stijl voor de speldata-tabellen (gedeeld met het D.U.A.-paneel).
 const statsStijl = document.createElement('style');
@@ -83,12 +68,12 @@ function nieuweCode(): string {
   return `${deel1}-${deel2}`;
 }
 
-window.genereerCode = function () {
+function genereerCode() {
   requireEl('gegenereerde-code').textContent = nieuweCode();
   requireEl<HTMLInputElement>('eigen-code').value = '';
-};
+}
 
-window.maakSessieAan = async function () {
+async function maakSessieAan() {
   const eigenCode = requireEl<HTMLInputElement>('eigen-code').value.trim().toUpperCase();
   const code = eigenCode || requireEl('gegenereerde-code').textContent || '';
   const status = requireEl('status-aanmaken');
@@ -117,7 +102,7 @@ window.maakSessieAan = async function () {
     }
 
     toonStatus(status, `✓ Sessie "${code}" aangemaakt!`, true);
-    window.genereerCode();
+    genereerCode();
     void laadLijst();
   } catch (err) {
     console.error(err);
@@ -126,7 +111,7 @@ window.maakSessieAan = async function () {
     btn.disabled = false;
     btn.innerHTML = '<i class="bi bi-check2 me-2"></i>Sessie aanmaken';
   }
-};
+}
 
 async function laadLijst(): Promise<void> {
   const laden = requireEl('laden-label');
@@ -182,7 +167,7 @@ async function laadLijst(): Promise<void> {
         return `<tr>
           <td class="code-cel">
             ${veiligeCode}${isDemoCode(code) ? ' <span class="badge-bezig">demo</span>' : ''}
-            <button class="kopieer-knop" title="Kopieer" onclick="kopieer('${veiligeCode}', this)">
+            <button class="kopieer-knop" title="Kopieer" data-actie="kopieer" data-tekst="${veiligeCode}">
               <i class="bi bi-copy"></i>
             </button>
           </td>
@@ -198,20 +183,20 @@ async function laadLijst(): Promise<void> {
           <td>
             ${
               data.actief && data.spelers
-                ? `<button class="kopieer-knop" title="Rollen vrijgeven (speler zit vast op 'rol al bezet')" onclick="rollenVrij('${veiligeCode}')" style="color:#555;">
+                ? `<button class="kopieer-knop" title="Rollen vrijgeven (speler zit vast op 'rol al bezet')" data-actie="rollen-vrij" data-code="${veiligeCode}" style="color:#555;">
                     <i class="bi bi-people"></i>
                   </button>`
                 : ''
             }
             ${
               data.actief
-                ? `<button class="kopieer-knop" title="Deactiveer sessie" onclick="deactiveer('${veiligeCode}')" style="color:#555;">
+                ? `<button class="kopieer-knop" title="Deactiveer sessie" data-actie="deactiveer" data-code="${veiligeCode}" style="color:#555;">
                     <i class="bi bi-x-circle"></i>
                   </button>`
                 : ''
             }
             <button class="kopieer-knop" title="Speldata van deze sessie" aria-expanded="false"
-              aria-controls="detail-${veiligeCode}" onclick="toonDetails('${veiligeCode}')">
+              aria-controls="detail-${veiligeCode}" data-actie="toon-details" data-code="${veiligeCode}">
               <i class="bi bi-bar-chart"></i>
             </button>
           </td>
@@ -258,7 +243,7 @@ async function laadReviews(): Promise<void> {
   }
 }
 
-window.keurGoed = async function (id) {
+async function keurGoed(id: string) {
   try {
     await keurReviewGoed(id);
     void laadReviews();
@@ -266,9 +251,9 @@ window.keurGoed = async function (id) {
     console.error('Goedkeuren mislukt:', err);
     alert('Goedkeuren mislukt: ' + foutTekst(err));
   }
-};
+}
 
-window.resetDemoSessie = async function () {
+async function resetDemoSessie() {
   const code = DEMO_CODES['kamer-14'];
   const status = requireEl('status-demo');
   const knop = requireEl<HTMLButtonElement>('btn-demo-reset');
@@ -285,26 +270,22 @@ window.resetDemoSessie = async function () {
   } finally {
     knop.disabled = false;
   }
-};
+}
 
-window.toonDetails = function (code) {
+function toonDetails(code: string) {
   const rij = document.getElementById(`detail-${code}`);
   if (!rij) return;
   rij.hidden = !rij.hidden;
   document
     .querySelector(`[aria-controls="detail-${CSS.escape(code)}"]`)
     ?.setAttribute('aria-expanded', String(!rij.hidden));
-};
+}
 
-window.verversLijst = function () {
-  void laadLijst();
-};
-
-window.kopieer = function (tekst, knop) {
+function kopieer(tekst: string, knop?: HTMLElement) {
   void kopieerNaarKlembord(tekst, knop);
-};
+}
 
-window.deactiveer = async function (code) {
+async function deactiveer(code: string) {
   if (
     !confirm(
       `Sessie ${code} deactiveren? Spelers die bezig zijn worden naar het tijdvoorbij-scherm gestuurd.`,
@@ -317,13 +298,13 @@ window.deactiveer = async function (code) {
   } catch (err) {
     console.error('Deactiveer mislukt:', err);
   }
-};
+}
 
-window.sluitVerlopen = function () {
+function sluitVerlopen() {
   void verlopen.sluit();
-};
+}
 
-window.rollenVrij = async function (code) {
+async function rollenVrij(code: string) {
   if (
     !confirm(
       `Rollen van sessie ${code} vrijgeven? Gebruik dit als een speler op een ander toestel verder wil en "rol al bezet" ziet. Spelers die al in het spel zitten, blijven gewoon spelen.`,
@@ -337,13 +318,23 @@ window.rollenVrij = async function (code) {
     console.error('Rollen vrijgeven mislukt:', err);
     alert('Rollen vrijgeven mislukt: ' + foutTekst(err));
   }
-};
+}
 
-window.laadLijst = function () {
-  void laadLijst();
-};
+// ── Knoppen (data-actie in de HTML en in de gegenereerde rijen) ──
+koppelActies({
+  'ververs-lijst': () => void laadLijst(),
+  'genereer-code': () => genereerCode(),
+  'maak-sessie': () => void maakSessieAan(),
+  'keur-goed': el => void keurGoed(el.dataset['id'] ?? ''),
+  'reset-demo': () => void resetDemoSessie(),
+  'toon-details': el => toonDetails(el.dataset['code'] ?? ''),
+  kopieer: el => kopieer(el.dataset['tekst'] ?? '', el),
+  deactiveer: el => void deactiveer(el.dataset['code'] ?? ''),
+  'sluit-verlopen': () => sluitVerlopen(),
+  'rollen-vrij': el => void rollenVrij(el.dataset['code'] ?? ''),
+});
 
 // Init
-window.genereerCode();
+genereerCode();
 // laadLijst() loopt pas via de onIngelogd-callback hierboven, zodra er
 // echt een ingelogde host is (zie koppelHostAuth-aanroep).

@@ -101,7 +101,8 @@
           <button
             class="btn btn-game btn-lg"
             id="btn-naar-briefing"
-            onclick="toonScherm('scherm-briefing')"
+            data-actie="scherm"
+            data-doel="scherm-briefing"
           >
             <i class="bi bi-play-fill me-2"></i>Begin
           </button>
@@ -198,13 +199,13 @@
         </div>
 
         <div class="text-center mt-4">
-          <button class="btn btn-game btn-lg" onclick="valideerCode()">
+          <button class="btn btn-game btn-lg" data-actie="valideer-code">
             <i class="bi bi-arrow-right me-2"></i>Verder
           </button>
         </div>
 
         <div class="text-center mt-3">
-          <button class="btn btn-terug" onclick="toonScherm('scherm-briefing')">
+          <button class="btn btn-terug" data-actie="scherm" data-doel="scherm-briefing">
             <i class="bi bi-arrow-left me-1"></i>Terug
           </button>
         </div>
@@ -241,7 +242,7 @@
         <div class="row g-3">
           <!-- Speler A -->
           <div class="col-md-6">
-            <div id="rol-kaart-a" class="rol-kaart" onclick="kiesRol('a')">
+            <div id="rol-kaart-a" class="rol-kaart" data-actie="kies-rol" data-rol="a">
               <div class="rol-label">Speler A</div>
               <h4 class="rol-titel">OPZ-dossier</h4>
               <p class="rol-beschrijving">
@@ -257,7 +258,7 @@
 
           <!-- Speler B -->
           <div class="col-md-6">
-            <div id="rol-kaart-b" class="rol-kaart" onclick="kiesRol('b')">
+            <div id="rol-kaart-b" class="rol-kaart" data-actie="kies-rol" data-rol="b">
               <div class="rol-label">Speler B</div>
               <h4 class="rol-titel">Buurtdossier</h4>
               <p class="rol-beschrijving">

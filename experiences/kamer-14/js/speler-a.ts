@@ -4,7 +4,7 @@ import {
   puzzelVoltooid,
   bewaakSessieGesloten,
 } from '../../../shared/js/session.ts';
-import { controleerAntwoordHash, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { controleerAntwoordHash, koppelHints, sessieUitUrl } from '../../../shared/js/utils.ts';
 import {
   updateVoortgang,
   markeerVoltooid,
@@ -240,6 +240,9 @@ if (strokenLijst && btnP6 && feedbackP6) {
     },
   });
 }
+
+// ── Hintknoppen (data-actie="hint") ──────────────────────
+koppelHints();
 
 // ── Toetsenbord: tabs en klikbare documenten ──────────────
 maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));

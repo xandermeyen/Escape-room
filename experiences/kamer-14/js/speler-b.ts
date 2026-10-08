@@ -4,7 +4,8 @@ import {
   puzzelVoltooid,
   bewaakSessieGesloten,
 } from '../../../shared/js/session.ts';
-import { controleerAntwoordHash, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { controleerAntwoordHash, koppelHints, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { koppelActies } from '../../../shared/js/acties.ts';
 import {
   updateVoortgang,
   markeerVoltooid,
@@ -210,13 +211,8 @@ function draaiOm(): void {
   kaart.classList.toggle('omgedraaid');
 }
 
-declare global {
-  interface Window {
-    draaiOm: typeof draaiOm;
-  }
-}
-
-window.draaiOm = draaiOm;
+koppelActies({ 'draai-om': () => draaiOm() });
+koppelHints();
 
 // Tekstpuzzels: antwoord invullen en controleren (P6 heeft een eigen aanpak, zie bladzijde.ts)
 KAMER14_TEKST_PUZZELS.forEach(nr => {

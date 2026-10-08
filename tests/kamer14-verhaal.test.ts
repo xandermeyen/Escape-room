@@ -36,7 +36,9 @@ describe('Kamer 14: briefing van An Vermeersch', () => {
     expect(intro).toBeLessThan(brief);
     expect(brief).toBeLessThan(code);
     // de Begin-knop van het intro opent de briefing, de briefing start de lobbyflow
-    expect(lobby).toMatch(/id="btn-naar-briefing"\s+onclick="toonScherm\('scherm-briefing'\)"/);
+    expect(lobby).toMatch(
+      /id="btn-naar-briefing"\s+data-actie="scherm"\s+data-doel="scherm-briefing"/,
+    );
     expect(lobby.split('id="scherm-briefing"')[1]).toContain('id="btn-begin"');
   });
 

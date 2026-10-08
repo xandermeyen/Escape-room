@@ -5,7 +5,7 @@
  */
 import '../../../shared/js/sentry.ts';
 import { luisterNaarStatus, bewaakSessieGesloten } from '../../../shared/js/session.ts';
-import { requireEl, beoordeelAntwoord } from '../../../shared/js/utils.ts';
+import { requireEl, beoordeelAntwoord, koppelHints } from '../../../shared/js/utils.ts';
 import {
   registreerPoging,
   registreerVrijgaves,
@@ -79,12 +79,7 @@ luisterNaarHints(sessie, blokId => {
 });
 
 // ── Hints globaal voor onclick ──
-declare global {
-  interface Window {
-    duaHintKlik: (blokId: string) => void;
-  }
-}
-window.duaHintKlik = (blokId: string) => duaHint(sessie, blokId);
+koppelHints(blokId => duaHint(sessie, blokId));
 
 // ═══════════════════ P0: HET ZEGEL ═══════════════════
 document.getElementById('zegelknop')?.addEventListener('click', async () => {

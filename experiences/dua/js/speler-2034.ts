@@ -16,6 +16,7 @@ import {
   escHtml,
   beoordeelAntwoord,
   type Beoordeling,
+  koppelHints,
 } from '../../../shared/js/utils.ts';
 import {
   registreerPoging,
@@ -112,12 +113,7 @@ luisterNaarHints(sessie, blokId => {
 let dua: DuaState = {};
 let puzzels: PuzzelStatus = {};
 
-declare global {
-  interface Window {
-    duaHintKlik: (blokId: string) => void;
-  }
-}
-window.duaHintKlik = (blokId: string) => duaHint(sessie, blokId);
+koppelHints(blokId => duaHint(sessie, blokId));
 
 // ═══════════════════ P0: HET ZEGEL ═══════════════════
 function tekenZegel(): void {

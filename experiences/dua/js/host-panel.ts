@@ -32,19 +32,7 @@ import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
 import { DUA_PUZZELS } from './dua-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
-
-declare global {
-  interface Window {
-    maakSessieAan: () => void;
-    laadLijst: () => void;
-    kopieer: (tekst: string, knop?: HTMLElement) => void;
-    deactiveer: (code: string) => void;
-    keurGoed: (id: string) => void;
-    toonDetails: (code: string) => void;
-    resetDemoSessie: () => void;
-    sluitVerlopen: () => void;
-  }
-}
+import { koppelActies } from '../../../shared/js/acties.ts';
 
 // Knop "Verlopen sessies sluiten (n)" (zie shared/js/host-verlopen.ts).
 const verlopen = maakVerlopenKnop(() => void laadLijst());
@@ -94,7 +82,7 @@ async function verversCode(): Promise<void> {
 }
 
 // ── Sessie aanmaken ──
-window.maakSessieAan = async function () {
+async function maakSessieAan() {
   const code = requireEl('volgende-code').dataset.code;
   const status = requireEl('status-aanmaken');
   const btn = requireEl<HTMLButtonElement>('btn-aanmaken');
@@ -129,7 +117,7 @@ window.maakSessieAan = async function () {
     btn.disabled = false;
     btn.innerHTML = '<i class="bi bi-database-add me-2"></i>Sessie aanmaken';
   }
-};
+}
 
 // ── Sessie-overzicht laden ──
 async function laadLijst(): Promise<void> {
@@ -180,7 +168,7 @@ async function laadLijst(): Promise<void> {
         return `<tr>
           <td class="code-cel">
             ${veiligeCode}${isDemoCode(code) ? ' <span class="badge-bezig">demo</span>' : ''}
-            <button class="kopieer-knop" title="Kopieer code" onclick="kopieer('${veiligeCode}', this)">
+            <button class="kopieer-knop" title="Kopieer code" data-actie="kopieer" data-tekst="${veiligeCode}">
               <i class="bi bi-copy"></i>
             </button>
           </td>
@@ -195,13 +183,13 @@ async function laadLijst(): Promise<void> {
           <td>
             ${
               data.actief
-                ? `<button class="kopieer-knop" title="Deactiveer sessie" onclick="deactiveer('${veiligeCode}')" style="color:#666;">
+                ? `<button class="kopieer-knop" title="Deactiveer sessie" data-actie="deactiveer" data-code="${veiligeCode}" style="color:#666;">
                   <i class="bi bi-stop-circle"></i>
                 </button>`
                 : ''
             }
             <button class="kopieer-knop" title="Speldata van deze sessie" aria-expanded="false"
-              aria-controls="detail-${veiligeCode}" onclick="toonDetails('${veiligeCode}')">
+              aria-controls="detail-${veiligeCode}" data-actie="toon-details" data-code="${veiligeCode}">
               <i class="bi bi-bar-chart"></i>
             </button>
           </td>
@@ -249,7 +237,7 @@ async function laadReviews(): Promise<void> {
   }
 }
 
-window.keurGoed = async function (id) {
+async function keurGoed(id: string) {
   try {
     await keurReviewGoed(id);
     void laadReviews();
@@ -257,9 +245,9 @@ window.keurGoed = async function (id) {
     console.error('Goedkeuren mislukt:', err);
     alert('Goedkeuren mislukt: ' + foutTekst(err));
   }
-};
+}
 
-window.resetDemoSessie = async function () {
+async function resetDemoSessie() {
   const code = DEMO_CODES['dua'];
   const status = requireEl('status-demo');
   const knop = requireEl<HTMLButtonElement>('btn-demo-reset');
@@ -280,19 +268,19 @@ window.resetDemoSessie = async function () {
   } finally {
     knop.disabled = false;
   }
-};
+}
 
-window.toonDetails = function (code) {
+function toonDetails(code: string) {
   const rij = document.getElementById(`detail-${code}`);
   if (!rij) return;
   rij.hidden = !rij.hidden;
   document
     .querySelector(`[aria-controls="detail-${CSS.escape(code)}"]`)
     ?.setAttribute('aria-expanded', String(!rij.hidden));
-};
+}
 
 // ── Deactiveer ──
-window.deactiveer = async function (code) {
+async function deactiveer(code: string) {
   if (
     !confirm(
       `Sessie ${code} deactiveren? Spelers die bezig zijn worden naar het tijdvoorbij-scherm gestuurd.`,
@@ -305,21 +293,29 @@ window.deactiveer = async function (code) {
   } catch (err) {
     console.error('Deactiveer mislukt:', err);
   }
-};
+}
 
-window.sluitVerlopen = function () {
+function sluitVerlopen() {
   void verlopen.sluit();
-};
+}
 
 // ── Kopieer naar klembord ──
-window.kopieer = function (tekst, knop) {
+function kopieer(tekst: string, knop?: HTMLElement) {
   void kopieerNaarKlembord(tekst, knop);
-};
-
-window.laadLijst = function () {
-  void laadLijst();
-};
+}
 
 // ── Init ──
 // verversCode()/laadLijst() lopen pas via de onIngelogd-callback hierboven,
 // zodra er echt een ingelogde host is (zie koppelHostAuth-aanroep).
+
+// ── Knoppen (data-actie in de HTML en in de gegenereerde rijen) ──
+koppelActies({
+  'ververs-lijst': () => void laadLijst(),
+  'maak-sessie': () => void maakSessieAan(),
+  'keur-goed': el => void keurGoed(el.dataset['id'] ?? ''),
+  'reset-demo': () => void resetDemoSessie(),
+  'toon-details': el => toonDetails(el.dataset['code'] ?? ''),
+  deactiveer: el => void deactiveer(el.dataset['code'] ?? ''),
+  'sluit-verlopen': () => sluitVerlopen(),
+  kopieer: el => kopieer(el.dataset['tekst'] ?? '', el),
+});

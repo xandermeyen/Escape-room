@@ -135,7 +135,7 @@ export function lobbyLinkHtml(lobbyPad: string, code: string): string {
   const veiligeUrl = escHtml(url);
   return `
     <input class="link-input" readonly value="${veiligeUrl}" />
-    <button class="kopieer-knop" title="Kopieer lobby-link" onclick="kopieer('${veiligeUrl}', this)">
+    <button class="kopieer-knop" title="Kopieer lobby-link" data-actie="kopieer" data-tekst="${veiligeUrl}">
       <i class="bi bi-clipboard"></i>
     </button>
     <a href="${veiligeUrl}" target="_blank" rel="noopener noreferrer" class="kopieer-knop" title="Open lobby">

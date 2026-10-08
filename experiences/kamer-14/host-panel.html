@@ -363,7 +363,7 @@
         <br /><br />
         <button
           id="login-knop"
-          onclick="login()"
+          data-actie="login"
           style="
             background: #8b3a3a;
             color: #fff;
@@ -408,7 +408,7 @@
           >
             <i class="bi bi-house me-1"></i>Home
           </a>
-          <button onclick="window.uitloggen()" class="btn-sec" style="font-size: 0.8rem">
+          <button data-actie="uitloggen" class="btn-sec" style="font-size: 0.8rem">
             <i class="bi bi-box-arrow-right me-1"></i>Uitloggen
           </button>
         </div>
@@ -421,7 +421,7 @@
 
           <div class="mb-3">
             <div class="code-gegenereerd" id="gegenereerde-code">- - -</div>
-            <button class="btn-sec ms-2" onclick="genereerCode()">
+            <button class="btn-sec ms-2" data-actie="genereer-code">
               <i class="bi bi-arrow-clockwise me-1"></i>Andere code
             </button>
           </div>
@@ -437,7 +437,7 @@
             />
           </div>
 
-          <button class="btn-admin mt-2" id="btn-aanmaken" onclick="maakSessieAan()">
+          <button class="btn-admin mt-2" id="btn-aanmaken" data-actie="maak-sessie">
             <i class="bi bi-check2 me-2"></i>Sessie aanmaken
           </button>
 
@@ -454,7 +454,7 @@
             de statistieken of de reviews. Op de spelerpagina's wissel je met één klik van rol.
           </p>
           <div class="d-flex flex-wrap gap-2 align-items-center">
-            <button class="btn-admin" id="btn-demo-reset" onclick="resetDemoSessie()">
+            <button class="btn-admin" id="btn-demo-reset" data-actie="reset-demo">
               <i class="bi bi-arrow-counterclockwise me-2"></i>Demo resetten
             </button>
             <a
@@ -500,7 +500,7 @@
             <button
               class="btn-sec"
               style="font-size: 0.8rem; padding: 3px 10px"
-              onclick="verversLijst()"
+              data-actie="ververs-lijst"
             >
               <i class="bi bi-arrow-clockwise me-1"></i>Verversen
             </button>
@@ -509,7 +509,7 @@
           <button
             class="btn-sec mb-3"
             id="btn-sluit-verlopen"
-            onclick="sluitVerlopen()"
+            data-actie="sluit-verlopen"
             title="Sessies die meer dan 24 uur geleden geopend werden en geen rapport hebben, op inactief zetten"
             hidden
           >

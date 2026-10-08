@@ -6,6 +6,7 @@
  */
 import { isDemoCode } from './demo.ts';
 import { toonRecaptchaMeldingen } from './app-check-status.ts';
+import { koppelActies } from './acties.ts';
 import { maakKlikbaar } from './toegankelijk.ts';
 import {
   zoekSessieCode,
@@ -66,14 +67,6 @@ export interface LobbyConfig {
    * blokkeren, of null om door te laten. `spelers` is de live rolstatus.
    */
   magClaimen?: (rol: string, spelers: Record<string, string>) => string | null;
-}
-
-declare global {
-  interface Window {
-    valideerCode: () => void;
-    toonScherm: (id: string) => void;
-    kiesRol: (rol: string) => void;
-  }
 }
 
 const ROL_OPSLAG_PREFIX = 'bureaux-rol-';
@@ -283,16 +276,14 @@ export function initLobby(config: LobbyConfig): void {
     }
   }
 
-  // ── Globals voor onclick-attributen in de HTML ──
-  window.valideerCode = () => {
-    void valideerCode();
-  };
-  window.toonScherm = toonScherm;
-  window.kiesRol = (rol: string) => {
-    void kiesRol(rol);
-  };
+  // ── Knoppen: data-actie in de HTML (zie acties.ts) ──
+  koppelActies({
+    'valideer-code': () => void valideerCode(),
+    scherm: el => toonScherm(el.dataset['doel'] ?? ''),
+    'kies-rol': el => void kiesRol(el.dataset['rol'] ?? ''),
+  });
 
-  // Rolkaarten zijn divs met onclick: ook bedienbaar met het toetsenbord.
+  // Rolkaarten zijn divs met data-actie: ook bedienbaar met het toetsenbord.
   document.querySelectorAll<HTMLElement>('.rol-kaart').forEach(kaart => maakKlikbaar(kaart));
 
   koppelCodeInvoer(() => void valideerCode());

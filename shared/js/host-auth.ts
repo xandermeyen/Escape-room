@@ -21,13 +21,7 @@ import {
 } from 'firebase/auth';
 import { ref, get } from 'firebase/database';
 import { requireEl } from './utils.ts';
-
-declare global {
-  interface Window {
-    login: () => void;
-    uitloggen: () => void;
-  }
-}
+import { koppelActies } from './acties.ts';
 
 const FOUT_LOGIN = 'Ongeldig e-mailadres of wachtwoord.';
 const FOUT_GEEN_BEHEERDER = 'Dit account heeft geen beheerdersrechten.';
@@ -100,10 +94,8 @@ export function koppelHostAuth(onIngelogd?: () => void): void {
     }
   }
 
-  window.login = () => {
-    void login();
-  };
-  window.uitloggen = () => {
-    void signOut(auth);
-  };
+  koppelActies({
+    login: () => void login(),
+    uitloggen: () => void signOut(auth),
+  });
 }

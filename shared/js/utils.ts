@@ -1,3 +1,5 @@
+import { koppelActies, hintBlokVan } from './acties.ts';
+
 /**
  * requireEl: haalt een element op via id en gooit een duidelijke fout als het
  * niet bestaat. Vervangt de `getElementById(...)!`-patronen die met strict mode
@@ -232,11 +234,12 @@ export function volgendHint(blokId: string): void {
   }
 }
 
-// Globaal beschikbaar voor onclick-attributen in HTML
-declare global {
-  interface Window {
-    volgendHint: typeof volgendHint;
-  }
+/** Koppelt alle hintknoppen (data-actie="hint") op de pagina aan een hint-functie. */
+export function koppelHints(opHint: (blokId: string) => void = volgendHint): void {
+  koppelActies({
+    hint: el => {
+      const blokId = hintBlokVan(el);
+      if (blokId) opHint(blokId);
+    },
+  });
 }
-
-window.volgendHint = volgendHint;

@@ -66,7 +66,7 @@ export function reviewKaartHtml(rij: ReviewRij): string {
 
   const actie = data.goedgekeurd
     ? '<span class="badge-klaar"><i class="bi bi-check2 me-1"></i>Goedgekeurd</span>'
-    : `<button class="btn-admin" style="font-size:0.8rem; padding:0.35rem 0.9rem;" onclick="keurGoed('${veiligId}')">
+    : `<button class="btn-admin" style="font-size:0.8rem; padding:0.35rem 0.9rem;" data-actie="keur-goed" data-id="${veiligId}">
         <i class="bi bi-check2 me-1"></i>Goedkeuren
       </button>`;
 
