@@ -213,6 +213,7 @@
       <div class="tab actief" data-tab="logboek">Huishoudlogboek</div>
       <div class="tab" data-tab="kas">Kas &amp; Bonnen</div>
       <div class="tab slot" data-tab="kamer" id="tab-kamer">🔒 Kamerinspectie</div>
+      <div class="tab" data-tab="berichten" id="tab-berichten" hidden>Berichten</div>
     </div>
 
     <!-- Tab content -->
@@ -1125,6 +1126,11 @@
         </div>
       </div>
       <!-- /panel-kamer -->
+      <!-- Berichten: tekst van de verhaalfragmenten (zie js/berichten.ts) -->
+      <div class="tab-panel" id="panel-berichten">
+        <div class="doc-label">Berichten bij de opgeloste vragen</div>
+        <div id="berichten-lijst"></div>
+      </div>
     </div>
     <!-- /content-wrapper -->
 

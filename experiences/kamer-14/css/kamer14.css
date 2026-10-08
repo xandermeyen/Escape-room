@@ -742,6 +742,10 @@ html body {
   flex-wrap: wrap;
   gap: 4px 22px;
 }
+.rapport-doel li {
+  display: flex;
+  align-items: baseline;
+}
 .rapport-doel li::before {
   content: '☐';
   display: inline-block;
@@ -762,6 +766,59 @@ html body {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* ── Geluid: melding bij de start en ondertitel ── */
+.geluidsmelding {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 10px 24px;
+  padding: 10px 14px;
+  border: 1px solid var(--k-rand-mid, var(--k-rand));
+  border-left: 3px solid var(--k-accent-licht);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--k-tekst);
+}
+.geluidsmelding p {
+  flex: 1 1 260px;
+  margin: 0;
+}
+.geluidsmelding button {
+  min-height: 36px;
+  padding: 4px 14px;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  color: var(--k-tekst-mid);
+  border: 1px solid var(--k-rand-mid, var(--k-rand));
+}
+.geluidsmelding .geluid-aan {
+  color: var(--k-tekst);
+  border-color: var(--k-accent-licht);
+}
+.ondertitel {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(620px, calc(100vw - 32px));
+  z-index: 160;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.88);
+  border: 1px solid var(--k-rand);
+  color: #f2ead8;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.berichten-leeg {
+  color: var(--k-tekst-mid);
+  font-size: 13px;
 }
 
 /* ── Gsm (390 px): niets breder dan het scherm ── */
@@ -788,6 +845,12 @@ html body {
   }
   .rapport-doel {
     margin: 0 16px;
+  }
+  .geluidsmelding {
+    margin: 10px 16px;
+  }
+  .geluidsmelding button {
+    min-height: 44px;
   }
   .rapport-doel summary {
     min-height: 44px;

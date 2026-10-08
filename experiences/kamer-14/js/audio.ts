@@ -33,6 +33,13 @@ function getCtx(): AudioContext {
   return _ctx;
 }
 
+/** Zet een geblokkeerde AudioContext weer aan (enkel zinvol binnen een klik). */
+export function hervatAudio(): void {
+  void getCtx()
+    .resume()
+    .catch(() => {});
+}
+
 // ── Geluidseffecten ───────────────────────────────────────
 
 function speelTonen(tonen: [number, number, number][], volume = 0.2): void {
@@ -232,10 +239,15 @@ export function stopAchtergrond(): void {
  * Pad: audio/<karakter>/<fragment>.mp3 (relatief aan de HTML-pagina)
  * Faalt stil als het bestand ontbreekt.
  */
-export function speelStem(karakter: string, fragment: string): HTMLAudioElement {
+export function speelStem(
+  karakter: string,
+  fragment: string,
+  bijFout?: () => void,
+): HTMLAudioElement {
   const audio = new Audio(`audio/${karakter}/${fragment}.mp3`);
   audio.volume = 0.88;
-  audio.play().catch(() => {});
+  // Geblokkeerd door de browser (geen klik gehad) of bestand ontbreekt.
+  audio.play().catch(() => bijFout?.());
   return audio;
 }
 
@@ -279,10 +291,10 @@ export function speelEnvelopGeluid(): void {
  * Om een fragment toe te voegen: neem het op, zet het in de juiste map,
  * en vervang null door de bestandsnaam (zonder .mp3).
  *
- * Scripts staan in: Kamer_story/naratie_scripts.md
+ * De tekst van elk fragment staat in berichten.ts (tab Berichten en ondertitel).
  */
-type SpelerType = 'a' | 'b';
-type PuzzelNr = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
+export type SpelerType = 'a' | 'b';
+export type PuzzelNr = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
 
 // Per puzzel een vast verhaalfragment, ingesproken door het
 // personage van de eigen kant (A: An Vermeersch, B: Katrijn).
@@ -308,18 +320,97 @@ const KARAKTER: Record<SpelerType, string> = {
   b: 'katrijn',
 };
 
+// ── Volgorde A en B ───────────────────────────────────────
+// Zitten A en B in dezelfde kamer, dan mogen hun fragmenten niet door elkaar
+// spelen. A spreekt eerst; B wacht tot het fragment van A gedaan is.
+
+/** Wachttijd na het unlock-geluid, zodat dat eerst klinkt. */
+export const WACHT_NA_UNLOCK_MS = 1800;
+/** Stilte tussen het fragment van A en dat van B. */
+export const PAUZE_TUSSEN_MS = 1500;
+
+/**
+ * Lengte van de fragmenten van An Vermeersch in seconden, gemeten op de
+ * mp3-bestanden. Enkel reserve: de echte lengte wordt bij het afspelen uit
+ * het bestand gelezen. Neem je een fragment opnieuw op, pas dit dan aan.
+ */
+export const DUUR_A_SEC: Record<PuzzelNr, number> = {
+  p1: 25.4,
+  p2: 29.0,
+  p3: 32.8,
+  p4: 34.0,
+  p5: 33.9,
+};
+
+/** Hoe lang een speler wacht voor zijn fragment start (ms). */
+export function wachttijdFragment(
+  spelerType: SpelerType,
+  puzzelNr: PuzzelNr,
+  duurASec: number = DUUR_A_SEC[puzzelNr],
+): number {
+  if (spelerType === 'a') return WACHT_NA_UNLOCK_MS;
+  return WACHT_NA_UNLOCK_MS + Math.round(duurASec * 1000) + PAUZE_TUSSEN_MS;
+}
+
+/** Leest de lengte van het fragment van A uit het bestand, met reserve. */
+function duurVanA(puzzelNr: PuzzelNr): Promise<number> {
+  const reserve = DUUR_A_SEC[puzzelNr];
+  return new Promise(klaar => {
+    const audio = new Audio();
+    audio.preload = 'metadata';
+    const timer = setTimeout(() => klaar(reserve), 3000);
+    audio.addEventListener(
+      'loadedmetadata',
+      () => {
+        clearTimeout(timer);
+        klaar(Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : reserve);
+      },
+      { once: true },
+    );
+    audio.addEventListener(
+      'error',
+      () => {
+        clearTimeout(timer);
+        klaar(reserve);
+      },
+      { once: true },
+    );
+    audio.src = `audio/${KARAKTER.a}/${VERHAAL_FRAGMENTEN.a[puzzelNr]}.mp3`;
+  });
+}
+
+export interface FragmentOpties {
+  /** Het fragment begint: bv. ondertitel tonen. */
+  bijStart?: (audio: HTMLAudioElement) => void;
+  /** Afspelen geblokkeerd of mislukt: bv. de geluidsmelding tonen. */
+  bijFout?: () => void;
+}
+
 /**
  * Speelt het verhaalfragment dat bij de opgegeven puzzel hoort.
- * Wacht 1.8 s zodat het unlock-geluid eerst klinkt.
- * Doet niets als er voor die puzzel nog geen opname is.
+ * Speler A start na het unlock-geluid, speler B pas als A klaar is.
  *
  * @param spelerType - 'a' of 'b'
  * @param puzzelNr   - 'p1' t/m 'p5'
  */
-export function speelVerhaalFragment(spelerType: SpelerType, puzzelNr: PuzzelNr): void {
+export function speelVerhaalFragment(
+  spelerType: SpelerType,
+  puzzelNr: PuzzelNr,
+  opties: FragmentOpties = {},
+): void {
   const fragment = VERHAAL_FRAGMENTEN[spelerType]?.[puzzelNr];
   const karakter = KARAKTER[spelerType];
   if (!fragment || !karakter) return;
 
-  setTimeout(() => speelStem(karakter, fragment), 1800);
+  const speel = (wacht: number) =>
+    setTimeout(() => {
+      const audio = speelStem(karakter, fragment, opties.bijFout);
+      opties.bijStart?.(audio);
+    }, wacht);
+
+  if (spelerType === 'a') {
+    speel(wachttijdFragment('a', puzzelNr));
+  } else {
+    void duurVanA(puzzelNr).then(duur => speel(wachttijdFragment('b', puzzelNr, duur)));
+  }
 }

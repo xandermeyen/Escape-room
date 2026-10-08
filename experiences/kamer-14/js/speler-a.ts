@@ -27,9 +27,10 @@ import { initHulp } from '../../../shared/js/hulp.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { maakTabsToegankelijk } from '../../../shared/js/toegankelijk.ts';
 import { KAMER14_INACTIEF, KAMER14_HULP_HTML, kamer14VrijgaveMelding } from './kamer14-hulp.ts';
-import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.ts';
+import { startAchtergrond, speelUnlock, speelVerhaalFragment, hervatAudio } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 import { initRapportDoel, updateRapportDoel } from './rapport-doel.ts';
+import { heeftBerichten, toonBerichten, toonOndertitel, toonGeluidsmelding } from './berichten.ts';
 
 let _audioGestart: boolean = false;
 
@@ -42,9 +43,16 @@ const _paginaLaadtijd: number = Date.now();
 const WACHT_NA_LADEN: number = 4000; // ms — Firebase-initiële snapshot duurt doorgaans < 2 s
 
 function zorgVoorAudio(): void {
+  hervatAudio();
   if (_audioGestart) return;
   _audioGestart = true;
   startAchtergrond('a');
+}
+
+/** Knop "Geluid aan" in de geluidsmelding: start de audio en speelt een testtoon. */
+function zetGeluidAan(): void {
+  zorgVoorAudio();
+  speelUnlock();
 }
 
 // Sessie ophalen uit URL (redirect + stop als die ontbreekt)
@@ -143,7 +151,10 @@ function updateTabs(p: Record<string, boolean>): void {
       _fragmentenAfgespeeld.add(nr);
       if (Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
         zorgVoorAudio();
-        speelVerhaalFragment('a', nr);
+        speelVerhaalFragment('a', nr, {
+          bijStart: audio => toonOndertitel('a', nr, audio),
+          bijFout: () => toonGeluidsmelding('a', zetGeluidAan),
+        });
       }
     }
   });
@@ -200,12 +211,17 @@ maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));
 // ── Doel: rapportvragen (dicht op gsm) ─────────────────────
 initRapportDoel();
 
+// ── Audio volgbaar: tab Berichten en melding over het geluid ──
+if (heeftBerichten('a')) document.getElementById('tab-berichten')?.removeAttribute('hidden');
+toonGeluidsmelding('a', zetGeluidAan);
+
 // ── Firebase live luisteren ───────────────────────────────
 const unsubscribe = luisterNaarStatus(sessie, puzzels => {
   const p = puzzels || {};
   updateVoortgang(p);
   updateTabs(p);
   updateRapportDoel(p);
+  toonBerichten('a', p);
   registreerVrijgaves(sessie, p, KAMER14_VRIJGAVE);
   hulp.status(p);
 });
