@@ -128,9 +128,12 @@ describe('Kamer 14: geluidsmelding', () => {
   });
 
   it("beide spelerpagina's tonen de melding bij de start", () => {
+    // Gedeelde code van Speler A en B (speler-a.ts en speler-b.ts roepen ze aan)
+    const gedeeld = lees('js/kamer14-speler.ts');
+    expect(gedeeld).toMatch(/\n {2}toonGeluidsmelding\(rol, zetGeluidAan\);/);
+    expect(gedeeld).toMatch(/bijFout: \(\) => toonGeluidsmelding/);
     for (const bestand of ['js/speler-a.ts', 'js/speler-b.ts']) {
-      expect(lees(bestand)).toMatch(/\ntoonGeluidsmelding\('[ab]', zetGeluidAan\);/);
-      expect(lees(bestand)).toMatch(/bijFout: \(\) => toonGeluidsmelding/);
+      expect(lees(bestand)).toContain('startSpelerPagina(');
     }
   });
 });

@@ -192,6 +192,7 @@ describe('broncode', () => {
       '../experiences/kamer-14/js/einde.ts',
       '../experiences/kamer-14/js/speler-a.ts',
       '../experiences/kamer-14/js/speler-b.ts',
+      '../experiences/kamer-14/js/kamer14-speler.ts',
     ];
     for (const bestand of bestanden) {
       const bron = readFileSync(resolve(__dirname, bestand), 'utf8').toLowerCase();

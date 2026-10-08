@@ -20,6 +20,9 @@ const BESTANDEN = [
   'host-panel.html',
   'js/speler-a.ts',
   'js/speler-b.ts',
+  'js/kamer14-speler.ts',
+  'js/kamerinspectie.ts',
+  'js/bladzijde.ts',
   'js/einde.ts',
 ];
 
