@@ -8,6 +8,13 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: 'development'
+    ignore:
+      # typescript-eslint ondersteunt TypeScript 7 nog niet (ESLint crasht).
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      # Types volgen de Node-versie uit de workflows (24).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
