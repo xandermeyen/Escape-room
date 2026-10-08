@@ -224,8 +224,15 @@ export const KAMER14_ANTWOORD_REGELS: Record<string, AntwoordRegel> = {
 };
 
 // ── Puzzels en vrijgave (voor de speldata) ────────────────
+/**
+ * Puzzels met een tekstantwoord en een verhaalfragment (audio + tab Berichten).
+ * Dit is de enige plek waar die lijst staat; audio.ts en berichten.ts lezen ze.
+ */
+export const KAMER14_TEKST_PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'] as const;
+export type Kamer14TekstPuzzel = (typeof KAMER14_TEKST_PUZZELS)[number];
+
 /** Alle puzzels van Kamer 14. P6 is de uitgescheurde bladzijde (bladzijde.ts). */
-export const KAMER14_PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'];
+export const KAMER14_PUZZELS: string[] = [...KAMER14_TEKST_PUZZELS, 'p6'];
 
 /** De laatste puzzel: daarna komt de balk naar het rapport. */
 export const KAMER14_LAATSTE = 'p6';

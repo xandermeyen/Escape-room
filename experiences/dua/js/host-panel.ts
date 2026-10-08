@@ -64,7 +64,8 @@ koppelHostAuth(() => {
 
 const JAAR = new Date().getFullYear();
 const LOBBY_PAD = '/experiences/dua/';
-const PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'];
+// Voortgang in de lijst: P1 tot P5. P0 (het zegel) is de opwarmer en telt niet mee.
+const PUZZELS = DUA_PUZZELS.filter(p => p !== 'p0');
 
 // ── Volgende code berekenen ──
 async function berekenVolgendeCode(): Promise<string> {
@@ -111,7 +112,7 @@ window.maakSessieAan = async function () {
     const aangemaakt = await maakSessie(code, {
       ervaringsId: 'dua',
       aantalSpelers: spelers,
-      puzzelIds: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'],
+      puzzelIds: DUA_PUZZELS,
     });
     if (!aangemaakt) {
       toonStatus(status, `${code} bestaat al. Ververs en probeer opnieuw.`, false);
@@ -269,7 +270,7 @@ window.resetDemoSessie = async function () {
     await resetDemo(code, {
       ervaringsId: 'dua',
       aantalSpelers: 4,
-      puzzelIds: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'],
+      puzzelIds: DUA_PUZZELS,
     });
     toonStatus(status, `✓ ${code} staat klaar. Open de spelerpagina's hieronder.`, true);
     void laadLijst();

@@ -30,6 +30,7 @@ import {
   maakSessie,
   bewaakSessieGesloten,
 } from '../shared/js/session.ts';
+import { KAMER14_PUZZELS } from '../experiences/kamer-14/js/kamer14-config.ts';
 
 // Korte alias zodat de tests de mocks kunnen sturen
 const getMock = get as unknown as ReturnType<typeof vi.fn>;
@@ -214,7 +215,10 @@ describe('maakSessie', () => {
       return { committed: true };
     });
 
-    const ok = await maakSessie('ABC-123', { ervaringsId: 'kamer-14' });
+    const ok = await maakSessie('ABC-123', {
+      ervaringsId: 'kamer-14',
+      puzzelIds: KAMER14_PUZZELS,
+    });
 
     expect(ok).toBe(true);
     expect(refMock).toHaveBeenCalledWith({}, 'sessions/ABC-123');
@@ -223,7 +227,7 @@ describe('maakSessie', () => {
     expect(nieuw).toMatchObject({
       actief: true,
       ervaringsId: 'kamer-14',
-      puzzels: { p1: false, p2: false, p3: false, p4: false, p5: false },
+      puzzels: { p1: false, p2: false, p3: false, p4: false, p5: false, p6: false },
       rapport: { ingediend: false, inhoud: {} },
     });
   });
@@ -236,7 +240,7 @@ describe('maakSessie', () => {
       return { committed: resultaat !== undefined };
     });
 
-    const ok = await maakSessie('ABC-123');
+    const ok = await maakSessie('ABC-123', { puzzelIds: KAMER14_PUZZELS });
 
     expect(ok).toBe(false);
     expect(updater({ actief: true })).toBeUndefined();

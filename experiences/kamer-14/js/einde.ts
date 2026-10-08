@@ -7,7 +7,11 @@ import {
   type RapportInhoud,
 } from '../../../shared/js/session.ts';
 import { beoordeelAntwoord, sessieUitUrl } from '../../../shared/js/utils.ts';
-import { KAMER14_ANTWOORD_HASHES, KAMER14_ANTWOORD_REGELS } from './kamer14-config.ts';
+import {
+  KAMER14_ANTWOORD_HASHES,
+  KAMER14_ANTWOORD_REGELS,
+  KAMER14_PUZZELS,
+} from './kamer14-config.ts';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
@@ -29,6 +33,9 @@ const sessie = sessieUitUrl();
 const sysCaseRapport = document.getElementById('sys-case-rapport');
 if (sysCaseRapport)
   sysCaseRapport.textContent = `Intern rapport · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
+
+const statPuzzels = document.getElementById('stat-puzzels');
+if (statPuzzels) statPuzzels.textContent = `${KAMER14_PUZZELS.length}/${KAMER14_PUZZELS.length}`;
 
 const rapportSessieLabel = document.getElementById('rapport-sessie-label');
 if (rapportSessieLabel) rapportSessieLabel.textContent = sessie;

@@ -75,3 +75,21 @@ describe('tekenVoortgang', () => {
     expect(() => tekenVoortgang({ p1: true })).not.toThrow();
   });
 });
+
+describe('ontgrendeld volgt DUA_VRIJGAVE', () => {
+  it('geeft dezelfde uitkomst als de vrijgavetabel', async () => {
+    const { ontgrendeld } = await import('../experiences/dua/js/dua-ui.ts');
+    const { DUA_VRIJGAVE } = await import('../experiences/dua/js/dua-config.ts');
+    const p = { p0: true, p1: true, p2: true, p3: false, p4: false };
+    expect(ontgrendeld(p, 1)).toBe(true);
+    expect(ontgrendeld(p, 2)).toBe(true);
+    expect(ontgrendeld(p, 4)).toBe(false);
+    expect(ontgrendeld({ ...p, p3: true }, 4)).toBe(true);
+    expect(ontgrendeld(p, 0)).toBe(false);
+    expect(ontgrendeld(p, 6)).toBe(false);
+    for (let i = 1; i <= 5; i++) {
+      const alles = Object.fromEntries((DUA_VRIJGAVE[`p${i}`] ?? []).map(v => [v, true]));
+      expect(ontgrendeld(alles, i)).toBe(true);
+    }
+  });
+});

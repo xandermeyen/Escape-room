@@ -61,7 +61,7 @@ export function beoordeelDoorslag(invoer: string, woord: string): 'juist' | 'bij
   return eenTypfoutVarianten(a).includes(b) ? 'bijna' : 'fout';
 }
 
-/** Wanneer komt welke puzzel vrij (zelfde logica als ontgrendeld() in dua-ui.ts). */
+/** Wanneer komt welke puzzel vrij. ontgrendeld() in dua-ui.ts leest deze tabel. */
 export const DUA_VRIJGAVE: Record<string, string[]> = {
   p0: [],
   p1: ['p0'],

@@ -14,6 +14,7 @@
  * Browsers blokkeren audio tot eerste gebruikersinteractie.
  * Roep startAchtergrond('a') of startAchtergrond('b') aan bij eerste klik.
  */
+import type { Kamer14TekstPuzzel } from './kamer14-config.ts';
 
 declare global {
   interface Window {
@@ -294,7 +295,7 @@ export function speelEnvelopGeluid(): void {
  * De tekst van elk fragment staat in berichten.ts (tab Berichten en ondertitel).
  */
 export type SpelerType = 'a' | 'b';
-export type PuzzelNr = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
+export type PuzzelNr = Kamer14TekstPuzzel;
 
 // Per puzzel een vast verhaalfragment, ingesproken door het
 // personage van de eigen kant (A: An Vermeersch, B: Katrijn).
@@ -391,7 +392,7 @@ export interface FragmentOpties {
  * Speler A start na het unlock-geluid, speler B pas als A klaar is.
  *
  * @param spelerType - 'a' of 'b'
- * @param puzzelNr   - 'p1' t/m 'p5'
+ * @param puzzelNr   - een puzzel uit KAMER14_TEKST_PUZZELS
  */
 export function speelVerhaalFragment(
   spelerType: SpelerType,

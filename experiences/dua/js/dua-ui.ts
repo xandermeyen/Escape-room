@@ -14,6 +14,7 @@ import {
 import { volgendHint, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { telHint, zetBadge, type DuaMeta } from './dua-session.ts';
 import { fx, isGedempt, wisselGeluid } from './dua-audio.ts';
+import { DUA_VRIJGAVE } from './dua-config.ts';
 
 // ── Melding (toast) ─────────────────────────────────────────
 let meldingTimer: ReturnType<typeof setTimeout> | null = null;
@@ -86,12 +87,11 @@ export function koppelMeta(code: string, callback?: (meta: DuaMeta) => void): vo
 // ── Voortgang P1-P5 ─────────────────────────────────────────
 export type PuzzelStatus = Record<string, boolean>;
 
+/** Is puzzel i (1 tot 5) vrij? Volgt DUA_VRIJGAVE uit dua-config.ts. */
 export function ontgrendeld(p: PuzzelStatus, i: number): boolean {
-  if (i === 1) return !!p['p0'];
-  if (i === 2 || i === 3) return !!p['p1'];
-  if (i === 4) return !!p['p2'] && !!p['p3'];
-  if (i === 5) return !!p['p4'];
-  return false;
+  if (i < 1 || i > 5) return false;
+  const nodig = DUA_VRIJGAVE[`p${i}`];
+  return !!nodig && nodig.every(v => !!p[v]);
 }
 
 export function tekenVoortgang(p: PuzzelStatus): void {

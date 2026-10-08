@@ -98,13 +98,13 @@ describe('resetDemo', () => {
       expect(waarde).toMatchObject({ demo: true, actief: true, ervaringsId: 'kamer-14' });
       return { committed: true };
     });
-    await resetDemo('DEMO-K14', { ervaringsId: 'kamer-14' });
+    await resetDemo('DEMO-K14', { ervaringsId: 'kamer-14', puzzelIds: ['p1'] });
     expect(setMock).toHaveBeenCalledWith({ path: 'sessions/DEMO-K14' }, null);
     expect(txMock).toHaveBeenCalledOnce();
   });
 
   it('meldt een fout als opnieuw aanmaken mislukt', async () => {
     txMock.mockResolvedValue({ committed: false });
-    await expect(resetDemo('DEMO-K14')).rejects.toThrow();
+    await expect(resetDemo('DEMO-K14', { puzzelIds: ['p1'] })).rejects.toThrow();
   });
 });

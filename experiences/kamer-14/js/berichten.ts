@@ -8,10 +8,12 @@
  * De teksten komen letterlijk uit de opnamescripts. Een lege tekst betekent
  * dat het script nog ontbreekt: dat fragment verschijnt dan niet als bericht.
  */
-export type Rol = 'a' | 'b';
-export type PuzzelNr = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
+import { KAMER14_TEKST_PUZZELS, type Kamer14TekstPuzzel } from './kamer14-config.ts';
 
-export const PUZZEL_NRS: PuzzelNr[] = ['p1', 'p2', 'p3', 'p4', 'p5'];
+export type Rol = 'a' | 'b';
+export type PuzzelNr = Kamer14TekstPuzzel;
+
+export const PUZZEL_NRS: readonly PuzzelNr[] = KAMER14_TEKST_PUZZELS;
 
 /** Wie spreekt de fragmenten in, per speler. */
 export const AFZENDER: Record<Rol, string> = {

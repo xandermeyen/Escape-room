@@ -16,6 +16,8 @@ import {
   KAMER14_TIMER_WAARSCHUWINGEN,
   KAMER14_VRIJGAVE,
   KAMER14_LAATSTE,
+  KAMER14_PUZZELS,
+  KAMER14_TEKST_PUZZELS,
 } from './kamer14-config.ts';
 import { initBladzijde, toonVolledigeBladzijde } from './bladzijde.ts';
 import {
@@ -151,7 +153,7 @@ function updateTabs(p: Record<string, boolean>): void {
   }
 
   // ── Verhaalfragmenten na puzzeloplossing ─────────────────
-  (['p1', 'p2', 'p3', 'p4', 'p5'] as const).forEach(nr => {
+  KAMER14_TEKST_PUZZELS.forEach(nr => {
     if (p[nr] && !_fragmentenAfgespeeld.has(nr)) {
       _fragmentenAfgespeeld.add(nr);
       if (Date.now() - _paginaLaadtijd > WACHT_NA_LADEN) {
@@ -165,8 +167,8 @@ function updateTabs(p: Record<string, boolean>): void {
   });
 
   // Voltooide puzzels markeren als verborgen
-  ['p1', 'p2', 'p3', 'p4', 'p5'].forEach((nr, i) => {
-    if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
+  KAMER14_PUZZELS.forEach(nr => {
+    if (p[nr]) markeerVoltooid(`puzzel-${nr.slice(1)}`);
   });
 
   // Bladzijde (P6): vrijgegeven na P5, na het oplossen de hele bladzijde tonen
@@ -175,7 +177,6 @@ function updateTabs(p: Record<string, boolean>): void {
     ontgrendelTab(tabBladzijde, 'Bladzijde', 'panel-bladzijde');
   }
   if (p['p6']) {
-    markeerVoltooid('puzzel-6');
     const volledig = document.getElementById('bladzijde-volledig');
     if (volledig) toonVolledigeBladzijde(volledig);
   }
@@ -212,8 +213,9 @@ declare global {
 
 window.draaiOm = draaiOm;
 
-['p1', 'p2', 'p3', 'p4', 'p5'].forEach(nr => {
-  const puzzelNr = parseInt(nr.replace('p', ''));
+// Tekstpuzzels: antwoord invullen en controleren (P6 heeft een eigen aanpak, zie bladzijde.ts)
+KAMER14_TEKST_PUZZELS.forEach(nr => {
+  const puzzelNr = parseInt(nr.slice(1));
   document.getElementById(`btn-${nr}`)?.addEventListener('click', () =>
     controleerAntwoordHash(
       nr,

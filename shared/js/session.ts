@@ -32,22 +32,15 @@ export async function sluitSessie(sessieCode: string): Promise<void> {
 export interface MaakSessieOpties {
   ervaringsId?: string;
   aantalSpelers?: number;
-  puzzelIds?: string[];
+  /** Puzzels van deze experience, uit de config (KAMER14_PUZZELS, DUA_PUZZELS). */
+  puzzelIds: string[];
   /** Demo-sessie (zie demo.ts): telt niet mee in speldata en statistieken. */
   demo?: boolean;
 }
 
-export async function maakSessie(
-  sessieCode: string,
-  opties: MaakSessieOpties = {},
-): Promise<boolean> {
+export async function maakSessie(sessieCode: string, opties: MaakSessieOpties): Promise<boolean> {
   await authReady;
-  const {
-    ervaringsId = 'kamer-14',
-    aantalSpelers,
-    puzzelIds = ['p1', 'p2', 'p3', 'p4', 'p5'],
-    demo,
-  } = opties;
+  const { ervaringsId = 'kamer-14', aantalSpelers, puzzelIds, demo } = opties;
 
   const puzzels: Record<string, boolean> = {};
   for (const id of puzzelIds) puzzels[id] = false;
@@ -155,7 +148,7 @@ export async function geefRollenVrij(sessieCode: string): Promise<void> {
  * aan met demo: true. Twee stappen: eerst wissen, dan aanmaken, zodat er
  * geen oude speldata, rollen of D.U.A.-toestand blijft hangen.
  */
-export async function resetDemo(sessieCode: string, opties: MaakSessieOpties = {}): Promise<void> {
+export async function resetDemo(sessieCode: string, opties: MaakSessieOpties): Promise<void> {
   await authReady;
   await schrijf('resetDemo', set(ref(db, `sessions/${sessieCode}`), null));
   const ok = await maakSessie(sessieCode, { ...opties, demo: true });
