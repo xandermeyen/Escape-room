@@ -14,12 +14,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:rules": "pnpm dlx firebase-tools@15.33.0 emulators:exec --only database --project demo-bureau-x \"vitest run tests/database-rules.test.ts\"",
+    "test:e2e": "playwright test",
     "rookproef": "node --experimental-strip-types scripts/rookproef.ts",
     "lint:html": "html-validate \"*.html\" \"kamer-14/*.html\" \"dua/*.html\" \"experiences/**/*.html\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@firebase/rules-unit-testing": "^5.0.2",
+    "@playwright/test": "~1.63.0",
     "@types/node": "^24.19.1",
     "@types/three": "^0.186.0",
     "eslint": "^10.5.0",

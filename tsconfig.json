@@ -27,6 +27,7 @@
     "experiences/dua/js",
     "js",
     "scripts",
-    "tests"
+    "tests",
+    "e2e"
   ]
 }

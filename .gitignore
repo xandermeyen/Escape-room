@@ -34,3 +34,7 @@ desktop.ini
 
 # Lokale pnpm-store (per ongeluk aangemaakt via een sandbox-install)
 .pnpm-store/
+
+# End-to-end-tests (Playwright)
+test-results/
+playwright-report/
