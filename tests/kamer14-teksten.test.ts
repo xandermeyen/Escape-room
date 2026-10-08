@@ -78,6 +78,51 @@ describe('Kamer 14: geen weggeefsels', () => {
   });
 });
 
+// ── Documenten markeren niet zelf wat belangrijk is ───────────────────────────
+
+describe('Kamer 14: geen markeringen in de documenten', () => {
+  /** Alle <strong>-teksten van een bestand, zonder extra witruimte. */
+  const vet = (bestand: string) =>
+    [...lees(bestand).matchAll(/<strong\s*>([\s\S]*?)<\/strong\s*>/g)].map(m =>
+      (m[1] ?? '').replace(/\s+/g, ' ').trim(),
+    );
+
+  it('speler A heeft geen vette tekst in de dossierstukken', () => {
+    expect(vet('speler-a.html')).toEqual([]);
+  });
+
+  it('speler B heeft enkel de klikinstructie van de kamerinspectie in het vet', () => {
+    expect(vet('speler-b.html')).toEqual([
+      'Klik op de gemarkeerde zones in de foto om de bevindingen per zone te lezen.',
+    ]);
+  });
+
+  it('het kasoverzicht toont enkel datum en bedrag, zonder kleur of commentaar', () => {
+    const kas = lees('speler-b.html').split('id="panel-kas"')[1]?.split('id="puzzel-3"')[0] ?? '';
+    expect(kas).not.toMatch(/⚠|niet betaald|normaal/);
+    expect(kas).not.toMatch(/<tr style=/);
+    for (const rij of kas.match(/<tr>[\s\S]*?<\/tr>/g) ?? []) {
+      expect(rij.match(/<td>/g)).toHaveLength(2);
+    }
+  });
+
+  it('het logboek kleurt geen enkele week anders', () => {
+    const logboek =
+      lees('speler-b.html').split('id="panel-logboek"')[1]?.split('id="puzzel-1"')[0] ?? '';
+    expect(logboek).not.toMatch(/style=|Afwijkend/);
+  });
+
+  it('het prikbord springt niet meer in het oog dan de andere zones', () => {
+    expect(lees('speler-b.html')).not.toContain('kamer-zone--uitgelicht');
+  });
+
+  it('geen hint verwijst naar een markering die er niet meer is', () => {
+    for (const bestand of ['speler-a.html', 'speler-b.html']) {
+      expect(tekst(bestand)).not.toMatch(/⚠|rode rij|vetgedrukt|dikgedrukt/i);
+    }
+  });
+});
+
 // ── Gelijke vragen en consistente feiten ──────────────────────────────────────
 
 describe('Kamer 14: consistentie', () => {

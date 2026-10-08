@@ -72,34 +72,14 @@
         color: rgba(196, 144, 64, 0.55);
         text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
       }
-      /* Prikbord: iets nadrukkelijker, met puls */
-      .kamer-zone--uitgelicht::after {
-        color: rgba(196, 144, 64, 0.9);
-        animation: dot-pulse 2s ease-in-out infinite;
-      }
       /* Onderzochte zone: vinkje en subtiel zichtbare rand */
       .kamer-zone.zone-bekeken::after {
         content: '✓';
         font-size: 11px;
         color: rgba(196, 144, 64, 0.9);
-        animation: none;
       }
       .kamer-zone.zone-bekeken {
         border-color: rgba(196, 144, 64, 0.22);
-      }
-      @keyframes dot-pulse {
-        0%,
-        100% {
-          opacity: 0.4;
-        }
-        50% {
-          opacity: 1;
-        }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .kamer-zone--uitgelicht::after {
-          animation: none;
-        }
       }
       .zone-label {
         font-family: 'Special Elite', 'Courier New', monospace;
@@ -232,39 +212,33 @@
         <div class="notitie">
           <div class="notitie-datum">Week 14 tot 18 april</div>
           <div class="doc-tekst">
-            Di 15 apr · wandeling kanaal · verwacht terug 11u00 · <strong>teruggekeerd 14u15</strong
-            ><br />
-            Do 17 apr · bakkerij Gasthuisstraat · verwacht terug 10u30 ·
-            <strong>teruggekeerd 13u10</strong>
+            Di 15 apr · wandeling kanaal · verwacht terug 11u00 · teruggekeerd 14u15<br />
+            Do 17 apr · bakkerij Gasthuisstraat · verwacht terug 10u30 · teruggekeerd 13u10
           </div>
         </div>
 
         <div class="notitie">
           <div class="notitie-datum">Week 21 tot 25 april</div>
           <div class="doc-tekst">
-            Di 22 apr · wandeling kanaal · verwacht 11u00 · <strong>teruggekeerd 13u50</strong
-            ><br />
-            Do 24 apr · bakkerij · verwacht 10u30 · <strong>teruggekeerd 12u55</strong>
+            Di 22 apr · wandeling kanaal · verwacht 11u00 · teruggekeerd 13u50<br />
+            Do 24 apr · bakkerij · verwacht 10u30 · teruggekeerd 12u55
           </div>
         </div>
 
         <div class="notitie">
           <div class="notitie-datum">Week 28 april tot 2 mei</div>
           <div class="doc-tekst">
-            Di 29 apr · wandeling · verwacht 11u00 · <strong>teruggekeerd 14u05</strong> · leek
-            vermoeid maar gelukkig<br />
-            Do 1 mei · bakkerij · verwacht 10u30 · <strong>teruggekeerd 13u15</strong>
+            Di 29 apr · wandeling · verwacht 11u00 · teruggekeerd 14u05 · leek vermoeid maar
+            gelukkig<br />
+            Do 1 mei · bakkerij · verwacht 10u30 · teruggekeerd 13u15
           </div>
         </div>
 
-        <div class="notitie" style="border-left-color: #7a3030">
-          <div class="notitie-datum" style="color: #7a4040">
-            Week 5 tot 9 mei · Afwijkend incident
-          </div>
+        <div class="notitie">
+          <div class="notitie-datum">Week 5 tot 9 mei</div>
           <div class="doc-tekst">
             Di 6 mei · Lena aanwezig bij ontbijt (07u00) · kamer leeg vastgesteld om 07u45<br />
-            <strong>OPZ Geel gebeld om 08u30.</strong> Deur niet op slot. Kledij mee. Geen briefje
-            achtergelaten.
+            OPZ Geel gebeld om 08u30. Deur niet op slot. Kledij mee. Geen briefje achtergelaten.
           </div>
         </div>
 
@@ -388,72 +362,58 @@
           <tr>
             <td>3 feb</td>
             <td>€35</td>
-            <td style="font-size: 11px; color: var(--k-tekst-donker)">- normaal</td>
           </tr>
           <tr>
             <td>10 feb</td>
             <td>€35</td>
-            <td style="font-size: 11px; color: var(--k-tekst-donker)">- normaal</td>
           </tr>
-          <tr style="color: var(--k-accent-licht)">
+          <tr>
             <td>17 feb</td>
             <td>€0</td>
-            <td style="font-size: 11px">⚠ niet betaald</td>
           </tr>
           <tr>
             <td>24 feb</td>
             <td>€35</td>
-            <td style="font-size: 11px; color: var(--k-tekst-donker)">- normaal</td>
           </tr>
-          <tr style="color: var(--k-accent-licht)">
+          <tr>
             <td>3 mrt</td>
             <td>€0</td>
-            <td style="font-size: 11px">⚠ niet betaald</td>
           </tr>
-          <tr style="color: var(--k-accent-licht)">
+          <tr>
             <td>10 mrt</td>
             <td>€0</td>
-            <td style="font-size: 11px">⚠ niet betaald</td>
           </tr>
           <tr>
             <td>17 mrt</td>
             <td>€35</td>
-            <td style="font-size: 11px; color: var(--k-tekst-donker)">- normaal</td>
           </tr>
-          <tr style="color: var(--k-accent-licht)">
+          <tr>
             <td>24 mrt</td>
             <td>€0</td>
-            <td style="font-size: 11px">⚠ niet betaald</td>
           </tr>
           <tr>
             <td>31 mrt</td>
             <td>€35</td>
-            <td style="font-size: 11px; color: var(--k-tekst-donker)">- normaal</td>
           </tr>
-          <tr style="color: var(--k-accent-licht)">
+          <tr>
             <td>7 apr</td>
             <td>€0</td>
-            <td style="font-size: 11px">⚠ niet betaald</td>
           </tr>
           <tr>
             <td>14 apr</td>
             <td>€35</td>
-            <td style="font-size: 11px; color: var(--k-tekst-donker)">- normaal</td>
           </tr>
-          <tr style="color: var(--k-accent-licht)">
+          <tr>
             <td>21 apr</td>
             <td>€0</td>
-            <td style="font-size: 11px">⚠ niet betaald</td>
           </tr>
-          <tr style="color: var(--k-accent-licht)">
+          <tr>
             <td>28 apr</td>
             <td>€0</td>
-            <td style="font-size: 11px">⚠ niet betaald</td>
           </tr>
           <tr>
             <td>5 mei</td>
             <td>€35</td>
-            <td style="font-size: 11px; color: var(--k-tekst-donker)">- normaal</td>
           </tr>
         </table>
 
@@ -478,13 +438,13 @@
             </div>
             <div class="hint-stap verborgen">
               <span class="hint-nr">Aanwijzing 2 / 3</span>
-              Zoek alle rijen met "⚠ niet betaald" in de tabel - ze staan niet allemaal achter
-              elkaar.
+              Niet elke week kwam er €35 binnen. Zoek de weken waarin het gastgezin niets kreeg. Ze
+              staan niet allemaal na elkaar.
             </div>
             <div class="hint-stap verborgen">
               <span class="hint-nr">Aanwijzing 3 / 3</span>
-              Tel alleen de rijen met ⚠ niet betaald, van boven naar onder. Sommige staan net na
-              elkaar, dus sla er geen over.
+              Tel de rijen met €0, van boven naar onder. Sommige staan net na elkaar, dus sla er
+              geen over.
             </div>
             <button class="hint-verder verborgen" onclick="volgendHint('hint-p3-b')">
               Volgende aanwijzing →
@@ -534,9 +494,9 @@
             "
           />
 
-          <!-- HOTSPOT: Prikbord (links boven)  -  nadrukkelijke dot als hint -->
+          <!-- HOTSPOT: Prikbord (links boven) -->
           <div
-            class="kamer-zone kamer-zone--uitgelicht"
+            class="kamer-zone"
             data-zone="prikbord"
             role="button"
             tabindex="0"
@@ -1029,7 +989,7 @@
                       Wat fijn dat je me hebt<br />
                       weten te vinden!<br /><br />
                       Ik woon hier al drie jaar:<br />
-                      <strong>Stationsstraat 7, Diest.</strong><br /><br />
+                      Stationsstraat 7, Diest.<br /><br />
                       Kom gerust langs.<br /><br />
                       - Marie
                     </div>
