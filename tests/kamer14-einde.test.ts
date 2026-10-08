@@ -175,3 +175,64 @@ describe('einde: twee keer fout', () => {
     expect(actief()).toBe('scherm-slot');
   });
 });
+
+// ── Route-finale ──────────────────────────────────────────────────────────────
+
+describe('route-finale', () => {
+  it('routeStand volgt de invoer, niet het juiste antwoord', async () => {
+    const { routeStand } = await import('../experiences/kamer-14/js/route-kaart.ts');
+    expect(routeStand({ vervoer: '', tijdstip: '', bestemming: '', wie: '' })).toEqual({
+      rit: false,
+      stad: '?',
+      adres: '',
+    });
+    expect(
+      routeStand({ vervoer: 'trein', tijdstip: '9u', bestemming: 'Hasselt', wie: 'Jan' }),
+    ).toEqual({
+      rit: true,
+      stad: 'Hasselt',
+      adres: 'bij Jan',
+    });
+    expect(routeStand({ vervoer: 'bus', tijdstip: '', bestemming: '', wie: '' }).rit).toBe(false);
+  });
+
+  it('lange invoer wordt ingekort op de kaart', async () => {
+    const { routeStand } = await import('../experiences/kamer-14/js/route-kaart.ts');
+    const stand = routeStand({ vervoer: '', tijdstip: '', bestemming: 'x'.repeat(40), wie: '' });
+    expect(stand.stad.length).toBeLessThanOrEqual(22);
+  });
+
+  it('de kaart verraadt de bestemming niet in de HTML', () => {
+    const kaart = new DOMParser().parseFromString(body, 'text/html').getElementById('route-kaart');
+    expect(kaart).not.toBeNull();
+    expect(kaart!.textContent).not.toMatch(/Diest|Marie|Stas|07:35|bus/i);
+  });
+
+  it('alle vier de velden staan in de route, met een label', () => {
+    const doc = new DOMParser().parseFromString(body, 'text/html');
+    for (const id of ['r-vervoer', 'r-tijdstip', 'r-bestemming', 'r-wie']) {
+      expect(doc.querySelector(`.route #${id}`), id).not.toBeNull();
+      expect(doc.querySelector(`label[for="${id}"]`), id).not.toBeNull();
+    }
+  });
+
+  it('de kaart tekent mee tijdens het typen', async () => {
+    vi.resetModules();
+    window.history.replaceState({}, '', '/experiences/kamer-14/einde.html?sessie=EIN-003');
+    document.body.innerHTML = body;
+    await import('../experiences/kamer-14/js/einde.ts');
+    const typ = (id: string, w: string) => {
+      const el = document.getElementById(id) as HTMLInputElement;
+      el.value = w;
+      el.dispatchEvent(new Event('input'));
+    };
+    expect(document.getElementById('route-rit')!.classList).not.toContain('getekend');
+    typ('r-vervoer', 'bus');
+    typ('r-tijdstip', '7u35');
+    expect(document.getElementById('route-rit')!.classList).toContain('getekend');
+    typ('r-bestemming', 'Diest');
+    expect(document.getElementById('route-label-stad')!.textContent).toBe('Diest');
+    typ('r-wie', 'Marie Stas');
+    expect(document.getElementById('route-label-adres')!.textContent).toBe('bij Marie Stas');
+  });
+});

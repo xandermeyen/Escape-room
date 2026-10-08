@@ -614,6 +614,100 @@
         color: var(--k-accent);
         margin-top: 4px;
       }
+      /* ── Route-finale ── */
+      .route-kaart {
+        display: block;
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto 18px;
+        background: var(--k-bg-panel);
+        border: 1px solid var(--k-rand);
+      }
+      .route-lijn {
+        fill: none;
+        stroke: var(--k-rand-mid);
+        stroke-width: 2;
+        stroke-dasharray: 2 5;
+        transition: stroke 0.4s;
+      }
+      .route-lijn.rit {
+        stroke-dasharray: 8 6;
+      }
+      .route-lijn.getekend {
+        stroke: var(--k-accent);
+        stroke-width: 3;
+      }
+      .route-punt {
+        fill: var(--k-bg);
+        stroke: var(--k-rand);
+        stroke-width: 2;
+        transition: fill 0.4s;
+      }
+      .route-punt.getekend {
+        fill: var(--k-accent);
+        stroke: var(--k-accent);
+      }
+      .route-label {
+        font-family: var(--font);
+        font-size: 13px;
+        fill: var(--k-tekst);
+      }
+      .route-label.klein {
+        font-size: 10px;
+        fill: var(--k-tekst-grijs);
+      }
+      .route {
+        list-style: none;
+        margin: 0 0 24px;
+        padding: 0;
+        border-left: 2px solid var(--k-rand);
+      }
+      .route-stop {
+        display: grid;
+        grid-template-columns: 76px 1fr;
+        gap: 12px;
+        position: relative;
+        padding: 0 0 18px 16px;
+      }
+      .route-stop::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--k-bg);
+        border: 2px solid var(--k-accent);
+      }
+      .route-tijd {
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        color: var(--k-tekst-grijs);
+        padding-top: 2px;
+      }
+      .route-titel {
+        font-size: 14px;
+        color: var(--k-tekst);
+      }
+      .route-sub {
+        font-size: 12px;
+        color: var(--k-tekst-grijs);
+        margin-top: 2px;
+      }
+      .route .rapport-veld-label {
+        display: block;
+      }
+      .route-tweede {
+        margin-top: 12px;
+      }
+      @media (max-width: 480px) {
+        .route-stop {
+          grid-template-columns: 1fr;
+          gap: 2px;
+        }
+      }
+
       /* ── Mail van An, waarschuwing en epiloog ── */
       .einde-mail {
         width: 100%;
@@ -707,79 +801,115 @@
           <div>Sessie:&nbsp;<span id="rapport-sessie-label"> - </span></div>
         </div>
 
-        <div class="rapport-sectie-titel">Bevindingen onderzoekers</div>
+        <div class="rapport-sectie-titel">De route van Lena, dinsdag 6 mei</div>
 
-        <!-- Veld 01 -->
-        <div class="rapport-veld">
-          <div class="rapport-veld-nr">01</div>
-          <div class="rapport-veld-inner">
-            <div class="rapport-veld-label">Bestemming van de kostganger</div>
-            <input
-              class="rapport-input"
-              id="r-bestemming"
-              placeholder="stad of locatie…"
-              maxlength="40"
-              autocomplete="off"
-            />
-            <div class="rapport-veld-fout" id="fout-bestemming">
-              Kijk naar de tekening en het vrijetijdsmateriaal - welke stad herkende je?
-            </div>
-          </div>
-        </div>
+        <svg
+          class="route-kaart"
+          id="route-kaart"
+          viewBox="0 0 320 210"
+          role="img"
+          aria-labelledby="route-kaart-titel"
+        >
+          <title id="route-kaart-titel">
+            Kaart van de route van Geel naar de bestemming van Lena
+          </title>
+          <!-- Gasthuisstraat → Geel Markt: te voet, altijd getekend -->
+          <path class="route-lijn te-voet getekend" d="M262 34 L226 58" />
+          <!-- Geel Markt → bestemming: bus -->
+          <path class="route-lijn rit" id="route-rit" d="M226 58 C 200 100, 150 120, 104 158" />
+          <!-- bestemming → adres: te voet -->
+          <path class="route-lijn te-voet" id="route-laatste" d="M104 158 L68 182" />
 
-        <!-- Veld 02 -->
-        <div class="rapport-veld">
-          <div class="rapport-veld-nr">02</div>
-          <div class="rapport-veld-inner">
-            <div class="rapport-veld-label">Persoon die ze opzocht</div>
-            <input
-              class="rapport-input"
-              id="r-wie"
-              placeholder="voor- en achternaam…"
-              maxlength="40"
-              autocomplete="off"
-            />
-            <div class="rapport-veld-fout" id="fout-wie">
-              Combineer de intakefiche (Speler A) met de brief op het prikbord (Speler B).
-            </div>
-          </div>
-        </div>
+          <circle class="route-punt getekend" cx="262" cy="34" r="5" />
+          <circle class="route-punt getekend" cx="226" cy="58" r="5" />
+          <circle class="route-punt" id="route-punt-stad" cx="104" cy="158" r="6" />
+          <circle class="route-punt" id="route-punt-adres" cx="68" cy="182" r="5" />
 
-        <!-- Veld 03 -->
-        <div class="rapport-veld">
-          <div class="rapport-veld-nr">03</div>
-          <div class="rapport-veld-inner">
-            <div class="rapport-veld-label">Vervoermiddel</div>
-            <input
-              class="rapport-input"
-              id="r-vervoer"
-              placeholder="wijze van verplaatsing…"
-              maxlength="60"
-              autocomplete="off"
-            />
-            <div class="rapport-veld-fout" id="fout-vervoer">
-              Welk vervoermiddel nam Lena? Kijk wat Speler B in de prullenmand vond.
-            </div>
-          </div>
-        </div>
+          <text class="route-label" x="272" y="30">Geel</text>
+          <text class="route-label klein" x="236" y="68">Geel Markt</text>
+          <text class="route-label" id="route-label-stad" x="116" y="160">?</text>
+          <text class="route-label klein" id="route-label-adres" x="80" y="196"></text>
+        </svg>
 
-        <!-- Veld 04 -->
-        <div class="rapport-veld">
-          <div class="rapport-veld-nr">04</div>
-          <div class="rapport-veld-inner">
-            <div class="rapport-veld-label">Vertrektijdstip (uu:mm)</div>
-            <input
-              class="rapport-input"
-              id="r-tijdstip"
-              placeholder="uu:mm"
-              maxlength="20"
-              autocomplete="off"
-            />
-            <div class="rapport-veld-fout" id="fout-tijdstip">
-              Vergelijk de dienstregeling lijn 19 (Speler A) met het logboekmoment van Speler B.
+        <ol class="route">
+          <li class="route-stop">
+            <div class="route-tijd">07u00</div>
+            <div class="route-inhoud">
+              <div class="route-titel">Gasthuisstraat 44, Geel</div>
+              <div class="route-sub">
+                Ontbijt bij het gastgezin. Rond kwart over zeven gaat de voordeur dicht.
+              </div>
             </div>
-          </div>
-        </div>
+          </li>
+          <li class="route-stop">
+            <div class="route-tijd">te voet</div>
+            <div class="route-inhoud">
+              <div class="route-titel">Halte Geel Markt</div>
+              <div class="route-sub">Een kwartier wandelen.</div>
+            </div>
+          </li>
+          <li class="route-stop">
+            <div class="route-tijd">vertrek</div>
+            <div class="route-inhoud">
+              <label class="rapport-veld-label" for="r-vervoer">Hoe reisde ze verder?</label>
+              <input
+                class="rapport-input"
+                id="r-vervoer"
+                placeholder="wijze van verplaatsing…"
+                maxlength="60"
+                autocomplete="off"
+              />
+              <div class="rapport-veld-fout" id="fout-vervoer">
+                Welk vervoermiddel nam Lena? Kijk wat Speler B in de prullenmand vond.
+              </div>
+              <label class="rapport-veld-label route-tweede" for="r-tijdstip"
+                >Vertrektijdstip (uu:mm)</label
+              >
+              <input
+                class="rapport-input"
+                id="r-tijdstip"
+                placeholder="uu:mm"
+                maxlength="20"
+                autocomplete="off"
+              />
+              <div class="rapport-veld-fout" id="fout-tijdstip">
+                Vergelijk de dienstregeling lijn 19 (Speler A) met het logboekmoment van Speler B.
+              </div>
+            </div>
+          </li>
+          <li class="route-stop">
+            <div class="route-tijd">aankomst</div>
+            <div class="route-inhoud">
+              <label class="rapport-veld-label" for="r-bestemming">Naar welke stad?</label>
+              <input
+                class="rapport-input"
+                id="r-bestemming"
+                placeholder="stad of locatie…"
+                maxlength="40"
+                autocomplete="off"
+              />
+              <div class="rapport-veld-fout" id="fout-bestemming">
+                Kijk naar de tekening en het vrijetijdsmateriaal - welke stad herkende je?
+              </div>
+            </div>
+          </li>
+          <li class="route-stop">
+            <div class="route-tijd">bij</div>
+            <div class="route-inhoud">
+              <label class="rapport-veld-label" for="r-wie">Bij wie is ze?</label>
+              <input
+                class="rapport-input"
+                id="r-wie"
+                placeholder="voor- en achternaam…"
+                maxlength="40"
+                autocomplete="off"
+              />
+              <div class="rapport-veld-fout" id="fout-wie">
+                Combineer de intakefiche (Speler A) met de brief op het prikbord (Speler B).
+              </div>
+            </div>
+          </li>
+        </ol>
 
         <article
           class="einde-mail an-waarschuwing"

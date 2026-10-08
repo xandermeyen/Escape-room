@@ -20,6 +20,7 @@ import {
   MAX_FOUTE_POGINGEN,
   volgendeStap,
 } from './einde-verloop.ts';
+import { koppelRouteKaart } from './route-kaart.ts';
 
 // ── Sessie ophalen (redirect + stop als die ontbreekt) ────
 const sessie = sessieUitUrl();
@@ -46,6 +47,7 @@ function toonScherm(id: string): void {
 // Antwoorden staan als SHA-256 hash in de bundle, niet als plain-text.
 // Zelfde hashes en normalisatie als de puzzels in speler-a.ts / speler-b.ts:
 // bestemming = P2, wie = P4, tijdstip = P5; vervoer heeft een eigen regel.
+// De velden staan als route onder de kaart (zie route-kaart.ts).
 const VELD_PUZZEL: Record<string, string> = {
   bestemming: 'p2',
   wie: 'p4',
@@ -151,6 +153,9 @@ async function diendIn(): Promise<void> {
 }
 
 document.getElementById('btn-indienen')?.addEventListener('click', diendIn);
+
+// Kaart tekent mee terwijl de route ingevuld wordt
+koppelRouteKaart();
 
 // Enter werkt op alle inputvelden
 ['r-bestemming', 'r-wie', 'r-vervoer', 'r-tijdstip'].forEach(id => {
