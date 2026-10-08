@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+vi.mock('../shared/js/firebase-config.ts', () => ({ db: {}, app: {} }));
+vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
 vi.mock('../shared/js/reviews.ts', () => ({ schrijfReview: vi.fn(() => Promise.resolve()) }));
 
 import { schrijfReview } from '../shared/js/reviews.ts';
