@@ -15,7 +15,7 @@ vi.mock('firebase/database', () => ({
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {} }));
 vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
 
-import { ref, set, get } from 'firebase/database';
+import { ref, set, get, update } from 'firebase/database';
 import {
   normaliseerSessieCode,
   valideerSessie,
@@ -28,11 +28,15 @@ import {
   statusBadgeHtml,
   geopendHtml,
   VERLOOPT_NA_MS,
+  verlopenCodes,
+  sluitSessies,
 } from '../shared/js/host-sessies.ts';
+import { DEMO_CODES } from '../shared/js/demo.ts';
 
 const getMock = get as unknown as ReturnType<typeof vi.fn>;
 const setMock = set as unknown as ReturnType<typeof vi.fn>;
 const refMock = ref as unknown as ReturnType<typeof vi.fn>;
+const updateMock = update as unknown as ReturnType<typeof vi.fn>;
 
 /** Laat get() alleen voor de opgegeven actieve codes een sessie teruggeven. */
 function bestaandeSessies(...codes: string[]) {
@@ -135,29 +139,52 @@ describe('isVerlopen / statusBadgeHtml', () => {
   const oud = nu - VERLOOPT_NA_MS - 1;
   const recent = nu - 60 * 60 * 1000;
 
-  it('telt een actieve sessie van meer dan 24 uur oud als verlopen', () => {
-    expect(isVerlopen({ actief: true, aangemaakt: oud }, nu)).toBe(true);
+  it('telt een actieve sessie die meer dan 24 uur geleden geopend werd als verlopen', () => {
+    expect(isVerlopen({ actief: true, aangemaakt: oud, geopendOp: oud }, nu)).toBe(true);
     expect(
-      statusBadgeHtml({ actief: true, aangemaakt: oud }, 0, 5, { toonVerlopen: true, nu }),
+      statusBadgeHtml({ actief: true, geopendOp: oud }, 0, 5, { toonVerlopen: true, nu }),
     ).toContain('Verlopen');
   });
 
+  it('een oude boeking die nog niet geopend werd, verloopt niet', () => {
+    // aangemaakt = moment van boeken; de groep kan pas dagen later spelen
+    expect(isVerlopen({ actief: true, aangemaakt: oud }, nu)).toBe(false);
+    expect(isVerlopen({ actief: true, aangemaakt: oud, geopendOp: recent }, nu)).toBe(false);
+  });
+
   it('laat recente, inactieve en ingediende sessies met rust', () => {
-    expect(isVerlopen({ actief: true, aangemaakt: recent }, nu)).toBe(false);
-    expect(isVerlopen({ actief: false, aangemaakt: oud }, nu)).toBe(false);
-    expect(isVerlopen({ actief: true, aangemaakt: oud, rapport: { ingediend: true } }, nu)).toBe(
+    expect(isVerlopen({ actief: true, geopendOp: recent }, nu)).toBe(false);
+    expect(isVerlopen({ actief: false, geopendOp: oud }, nu)).toBe(false);
+    expect(isVerlopen({ actief: true, geopendOp: oud, rapport: { ingediend: true } }, nu)).toBe(
       false,
     );
   });
 
   it('toont Voltooid boven Verlopen', () => {
     expect(
-      statusBadgeHtml({ actief: true, aangemaakt: oud }, 5, 5, { toonVerlopen: true, nu }),
+      statusBadgeHtml({ actief: true, geopendOp: oud }, 5, 5, { toonVerlopen: true, nu }),
     ).toContain('Voltooid');
   });
 
   it('toont geen Verlopen zonder de optie (D.U.A.-paneel blijft ongewijzigd)', () => {
-    expect(statusBadgeHtml({ actief: true, aangemaakt: oud }, 0, 5)).not.toContain('Verlopen');
+    expect(statusBadgeHtml({ actief: true, geopendOp: oud }, 0, 5)).not.toContain('Verlopen');
+  });
+
+  it('verlopenCodes slaat demo-sessies over', () => {
+    const rijen = [
+      { code: 'ABC-234', data: { actief: true, geopendOp: oud } },
+      { code: 'DEF-567', data: { actief: true, geopendOp: recent } },
+      { code: DEMO_CODES['kamer-14'], data: { actief: true, geopendOp: oud } },
+      { code: 'GHJ-892', data: { actief: false, geopendOp: oud } },
+    ];
+    expect(verlopenCodes(rijen, nu)).toEqual(['ABC-234']);
+  });
+
+  it('sluitSessies zet elke sessie echt op actief: false', async () => {
+    expect(await sluitSessies(['ABC-234', 'KLM-345'])).toBe(2);
+    expect(updateMock).toHaveBeenCalledWith({ path: 'sessions/ABC-234' }, { actief: false });
+    expect(updateMock).toHaveBeenCalledWith({ path: 'sessions/KLM-345' }, { actief: false });
+    expect(updateMock).toHaveBeenCalledTimes(2);
   });
 
   it('toont geopendOp, of een streepje als de code nooit geopend werd', () => {

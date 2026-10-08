@@ -150,6 +150,8 @@ Na het deployen van de rules, met de live site:
 - [ ] D.U.A. van begin tot einde met 1934 en 2034, inclusief een fout gekozen
       verstopplek (wordt gewist en opnieuw gekozen).
 - [ ] Rol vrijgeven en sessie deactiveren vanuit het host-paneel.
+- [ ] Kamer 14-host-paneel: "Verlopen sessies sluiten" zet sessies die meer dan 24 uur
+      geleden geopend werden en geen rapport hebben op `actief: false` (demo's niet).
 - [ ] Review goedkeuren in het host-paneel, verschijnt op de homepage.
 - [ ] Browserconsole zonder login (incognito, op een andere site):
       `fetch('<database-url>/sessions/<code>.json', {method: 'DELETE'})`

@@ -177,6 +177,17 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       await assertFails(speler().ref(`sessions/${CODE}/actief`).set(true));
     });
 
+    it('de host sluit een verlopen sessie vanuit het host-paneel', async () => {
+      // zelfde aanroep als sluitSessies() in shared/js/host-sessies.ts
+      await assertSucceeds(host().ref('sessions').once('value'));
+      await assertSucceeds(host().ref(`sessions/${CODE}`).update({ actief: false }));
+      // wie geen beheerder is, kan de lijst niet lezen en niets heropenen
+      await assertFails(speler().ref('sessions').once('value'));
+      await assertFails(
+        vreemdeWachtwoordGebruiker().ref(`sessions/${CODE}`).update({ actief: true }),
+      );
+    });
+
     it('timerGestart: één keer, en alleen met de servertijd', async () => {
       await assertFails(speler().ref(`sessions/${CODE}/timerGestart`).set(123));
       await assertSucceeds(speler().ref(`sessions/${CODE}/timerGestart`).set(SV_NU));

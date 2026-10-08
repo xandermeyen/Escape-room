@@ -8,8 +8,9 @@
  * (`beheerders/<uid>` in firebase/database.rules.json).
  */
 import { db } from './firebase-config.ts';
-import { ref, get } from 'firebase/database';
+import { ref, get, update } from 'firebase/database';
 import { escHtml } from './utils.ts';
+import { isDemoCode } from './demo.ts';
 
 export interface SessieRij {
   code: string;
@@ -51,8 +52,9 @@ export const VERLOOPT_NA_MS = 24 * 60 * 60 * 1000;
 
 /**
  * isVerlopen: actief, nog geen rapport ingediend en meer dan `naMs` geleden
- * aangemaakt. Puur weergave in het host-paneel: de sessie zelf blijft in
- * Firebase actief (automatisch sluiten vraagt een geplande Cloud Function).
+ * voor het eerst geopend in de lobby (`geopendOp`). Bewust niet `aangemaakt`:
+ * dat is het moment van boeken, en een groep kan dagen later spelen. Een code
+ * die nooit geopend werd, verloopt dus niet.
  */
 export function isVerlopen(
   data: Record<string, unknown>,
@@ -62,12 +64,27 @@ export function isVerlopen(
   if (data.actief !== true) return false;
   const rapport = data.rapport as { ingediend?: boolean } | undefined;
   if (rapport?.ingediend) return false;
-  const aangemaakt = data.aangemaakt;
-  return typeof aangemaakt === 'number' && nu - aangemaakt > naMs;
+  const geopend = data.geopendOp;
+  return typeof geopend === 'number' && nu - geopend > naMs;
+}
+
+/** Codes van verlopen sessies die het host-paneel mag sluiten (geen demo's). */
+export function verlopenCodes(rijen: SessieRij[], nu: number = Date.now()): string[] {
+  return rijen.filter(r => !isDemoCode(r.code) && isVerlopen(r.data, nu)).map(r => r.code);
+}
+
+/**
+ * Zet verlopen sessies echt op `actief: false`, één update per sessie (zoals
+ * de knop "Deactiveer"). Alleen een beheerder mag dit voor andermans sessies;
+ * zie firebase/database.rules.json. Geeft het aantal gesloten sessies terug.
+ */
+export async function sluitSessies(codes: string[]): Promise<number> {
+  await Promise.all(codes.map(code => update(ref(db, `sessions/${code}`), { actief: false })));
+  return codes.length;
 }
 
 export interface StatusOpties {
-  /** Toon 'Verlopen' voor actieve sessies ouder dan 24 uur. */
+  /** Toon 'Verlopen' voor actieve sessies die meer dan 24 uur geleden geopend werden. */
   toonVerlopen?: boolean;
   /** Huidig tijdstip (voor tests). */
   nu?: number;
@@ -83,7 +100,7 @@ export function statusBadgeHtml(
   if (!data.actief) return '<span class="badge-inactief">Inactief</span>';
   if (aantalKlaar === totaal) return '<span class="badge-klaar">Voltooid</span>';
   if (opties.toonVerlopen && isVerlopen(data, opties.nu)) {
-    return '<span class="badge-verlopen" title="Meer dan 24 uur oud en nog actief">Verlopen</span>';
+    return '<span class="badge-verlopen" title="Meer dan 24 uur geleden geopend en nog actief">Verlopen</span>';
   }
   if (data.timerGestart) return '<span class="badge-bezig">Bezig</span>';
   return '<span class="badge-actief">Actief</span>';
