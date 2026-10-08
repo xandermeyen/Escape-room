@@ -20,9 +20,8 @@ import {
   datumHtml,
   geopendHtml,
   lobbyLinkHtml,
-  verlopenCodes,
-  sluitSessies,
 } from '../../../shared/js/host-sessies.ts';
+import { maakVerlopenKnop } from '../../../shared/js/host-verlopen.ts';
 import {
   haalReviews,
   keurReviewGoed,
@@ -65,14 +64,8 @@ koppelHostAuth(() => {
 
 const PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'];
 
-// Codes die bij de laatste lijstopbouw als verlopen telden.
-let teSluiten: string[] = [];
-
-function toonSluitKnop(): void {
-  const knop = requireEl<HTMLButtonElement>('btn-sluit-verlopen');
-  knop.hidden = teSluiten.length === 0;
-  knop.textContent = `Verlopen sessies sluiten (${teSluiten.length})`;
-}
+// Knop "Verlopen sessies sluiten (n)" (zie shared/js/host-verlopen.ts).
+const verlopen = maakVerlopenKnop(() => void laadLijst());
 const LOBBY_PAD = '/experiences/kamer-14/';
 
 function nieuweCode(): string {
@@ -145,8 +138,7 @@ async function laadLijst(): Promise<void> {
     // Sessies zonder ervaringsId zijn oudere Kamer 14-sessies (o.a. Make.com).
     const rijen = await haalSessies(d => (d.ervaringsId ?? 'kamer-14') === 'kamer-14');
     laden.style.display = 'none';
-    teSluiten = verlopenCodes(rijen);
-    toonSluitKnop();
+    verlopen.bijLijst(rijen);
 
     // Gemiddelden per puzzel over alle sessies met speldata.
     // Demo-sessies tellen niet mee in de statistieken.
@@ -323,28 +315,8 @@ window.deactiveer = async function (code) {
   }
 };
 
-window.sluitVerlopen = async function () {
-  const status = requireEl('status-verlopen');
-  const knop = requireEl<HTMLButtonElement>('btn-sluit-verlopen');
-  const codes = [...teSluiten];
-  if (codes.length === 0) return;
-  if (
-    !confirm(
-      `${codes.length} sessie(s) sluiten die meer dan 24 uur geleden geopend werden en geen rapport hebben?\n\n${codes.join(', ')}`,
-    )
-  )
-    return;
-  knop.disabled = true;
-  try {
-    const aantal = await sluitSessies(codes);
-    toonStatus(status, `✓ ${aantal} verlopen sessie(s) gesloten.`, true);
-    void laadLijst();
-  } catch (err) {
-    console.error('Verlopen sessies sluiten mislukt:', err);
-    toonStatus(status, 'Sluiten mislukt: ' + foutTekst(err), false);
-  } finally {
-    knop.disabled = false;
-  }
+window.sluitVerlopen = function () {
+  void verlopen.sluit();
 };
 
 window.rollenVrij = async function (code) {

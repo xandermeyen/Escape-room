@@ -241,6 +241,13 @@
         vertical-align: middle;
       }
 
+      .badge-verlopen {
+        background: #4a2a1a;
+        color: #d08a5a;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 3px;
+      }
       .status-bericht {
         padding: 0.6rem 1rem;
         border-radius: 4px;
@@ -525,6 +532,17 @@
               <i class="bi bi-arrow-clockwise me-1"></i>Verversen
             </button>
           </div>
+
+          <button
+            class="btn-sec mb-3"
+            id="btn-sluit-verlopen"
+            onclick="sluitVerlopen()"
+            title="Sessies die meer dan 24 uur geleden geopend werden en geen rapport hebben, op inactief zetten"
+            hidden
+          >
+            Verlopen sessies sluiten (0)
+          </button>
+          <div class="status-bericht" id="status-verlopen"></div>
 
           <div class="laden" id="laden-label">Laden…</div>
 

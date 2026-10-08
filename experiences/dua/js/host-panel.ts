@@ -19,6 +19,7 @@ import {
   datumHtml,
   lobbyLinkHtml,
 } from '../../../shared/js/host-sessies.ts';
+import { maakVerlopenKnop } from '../../../shared/js/host-verlopen.ts';
 import {
   haalReviews,
   keurReviewGoed,
@@ -41,8 +42,12 @@ declare global {
     keurGoed: (id: string) => void;
     toonDetails: (code: string) => void;
     resetDemoSessie: () => void;
+    sluitVerlopen: () => void;
   }
 }
+
+// Knop "Verlopen sessies sluiten (n)" (zie shared/js/host-verlopen.ts).
+const verlopen = maakVerlopenKnop(() => void laadLijst());
 
 // Stijl voor de speldata-tabellen (gedeeld met het Kamer 14-paneel).
 const statsStijl = document.createElement('style');
@@ -139,6 +144,7 @@ async function laadLijst(): Promise<void> {
   try {
     const rijen = await haalSessies(d => d.ervaringsId === 'dua');
     laden.style.display = 'none';
+    verlopen.bijLijst(rijen);
 
     // Gemiddelden per puzzel over alle sessies met speldata.
     // Demo-sessies tellen niet mee in de statistieken.
@@ -183,7 +189,7 @@ async function laadLijst(): Promise<void> {
             <div class="puzzel-bollen">${puzzelBollenHtml(data, PUZZELS)}</div>
             <span style="color:#666; font-size:0.75rem;">${aantalKlaar}/${PUZZELS.length}</span>
           </td>
-          <td>${statusBadgeHtml(data, aantalKlaar, PUZZELS.length)}</td>
+          <td>${statusBadgeHtml(data, aantalKlaar, PUZZELS.length, { toonVerlopen: true })}</td>
           <td>${lobbyLinkHtml(LOBBY_PAD, code)}</td>
           <td>
             ${
@@ -298,6 +304,10 @@ window.deactiveer = async function (code) {
   } catch (err) {
     console.error('Deactiveer mislukt:', err);
   }
+};
+
+window.sluitVerlopen = function () {
+  void verlopen.sluit();
 };
 
 // ── Kopieer naar klembord ──

@@ -166,7 +166,7 @@ describe('isVerlopen / statusBadgeHtml', () => {
     ).toContain('Voltooid');
   });
 
-  it('toont geen Verlopen zonder de optie (D.U.A.-paneel blijft ongewijzigd)', () => {
+  it('toont geen Verlopen zonder de optie', () => {
     expect(statusBadgeHtml({ actief: true, geopendOp: oud }, 0, 5)).not.toContain('Verlopen');
   });
 
