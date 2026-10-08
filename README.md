@@ -51,7 +51,7 @@ host zet een demo vanuit het host-paneel met één knop terug naar het begin.
 Browser (Vite + TypeScript, statische pagina's)
    │  realtime sync, anonieme login
    ▼
-Firebase Realtime Database + Firebase Auth + App Check (reCAPTCHA v3)
+Firebase Realtime Database + Firebase Auth + App Check (reCAPTCHA Enterprise)
    ▲
    │  sessie aanmaken (REST, ingelogd als beheerder)
 Make.com  ◄── Formspree-boekingsformulier ── speler

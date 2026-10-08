@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
@@ -15,7 +15,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 
 /**
- * App Check met reCAPTCHA v3: Firebase aanvaardt dan enkel verkeer dat van
+ * App Check met reCAPTCHA Enterprise (Fraud Defense): Firebase aanvaardt dan enkel verkeer dat van
  * deze site komt, niet van een los script met de (publieke) config.
  * Alleen actief als VITE_RECAPTCHA_SITE_KEY gezet is, zodat lokaal
  * ontwikkelen en de tests zonder sleutel blijven werken.
@@ -39,7 +39,7 @@ if (recaptchaSleutel && typeof window !== 'undefined') {
   stijl.textContent = '.grecaptcha-badge { visibility: hidden; }';
   document.head.appendChild(stijl);
   initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider(recaptchaSleutel),
+    provider: new ReCaptchaEnterpriseProvider(recaptchaSleutel),
     isTokenAutoRefreshEnabled: true,
   });
 }

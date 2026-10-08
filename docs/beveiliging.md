@@ -99,14 +99,19 @@ Push naar `main`. De site deployt automatisch.
 
 Loop de [checklist](#handmatige-checklist) hieronder af.
 
-### 7. App Check (reCAPTCHA v3)
+### 7. App Check (reCAPTCHA Enterprise / Fraud Defense)
 
-1. Maak een reCAPTCHA v3-sleutel aan op <https://www.google.com/recaptcha/admin>
-   voor `bureau-x.be` (en eventueel `localhost`).
-2. **Firebase-console > App Check > Apps**: registreer de web-app met de
-   reCAPTCHA v3-provider en de **geheime** sleutel.
-3. GitHub: voeg de repository-secret `VITE_RECAPTCHA_SITE_KEY` toe (de
-   **site**-sleutel). De deploy-workflow geeft hem door aan de build.
+reCAPTCHA Classic (v3) is uitgefaseerd, daarom gebruikt de site de
+Enterprise-provider (in de console nu "Fraud Defense").
+
+1. **Google Cloud-console** (project `bureau-x`): zet de _reCAPTCHA Enterprise
+   API_ aan en maak onder _Security > reCAPTCHA_ een **website**-sleutel aan
+   voor `bureau-x.be`, zonder checkbox-uitdaging. Er is enkel een sitesleutel,
+   geen geheime sleutel.
+2. **Firebase-console > App Check > Apps**: registreer de web-app met
+   **Fraud Defense** en die sitesleutel.
+3. GitHub: voeg de repository-secret `VITE_RECAPTCHA_SITE_KEY` toe (dezelfde
+   sitesleutel). De deploy-workflow geeft hem door aan de build.
 4. Laat App Check eerst een week op **monitoren** staan
    (_App Check > APIs > Realtime Database_): je ziet dan welk deel van het
    verkeer een geldig token heeft.
