@@ -613,7 +613,7 @@
 
         <!-- MODAL OVERLAY -->
         <div id="zone-modal">
-          <div id="zone-modal-backdrop" onclick="sluitModal()"></div>
+          <div id="zone-modal-backdrop"></div>
           <div
             id="zone-modal-inhoud"
             role="dialog"
@@ -1083,7 +1083,7 @@
               </div>
             </div>
 
-            <button type="button" class="modal-sluit-btn" onclick="sluitModal()">↩ Sluiten</button>
+            <button type="button" class="modal-sluit-btn">↩ Sluiten</button>
           </div>
         </div>
 
@@ -1184,120 +1184,6 @@
     <!-- /content-wrapper -->
 
     <script type="module" src="js/speler-b.ts"></script>
-
-    <script>
-      /* ── Zone data ── */
-      const zoneData = {
-        bed: {
-          titel: 'Zone 1  -  Bed',
-          tekst:
-            'Opgemaakt. Lakens strak. Geen briefje onder kussen aangetroffen. Kussen zit nog op originele positie.',
-        },
-        kast: {
-          titel: 'Zone 2  -  Kledingkast',
-          tekst:
-            'Half leeg. Zomerjurk en reisjas ontbreken. Overige kleding aanwezig. Geen verborgen voorwerpen op de bovenste plank.',
-        },
-        nachtkastje: {
-          titel: 'Zone 3  -  Nachtkastje',
-          tekst:
-            'OPZ-dagboek aanwezig. Laatste bladzijde ontbreekt  -  ruw uitgescheurd. Pen. Eén ongebruikte postzegel in de la aangetroffen.',
-        },
-        onderbed: {
-          titel: 'Zone 4  -  Onder bed',
-          tekst:
-            'Lege koekjesdoos aangetroffen, schuifbaar. Mogelijk gebruikt als bewaarplaats. Geen verdere inhoud.',
-        },
-        raam: {
-          titel: 'Zone 5  -  Raam',
-          tekst: 'Gesloten en op slot. Geen sporen van geforceerde ingang. Vensterbank leeg.',
-        },
-        prikbord: {
-          titel: 'Zone 6  -  Prikbord',
-          tekst:
-            'Eén envelop vastgespeld met rode punaise. Afzender: Diest, 3 april 2025. Meerdere notities aanwezig.',
-          heeftPrikbord: true,
-        },
-        prullenmand: {
-          titel: 'Zone 7  -  Prullenmand',
-          tekst:
-            'Prullenmand onder het bureau. Bovenop ligt een verfrommeld vervoersbewijs van De Lijn.',
-          heeftDagpas: true,
-        },
-      };
-
-      /* ── Klik op zone ── */
-      function updateZoneTeller() {
-        const aantal = document.querySelectorAll('.kamer-zone.zone-bekeken').length;
-        const teller = document.getElementById('zone-teller');
-        if (!teller) return;
-        teller.textContent = aantal;
-        teller.parentElement.classList.toggle('zv-klaar', aantal === 7);
-      }
-
-      let laatsteZone = null;
-
-      function openZone(zone) {
-        const data = zoneData[zone.dataset.zone];
-        if (!data) return;
-        laatsteZone = zone;
-        document.getElementById('zone-modal-titel').textContent = data.titel;
-        document.getElementById('zone-modal-tekst').textContent = data.tekst;
-        document.getElementById('zone-prikbord-inhoud').style.display = data.heeftPrikbord
-          ? 'block'
-          : 'none';
-        document.getElementById('zone-prullenmand-inhoud').style.display = data.heeftDagpas
-          ? 'block'
-          : 'none';
-        document.getElementById('zone-modal').style.display = 'block';
-        zone.classList.add('zone-bekeken');
-        updateZoneTeller();
-        // Toetsenbord: focus in het venster, terug naar de zone bij sluiten.
-        document.querySelector('#zone-modal .modal-sluit-btn').focus();
-      }
-
-      document.querySelectorAll('.kamer-zone').forEach(zone => {
-        zone.addEventListener('click', () => openZone(zone));
-        zone.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openZone(zone);
-          }
-        });
-      });
-
-      function modalOpen() {
-        return document.getElementById('zone-modal').style.display === 'block';
-      }
-
-      function sluitModal() {
-        if (!modalOpen()) return;
-        document.getElementById('zone-modal').style.display = 'none';
-        laatsteZone?.focus();
-      }
-
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') sluitModal();
-        // Focus binnen het venster houden zolang het open is.
-        if (e.key === 'Tab' && modalOpen()) {
-          const focusbaar = [
-            ...document.querySelectorAll(
-              '#zone-modal-inhoud button, #zone-modal-inhoud [tabindex="0"]',
-            ),
-          ].filter(el => el.offsetParent !== null);
-          if (!focusbaar.length) return;
-          const eerste = focusbaar[0];
-          const laatste = focusbaar[focusbaar.length - 1];
-          if (e.shiftKey && document.activeElement === eerste) {
-            e.preventDefault();
-            laatste.focus();
-          } else if (!e.shiftKey && document.activeElement === laatste) {
-            e.preventDefault();
-            eerste.focus();
-          }
-        }
-      });
-    </script>
 
     <script type="module" src="/src/bootstrap.ts"></script>
   </body>

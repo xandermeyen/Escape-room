@@ -20,6 +20,7 @@ import {
   KAMER14_TEKST_PUZZELS,
 } from './kamer14-config.ts';
 import { initBladzijde, toonVolledigeBladzijde } from './bladzijde.ts';
+import { initKamerinspectie } from './kamerinspectie.ts';
 import {
   registreerPoging,
   registreerOpgelost,
@@ -260,6 +261,9 @@ if (strokenLijst && btnP6 && feedbackP6) {
     },
   });
 }
+
+// ── Kamerinspectie: zones op de foto ───────────────────────
+initKamerinspectie();
 
 // ── Toetsenbord: tabs en klikbare documenten ──────────────
 maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));

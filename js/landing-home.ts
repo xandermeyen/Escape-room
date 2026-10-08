@@ -1,5 +1,20 @@
 import '../shared/js/sentry.ts';
-import { leesGoedgekeurdeReviews, type Review } from '../shared/js/reviews.ts';
+import type { Review } from '../shared/js/reviews.ts';
+import { initLanding } from './landing.ts';
+
+// ── Navigatie, menu, reveal en FAQ (zie landing.ts) ────────────
+initLanding({ getrapt: '.usp-grid, .steps-grid, .reviews-grid, .exp-grid' });
+
+// ── Deeltjes achter de hero: pas na het laden, niet blokkerend ──
+const heroCanvas = document.getElementById('hero-canvas');
+if (heroCanvas instanceof HTMLCanvasElement) {
+  const start = () =>
+    void import('./hero-deeltjes.ts')
+      .then(m => m.startHeroDeeltjes(heroCanvas))
+      .catch((err: unknown) => console.error('Deeltjes laden mislukt:', err));
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
+}
 
 // ── ECHTE REVIEWS LADEN ────────────────────────────────────────
 // Reviews komen uit Firebase en worden enkel getoond als ze
@@ -95,6 +110,9 @@ async function laadReviews(): Promise<void> {
   try {
     // Ruim ophalen: de eerste 6 worden getoond, maar het gemiddelde voor
     // de rich results telt over alle goedgekeurde reviews.
+    // Dynamisch geladen: valt Firebase uit, dan blijven menu, reveal en
+    // deeltjes gewoon werken (vroeger brak een Firebase-fout de hele pagina).
+    const { leesGoedgekeurdeReviews } = await import('../shared/js/reviews.ts');
     reviews = await leesGoedgekeurdeReviews(100);
   } catch (err) {
     console.error('Reviews laden mislukt:', err);

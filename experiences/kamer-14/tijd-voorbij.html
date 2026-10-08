@@ -58,13 +58,7 @@
       </div>
 
       <!-- ── Fase 2: Nieuwe post (verschijnt na 4 sec) ── -->
-      <div
-        id="nieuwe-post-notif"
-        class="nieuwe-post-notif verborgen"
-        onclick="toonBriefkaart()"
-        role="button"
-        tabindex="0"
-      >
+      <div id="nieuwe-post-notif" class="nieuwe-post-notif verborgen" role="button" tabindex="0">
         <div class="nieuwe-post-icoon">
           <i class="bi bi-envelope-fill"></i>
         </div>
@@ -162,35 +156,6 @@
       </div>
     </div>
     <!-- /container-smal -->
-
-    <script>
-      // Toon "nieuwe post" notificatie na 4 seconden
-      setTimeout(() => {
-        const notif = document.getElementById('nieuwe-post-notif');
-        notif.classList.remove('verborgen');
-
-        // Ook toegankelijk via toetsenbord
-        notif.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') toonBriefkaart();
-        });
-      }, 4000);
-
-      function toonBriefkaart() {
-        document.getElementById('nieuwe-post-notif').style.display = 'none';
-        document.getElementById('briefkaart-blok').classList.remove('verborgen');
-
-        // Scroll soepel naar briefkaart
-        setTimeout(() => {
-          document.getElementById('briefkaart-blok').scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        }, 100);
-      }
-
-      // Maak toonBriefkaart globaal beschikbaar
-      window.toonBriefkaart = toonBriefkaart;
-    </script>
 
     <script type="module" src="/src/bootstrap.ts"></script>
     <script type="module" src="./js/tijd-voorbij.ts"></script>

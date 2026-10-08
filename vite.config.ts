@@ -3,6 +3,9 @@ import { resolve } from 'path';
 
 export default defineConfig({
   build: {
+    // three.js (deeltjes op de homepage) is één lazy chunk van ~530 kB, pas na
+    // het laden van de pagina. De rest blijft ruim onder deze grens.
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       input: {
         // Hoofdpagina's

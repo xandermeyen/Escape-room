@@ -944,6 +944,11 @@
           gap: 2rem;
         }
       }
+      .boek-fout {
+        color: #e08a7a;
+        font-size: 0.9rem;
+        margin-top: 0.75rem;
+      }
     </style>
   </head>
   <body>
@@ -1305,6 +1310,7 @@
         <p class="boek-ok" id="boek-ok">
           &#10003; Aanvraag ontvangen. Jullie spellinks worden zo snel mogelijk verstuurd.
         </p>
+        <p class="boek-fout" id="boek-fout" role="alert" hidden></p>
       </div>
     </section>
 
@@ -1341,88 +1347,7 @@
       </div>
     </footer>
 
-    <script>
-      var navbar = document.getElementById('navbar');
-      window.addEventListener(
-        'scroll',
-        function () {
-          navbar && navbar.classList.toggle('scrolled', window.scrollY > 50);
-        },
-        { passive: true },
-      );
-
-      var navToggle = document.getElementById('navToggle');
-      var navLinksEl = document.getElementById('navLinks');
-      if (navToggle && navLinksEl) {
-        navToggle.addEventListener('click', function () {
-          var isOpen = navLinksEl.classList.toggle('open');
-          navToggle.classList.toggle('open', isOpen);
-          navToggle.setAttribute('aria-expanded', String(isOpen));
-        });
-        navLinksEl.querySelectorAll('a').forEach(function (a) {
-          a.addEventListener('click', function () {
-            navLinksEl.classList.remove('open');
-            navToggle.classList.remove('open');
-            navToggle.setAttribute('aria-expanded', 'false');
-          });
-        });
-      }
-
-      var io = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (e) {
-            if (e.isIntersecting) {
-              e.target.classList.add('visible');
-              io.unobserve(e.target);
-            }
-          });
-        },
-        { threshold: 0.12 },
-      );
-      document.querySelectorAll('.reveal').forEach(function (el) {
-        io.observe(el);
-      });
-
-      document.querySelectorAll('.faq-q').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var item = btn.parentElement;
-          var was = item.classList.contains('open');
-          document.querySelectorAll('.faq-item').forEach(function (i) {
-            i.classList.remove('open');
-          });
-          if (!was) item.classList.add('open');
-        });
-      });
-
-      var boekForm = document.getElementById('boekForm');
-      if (boekForm) {
-        var datumInput = boekForm.querySelector('input[name="datum"]');
-        if (datumInput) datumInput.min = new Date().toISOString().split('T')[0];
-
-        boekForm.addEventListener('submit', async function (e) {
-          e.preventDefault();
-          var btn = boekForm.querySelector('button[type="submit"]');
-          btn.disabled = true;
-          btn.textContent = 'Bezig…';
-          try {
-            var res = await fetch(boekForm.action, {
-              method: 'POST',
-              body: new FormData(boekForm),
-              headers: { Accept: 'application/json' },
-            });
-            if (res.ok) {
-              boekForm.style.display = 'none';
-              document.getElementById('boek-ok').style.display = 'block';
-            } else {
-              throw new Error();
-            }
-          } catch {
-            btn.disabled = false;
-            btn.textContent = 'Sessie aanvragen';
-          }
-        });
-      }
-    </script>
+    <script type="module" src="/js/landing-kamer14.ts"></script>
     <script type="module" src="/shared/js/cookie-banner.ts"></script>
   </body>
 </html>
