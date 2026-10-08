@@ -149,6 +149,10 @@ function updateTabs(p: Record<string, boolean>): void {
     document.getElementById('puzzel-2')?.classList.remove('verborgen');
     document.getElementById('puzzel-3')?.classList.remove('verborgen');
   }
+  // P4 (wie ging ze opzoeken) staat in de kamerinspectie: samen met die tab vrij.
+  if (p['p2'] && p['p3']) {
+    document.getElementById('puzzel-4')?.classList.remove('verborgen');
+  }
   if (p['p4']) {
     document.getElementById('puzzel-5')?.classList.remove('verborgen');
   }
