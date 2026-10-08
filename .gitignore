@@ -38,3 +38,6 @@ desktop.ini
 # End-to-end-tests (Playwright)
 test-results/
 playwright-report/
+
+# Bestanden die Claude op deze computer klaarzet
+Claude outputs/
