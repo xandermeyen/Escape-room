@@ -12,11 +12,16 @@ dist
 dist-ssr
 *.local
 desktop.ini
+Thumbs.db
 
 # Environment variables - nooit op git
 .env
-.env.development
-.env.production
+.env.*
+!.env.example
+
+# Sleutels en service-accounts (bv. firebase-sa.json uit de rules-workflow)
+*-sa.json
+*.pem
 
 # Editor directories and files
 .vscode/*
@@ -35,9 +40,11 @@ desktop.ini
 # Lokale pnpm-store (per ongeluk aangemaakt via een sandbox-install)
 .pnpm-store/
 
-# End-to-end-tests (Playwright)
+# Tests: Playwright-resultaten en dekkingsrapporten
 test-results/
 playwright-report/
+blob-report/
+coverage/
 
 # Bestanden die Claude op deze computer klaarzet
 Claude outputs/
