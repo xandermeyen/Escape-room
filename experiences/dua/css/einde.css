@@ -1,0 +1,16 @@
+/*
+ * D.U.A., eindscherm
+ */
+
+.duo {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.duo > div {
+  flex: 1;
+  min-width: 280px;
+}
+.wacht-tekst {
+  text-align: center;
+}

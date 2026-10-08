@@ -1,0 +1,115 @@
+/*
+ * Host-paneel D.U.A.: enkel wat afwijkt van shared/css/host.css.
+ */
+
+.badge-admin {
+  background: #2d4a3e;
+  color: #8fc9a8;
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.code-gegenereerd {
+  font-family: monospace;
+  font-size: 1.6rem;
+  letter-spacing: 3px;
+  color: #e8e0d0;
+  background: #1a1a1a;
+  border: 1px dashed #555;
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.btn-admin {
+  background: #2d4a3e;
+  color: #e8e0d0;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-admin:hover {
+  background: #3d6b5a;
+  color: #fff;
+}
+
+.veld-label {
+  color: #888;
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+select.admin-select {
+  background: #1a1a1a;
+  border: 1px solid #444;
+  color: #e8e0d0;
+  border-radius: 4px;
+  padding: 0.45rem 0.6rem;
+  font-family: 'Special Elite', serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+select.admin-select:focus {
+  outline: none;
+  border-color: #2d4a3e;
+}
+
+.code-cel {
+  font-family: monospace;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  color: #c9b99a;
+}
+
+.badge-bezig {
+  background: #2d4a3e;
+  color: #8fc9a8;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.link-input {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #888;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  width: 230px;
+  vertical-align: middle;
+}
+
+.spelers-info {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.era-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.era-1934 {
+  background: #8b6914;
+}
+
+.era-2034 {
+  background: #2d4a3e;
+}

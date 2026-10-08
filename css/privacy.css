@@ -1,0 +1,237 @@
+/*
+ * Privacybeleid
+ */
+
+.dossier-wrapper {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+.dossier-header {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: none;
+  padding: 2rem 2.5rem 1.5rem;
+  margin-top: 3rem;
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dossier-ref {
+  font-family: 'Special Elite', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  opacity: 0.75;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.dossier-title {
+  font-family: 'Special Elite', serif;
+  font-size: 2rem;
+  line-height: 1.1;
+  margin-bottom: 0;
+}
+
+.dossier-stamp {
+  position: absolute;
+  top: 1.6rem;
+  right: 2rem;
+  font-family: 'Special Elite', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(180, 140, 90, 0.6);
+  border: 1.5px solid rgba(180, 140, 90, 0.35);
+  padding: 0.3rem 0.6rem;
+  transform: rotate(2deg);
+  white-space: nowrap;
+}
+
+.dossier-meta-bar {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: none;
+  padding: 0.75rem 2.5rem;
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.meta-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.meta-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  font-family: 'Special Elite', serif;
+}
+
+.meta-value {
+  font-size: 0.82rem;
+  opacity: 0.75;
+  font-family: 'Special Elite', serif;
+}
+
+.dossier-body {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.artikel {
+  margin-bottom: 2.25rem;
+  padding-bottom: 2.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.artikel:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.artikel-nummer {
+  font-family: 'Special Elite', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 0.25rem;
+}
+
+.artikel-titel {
+  font-family: 'Special Elite', serif;
+  font-size: 1.05rem;
+  margin-bottom: 0.9rem;
+  opacity: 0.92;
+}
+
+.artikel p,
+.artikel li {
+  font-size: 0.9rem;
+  line-height: 1.85;
+  opacity: 0.72;
+  margin-bottom: 0.5rem;
+}
+
+.artikel ul {
+  padding-left: 1.1rem;
+}
+.artikel ul li::marker {
+  content: ' -  ';
+  opacity: 0.4;
+}
+.artikel strong {
+  opacity: 1;
+  color: inherit;
+}
+
+.dossier-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.dossier-table th {
+  font-family: 'Special Elite', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: normal;
+}
+
+.dossier-table td {
+  padding: 0.6rem 1rem 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  opacity: 0.72;
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.dossier-table tr:last-child td {
+  border-bottom: none;
+}
+
+.recht-item {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  margin-bottom: 0.6rem;
+}
+
+.recht-naam {
+  font-family: 'Special Elite', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.2rem;
+  opacity: 0.9;
+}
+
+.recht-omschrijving {
+  font-size: 0.82rem;
+  opacity: 0.85;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.gba-blok {
+  border-left: 2px solid rgba(180, 140, 90, 0.35);
+  padding: 0.75rem 1.2rem;
+  background: rgba(180, 140, 90, 0.04);
+  font-size: 0.85rem;
+}
+
+.gba-blok p {
+  opacity: 0.95;
+  margin: 0;
+  line-height: 1.75;
+}
+
+.dossier-footer-note {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.78rem;
+  opacity: 0.8;
+  font-family: 'Special Elite', serif;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+body code {
+  color: #f3c6d8; /* Bootstrap-roze is onleesbaar op donker */
+}
+body .footer-link {
+  color: #d9b56a;
+}
+body .link-accent {
+  color: #ffe0a0; /* leesbaar op de donkere achtergrond, wint van style.css */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 576px) {
+  .dossier-header,
+  .dossier-meta-bar,
+  .dossier-body {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  .dossier-stamp {
+    display: none;
+  }
+  .dossier-title {
+    font-size: 1.5rem;
+  }
+}

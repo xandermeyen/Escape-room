@@ -1,0 +1,278 @@
+/*
+ * host.css: gedeelde opmaak van de host-panelen (Kamer 14 en D.U.A.).
+ * Wat per experience verschilt (kleuren, extra velden), staat in
+ * experiences/<naam>/css/host-panel.css en laadt daarna.
+ */
+
+body {
+  background: #1a1a1a;
+  color: #e8e0d0;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-header img {
+  height: 28px;
+  opacity: 0.8;
+}
+
+.admin-header h1 {
+  font-family: 'Special Elite', serif;
+  font-size: 1.4rem;
+  margin: 0;
+  color: #c9b99a;
+}
+
+.kaart {
+  background: #252525;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.kaart-titel {
+  font-family: 'Special Elite', serif;
+  font-size: 1rem;
+  color: #c9b99a;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.btn-admin:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-sec {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #444;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-sec:hover {
+  border-color: #888;
+  color: #e8e0d0;
+}
+
+.sessie-tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.sessie-tabel th {
+  text-align: left;
+  color: #888;
+  font-weight: normal;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0 0.5rem 0.75rem;
+  border-bottom: 1px solid #333;
+}
+
+.sessie-tabel td {
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid #2a2a2a;
+  vertical-align: middle;
+}
+
+.sessie-tabel tr:last-child td {
+  border-bottom: none;
+}
+
+.sessie-tabel tr:hover td {
+  background: #2a2a2a;
+}
+
+.puzzel-bollen {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.bol {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #444;
+}
+
+.bol.klaar {
+  background: #4a7c4a;
+  border-color: #4a7c4a;
+}
+
+.bol.open {
+  background: #2a2a2a;
+}
+
+.badge-actief {
+  background: #2a4a2a;
+  color: #7dc47d;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.badge-klaar {
+  background: #4a3a00;
+  color: #c9a84c;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.badge-inactief {
+  background: #3a2a2a;
+  color: #888;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.badge-verlopen {
+  background: #4a2a1a;
+  color: #d08a5a;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.kopieer-knop {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: color 0.15s;
+}
+
+.kopieer-knop:hover {
+  color: #c9b99a;
+}
+
+.status-bericht {
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+  display: none;
+}
+
+.status-ok {
+  background: #2a4a2a;
+  color: #7dc47d;
+}
+
+.status-fout {
+  background: #4a2a2a;
+  color: #c47d7d;
+}
+
+.laden {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.geen-sessies {
+  color: #555;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.geen-reviews {
+  color: #555;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.review-kaart {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.9rem;
+}
+
+.review-kaart:last-child {
+  margin-bottom: 0;
+}
+
+.terug-link {
+  color: #9a9a9a;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.terug-link:hover {
+  color: #c9b99a;
+}
+
+/* Speldata-tabellen (host-stats.ts) */
+.stats-tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 0.25rem 0;
+}
+.stats-tabel th {
+  text-align: left;
+  color: #888;
+  font-weight: normal;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid #333;
+}
+.stats-tabel td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+.stats-rij-zwaarste td {
+  background: #3a2a1a;
+}
+.stats-zwaarste {
+  background: #8b3a3a;
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+.stats-bezig {
+  color: #c9a84c;
+  font-size: 0.7rem;
+  margin-left: 4px;
+}
+.stats-leeg {
+  color: #777;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+.detail-rij td {
+  background: #1f1f1f;
+}
+.tabel-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

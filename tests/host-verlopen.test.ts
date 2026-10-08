@@ -68,6 +68,9 @@ describe('knop "Verlopen sessies sluiten"', () => {
     );
     expect(html).toContain('id="btn-sluit-verlopen"');
     expect(html).toContain('id="status-verlopen"');
-    expect(html).toContain('.badge-verlopen');
+    // De opmaak van de badge staat in de gedeelde host-CSS
+    expect(html).toContain('shared/css/host.css');
+    const css = readFileSync(resolve(__dirname, '../shared/css/host.css'), 'utf8');
+    expect(css).toContain('.badge-verlopen');
   });
 });

@@ -33,13 +33,8 @@ import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
 import { KAMER14_PUZZELS } from './kamer14-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 import { koppelActies } from '../../../shared/js/acties.ts';
-import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
+import { statsDetailHtml, gemiddeldenHtml } from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
-
-// Stijl voor de speldata-tabellen (gedeeld met het D.U.A.-paneel).
-const statsStijl = document.createElement('style');
-statsStijl.textContent = HOST_STATS_CSS;
-document.head.appendChild(statsStijl);
 
 const ROLLEN = { a: 'A', b: 'B' };
 

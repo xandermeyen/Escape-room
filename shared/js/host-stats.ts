@@ -95,16 +95,3 @@ export function gemiddeldenHtml(alle: SessieStats[], puzzels: string[]): string 
 }
 
 /** CSS voor beide host-panels (één keer in de pagina zetten). */
-export const HOST_STATS_CSS = `
-  .stats-tabel { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 0.25rem 0; }
-  .stats-tabel th { text-align: left; color: #888; font-weight: normal; font-size: 0.7rem;
-    text-transform: uppercase; letter-spacing: 1px; padding: 0.3rem 0.5rem; border-bottom: 1px solid #333; }
-  .stats-tabel td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #2a2a2a; }
-  .stats-rij-zwaarste td { background: #3a2a1a; }
-  .stats-zwaarste { background: #8b3a3a; color: #fff; font-size: 0.65rem; padding: 1px 6px;
-    border-radius: 3px; margin-left: 4px; }
-  .stats-bezig { color: #c9a84c; font-size: 0.7rem; margin-left: 4px; }
-  .stats-leeg { color: #777; font-size: 0.85rem; margin: 0.5rem 0; }
-  .detail-rij td { background: #1f1f1f; }
-  .tabel-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-`;

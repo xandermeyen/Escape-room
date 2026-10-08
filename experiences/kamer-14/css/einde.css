@@ -1,0 +1,754 @@
+/*
+ * Kamer 14, eindscherm: rapport, mail van An, briefkaart, epiloog, slot
+ */
+
+/* ══════════════════════════════════════════
+   PALET-OVERRIDE  -  warm perkament
+   Vervangt het donkergroene terminal-thema
+   van kamer14.css volledig voor einde.html
+══════════════════════════════════════════ */
+:root {
+  --k-bg: #f5efe0;
+  --k-bg-dark: #1e1408; /* systeembalk blijft donker */
+  --k-bg-panel: #f0e8d5;
+  --k-rand: #c8aa7a;
+  --k-rand-mid: #d8c090;
+  --k-accent: #8b5e1a;
+  --k-accent-licht: #c49a2a;
+  --k-tekst: #1e1408;
+  --k-tekst-mid: #3d2e14;
+  --k-tekst-grijs: #7a6040;
+  --k-tekst-donker: #b09070;
+  --font: 'Special Elite', Georgia, serif;
+}
+
+body {
+  background-color: var(--k-bg);
+  background-image: none; /* geen groene lijntjes */
+  color: var(--k-tekst);
+}
+
+/* Systeembalk: donker warm bruin */
+.systeembalk {
+  background: var(--k-bg-dark);
+  border-bottom-color: #5a4030;
+}
+.sys-logo {
+  color: var(--k-accent-licht);
+}
+.sys-sep {
+  color: #5a4030;
+}
+.sys-case {
+  color: #7a6040;
+}
+.sys-badge {
+  color: var(--k-accent-licht);
+  border-color: var(--k-accent);
+}
+
+/* Postkaart voorkant: donker zodat hij contrasteert met de warme achtergrond */
+.postkaart-voorkant {
+  background: #2a1f10;
+  border-color: var(--k-rand);
+}
+.postkaart-stad {
+  color: #f5efe0;
+}
+.postkaart-ondertitel {
+  color: #9a8060;
+}
+
+/* Slotscherm: iets lichter dan de rest */
+#scherm-slot {
+  background: #faf6ee;
+}
+
+/* ── Schermen ── */
+.einde-scherm {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  animation: fadeIn 0.5s ease;
+}
+.einde-scherm.actief {
+  display: flex;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Rapport form ── */
+.rapport-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 24px 40px;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+}
+.rapport-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--k-accent);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.rapport-org {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--k-tekst-donker);
+  line-height: 2;
+}
+.rapport-titel {
+  font-size: 17px;
+  color: var(--k-tekst);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+.rapport-stempel {
+  font-size: 10px;
+  color: var(--k-accent);
+  border: 1.5px solid var(--k-accent);
+  padding: 6px 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transform: rotate(3deg);
+  display: inline-block;
+  opacity: 0.7;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.rapport-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 24px;
+  margin-bottom: 28px;
+  font-size: 12px;
+  color: var(--k-tekst-donker);
+  letter-spacing: 0.07em;
+}
+.rapport-meta span {
+  color: var(--k-tekst-mid);
+}
+.rapport-sectie-titel {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--k-tekst-donker);
+  border-bottom: 1px dashed var(--k-rand);
+  padding-bottom: 7px;
+  margin-bottom: 20px;
+}
+.rapport-veld {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.rapport-veld-nr {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--k-tekst-donker);
+  padding-top: 6px;
+  min-width: 22px;
+}
+.rapport-veld-inner {
+  flex: 1;
+}
+.rapport-veld-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--k-tekst-grijs);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.rapport-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--k-accent);
+  color: var(--k-tekst);
+  font-family: var(--font);
+  font-size: 15px;
+  padding: 4px 0;
+  letter-spacing: 0.08em;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.rapport-input:focus {
+  border-bottom-color: var(--k-accent-licht);
+}
+.rapport-input.fout {
+  border-bottom-color: #7a3030;
+}
+.rapport-veld-fout {
+  font-size: 11px;
+  color: #7a4040;
+  margin-top: 5px;
+  letter-spacing: 0.05em;
+  display: none;
+}
+.rapport-actie {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid var(--k-rand);
+  padding-top: 20px;
+  margin-top: 8px;
+}
+.rapport-validatie-bericht {
+  flex: 1;
+  font-size: 11px;
+  color: #7a4040;
+  letter-spacing: 0.06em;
+  display: none;
+}
+.rapport-btn {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--k-accent);
+  color: var(--k-accent-licht);
+  padding: 10px 24px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition:
+    background 0.2s,
+    color 0.2s;
+  white-space: nowrap;
+}
+.rapport-btn:hover:not(:disabled) {
+  background: var(--k-accent);
+  color: var(--k-bg);
+}
+.rapport-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ── Briefkaart scherm ── */
+.briefkaart-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+.briefkaart-melding {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--k-tekst-donker);
+  margin-bottom: 10px;
+  text-align: center;
+}
+.briefkaart-melding-sub {
+  font-size: 13px;
+  color: var(--k-tekst-grijs);
+  letter-spacing: 0.06em;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+/* Flip card */
+.postkaart-scene {
+  perspective: 900px;
+  margin-bottom: 28px;
+}
+.postkaart {
+  width: 360px;
+  height: 240px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s ease;
+  cursor: pointer;
+}
+@media (max-width: 420px) {
+  .postkaart {
+    width: 300px;
+    height: 200px;
+  }
+}
+.postkaart.omgedraaid {
+  transform: rotateY(180deg);
+}
+.postkaart-zijde {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 2px;
+}
+
+/* Voorkant */
+.postkaart-voorkant {
+  background: var(--k-bg-panel);
+  border: 1px solid var(--k-accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+.postkaart-icoon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+.postkaart-stad {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 22px;
+  color: var(--k-tekst);
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.postkaart-ondertitel {
+  font-size: 10px;
+  color: var(--k-tekst-donker);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.postkaart-poststempel {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  font-size: 9px;
+  border: 1px solid var(--k-accent);
+  color: var(--k-accent);
+  padding: 3px 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: rotate(7deg);
+  opacity: 0.55;
+}
+
+/* Achterkant */
+.postkaart-achterkant {
+  background: #f4edda;
+  transform: rotateY(180deg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.postkaart-scheidslijn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 38%;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.postkaart-tekst {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 11.5px;
+  color: #2a2010;
+  line-height: 1.85;
+  padding-right: 42%;
+}
+.postkaart-handtekening {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 12px;
+  color: #2a2010;
+  text-align: right;
+  padding-right: 42%;
+  margin-top: 6px;
+}
+
+.briefkaart-hint {
+  font-size: 10px;
+  color: var(--k-tekst-donker);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 24px;
+  transition: opacity 0.3s;
+}
+.briefkaart-verder-btn {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--k-accent);
+  color: var(--k-accent-licht);
+  padding: 10px 24px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition:
+    background 0.2s,
+    color 0.2s;
+  display: none;
+}
+.briefkaart-verder-btn:hover {
+  background: var(--k-accent);
+  color: var(--k-bg);
+}
+
+/* ── Slotscherm ── */
+.slot-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+.slot-logo {
+  margin-bottom: 32px;
+  opacity: 0.55;
+}
+.slot-divider {
+  width: 36px;
+  height: 1px;
+  background: var(--k-accent);
+  margin: 20px auto;
+}
+.slot-hoofdtekst {
+  font-size: 14px;
+  color: var(--k-tekst-mid);
+  line-height: 1.95;
+  margin-bottom: 4px;
+}
+.slot-credit {
+  font-size: 12px;
+  color: var(--k-tekst-grijs);
+  letter-spacing: 0.06em;
+  line-height: 1.85;
+}
+.slot-link {
+  color: var(--k-accent-licht);
+  text-decoration: none;
+  border-bottom: 1px solid var(--k-accent);
+  padding-bottom: 1px;
+  transition: color 0.2s;
+}
+.slot-link:hover {
+  color: var(--k-tekst);
+}
+.slot-bureau {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--k-tekst-donker);
+  margin-top: 40px;
+}
+.slot-terug-btn {
+  margin-top: 16px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--k-tekst-donker);
+  color: var(--k-tekst-donker);
+  padding: 3px 0;
+  cursor: pointer;
+  font-family: var(--font);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.slot-terug-btn:hover {
+  color: var(--k-accent-licht);
+  border-color: var(--k-accent);
+}
+
+/* ── Eindstatistieken ── */
+.slot-stats {
+  display: none; /* wordt 'flex' zodra de data geladen is */
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.slot-stat {
+  border: 1px solid var(--k-rand);
+  background: var(--k-bg-panel);
+  padding: 12px 20px;
+  min-width: 120px;
+  text-align: center;
+}
+.slot-stat b {
+  display: block;
+  font-size: 20px;
+  color: var(--k-accent);
+  letter-spacing: 0.08em;
+  font-weight: normal;
+}
+.slot-stat span {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--k-tekst-grijs);
+}
+
+.slot-prestatie {
+  font-size: 13px;
+  color: var(--k-accent-licht);
+  letter-spacing: 0.04em;
+  margin: 4px 0 0;
+}
+.review-verbeter-label {
+  display: block;
+  text-align: left;
+  font-size: 11px;
+  color: var(--k-tekst-mid);
+  margin-bottom: 4px;
+}
+
+/* ── Review achterlaten ── */
+.slot-review {
+  max-width: 420px;
+  margin: 8px auto 0;
+  text-align: center;
+}
+.slot-review-titel {
+  font-size: 13px;
+  color: var(--k-tekst-donker);
+  margin-bottom: 4px;
+}
+.slot-review-sub {
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--k-tekst-grijs);
+  margin-bottom: 16px;
+}
+.review-sterren {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.review-sterren .ster {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--k-rand);
+  padding: 0 2px;
+  transition: color 0.15s;
+}
+.review-sterren .ster.actief {
+  color: var(--k-accent);
+}
+.review-sterren .ster:hover {
+  color: var(--k-accent-licht);
+}
+.slot-review textarea,
+.slot-review input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--k-bg-panel);
+  border: 1px solid var(--k-rand);
+  color: var(--k-tekst-donker);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  resize: vertical;
+}
+.slot-review textarea:focus,
+.slot-review input:focus {
+  outline: none;
+  border-color: var(--k-accent);
+}
+.slot-review-btn {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--k-accent);
+  border: none;
+  color: #1a1a1a;
+  padding: 10px 22px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: opacity 0.2s;
+}
+.slot-review-btn:hover {
+  opacity: 0.85;
+}
+.slot-review-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.review-fout {
+  display: none;
+  font-size: 11px;
+  color: #b04a3a;
+  margin-bottom: 10px;
+}
+.review-dank {
+  display: none;
+  font-size: 12px;
+  color: var(--k-accent);
+  margin-top: 4px;
+}
+/* ── Route-finale ── */
+.route-kaart {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 18px;
+  background: var(--k-bg-panel);
+  border: 1px solid var(--k-rand);
+}
+.route-lijn {
+  fill: none;
+  stroke: var(--k-rand-mid);
+  stroke-width: 2;
+  stroke-dasharray: 2 5;
+  transition: stroke 0.4s;
+}
+.route-lijn.rit {
+  stroke-dasharray: 8 6;
+}
+.route-lijn.getekend {
+  stroke: var(--k-accent);
+  stroke-width: 3;
+}
+.route-punt {
+  fill: var(--k-bg);
+  stroke: var(--k-rand);
+  stroke-width: 2;
+  transition: fill 0.4s;
+}
+.route-punt.getekend {
+  fill: var(--k-accent);
+  stroke: var(--k-accent);
+}
+.route-label {
+  font-family: var(--font);
+  font-size: 13px;
+  fill: var(--k-tekst);
+}
+.route-label.klein {
+  font-size: 10px;
+  fill: var(--k-tekst-grijs);
+}
+.route {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  border-left: 2px solid var(--k-rand);
+}
+.route-stop {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  position: relative;
+  padding: 0 0 18px 16px;
+}
+.route-stop::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--k-bg);
+  border: 2px solid var(--k-accent);
+}
+.route-tijd {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--k-tekst-grijs);
+  padding-top: 2px;
+}
+.route-titel {
+  font-size: 14px;
+  color: var(--k-tekst);
+}
+.route-sub {
+  font-size: 12px;
+  color: var(--k-tekst-grijs);
+  margin-top: 2px;
+}
+.route .rapport-veld-label {
+  display: block;
+}
+.route-tweede {
+  margin-top: 12px;
+}
+@media (max-width: 480px) {
+  .route-stop {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* ── Mail van An, waarschuwing en epiloog ── */
+.einde-mail {
+  width: 100%;
+  max-width: 560px;
+  background: var(--k-bg-panel);
+  border: 1px solid var(--k-rand);
+  color: var(--k-tekst);
+  padding: 22px 26px;
+  box-shadow: 0 6px 22px rgba(30, 20, 8, 0.12);
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: left;
+}
+.einde-mail-kop {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 12px;
+  margin: 0 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--k-rand-mid);
+  font-size: 12px;
+}
+.einde-mail-kop dt {
+  color: var(--k-tekst-grijs);
+  font-weight: normal;
+}
+.einde-mail-kop dd {
+  margin: 0;
+}
+.einde-mail p {
+  margin: 0 0 0.8em;
+}
+.einde-mail p:last-child {
+  margin-bottom: 0;
+}
+.einde-verder-btn {
+  margin-top: 28px;
+  display: inline-block;
+}
+.an-waarschuwing {
+  display: none;
+  margin: 0 0 18px;
+  max-width: none;
+  border-left: 3px solid #b04a3a;
+}
+.an-waarschuwing.zichtbaar {
+  display: block;
+}
+.politie-tekst p {
+  margin: 0 0 0.9em;
+}
+@media (max-width: 600px) {
+  .einde-mail {
+    padding: 16px;
+  }
+}

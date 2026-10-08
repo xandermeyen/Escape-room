@@ -26,7 +26,7 @@ import {
   reviewKaartHtml,
   reviewSamenvattingHtml,
 } from '../../../shared/js/host-reviews.ts';
-import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
+import { statsDetailHtml, gemiddeldenHtml } from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
 import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
@@ -36,11 +36,6 @@ import { koppelActies } from '../../../shared/js/acties.ts';
 
 // Knop "Verlopen sessies sluiten (n)" (zie shared/js/host-verlopen.ts).
 const verlopen = maakVerlopenKnop(() => void laadLijst());
-
-// Stijl voor de speldata-tabellen (gedeeld met het Kamer 14-paneel).
-const statsStijl = document.createElement('style');
-statsStijl.textContent = HOST_STATS_CSS;
-document.head.appendChild(statsStijl);
 
 const ROLLEN = { '1934': '1934', '2034': '2034' };
 

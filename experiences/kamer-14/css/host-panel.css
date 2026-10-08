@@ -1,0 +1,87 @@
+/*
+ * Host-paneel Kamer 14: enkel wat afwijkt van shared/css/host.css.
+ */
+
+.badge-admin {
+  background: #8b3a3a;
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.code-gegenereerd {
+  font-family: monospace;
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  color: #e8e0d0;
+  background: #1a1a1a;
+  border: 1px dashed #555;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.btn-admin {
+  background: #8b3a3a;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-admin:hover {
+  background: #a04040;
+  color: #fff;
+}
+
+.code-cel {
+  font-family: monospace;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: #c9b99a;
+}
+
+.badge-bezig {
+  background: #3a3a2a;
+  color: #c9b99a;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.link-input {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #888;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  width: 200px;
+  vertical-align: middle;
+}
+
+.code-invoer-admin {
+  background: #1a1a1a;
+  border: 1px solid #444;
+  color: #e8e0d0;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-family: monospace;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  width: 180px;
+  text-transform: uppercase;
+}
+
+.code-invoer-admin:focus {
+  outline: none;
+  border-color: #8b3a3a;
+}

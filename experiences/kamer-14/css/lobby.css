@@ -1,0 +1,58 @@
+/*
+ * Kamer 14, lobby: de briefing van An
+ */
+
+.briefing-mail {
+  background: var(--kleur-perkament);
+  color: var(--kleur-donker);
+  border-radius: 2px;
+  padding: 20px 24px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-body);
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+.briefing-kop {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 12px;
+  margin: 0 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #d8ccb4;
+  font-family: var(--font-archief);
+  font-size: 0.8rem;
+}
+.briefing-kop dt {
+  color: #6b6150;
+  font-weight: normal;
+}
+.briefing-kop dd {
+  margin: 0;
+}
+.briefing-tekst p {
+  margin: 0 0 0.8em;
+}
+.briefing-uitleg {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border: 1px solid rgba(200, 185, 154, 0.25);
+  border-radius: 2px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.briefing-uitleg h3 {
+  font-family: var(--font-archief);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--kleur-accent-licht);
+  margin: 0 0 8px;
+}
+.briefing-uitleg p {
+  margin: 0 0 0.6em;
+}
+@media (max-width: 600px) {
+  .briefing-mail {
+    padding: 16px;
+  }
+}
