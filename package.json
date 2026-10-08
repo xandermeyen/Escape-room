@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:rules": "pnpm dlx firebase-tools@15 emulators:exec --only database --project demo-bureau-x \"vitest run tests/database-rules.test.ts\"",
+    "test:rules": "pnpm dlx firebase-tools@15.33.0 emulators:exec --only database --project demo-bureau-x \"vitest run tests/database-rules.test.ts\"",
     "lint:html": "html-validate \"*.html\" \"kamer-14/*.html\" \"dua/*.html\" \"experiences/**/*.html\""
   },
   "devDependencies": {
