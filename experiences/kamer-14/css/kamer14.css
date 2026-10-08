@@ -695,6 +695,18 @@ html body {
   color: var(--k-tekst);
 }
 
+/* ── Uitstaplijst (atelier): elke bestemming even zwaar ── */
+.uitstaplijst {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--k-tekst);
+}
+.uitstaplijst li + li {
+  margin-top: 4px;
+}
+
 /* ── Doel: rapport voor An ── */
 .rapport-doel {
   margin: 0 24px;

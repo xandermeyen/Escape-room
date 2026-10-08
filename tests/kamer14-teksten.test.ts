@@ -112,6 +112,23 @@ describe('Kamer 14: geen markeringen in de documenten', () => {
     expect(logboek).not.toMatch(/style=|Afwijkend/);
   });
 
+  it('in de uitstaplijst springt geen bestemming in het oog', () => {
+    const html = lees('speler-a.html');
+    const lijst = /<ul class="uitstaplijst">([\s\S]*?)<\/ul>/.exec(html)?.[1] ?? '';
+    const items = [...lijst.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(m =>
+      (m[1] ?? '').replace(/\s+/g, ' ').trim(),
+    );
+    expect(items).toHaveLength(3);
+    expect(lijst).not.toMatch(/<img|<strong|style=/);
+    const lengtes = items.map(i => i.length);
+    expect(Math.max(...lengtes) / Math.min(...lengtes)).toBeLessThan(1.4);
+    // Diest blijft te vinden: enkel die bestemming past bij de tekening
+    const passend = items.filter(i => /achtzijdige spits/.test(i) && /vierkante toren/i.test(i));
+    expect(passend).toHaveLength(1);
+    expect(passend[0]).toMatch(/^Diest:/);
+    expect(tekst('speler-a.html')).toMatch(/achtzijdige spits boven een vierkante toren/);
+  });
+
   it('het prikbord springt niet meer in het oog dan de andere zones', () => {
     expect(lees('speler-b.html')).not.toContain('kamer-zone--uitgelicht');
   });
