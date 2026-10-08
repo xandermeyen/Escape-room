@@ -24,14 +24,14 @@ describe('controleerAntwoordHash', () => {
     expect(onJuist).toHaveBeenCalledOnce();
   });
 
-  it('toont "Correct" feedback bij goed antwoord', async () => {
+  it('toont "Juist" feedback bij goed antwoord', async () => {
     (document.getElementById('inp') as HTMLInputElement).value = 'hello';
 
     const hashes = { p1: ['2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'] };
 
     await controleerAntwoordHash('p1', 'inp', 'fb', 'btn', hashes, vi.fn(), 'Fout');
 
-    expect(document.getElementById('fb')!.textContent).toContain('Correct');
+    expect(document.getElementById('fb')!.textContent).toContain('Juist');
   });
 
   it('roept onJuist NIET aan bij fout antwoord', async () => {

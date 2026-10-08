@@ -13,9 +13,9 @@ import {
   type PuzzelStat,
 } from './speldata.ts';
 
-/** 754000 → "12:34", null → "—". */
+/** 754000 → "12:34", null → "-". */
 export function formateerDuur(ms: number | null): string {
-  if (ms === null) return '—';
+  if (ms === null) return '-';
   const sec = Math.round(ms / 1000);
   return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
 }
@@ -25,7 +25,7 @@ function hintsTekst(stat: PuzzelStat | undefined, rollen: Record<string, string>
   const delen = Object.entries(rollen)
     .filter(([rol]) => hints[rol])
     .map(([rol, label]) => `${escHtml(label)} ${hints[rol]}`);
-  return delen.length ? delen.join(' · ') : '—';
+  return delen.length ? delen.join(' · ') : '-';
 }
 
 /**

@@ -266,3 +266,29 @@ describe('Kamer 14: consistentie', () => {
     expect(lees('speler-b.html')).not.toContain('💡 Aanwijzing');
   });
 });
+
+// ── Geen gedachtestreepjes of techniek in wat spelers lezen ──────────────────
+
+describe('spelerteksten', () => {
+  const bronnen = [
+    '../shared/js/utils.ts',
+    '../shared/js/deel.ts',
+    '../shared/js/timer.ts',
+    '../experiences/kamer-14/js/kamer14-config.ts',
+    '../experiences/kamer-14/js/einde.ts',
+    '../experiences/dua/js/dua-session.ts',
+  ];
+
+  it.each(bronnen)('%s: geen gedachtestreepje in een tekst tussen aanhalingstekens', pad => {
+    const code = readFileSync(resolve(__dirname, pad), 'utf8')
+      .split('\n')
+      .filter(regel => !/^\s*(\/\/|\*|\/\*)/.test(regel))
+      .join('\n');
+    expect(code).not.toMatch(/['`][^'`\n]*[—–][^'`\n]*['`]/);
+  });
+
+  it('feedback bij een juist antwoord noemt Firebase niet', () => {
+    const utils = readFileSync(resolve(__dirname, '../shared/js/utils.ts'), 'utf8');
+    expect(utils).not.toMatch(/textContent = '[^']*Firebase/);
+  });
+});

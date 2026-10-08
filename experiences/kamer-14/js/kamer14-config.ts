@@ -251,14 +251,14 @@ export const KAMER14_VRIJGAVE: Record<string, string[]> = {
 export const KAMER14_TIMER_WAARSCHUWINGEN: TimerWaarschuwing[] = [
   {
     minuten: 30,
-    titel: 'Melding — halftime',
+    titel: 'Halverwege',
     tekst:
       'Het kantoor van An Vermeersch sluit om 17u00. U heeft nog 30 minuten om uw rapport in te dienen.',
     urgent: false,
   },
   {
     minuten: 10,
-    titel: '⚠ Dringend — nog 10 minuten',
+    titel: '⚠ Dringend: nog 10 minuten',
     tekst:
       'Het intern dossier van Lena Bogaert wordt automatisch gesloten als er geen rapport is ingediend.',
     urgent: true,

@@ -153,7 +153,7 @@ async function diendIn(): Promise<void> {
     btn.disabled = false;
     btn.innerHTML = '<i class="bi bi-check2-square me-2"></i>Rapport indienen';
     if (validatieBericht) {
-      validatieBericht.textContent = 'Verbindingsfout — probeer opnieuw.';
+      validatieBericht.textContent = 'Verbindingsfout. Probeer opnieuw.';
       validatieBericht.style.display = 'block';
     }
   }

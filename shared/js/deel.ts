@@ -23,7 +23,7 @@ export function koppelDeelKnop(knopId: string, maakTekst: () => string): void {
 
     try {
       await navigator.clipboard.writeText(tekst);
-      knop.textContent = 'Gekopieerd — plak het in je groepschat!';
+      knop.textContent = 'Gekopieerd. Plak het in je groepschat!';
     } catch {
       return; // klembord geweigerd; knop ongemoeid laten
     }

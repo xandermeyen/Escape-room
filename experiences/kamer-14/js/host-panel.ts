@@ -101,7 +101,7 @@ async function maakSessieAan() {
     void laadLijst();
   } catch (err) {
     console.error(err);
-    toonStatus(status, 'Firebase-fout: ' + foutTekst(err), false);
+    toonStatus(status, 'Aanmaken mislukt: ' + foutTekst(err), false);
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<i class="bi bi-check2 me-2"></i>Sessie aanmaken';

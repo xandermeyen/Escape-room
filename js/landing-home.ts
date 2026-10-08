@@ -141,7 +141,7 @@ laadReviews();
 
 // ── EASTER EGG ─────────────────────────────────────────────────
 console.log(
-  '%cBUREAU X — INTERN ARCHIEF',
+  '%cBUREAU X · INTERN ARCHIEF',
   'font-family: monospace; font-size: 14px; letter-spacing: 2px; color: #c8a96e;',
   '\n\nJe zoekt op plekken waar anderen niet kijken. Goede reflex, speurder.' +
     '\nHet archief reageert op haar naam. Typ die maar eens.',

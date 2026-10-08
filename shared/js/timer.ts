@@ -34,13 +34,13 @@ export interface TimerOpties {
 const STANDAARD_WAARSCHUWINGEN: TimerWaarschuwing[] = [
   {
     minuten: 30,
-    titel: 'Melding — halftime',
+    titel: 'Halverwege',
     tekst: 'De helft van de tijd is voorbij. U heeft nog 30 minuten.',
     urgent: false,
   },
   {
     minuten: 10,
-    titel: '⚠ Dringend — nog 10 minuten',
+    titel: '⚠ Dringend: nog 10 minuten',
     tekst: 'Nog 10 minuten. Rond het onderzoek af.',
     urgent: true,
   },

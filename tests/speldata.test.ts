@@ -176,7 +176,7 @@ describe('host-stats', () => {
   it('formateerDuur', () => {
     expect(formateerDuur(754_000)).toBe('12:34');
     expect(formateerDuur(5_000)).toBe('0:05');
-    expect(formateerDuur(null)).toBe('—');
+    expect(formateerDuur(null)).toBe('-');
   });
 
   it('details tonen tijd, pogingen en hints per rol', () => {

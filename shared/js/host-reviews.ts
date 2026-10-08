@@ -61,7 +61,7 @@ export function reviewKaartHtml(rij: ReviewRij): string {
         month: '2-digit',
         year: 'numeric',
       })
-    : '—';
+    : '-';
   const veiligId = escHtml(id);
 
   const actie = data.goedgekeurd

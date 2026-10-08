@@ -197,7 +197,7 @@ export async function controleerAntwoordHash(
   if (oordeel === 'juist') {
     input.classList.remove('fout');
     feedback.className = 'puzzel-feedback correct';
-    feedback.textContent = 'Correct — Firebase wordt bijgewerkt…';
+    feedback.textContent = 'Juist! Even opslaan…';
     btn.disabled = true;
     onJuist();
   } else {

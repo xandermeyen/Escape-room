@@ -111,14 +111,14 @@ export function datumHtml(data: Record<string, unknown>): string {
   return tijdstipHtml(data.aangemaakt);
 }
 
-/** Moment waarop de code de lobby voor het eerst opende, of '—'. */
+/** Moment waarop de code de lobby voor het eerst opende, of '-'. */
 export function geopendHtml(data: Record<string, unknown>): string {
   return tijdstipHtml(data.geopendOp);
 }
 
 /** Firebase-tijdstip (ms) leesbaar (nl-BE), ge-escaped voor innerHTML. */
 export function tijdstipHtml(waarde: unknown): string {
-  if (typeof waarde !== 'number' || !waarde) return '—';
+  if (typeof waarde !== 'number' || !waarde) return '-';
   const datum = new Date(waarde).toLocaleString('nl-BE', {
     day: '2-digit',
     month: '2-digit',

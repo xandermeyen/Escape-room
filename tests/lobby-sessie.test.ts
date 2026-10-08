@@ -188,7 +188,7 @@ describe('isVerlopen / statusBadgeHtml', () => {
   });
 
   it('toont geopendOp, of een streepje als de code nooit geopend werd', () => {
-    expect(geopendHtml({})).toBe('—');
-    expect(geopendHtml({ geopendOp: nu })).not.toBe('—');
+    expect(geopendHtml({})).toBe('-');
+    expect(geopendHtml({ geopendOp: nu })).not.toBe('-');
   });
 });

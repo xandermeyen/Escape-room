@@ -24,7 +24,7 @@ import { schrijf } from '../../../shared/js/verbinding.ts';
 export const BRIEFTEKST =
   'MONSEIGNEUR. KIJK NIET LANGER WEG. UW AARZELING KOST U MEER DAN GELD. ' +
   'EEN LAATSTE TEKEN IS ONDERWEG: ZOEK WAAR REIZIGERS WACHTEN. ' +
-  'HET NUMMER IS EEN MEER DAN HET AANTAL BRIEVEN DAT U TELT. — D.U.A.';
+  'HET NUMMER IS EEN MEER DAN HET AANTAL BRIEVEN DAT U TELT. - D.U.A.';
 
 // Plekken die de politie in december 1934 doorzocht (huiszoekingsverslag).
 export const DOORZOCHT = ['bureau', 'kast', 'boekenrek'];
