@@ -34,6 +34,7 @@ import {
   speelEnvelopGeluid,
 } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
+import { initRapportDoel, updateRapportDoel } from './rapport-doel.ts';
 
 let _audioGestart: boolean = false;
 
@@ -217,11 +218,15 @@ maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));
 const briefKaart = document.getElementById('brief-kaart');
 if (briefKaart) maakKlikbaar(briefKaart, 'Envelop omdraaien en de brief lezen');
 
+// ── Doel: rapportvragen (dicht op gsm) ─────────────────────
+initRapportDoel();
+
 // ── Firebase live luisteren ───────────────────────────────
 const unsubscribe = luisterNaarStatus(sessie, puzzels => {
   const p = puzzels || {};
   updateVoortgang(p);
   updateTabs(p);
+  updateRapportDoel(p);
   registreerVrijgaves(sessie, p, KAMER14_VRIJGAVE);
   hulp.status(p);
 });

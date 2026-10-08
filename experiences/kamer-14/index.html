@@ -14,6 +14,62 @@
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="../../shared/css/game.css" />
+    <style>
+      .briefing-mail {
+        background: var(--kleur-perkament);
+        color: var(--kleur-donker);
+        border-radius: 2px;
+        padding: 20px 24px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+        font-family: var(--font-body);
+        font-size: 0.97rem;
+        line-height: 1.6;
+      }
+      .briefing-kop {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 2px 12px;
+        margin: 0 0 14px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #d8ccb4;
+        font-family: var(--font-archief);
+        font-size: 0.8rem;
+      }
+      .briefing-kop dt {
+        color: #6b6150;
+        font-weight: normal;
+      }
+      .briefing-kop dd {
+        margin: 0;
+      }
+      .briefing-tekst p {
+        margin: 0 0 0.8em;
+      }
+      .briefing-uitleg {
+        margin-top: 20px;
+        padding: 16px 20px;
+        border: 1px solid rgba(200, 185, 154, 0.25);
+        border-radius: 2px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      .briefing-uitleg h3 {
+        font-family: var(--font-archief);
+        font-size: 0.8rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--kleur-accent-licht);
+        margin: 0 0 8px;
+      }
+      .briefing-uitleg p {
+        margin: 0 0 0.6em;
+      }
+      @media (max-width: 600px) {
+        .briefing-mail {
+          padding: 16px;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- STAP 1: INLEIDEND SCHERM -->
@@ -42,8 +98,76 @@
         </div>
 
         <div class="text-center mt-4">
-          <button class="btn btn-game btn-lg" id="btn-begin">
+          <button
+            class="btn btn-game btn-lg"
+            id="btn-naar-briefing"
+            onclick="toonScherm('scherm-briefing')"
+          >
             <i class="bi bi-play-fill me-2"></i>Begin
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAP 1B: BRIEFING VAN AN VERMEERSCH -->
+    <div id="scherm-briefing" class="scherm">
+      <div class="container-smal">
+        <div class="text-center mb-4">
+          <div class="dossier-label mb-2">Nieuw bericht</div>
+          <h2 class="game-subtitel">Een mail van het OPZ</h2>
+        </div>
+
+        <article class="briefing-mail" aria-labelledby="briefing-onderwerp">
+          <dl class="briefing-kop">
+            <dt>Van</dt>
+            <dd>An Vermeersch, OPZ Geel</dd>
+            <dt>Aan</dt>
+            <dd>Bureau X</dd>
+            <dt>Onderwerp</dt>
+            <dd id="briefing-onderwerp">Lena Bogaert is weg</dd>
+            <dt>Datum</dt>
+            <dd>Dinsdag 6 mei 2025, 16u00</dd>
+          </dl>
+          <div class="briefing-tekst">
+            <p>Hallo,</p>
+            <p>
+              Lena Bogaert is vanmorgen vertrokken zonder iets te zeggen. Ze woont al twee jaar bij
+              het gastgezin Martens-Peeters in de Gasthuisstraat. Haar kleren zijn mee, er ligt geen
+              briefje.
+            </p>
+            <p>
+              Ik denk niet dat ze in gevaar is. Het lijkt voorbereid. Maar ik moet weten waar ze is.
+              Heb ik om 17u00 geen rapport, dan schakel ik de politie in. Dat wil ik Lena liever
+              besparen.
+            </p>
+            <p>
+              Jullie hebben dus 60 minuten. In het rapport wil ik lezen waar ze naartoe is, bij wie,
+              hoe ze er geraakt is en wanneer ze vertrok.
+            </p>
+            <p>
+              Ik stuur jullie twee dossiers: dat van ons en dat van het gastgezin. Ik heb ze zelf
+              nog niet naast elkaar kunnen leggen.
+            </p>
+            <p class="mb-0">An</p>
+          </div>
+        </article>
+
+        <div class="briefing-uitleg">
+          <h3>Zo werkt het</h3>
+          <p>
+            Speler A krijgt het dossier van het OPZ: het weekrooster, de notities van An en het
+            atelier. Speler B krijgt het dossier van het gastgezin: het logboek van Katrijn, het
+            kasoverzicht en later de kamer van Lena.
+          </p>
+          <p class="mb-0">
+            Jullie zien elk andere stukken. Wat jij zoekt, staat vaak bij de ander. Bel met elkaar
+            en lees voor wat je ziet.
+          </p>
+        </div>
+
+        <div class="text-center mt-4">
+          <button class="btn btn-game btn-lg" id="btn-begin">
+            <i class="bi bi-folder2-open me-2"></i>Naar het dossier
           </button>
         </div>
       </div>
@@ -80,7 +204,7 @@
         </div>
 
         <div class="text-center mt-3">
-          <button class="btn btn-terug" onclick="toonScherm('scherm-intro')">
+          <button class="btn btn-terug" onclick="toonScherm('scherm-briefing')">
             <i class="bi bi-arrow-left me-1"></i>Terug
           </button>
         </div>

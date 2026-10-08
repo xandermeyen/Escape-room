@@ -695,6 +695,75 @@ html body {
   color: var(--k-tekst);
 }
 
+/* ── Doel: rapport voor An ── */
+.rapport-doel {
+  margin: 0 24px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--k-rand);
+  font-size: 13px;
+  color: var(--k-tekst);
+}
+.rapport-doel summary {
+  cursor: pointer;
+  min-height: 24px;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--k-accent-licht);
+}
+.rapport-doel summary {
+  list-style: none;
+}
+.rapport-doel summary::-webkit-details-marker {
+  display: none;
+}
+.rapport-doel summary::before {
+  content: '▸';
+  display: inline-block;
+  width: 14px;
+}
+.rapport-doel[open] summary::before {
+  content: '▾';
+}
+.rapport-doel summary:focus-visible {
+  outline: 1px solid var(--k-accent-licht);
+  outline-offset: 3px;
+}
+.doel-teller {
+  margin-left: 6px;
+  color: var(--k-tekst-mid);
+  letter-spacing: 0.05em;
+}
+.rapport-doel ul {
+  list-style: none;
+  margin: 8px 0 2px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+}
+.rapport-doel li::before {
+  content: '☐';
+  display: inline-block;
+  width: 20px;
+  color: var(--k-tekst-mid);
+}
+.rapport-doel li.gevonden {
+  color: var(--k-tekst-mid);
+}
+.rapport-doel li.gevonden::before {
+  content: '☑';
+  color: var(--k-accent-licht);
+}
+.visueel-verborgen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 /* ── Gsm (390 px): niets breder dan het scherm ── */
 @media (max-width: 600px) {
   .systeembalk {
@@ -716,5 +785,16 @@ html body {
   .hint-knop,
   .puzzel-btn {
     min-height: 44px;
+  }
+  .rapport-doel {
+    margin: 0 16px;
+  }
+  .rapport-doel summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .rapport-doel ul {
+    flex-direction: column;
   }
 }

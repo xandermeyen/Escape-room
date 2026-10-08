@@ -29,6 +29,7 @@ import { maakTabsToegankelijk } from '../../../shared/js/toegankelijk.ts';
 import { KAMER14_INACTIEF, KAMER14_HULP_HTML, kamer14VrijgaveMelding } from './kamer14-hulp.ts';
 import { startAchtergrond, speelUnlock, speelVerhaalFragment } from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
+import { initRapportDoel, updateRapportDoel } from './rapport-doel.ts';
 
 let _audioGestart: boolean = false;
 
@@ -196,11 +197,15 @@ function updateTabs(p: Record<string, boolean>): void {
 // ── Toetsenbord: tabs en klikbare documenten ──────────────
 maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));
 
+// ── Doel: rapportvragen (dicht op gsm) ─────────────────────
+initRapportDoel();
+
 // ── Firebase live luisteren ───────────────────────────────
 const unsubscribe = luisterNaarStatus(sessie, puzzels => {
   const p = puzzels || {};
   updateVoortgang(p);
   updateTabs(p);
+  updateRapportDoel(p);
   registreerVrijgaves(sessie, p, KAMER14_VRIJGAVE);
   hulp.status(p);
 });
