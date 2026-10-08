@@ -1,8 +1,12 @@
 name: Firebase rules deployen
 
-# Aparte, handmatige workflow. Draait NIET automatisch bij een push naar main.
-# Je start hem bewust via de "Run workflow"-knop (Actions-tab) zodat je nooit per
-# ongeluk je live database-rules overschrijft.
+# Zet firebase/database.rules.json live.
+#
+# - Automatisch bij een push naar main die de rules wijzigt, zodat code en rules
+#   niet uit elkaar lopen (bv. een nieuwe puzzel die de rules eerst moeten toelaten).
+# - Handmatig via "Run workflow" (Actions-tab), bv. na een terugrol.
+#
+# Er wordt pas gedeployed als de rules-tests tegen de emulator slagen.
 #
 # Vereiste repository-secrets:
 #   FIREBASE_SERVICE_ACCOUNT  -> de volledige service-account JSON (Firebase-console
@@ -14,12 +18,58 @@ name: Firebase rules deployen
 # de aanbevolen manier. De oude --token methode is in firebase-tools v14 verwijderd.
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'firebase/database.rules.json'
+      - 'firebase.json'
   workflow_dispatch:
 
-jobs:
-  deploy-rules:
-    runs-on: ubuntu-latest
+# Nooit twee deploys door elkaar.
+concurrency:
+  group: firebase-rules
+  cancel-in-progress: false
 
+env:
+  # Zelfde versie als in package.json (test:rules), zodat getest en gedeployed
+  # gebeurt met dezelfde tool.
+  FIREBASE_TOOLS: firebase-tools@15.33.0
+
+jobs:
+  test-rules:
+    name: Rules testen (emulator)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pnpm installeren
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Node.js instellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Java instellen (nodig voor de Database-emulator)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Dependencies installeren
+        run: pnpm install --frozen-lockfile
+
+      - name: Rules testen tegen de emulator
+        run: pnpm test:rules
+
+  deploy-rules:
+    name: Rules deployen
+    needs: test-rules
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,15 +77,21 @@ jobs:
       - name: Node.js instellen
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Rules deployen naar Firebase
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-sa.json
+          # Via een variabele, niet rechtstreeks in het script: zo breekt een ' in
+          # de JSON het commando niet en komt de sleutel niet in de shellcode.
+          SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          printf '%s' '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$GOOGLE_APPLICATION_CREDENTIALS"
-          npx --yes firebase-tools@latest deploy \
+          printf '%s' "$SERVICE_ACCOUNT" > "$GOOGLE_APPLICATION_CREDENTIALS"
+          npx --yes "$FIREBASE_TOOLS" deploy \
             --only database \
             --project ${{ secrets.VITE_FIREBASE_PROJECT_ID }} \
             --non-interactive
-          rm -f "$GOOGLE_APPLICATION_CREDENTIALS"
+
+      - name: Service-account-bestand opruimen
+        if: always()
+        run: rm -f "${{ github.workspace }}/firebase-sa.json"

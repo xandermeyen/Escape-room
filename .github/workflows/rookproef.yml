@@ -1,0 +1,48 @@
+name: Rookproef productie
+
+# Logt elk uur anoniem in op de live Firebase en leest de demo-sessie, net als
+# een speler die begint. Faalt dit, dan stuurt GitHub een mail (geplande
+# workflows melden mislukte runs aan wie de cron laatst wijzigde).
+# Zie scripts/rookproef.ts.
+#
+# Let op: GitHub zet geplande workflows uit na 60 dagen zonder activiteit in de
+# repo. Je krijgt daar vooraf een mail over; één klik op "Enable" volstaat.
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rookproef:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pnpm installeren
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Node.js instellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Dependencies installeren
+        run: pnpm install --frozen-lockfile
+
+      - name: Anoniem inloggen en de demo-sessie lezen
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_DATABASE_URL: ${{ secrets.VITE_FIREBASE_DATABASE_URL }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+        run: pnpm rookproef

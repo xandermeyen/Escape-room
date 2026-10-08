@@ -73,3 +73,38 @@ jobs:
 
       - name: Rules testen tegen de emulator
         run: pnpm test:rules
+
+  e2e:
+    name: End-to-end (Playwright, twee spelers)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pnpm installeren
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Node.js instellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Dependencies installeren
+        run: pnpm install --frozen-lockfile
+
+      - name: Chromium voor Playwright installeren
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Volledige run van Kamer 14
+        run: pnpm test:e2e
+
+      - name: Sporen bewaren bij een mislukte test
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-sporen
+          path: test-results/
+          retention-days: 7
