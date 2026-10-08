@@ -14,7 +14,8 @@ te raden.
 
 Daarnaast telde elke e-mail/wachtwoordgebruiker als host. Zolang registratie
 in Firebase Auth openstaat, kan iedereen met de (publieke) API-key zo'n account
-aanmaken.
+aanmaken. Daarom hangt host-toegang nu af van `beheerders/` en niet meer van
+het type login.
 
 ## Het model
 
@@ -64,8 +65,12 @@ kunnen spelers niet meer schrijven.
 ### 1. Firebase Authentication
 
 1. **Authentication > Sign-in method**: _Anonymous_ en _Email/Password_ staan aan.
-2. **Authentication > Settings > User actions**: vink **Enable create (sign-up)**
-   uit. Jij kan in de console nog altijd gebruikers toevoegen.
+2. **Authentication > Settings > User actions**: laat **Enable create (sign-up)**
+   **aan staan**. Uitvinken blokkeert ook anonieme logins
+   (`auth/admin-restricted-operation`), waardoor nieuwe spelers niets meer
+   kunnen schrijven (Sentry JAVASCRIPT-4, 8 oktober 2026). Open registratie is
+   geen risico: wie zelf een account aanmaakt, staat niet in `beheerders/` en
+   heeft dus enkel spelersrechten.
 3. **Authentication > Users > Add user**: maak `make@bureau-x.be` aan met een
    lang, willekeurig wachtwoord. Noteer de **User UID**.
 4. Noteer ook de User UID van je eigen host-account.
@@ -93,7 +98,11 @@ Push naar `main`. De site deployt automatisch.
 
 ### 5. Rules deployen
 
-**Actions > "Firebase rules deployen" > Run workflow.**
+Gebeurt automatisch: een push naar `main` die `firebase/database.rules.json`
+wijzigt, start de workflow "Firebase rules deployen". Die draait eerst de
+rules-tests tegen de emulator en deployt pas als ze slagen. Handmatig kan
+ook: **Actions > "Firebase rules deployen" > Run workflow** (bv. na een
+terugrol).
 
 ### 6. Testen
 
@@ -124,6 +133,16 @@ Enterprise-provider (in de console nu "Fraud Defense").
 Lokaal ontwikkelen met enforcement aan: zet `VITE_APPCHECK_DEBUG_TOKEN` in
 `.env.development` en registreer dat token onder _App Check > Apps >
 Debugtokens beheren_.
+
+## Bewaking
+
+- **Rookproef** (`.github/workflows/rookproef.yml`, `scripts/rookproef.ts`): logt
+  elk uur anoniem in op productie, leest `DEMO-K14` en verwijdert de
+  testgebruiker. Faalt dat, dan mailt GitHub. Vangt instellingen in de
+  Firebase-console die spelers blokkeren, zoals de sign-up hierboven.
+- **Sentry**: de regel "Send a notification for high priority issues" mailt bij
+  een nieuwe fout, ook bij een mislukte anonieme login (tag
+  `context: anonieme-login`).
 
 ## Rules testen
 

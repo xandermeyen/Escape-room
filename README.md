@@ -28,7 +28,9 @@ boekingsformulier een sessiecode krijgen.
 **Kamer 14** speelt zich af in Geel, rond de eeuwenoude gezinsverpleging. Kostgangster Lena
 is verdwenen. Speler A heeft het dossier van het psychiatrisch centrum, Speler B het logboek
 van het gastgezin en de kamer van Lena. Samen zoeken ze uit waar ze heen ging, bij wie, en
-met welke bus. Vijf puzzels, 60 minuten, en een briefkaart als beloning.
+met welke bus, en op een uitgescheurde dagboekbladzijde waarom ze niemand iets zei. Zes
+puzzels, 60 minuten, en een einde in drie stappen: een mail van An, een briefkaart en een
+epiloog een week later.
 
 **D.U.A.** gaat over de diefstal van _De Rechtvaardige Rechters_ in 1934. Eén kant speelt in
 1934 en verstopt een spoor, de andere kant speelt in 2034 en vindt wat er een eeuw later van
@@ -67,6 +69,7 @@ Make.com  ◄── Formspree-boekingsformulier ── speler
 | Analytics   | Google Analytics 4 met Consent Mode, pas na toestemming                 |
 | Boekingen   | Formspree, Make.com, Combell SMTP                                       |
 | Kwaliteit   | Vitest, ESLint, Prettier, html-validate, rules-tests met de emulator    |
+| Bewaking    | Rookproef elk uur op productie (anonieme login), Sentry-alerts          |
 
 Elke experience heeft dezelfde opbouw: een lobby (code en rol kiezen), een spelerpagina per
 rol, een eindscherm met rapport en review, een tijd-voorbij-scherm en een host-paneel. De
@@ -154,10 +157,12 @@ pnpm dev                           # http://localhost:5173
 | `pnpm format:check` | Prettier-controle                                       |
 | `pnpm typecheck`    | TypeScript zonder build                                 |
 | `pnpm build`        | Productiebuild naar `dist/`                             |
+| `pnpm rookproef`    | Anonieme login en demo-sessie op productie controleren  |
 
 CI draait dit allemaal bij elke push. Een push naar `main` bouwt en deployt naar GitHub
-Pages. De database-rules deploy je apart, met de handmatige workflow "Firebase rules
-deployen".
+Pages. Wijzigen de database-rules, dan test en deployt de workflow "Firebase rules
+deployen" ze automatisch. Elk uur controleert een rookproef of spelers op de live site
+nog kunnen inloggen.
 
 ## Meer documentatie
 

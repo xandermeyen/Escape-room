@@ -129,7 +129,7 @@ https://bureau-x-default-rtdb.europe-west1.firebasedatabase.app/sessions/{{12.se
   "aangemaakt": { ".sv": "timestamp" },
   "actief": true,
   "ervaringsId": "kamer-14",
-  "puzzels": { "p1": false, "p2": false, "p3": false, "p4": false, "p5": false },
+  "puzzels": { "p1": false, "p2": false, "p3": false, "p4": false, "p5": false, "p6": false },
   "rapport": { "ingediend": false, "inhoud": {} },
   "timerGestart": null
 }

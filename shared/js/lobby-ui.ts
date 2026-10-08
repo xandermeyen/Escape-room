@@ -5,6 +5,7 @@
  * rollen live tonen, claimen, terugkeer-banner — is identiek en leeft hier.
  */
 import { isDemoCode } from './demo.ts';
+import { toonRecaptchaMeldingen } from './app-check-status.ts';
 import { maakKlikbaar } from './toegankelijk.ts';
 import {
   zoekSessieCode,
@@ -81,6 +82,9 @@ export function initLobby(config: LobbyConfig): void {
   const rolNamen = Object.keys(config.rollen);
   let rollenUnsubscribe: (() => void) | null = null;
   let laatsteSpelers: Record<string, string> = {};
+
+  // reCAPTCHA-melding enkel als App Check in deze build aanstaat.
+  toonRecaptchaMeldingen();
 
   // ── Sessiecode uit URL ──
   const urlRuw = new URLSearchParams(window.location.search).get('sessie');

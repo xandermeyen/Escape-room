@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getDatabase } from 'firebase/database';
+import { APP_CHECK_SLEUTEL } from './app-check-status.ts';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -24,7 +25,7 @@ export const app = initializeApp(firebaseConfig);
  * dan print de SDK een debugtoken in de console dat je in de Firebase-console
  * registreert onder App Check > Apps > Debugtokens beheren).
  */
-const recaptchaSleutel = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined;
+const recaptchaSleutel = APP_CHECK_SLEUTEL;
 if (recaptchaSleutel && typeof window !== 'undefined') {
   if (import.meta.env.DEV) {
     (
