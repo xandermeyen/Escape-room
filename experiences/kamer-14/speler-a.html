@@ -46,6 +46,7 @@
         <div class="vp-stap" id="vp3"></div>
         <div class="vp-stap" id="vp4"></div>
         <div class="vp-stap" id="vp5"></div>
+        <div class="vp-stap" id="vp6"></div>
       </div>
     </div>
 
@@ -73,6 +74,7 @@
       <div class="tab slot" data-tab="atelier" id="tab-atelier">🔒 Atelier</div>
       <div class="tab slot" data-tab="intakefiche" id="tab-intakefiche">🔒 Intakefiche</div>
       <div class="tab slot" data-tab="bijlage" id="tab-bijlage">🔒 Bijlage D</div>
+      <div class="tab slot" data-tab="bladzijde" id="tab-bladzijde">🔒 Bladzijde</div>
       <div class="tab" data-tab="berichten" id="tab-berichten" hidden>Berichten</div>
     </div>
 
@@ -469,6 +471,53 @@
           </div>
           <div class="puzzel-feedback" id="feedback-p5"></div>
         </div>
+      </div>
+      <!-- P6: uitgescheurde bladzijde (zie js/bladzijde.ts) -->
+      <div class="tab-panel" id="panel-bladzijde">
+        <div class="doc-label">Ateliermap Lena Bogaert · achter de tekening</div>
+        <div class="notitie">
+          <div class="notitie-datum">Notitie An Vermeersch</div>
+          In Lena's ateliermap, achter de tekening van het plein, vond ik drie stroken papier. Uit
+          haar dagboek gescheurd, denk ik. Katrijn vond er thuis ook een paar.
+        </div>
+
+        <div class="hint-blok" id="hint-p6">
+          <button class="hint-knop" onclick="volgendHint('hint-p6')">
+            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
+          </button>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 1 / 3</span>
+            De bladzijde is in zes stroken gescheurd. Jij hebt er drie, Speler B de andere drie.
+            Lees elkaar voor hoe elke strook begint en eindigt.
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 2 / 3</span>
+            Een zin die halverwege stopt, loopt verder op een strook van Speler B. Zoek welke strook
+            van Speler B erop aansluit, en welke van jou daarna komt.
+          </div>
+          <div class="hint-stap verborgen">
+            <span class="hint-nr">Aanwijzing 3 / 3</span>
+            De strook met de datum ligt bovenaan. Vraag Speler B welke strook eindigt op "Ik" en
+            welke op "het geld voor". Wat daarop volgt, ligt bij jou.
+          </div>
+          <button class="hint-verder verborgen" onclick="volgendHint('hint-p6')">
+            Volgende aanwijzing →
+          </button>
+        </div>
+
+        <div class="puzzel-blok" id="puzzel-6">
+          <div class="puzzel-vraag">
+            Leg jouw stroken in de juiste volgorde. De zinnen lopen verder op de stroken van Speler
+            B.
+          </div>
+          <ol class="stroken-lijst" id="stroken-lijst" aria-label="Jouw stroken"></ol>
+          <div class="puzzel-invoer-rij" style="margin-top: 14px">
+            <button class="puzzel-btn" id="btn-p6">Bevestig</button>
+          </div>
+          <div class="puzzel-feedback" id="feedback-p6" aria-live="polite"></div>
+        </div>
+
+        <div class="bladzijde-volledig" id="bladzijde-volledig" hidden></div>
       </div>
       <!-- Berichten: tekst van de verhaalfragmenten (zie js/berichten.ts) -->
       <div class="tab-panel" id="panel-berichten">

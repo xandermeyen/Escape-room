@@ -5,13 +5,15 @@
 
 // ── Voortgangsbalk bijwerken ──────────────────────────────
 export function updateVoortgang(p: Record<string, boolean>): void {
-  const stappen = ['vp1', 'vp2', 'vp3', 'vp4', 'vp5'];
-  const voltooid = [p['p1'], p['p2'], p['p3'], p['p4'], p['p5']];
+  // Zoveel stappen als er vp-elementen op de pagina staan (vp1, vp2, ...).
+  const stappen: HTMLElement[] = [];
+  for (let n = 1; document.getElementById(`vp${n}`); n++) {
+    stappen.push(document.getElementById(`vp${n}`) as HTMLElement);
+  }
+  const voltooid = stappen.map((_, i) => !!p[`p${i + 1}`]);
   const aantalKlaar = voltooid.filter(Boolean).length;
 
-  stappen.forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (!el) return;
+  stappen.forEach((el, i) => {
     el.className = 'vp-stap';
     if (voltooid[i]) el.classList.add('vp-klaar');
     else if (i === aantalKlaar) el.classList.add('vp-bezig');

@@ -70,7 +70,14 @@ describe('verhaalmelding bij inactiviteit', () => {
 
   it('elke puzzel heeft een melding voor beide spelers', () => {
     for (const rol of ['a', 'b'] as const) {
-      expect(Object.keys(KAMER14_INACTIEF[rol]).sort()).toEqual(['p1', 'p2', 'p3', 'p4', 'p5']);
+      expect(Object.keys(KAMER14_INACTIEF[rol]).sort()).toEqual([
+        'p1',
+        'p2',
+        'p3',
+        'p4',
+        'p5',
+        'p6',
+      ]);
     }
   });
 });
@@ -168,9 +175,13 @@ describe('kamer14VrijgaveMelding', () => {
     expect(kamer14VrijgaveMelding('b', oud, nieuw)?.tekst).toContain('Kamerinspectie');
   });
 
-  it('na P4 en P5', () => {
+  it('na P4, P5 en P6', () => {
     expect(kamer14VrijgaveMelding('a', {}, { p4: true })?.tekst).toContain('Bijlage D');
-    expect(kamer14VrijgaveMelding('b', {}, { p5: true })?.tekst).toContain('rapport');
+    expect(kamer14VrijgaveMelding('b', {}, { p5: true })?.tekst).toContain('Bladzijde');
+    expect(kamer14VrijgaveMelding('a', {}, { p5: true })?.tekst).toContain('Speler B');
+    expect(kamer14VrijgaveMelding('b', { p5: true }, { p5: true, p6: true })?.tekst).toContain(
+      'rapport',
+    );
   });
 
   it('niets nieuw: geen melding', () => {

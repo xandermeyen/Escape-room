@@ -35,7 +35,7 @@
         "puzzels": {
           "$p": {
             ".write": "auth != null && newData.isBoolean() && (newData.val() === true || !data.exists() || data.val() === false) && root.child('sessions').child($sessie).child('aangemaakt').exists()",
-            ".validate": "$p.matches(/^p[0-5]$/) && newData.isBoolean()"
+            ".validate": "$p.matches(/^p[0-6]$/) && newData.isBoolean()"
           }
         },
         "spelers": {
@@ -135,26 +135,26 @@
         },
         "stats": {
           "$p": {
-            ".validate": "$p.matches(/^p[0-5]$/)",
+            ".validate": "$p.matches(/^p[0-6]$/)",
             "start": {
-              ".write": "$p.matches(/^p[0-5]$/) && auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
+              ".write": "$p.matches(/^p[0-6]$/) && auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
               ".validate": "newData.isNumber()"
             },
             "opgelost": {
-              ".write": "$p.matches(/^p[0-5]$/) && auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
+              ".write": "$p.matches(/^p[0-6]$/) && auth != null && !data.exists() && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
               ".validate": "newData.isNumber()"
             },
             "fout": {
-              ".write": "$p.matches(/^p[0-5]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
+              ".write": "$p.matches(/^p[0-6]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
               ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000 && (!data.exists() || newData.val() === data.val() + 1)"
             },
             "bijna": {
-              ".write": "$p.matches(/^p[0-5]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
+              ".write": "$p.matches(/^p[0-6]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
               ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000 && (!data.exists() || newData.val() === data.val() + 1)"
             },
             "hints": {
               "$rol": {
-                ".write": "$p.matches(/^p[0-5]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
+                ".write": "$p.matches(/^p[0-6]$/) && auth != null && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists() && root.child('sessions').child($sessie).child('demo').val() !== true",
                 ".validate": "$rol.matches(/^[a-z0-9]{1,8}$/) && newData.isNumber() && newData.val() >= 1 && newData.val() <= 10 && (!data.exists() || newData.val() >= data.val())"
               }
             },

@@ -30,6 +30,7 @@ import {
 } from '../../../shared/js/host-reviews.ts';
 import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
+import { KAMER14_PUZZELS } from './kamer14-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 import { statsDetailHtml, gemiddeldenHtml, HOST_STATS_CSS } from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
@@ -62,7 +63,7 @@ koppelHostAuth(() => {
   void laadReviews();
 });
 
-const PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'];
+const PUZZELS = KAMER14_PUZZELS;
 
 // Knop "Verlopen sessies sluiten (n)" (zie shared/js/host-verlopen.ts).
 const verlopen = maakVerlopenKnop(() => void laadLijst());
@@ -106,7 +107,10 @@ window.maakSessieAan = async function () {
   btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Aanmaken…';
 
   try {
-    const aangemaakt = await maakSessie(code, { ervaringsId: 'kamer-14' });
+    const aangemaakt = await maakSessie(code, {
+      ervaringsId: 'kamer-14',
+      puzzelIds: KAMER14_PUZZELS,
+    });
     if (!aangemaakt) {
       toonStatus(status, `Code "${code}" bestaat al. Kies een andere.`, false);
       return;
@@ -272,7 +276,7 @@ window.resetDemoSessie = async function () {
     return;
   knop.disabled = true;
   try {
-    await resetDemo(code, { ervaringsId: 'kamer-14' });
+    await resetDemo(code, { ervaringsId: 'kamer-14', puzzelIds: KAMER14_PUZZELS });
     toonStatus(status, `✓ ${code} staat klaar. Open de spelerpagina's hieronder.`, true);
     void laadLijst();
   } catch (err) {

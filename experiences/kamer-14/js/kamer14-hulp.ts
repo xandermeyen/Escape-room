@@ -35,6 +35,11 @@ export const KAMER14_INACTIEF: Record<Kamer14Rol, Record<string, Melding>> = {
       tekst:
         'Wanneer verliet Lena het huis? Speler B weet het. Vergeet niet dat ze nog naar de halte moest wandelen.',
     },
+    p6: {
+      titel: 'Notitie An Vermeersch',
+      tekst:
+        'Waarom zei ze niets? Misschien staat het op die bladzijde. Katrijn heeft de andere stroken.',
+    },
   },
   b: {
     p1: {
@@ -61,6 +66,11 @@ export const KAMER14_INACTIEF: Record<Kamer14Rol, Record<string, Melding>> = {
       tekst:
         'Rond kwart over zeven hoorde ik de voordeur. Ik dacht dat ze ging wandelen. Speler A weet hoe ver de bushalte is.',
     },
+    p6: {
+      titel: 'Katrijn',
+      tekst:
+        'Die stroken zijn van haar dagboek. An heeft er ook. Lees ze elkaar voor, dan past de bladzijde.',
+    },
   },
 };
 
@@ -78,10 +88,18 @@ export function kamer14VrijgaveMelding(
   const net = (p: string) => !!nieuw[p] && !oud[p];
   const a = rol === 'a';
 
-  if (net('p5')) {
+  if (net('p6')) {
     return {
       titel: 'Alle puzzels opgelost',
       tekst: 'Klik op de balk bovenaan en dien samen het rapport in. Spreek af wie typt.',
+    };
+  }
+  if (net('p5')) {
+    return {
+      titel: NIEUW,
+      tekst: a
+        ? 'De tab Bladzijde is vrij: drie stroken van een uitgescheurde dagboekbladzijde. Speler B heeft de andere drie.'
+        : 'De tab Bladzijde is vrij: drie stroken van een uitgescheurde dagboekbladzijde. Speler A heeft de andere drie.',
     };
   }
   if (net('p4')) {

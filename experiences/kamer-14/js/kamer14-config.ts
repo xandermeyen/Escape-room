@@ -223,7 +223,13 @@ export const KAMER14_ANTWOORD_REGELS: Record<string, AntwoordRegel> = {
   },
 };
 
-// ── Vrijgave (voor de speldata) ───────────────────────────
+// ── Puzzels en vrijgave (voor de speldata) ────────────────
+/** Alle puzzels van Kamer 14. P6 is de uitgescheurde bladzijde (bladzijde.ts). */
+export const KAMER14_PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'];
+
+/** De laatste puzzel: daarna komt de balk naar het rapport. */
+export const KAMER14_LAATSTE = 'p6';
+
 // Welke puzzels opgelost moeten zijn voor een puzzel vrijkomt voor de groep.
 export const KAMER14_VRIJGAVE: Record<string, string[]> = {
   p1: [],
@@ -231,6 +237,7 @@ export const KAMER14_VRIJGAVE: Record<string, string[]> = {
   p3: ['p1'],
   p4: ['p2', 'p3'],
   p5: ['p4'],
+  p6: ['p5'],
 };
 
 // ── Timer-waarschuwingen in de verhaalwereld van Kamer 14 ─

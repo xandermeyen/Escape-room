@@ -873,3 +873,101 @@ html body {
     flex-direction: column;
   }
 }
+
+/* ── P6: uitgescheurde bladzijde ── */
+.stroken-lijst {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.strook {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+.strook.sleept {
+  opacity: 0.5;
+}
+.strook-papier {
+  flex: 1;
+  background: var(--kleur-perkament);
+  color: #2a2418;
+  padding: 12px 16px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+  /* gescheurde boven- en onderrand */
+  clip-path: polygon(
+    0% 4px,
+    6% 0%,
+    13% 5px,
+    21% 1px,
+    30% 6px,
+    39% 2px,
+    48% 5px,
+    57% 0%,
+    66% 4px,
+    75% 1px,
+    84% 6px,
+    92% 2px,
+    100% 5px,
+    100% calc(100% - 3px),
+    93% 100%,
+    85% calc(100% - 5px),
+    76% calc(100% - 1px),
+    67% calc(100% - 6px),
+    58% calc(100% - 2px),
+    49% 100%,
+    40% calc(100% - 5px),
+    31% calc(100% - 1px),
+    22% calc(100% - 6px),
+    13% calc(100% - 2px),
+    6% calc(100% - 5px),
+    0% calc(100% - 1px)
+  );
+  cursor: grab;
+}
+.strook-papier p {
+  margin: 0 0 0.4em;
+}
+.strook-papier p:last-child {
+  margin-bottom: 0;
+}
+.strook-knoppen {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+}
+.strook-knop {
+  min-width: 44px;
+  min-height: 44px;
+  background: transparent;
+  border: 1px solid var(--k-accent);
+  color: var(--k-accent-licht);
+  font-family: var(--font);
+  font-size: 16px;
+  cursor: pointer;
+}
+.strook-knop:hover:not(:disabled) {
+  background: var(--k-accent);
+  color: var(--k-bg);
+}
+.strook-knop:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.bladzijde-volledig {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 14px;
+}
+.bladzijde-volledig .strook-papier {
+  cursor: default;
+}

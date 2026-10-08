@@ -15,7 +15,9 @@ import {
   KAMER14_ANTWOORD_REGELS,
   KAMER14_TIMER_WAARSCHUWINGEN,
   KAMER14_VRIJGAVE,
+  KAMER14_LAATSTE,
 } from './kamer14-config.ts';
+import { initBladzijde, toonVolledigeBladzijde } from './bladzijde.ts';
 import {
   registreerPoging,
   registreerOpgelost,
@@ -167,14 +169,25 @@ function updateTabs(p: Record<string, boolean>): void {
     if (p[nr]) markeerVoltooid(`puzzel-${i + 1}`);
   });
 
+  // Bladzijde (P6): vrijgegeven na P5, na het oplossen de hele bladzijde tonen
+  const tabBladzijde = document.getElementById('tab-bladzijde');
+  if (p['p5'] && tabBladzijde?.classList.contains('slot')) {
+    ontgrendelTab(tabBladzijde, 'Bladzijde', 'panel-bladzijde');
+  }
+  if (p['p6']) {
+    markeerVoltooid('puzzel-6');
+    const volledig = document.getElementById('bladzijde-volledig');
+    if (volledig) toonVolledigeBladzijde(volledig);
+  }
+
   // Eindelink tonen als alle puzzels opgelost zijn
-  if (p['p5'] && !document.getElementById('einde-link')) {
+  if (p[KAMER14_LAATSTE] && !document.getElementById('einde-link')) {
     const balk = document.createElement('a');
     balk.id = 'einde-link';
     balk.href = `einde.html?sessie=${sessie}`;
     balk.className = 'einde-link-balk';
     balk.innerHTML =
-      '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost — dien het rapport in';
+      '<i class="bi bi-arrow-right-circle me-2"></i>Alle puzzels opgelost. Dien samen het rapport in';
     balk.addEventListener('click', () => {
       schakelGuardUit();
     });
@@ -224,6 +237,27 @@ window.draaiOm = draaiOm;
     if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
   });
 });
+
+// ── P6: de uitgescheurde bladzijde ────────────────────────
+const strokenLijst = document.getElementById('stroken-lijst');
+const btnP6 = document.getElementById('btn-p6') as HTMLButtonElement | null;
+const feedbackP6 = document.getElementById('feedback-p6');
+if (strokenLijst && btnP6 && feedbackP6) {
+  initBladzijde({
+    rol: 'b',
+    lijst: strokenLijst,
+    knop: btnP6,
+    feedback: feedbackP6,
+    bijJuist: () => {
+      void puzzelVoltooid(sessie, 6);
+      void registreerOpgelost(sessie, 'p6');
+    },
+    bijFout: () => {
+      hulp.poging('p6', 'fout');
+      void registreerPoging(sessie, 'p6', 'fout');
+    },
+  });
+}
 
 // ── Toetsenbord: tabs en klikbare documenten ──────────────
 maakTabsToegankelijk(document.querySelector<HTMLElement>('.tabs'));

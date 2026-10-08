@@ -159,7 +159,11 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       await assertFails(speler().ref('sessions/BESTAAT-NIET/stats/p1/fout').set(1));
     });
 
-    it('alleen p0 tot p5 en alleen booleans', async () => {
+    it('alleen p0 tot p6 en alleen booleans', async () => {
+      // P6 (de bladzijde) bestaat niet in sessies van Make.com: mag toch aangemaakt worden
+      await assertSucceeds(speler().ref(`sessions/${CODE}/puzzels/p6`).set(true));
+      await assertSucceeds(speler().ref(`sessions/${CODE}/stats/p6/fout`).set(1));
+      await assertFails(speler().ref(`sessions/${CODE}/puzzels/p7`).set(true));
       await assertFails(speler().ref(`sessions/${CODE}/puzzels/p9`).set(true));
       await assertFails(speler().ref(`sessions/${CODE}/puzzels/p2`).set('ja'));
     });
