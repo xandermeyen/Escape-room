@@ -14,6 +14,12 @@ import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { speelStem } from './audio.ts';
 import { maakKlikbaar } from '../../../shared/js/toegankelijk.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
+import {
+  bewaarFoutePogingen,
+  leesFoutePogingen,
+  MAX_FOUTE_POGINGEN,
+  volgendeStap,
+} from './einde-verloop.ts';
 
 // ── Sessie ophalen (redirect + stop als die ontbreekt) ────
 const sessie = sessieUitUrl();
@@ -81,6 +87,7 @@ async function diendIn(): Promise<void> {
   ['bestemming', 'wie', 'vervoer', 'tijdstip'].forEach(resetVeld);
   const validatieBericht = document.getElementById('rapport-validatie-bericht');
   if (validatieBericht) validatieBericht.style.display = 'none';
+  const waarschuwing = document.getElementById('an-waarschuwing');
 
   let geldig = true;
 
@@ -101,10 +108,20 @@ async function diendIn(): Promise<void> {
     geldig = false;
   }
 
-  if (!geldig) {
-    if (validatieBericht) validatieBericht.style.display = 'block';
+  const fouteVoorDeze = leesFoutePogingen(sessie);
+  const stap = volgendeStap(fouteVoorDeze, geldig);
+  if (stap === 'waarschuwing') {
+    bewaarFoutePogingen(sessie, fouteVoorDeze + 1);
+    waarschuwing?.classList.add('zichtbaar');
+    waarschuwing?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
+  if (stap === 'politie') {
+    bewaarFoutePogingen(sessie, fouteVoorDeze + 1);
+    toonPolitie();
+    return;
+  }
+  waarschuwing?.classList.remove('zichtbaar');
 
   // Indienen
   const btn = document.getElementById('btn-indienen') as HTMLButtonElement;
@@ -121,7 +138,7 @@ async function diendIn(): Promise<void> {
   try {
     await diendRapportIn(sessie, inhoud);
     await sluitSessie(sessie); // sessie deactiveren zodat ze niet eeuwig actief blijft
-    // luisterNaarRapport vangt de statuswijziging op en activeert het briefkaartscherm
+    // luisterNaarRapport vangt de statuswijziging op en toont de mail van An
   } catch (err) {
     console.error('Firebase fout bij indienen rapport:', err);
     btn.disabled = false;
@@ -168,9 +185,33 @@ document.getElementById('postkaart')?.addEventListener('click', () => {
   }
 });
 
+// ── Verloop na het rapport ────────────────────────────────
+// Klopt het rapport: mail van An → briefkaart → epiloog → slot.
+// Twee keer fout: politie → slot (geen briefkaart, Lena is die avond al terug).
+document.getElementById('btn-mail-verder')?.addEventListener('click', () => {
+  toonScherm('scherm-briefkaart');
+});
+
 document.getElementById('btn-sluit-dossier')?.addEventListener('click', () => {
+  toonScherm('scherm-epiloog');
+});
+
+document.getElementById('btn-epiloog-verder')?.addEventListener('click', () => {
   toonScherm('scherm-slot');
 });
+
+document.getElementById('btn-politie-verder')?.addEventListener('click', () => {
+  toonScherm('scherm-slot');
+});
+
+let politieGetoond = false;
+function toonPolitie(): void {
+  if (politieGetoond) return;
+  politieGetoond = true;
+  toonScherm('scherm-politie');
+  // Er komt geen rapport meer: de sessie sluiten zodat ze niet actief blijft.
+  sluitSessie(sessie).catch((err: unknown) => console.error('Sessie sluiten mislukt:', err));
+}
 
 document.getElementById('btn-terug-lobby')?.addEventListener('click', () => {
   window.location.href = '../../index.html';
@@ -225,9 +266,14 @@ koppelDeelKnop('btn-deel-resultaat', () =>
 );
 
 // ── Firebase: luisteren naar rapport-status ───────────────
+let mailGetoond = false;
 luisterNaarRapport(sessie, rapport => {
-  if (rapport?.ingediend) {
-    toonScherm('scherm-briefkaart');
+  if (rapport?.ingediend && !mailGetoond && !politieGetoond) {
+    mailGetoond = true;
+    toonScherm('scherm-mail-an');
     vulStats();
   }
 });
+
+// Eerder twee keer fout ingediend op dit toestel (bv. na herladen): politie.
+if (leesFoutePogingen(sessie) >= MAX_FOUTE_POGINGEN) toonPolitie();

@@ -614,6 +614,62 @@
         color: var(--k-accent);
         margin-top: 4px;
       }
+      /* ── Mail van An, waarschuwing en epiloog ── */
+      .einde-mail {
+        width: 100%;
+        max-width: 560px;
+        background: var(--k-bg-panel);
+        border: 1px solid var(--k-rand);
+        color: var(--k-tekst);
+        padding: 22px 26px;
+        box-shadow: 0 6px 22px rgba(30, 20, 8, 0.12);
+        font-size: 14px;
+        line-height: 1.7;
+        text-align: left;
+      }
+      .einde-mail-kop {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 2px 12px;
+        margin: 0 0 14px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--k-rand-mid);
+        font-size: 12px;
+      }
+      .einde-mail-kop dt {
+        color: var(--k-tekst-grijs);
+        font-weight: normal;
+      }
+      .einde-mail-kop dd {
+        margin: 0;
+      }
+      .einde-mail p {
+        margin: 0 0 0.8em;
+      }
+      .einde-mail p:last-child {
+        margin-bottom: 0;
+      }
+      .einde-verder-btn {
+        margin-top: 28px;
+        display: inline-block;
+      }
+      .an-waarschuwing {
+        display: none;
+        margin: 0 0 18px;
+        max-width: none;
+        border-left: 3px solid #b04a3a;
+      }
+      .an-waarschuwing.zichtbaar {
+        display: block;
+      }
+      .politie-tekst p {
+        margin: 0 0 0.9em;
+      }
+      @media (max-width: 600px) {
+        .einde-mail {
+          padding: 16px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -725,6 +781,26 @@
           </div>
         </div>
 
+        <article
+          class="einde-mail an-waarschuwing"
+          id="an-waarschuwing"
+          aria-labelledby="an-waarschuwing-onderwerp"
+          aria-live="polite"
+        >
+          <dl class="einde-mail-kop">
+            <dt>Van</dt>
+            <dd>An Vermeersch, OPZ Geel</dd>
+            <dt>Onderwerp</dt>
+            <dd id="an-waarschuwing-onderwerp">Dit klopt niet</dd>
+          </dl>
+          <p>
+            Ik heb jullie rapport gelezen. Niet alles klopt met wat ik zelf in het dossier zie, ik
+            heb aangeduid wat niet past.
+          </p>
+          <p>Kijk het nog één keer na. Klopt het daarna nog niet, dan bel ik de politie.</p>
+          <p>An</p>
+        </article>
+
         <div class="rapport-actie">
           <div class="rapport-validatie-bericht" id="rapport-validatie-bericht">
             <i class="bi bi-exclamation-triangle me-1"></i>Controleer de gemarkeerde velden.
@@ -733,6 +809,76 @@
             <i class="bi bi-check2-square me-2"></i>Rapport indienen
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+       SCHERM 2A  -  MAIL VAN AN (rapport klopt)
+  ══════════════════════════════════════════ -->
+    <div id="scherm-mail-an" class="einde-scherm">
+      <div class="systeembalk">
+        <div style="display: flex; align-items: center">
+          <span class="sys-logo">Bureau X</span>
+          <span class="sys-sep">|</span>
+          <span class="sys-case">Ref. OPZ-2025-0506-LB · Rapport ingediend</span>
+        </div>
+      </div>
+
+      <div class="briefkaart-wrapper">
+        <div class="briefkaart-melding">Nieuw bericht</div>
+        <div class="briefkaart-melding-sub">Dinsdag 6 mei 2025</div>
+
+        <article class="einde-mail" aria-labelledby="mail-an-onderwerp">
+          <dl class="einde-mail-kop">
+            <dt>Van</dt>
+            <dd>An Vermeersch, OPZ Geel</dd>
+            <dt>Aan</dt>
+            <dd>Bureau X</dd>
+            <dt>Onderwerp</dt>
+            <dd id="mail-an-onderwerp">Gevonden</dd>
+          </dl>
+          <p>
+            Ik heb de bloemenwinkel in de Stationsstraat gebeld. Marie nam op. Op de achtergrond
+            hoorde ik Lena lachen.
+          </p>
+          <p>
+            Ik vroeg of ze veilig is. Ja. Ik vroeg of ze terugkomt. Donderdag, voor het ontbijt.
+          </p>
+          <p>De politie bel ik niet. Bedankt.</p>
+          <p>An</p>
+        </article>
+
+        <button class="briefkaart-verder-btn einde-verder-btn" id="btn-mail-verder">Verder</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+       SCHERM 2B  -  POLITIE (rapport twee keer fout)
+  ══════════════════════════════════════════ -->
+    <div id="scherm-politie" class="einde-scherm">
+      <div class="systeembalk">
+        <div style="display: flex; align-items: center">
+          <span class="sys-logo">Bureau X</span>
+          <span class="sys-sep">|</span>
+          <span class="sys-case">Ref. OPZ-2025-0506-LB · Geen bruikbaar rapport</span>
+        </div>
+      </div>
+
+      <div class="briefkaart-wrapper">
+        <div class="briefkaart-melding">Dinsdag 6 mei 2025, 17u00</div>
+        <div class="briefkaart-melding-sub">Het rapport klopte niet.</div>
+
+        <article class="einde-mail politie-tekst">
+          <p>An belt om 17u00 de politie.</p>
+          <p>
+            Om 19u40 vinden twee agenten Lena in een bloemenwinkel in Diest. Ze is veilig, maar ze
+            rijdt die avond in een politiewagen terug naar Geel.
+          </p>
+        </article>
+
+        <button class="briefkaart-verder-btn einde-verder-btn" id="btn-politie-verder">
+          Sluit het dossier
+        </button>
       </div>
     </div>
 
@@ -789,7 +935,48 @@
           Klik op de briefkaart om ze om te draaien
         </div>
 
-        <button class="briefkaart-verder-btn" id="btn-sluit-dossier">
+        <button class="briefkaart-verder-btn" id="btn-sluit-dossier">Verder</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+       SCHERM 2C  -  EPILOOG
+  ══════════════════════════════════════════ -->
+    <div id="scherm-epiloog" class="einde-scherm">
+      <div class="systeembalk">
+        <div style="display: flex; align-items: center">
+          <span class="sys-logo">Bureau X</span>
+          <span class="sys-sep">|</span>
+          <span class="sys-case">Ref. OPZ-2025-0506 · Dossiernotitie</span>
+        </div>
+      </div>
+
+      <div class="briefkaart-wrapper">
+        <div class="briefkaart-melding">Een week later</div>
+        <div class="briefkaart-melding-sub">Dossiernotities, An Vermeersch</div>
+
+        <article class="einde-mail" aria-labelledby="epiloog-titel">
+          <dl class="einde-mail-kop">
+            <dt>Datum</dt>
+            <dd id="epiloog-titel">Woensdag 14 mei 2025, 10u00, kamer 4</dd>
+          </dl>
+          <p>Lena kwam op tijd. Ze had een envelop mee voor Katrijn: zeven keer €35.</p>
+          <p>
+            Ze vertelde over Marie, over de zomers in Diest en waarom ze het alleen wilde doen. Ik
+            heb gezegd dat ik dat begrijp, en dat ik de volgende keer graag een briefje heb. Ze
+            lachte. "Een briefje. Geen toestemming." Afgesproken.
+          </p>
+          <p>
+            Nieuw in het weekrooster: elke eerste vrijdag van de maand naar Diest. Retour: wanneer
+            ze wil.
+          </p>
+          <p>
+            Vertrouwenspersoon bijgewerkt: Marie Stas, Stationsstraat 7, Diest. Huidig adres:
+            bekend.
+          </p>
+        </article>
+
+        <button class="briefkaart-verder-btn einde-verder-btn" id="btn-epiloog-verder">
           <i class="bi bi-archive me-2"></i>Sluit het dossier
         </button>
       </div>
