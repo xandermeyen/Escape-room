@@ -61,6 +61,11 @@ export default tseslint.config(
       '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
+  {
+    // Scripts voor GitHub Actions draaien in Node, niet in de browser.
+    files: ['scripts/**/*.ts'],
+    languageOptions: { globals: { process: 'readonly', console: 'readonly' } },
+  },
   // Prettier als laatste: zet alle opmaak-regels uit zodat eslint en prettier
   // elkaar niet tegenspreken.
   prettier,

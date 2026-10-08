@@ -20,5 +20,13 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "shared/js", "experiences/kamer-14/js", "experiences/dua/js", "js", "tests"]
+  "include": [
+    "src",
+    "shared/js",
+    "experiences/kamer-14/js",
+    "experiences/dua/js",
+    "js",
+    "scripts",
+    "tests"
+  ]
 }
