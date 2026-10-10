@@ -2,3 +2,8 @@ allowBuilds:
   '@firebase/util': true
   esbuild: true
   protobufjs: false
+overrides:
+  '@grpc/grpc-js': ^1.13.6
+  protobufjs: ^7.6.5
+  brace-expansion@>=4.0.0 <5.0.12: ^5.0.12
+  esbuild@>=0.27.3 <0.28.1: ^0.28.1
