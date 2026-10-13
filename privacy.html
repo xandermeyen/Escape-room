@@ -10,12 +10,7 @@
     />
     <meta name="robots" content="noindex, follow" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="/assets/fonts/fonts.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <!-- Bootstrap (CSS + JS voor het navbar-menu) en css/style.css via src/base.ts -->
     <script type="module" src="/src/base.ts"></script>
@@ -71,11 +66,11 @@
             </div>
             <div class="meta-field">
               <span class="meta-label">Laatst bijgewerkt</span>
-              <span class="meta-value">7 oktober 2026</span>
+              <span class="meta-value">13 oktober 2026</span>
             </div>
             <div class="meta-field">
               <span class="meta-label">Rechtsgrond</span>
-              <span class="meta-value">AVG / GDPR - art. 6.1.a en 6.1.b</span>
+              <span class="meta-value">AVG / GDPR - art. 6.1.a, 6.1.b en 6.1.f</span>
             </div>
           </div>
 
@@ -85,9 +80,9 @@
               <div class="artikel-titel">Over dit document</div>
               <p>
                 Bureau X hecht belang aan de bescherming van jouw persoonsgegevens. Dit
-                privacybeleid legt uit welke gegevens wij verzamelen wanneer je een sessie boekt,
-                waarom wij die gegevens nodig hebben, hoe lang we ze bewaren en welke rechten je
-                hebt als betrokkene. Bureau X valt onder de Europese Algemene Verordening
+                privacybeleid legt uit welke gegevens wij verwerken wanneer je de site bezoekt, een
+                sessie boekt of een spel speelt, waarom we dat doen, hoe lang we ze bewaren en
+                welke rechten je hebt. Bureau X valt onder de Europese Algemene Verordening
                 Gegevensbescherming (AVG / GDPR).
               </p>
             </div>
@@ -95,7 +90,10 @@
             <div class="artikel">
               <div class="artikel-nummer">Artikel 1</div>
               <div class="artikel-titel">Verwerkingsverantwoordelijke</div>
-              <p>De verwerkingsverantwoordelijke voor jouw persoonsgegevens is:</p>
+              <p>
+                Bureau X is een gratis, niet-commercieel project. De verwerkingsverantwoordelijke
+                voor jouw persoonsgegevens is:
+              </p>
               <div class="gba-blok mt-2">
                 <p>
                   <strong>Xander Meyen - Bureau X</strong><br />
@@ -107,11 +105,8 @@
 
             <div class="artikel">
               <div class="artikel-nummer">Artikel 2</div>
-              <div class="artikel-titel">Welke gegevens verzamelen wij?</div>
-              <p>
-                Wij verzamelen uitsluitend de gegevens die je zelf invult bij het boeken van een
-                sessie:
-              </p>
+              <div class="artikel-titel">Welke gegevens verwerken wij?</div>
+              <p>Bij het boeken van een sessie vul je zelf deze gegevens in:</p>
               <table class="dossier-table mt-2">
                 <thead>
                   <tr>
@@ -138,105 +133,184 @@
                   </tr>
                 </tbody>
               </table>
-              <p class="mt-3">
-                Wij verzamelen geen betaalgegevens, geen wachtwoorden en geen locatiegegevens.
-              </p>
+              <p class="mt-3">Tijdens het spelen en op de site verwerken we daarnaast:</p>
+              <ul>
+                <li>
+                  <strong>Speldata:</strong> de voortgang van je sessie, de tijd per puzzel, het
+                  aantal pogingen en de gebruikte hints. Die zijn gekoppeld aan een sessiecode en
+                  een willekeurige, anonieme gebruikers-ID, niet aan je naam of e-mailadres.
+                </li>
+                <li>
+                  <strong>Reviews:</strong> je score, je tekst en, als je die zelf invult, een
+                  naam of bijnaam.
+                </li>
+                <li>
+                  <strong>Technische gegevens:</strong> bij een fout in de site gegevens zoals je
+                  browser, besturingssysteem en de pagina waarop de fout gebeurde.
+                </li>
+                <li>
+                  <strong>Bezoekstatistieken:</strong> enkel als je analytische cookies accepteert,
+                  zie artikel 9.
+                </li>
+              </ul>
+              <p>Wij verzamelen geen betaalgegevens, geen wachtwoorden en geen locatiegegevens.</p>
             </div>
 
             <div class="artikel">
               <div class="artikel-nummer">Artikel 3</div>
               <div class="artikel-titel">Doeleinden van de verwerking</div>
-              <p>Jouw gegevens worden uitsluitend gebruikt om:</p>
+              <p>Wij gebruiken jouw gegevens enkel om:</p>
               <ul>
                 <li>Jouw boeking per e-mail te bevestigen</li>
-                <li>De persoonlijke spellinks naar jou en je medespeler te sturen</li>
+                <li>De persoonlijke spellinks naar jou en je medespelers te sturen</li>
                 <li>Vragen over jouw sessie te beantwoorden</li>
+                <li>Het spel te laten werken en je voortgang tussen spelers te synchroniseren</li>
+                <li>Te zien welke puzzels te moeilijk of te makkelijk zijn, en het spel te verbeteren</li>
+                <li>Reviews te tonen op de site, nadat we ze nagelezen hebben</li>
+                <li>Technische fouten op te sporen en op te lossen</li>
+                <li>Misbruik van de spel-database te voorkomen</li>
               </ul>
               <p>
-                Wij gebruiken jouw gegevens <strong>niet</strong> voor marketingdoeleinden,
-                profilering of commercieel delen met derden.
+                Wij gebruiken jouw gegevens <strong>niet</strong> voor marketing, advertenties of
+                profilering, en we verkopen ze niet door.
               </p>
             </div>
 
             <div class="artikel">
               <div class="artikel-nummer">Artikel 4</div>
               <div class="artikel-titel">Rechtsgrond</div>
-              <p>
-                De verwerking is gebaseerd op de
-                <strong>uitvoering van een overeenkomst</strong> (art. 6.1.b AVG): je vraagt een
-                sessie aan, en wij verwerken jouw gegevens om die sessie te kunnen organiseren en
-                uitvoeren.
-              </p>
-              <p>
-                Voor analytische cookies (Google Analytics) is de rechtsgrond jouw
-                <strong>toestemming</strong> (art. 6.1.a AVG). Die kan je op elk moment intrekken,
-                zie artikel 8.
-              </p>
+              <ul>
+                <li>
+                  <strong>Boeking en het spel zelf:</strong> uitvoering van een overeenkomst (art.
+                  6.1.b AVG). Je vraagt een sessie aan en wij hebben die gegevens nodig om ze te
+                  organiseren en te laten werken.
+                </li>
+                <li>
+                  <strong>Speldata voor verbetering, foutmeldingen en misbruikpreventie:</strong>
+                  ons gerechtvaardigd belang (art. 6.1.f AVG) om een werkend, veilig en goed
+                  spel aan te bieden. De gegevens zijn beperkt en niet gekoppeld aan je naam of
+                  e-mailadres.
+                </li>
+                <li>
+                  <strong>Reviews en Google Analytics:</strong> jouw toestemming (art. 6.1.a AVG).
+                  Die kan je op elk moment intrekken, zie artikels 8 en 9.
+                </li>
+              </ul>
             </div>
 
             <div class="artikel">
               <div class="artikel-nummer">Artikel 5</div>
               <div class="artikel-titel">Bewaartermijn</div>
-              <p>
-                Wij bewaren jouw gegevens maximaal <strong>3 maanden</strong> na de geboekte
-                speeldatum. Daarna worden ze verwijderd. Je kan ook op elk moment zelf vragen om
-                jouw gegevens te laten verwijderen, zie artikel 7.
+              <table class="dossier-table mt-2">
+                <thead>
+                  <tr>
+                    <th>Gegevens</th>
+                    <th>Bewaartermijn</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Boekingsgegevens</td>
+                    <td>Maximaal 3 maanden na de geboekte speeldatum</td>
+                  </tr>
+                  <tr>
+                    <td>Speldata en sessievoortgang</td>
+                    <td>Maximaal 12 maanden na de sessie</td>
+                  </tr>
+                  <tr>
+                    <td>Reviews</td>
+                    <td>Zolang ze op de site staan, of tot je vraagt om ze te verwijderen</td>
+                  </tr>
+                  <tr>
+                    <td>Technische foutmeldingen (Sentry)</td>
+                    <td>Maximaal 90 dagen</td>
+                  </tr>
+                  <tr>
+                    <td>Google Analytics</td>
+                    <td>Cookies maximaal 2 jaar, statistieken maximaal 14 maanden</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="mt-3">
+                Daarna worden de gegevens verwijderd. Je kan ook altijd zelf vragen om jouw
+                gegevens eerder te laten verwijderen, zie artikel 8.
               </p>
             </div>
 
             <div class="artikel">
               <div class="artikel-nummer">Artikel 6</div>
-              <div class="artikel-titel">Ontvangers van jouw gegevens</div>
+              <div class="artikel-titel">Verwerkers</div>
               <p>
-                Jouw gegevens worden verwerkt via
-                <a href="https://formspree.io" target="_blank" rel="noopener" class="link-accent"
-                  >Formspree</a
-                >, een externe dienst voor formulierverwerking die handelt in overeenstemming met de
-                GDPR. Buiten Formspree worden jouw boekingsgegevens niet gedeeld met andere partijen
-                en niet doorverkocht.
+                Wij delen jouw gegevens niet met andere partijen. Voor de technische werking doen we
+                wel een beroep op deze externe diensten, die de gegevens enkel in onze opdracht
+                verwerken:
+              </p>
+              <ul>
+                <li>
+                  <a href="https://formspree.io" target="_blank" rel="noopener" class="link-accent"
+                    >Formspree</a
+                  >
+                  (Formspree Inc., VS): verwerkt de gegevens van het boekingsformulier.
+                </li>
+                <li>
+                  <strong>Google Firebase</strong> (Google): bewaart de speldata, de
+                  sessievoortgang en reviews. De database staat in de regio europe-west1 (België).
+                  Voor het spel krijg je een anonieme gebruikers-ID via Firebase Authentication.
+                </li>
+                <li>
+                  <strong>Sentry</strong> (Functional Software Inc.): technische foutmeldingen,
+                  opgeslagen op servers in de EU (Duitsland).
+                </li>
+                <li>
+                  <strong>Google Analytics 4</strong> (Google Ireland Ltd.): enkel met jouw
+                  toestemming, zie artikel 9.
+                </li>
+              </ul>
+              <p class="recaptcha-melding" hidden>
+                Om misbruik van de spel-database te voorkomen, controleert
+                <strong>Google reCAPTCHA</strong> (via Firebase App Check) of een verzoek van een
+                echte bezoeker van deze site komt. Google verwerkt daarvoor technische gegevens over
+                je browser en toestel; het
+                <a
+                  href="https://policies.google.com/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="link-accent"
+                  >privacybeleid</a
+                >
+                en de
+                <a
+                  href="https://policies.google.com/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="link-accent"
+                  >servicevoorwaarden</a
+                >
+                van Google zijn van toepassing.
               </p>
               <p>
-                Voor het spel zelf gebruiken we <strong>Google Firebase</strong> (de voortgang van
-                je sessie en anonieme speldata zoals de tijd per puzzel, het aantal pogingen en de
-                gebruikte hints, enkel gekoppeld aan een sessiecode en niet aan je naam of
-                e-mailadres, plus reviews die je zelf achterlaat) en
-                <strong>Sentry</strong> (technische foutmeldingen, zodat we fouten kunnen oplossen).
-                Met de speldata zien we welke puzzels te moeilijk of te makkelijk zijn, zodat we het
-                spel kunnen verbeteren.
-                <span class="recaptcha-melding" hidden
-                  >Om misbruik van de spel-database te voorkomen, controleert
-                  <strong>Google reCAPTCHA</strong> (via Firebase App Check) of een verzoek van een
-                  echte bezoeker van deze site komt. Google verwerkt daarvoor technische gegevens
-                  over je browser en toestel; het
-                  <a
-                    href="https://policies.google.com/privacy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="link-accent"
-                    >privacybeleid</a
-                  >
-                  en de
-                  <a
-                    href="https://policies.google.com/terms"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="link-accent"
-                    >servicevoorwaarden</a
-                  >
-                  van Google zijn van toepassing.</span
-                >
-                Geef je toestemming voor analytische cookies, dan worden gegevens over je bezoek ook
-                verwerkt door <strong>Google Analytics</strong> (Google Ireland Ltd.), zie artikel
-                8.
+                De lettertypes van deze site worden lokaal geladen, niet via Google Fonts. Daardoor
+                gaat je IP-adres bij het laden van een pagina niet naar Google.
               </p>
             </div>
 
             <div class="artikel">
               <div class="artikel-nummer">Artikel 7</div>
+              <div class="artikel-titel">Doorgifte buiten de Europese Unie</div>
+              <p>
+                Formspree, Sentry en Google zijn (deels) Amerikaanse bedrijven. Daardoor kunnen
+                gegevens in de Verenigde Staten terechtkomen. Dat gebeurt enkel met passende
+                waarborgen: op basis van het EU-VS Data Privacy Framework of de
+                standaardcontractbepalingen van de Europese Commissie.
+              </p>
+            </div>
+
+            <div class="artikel">
+              <div class="artikel-nummer">Artikel 8</div>
               <div class="artikel-titel">Jouw rechten als betrokkene</div>
               <p>
                 Onder de AVG beschik je over de volgende rechten. Je kan ze uitoefenen via
-                <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a> wij
+                <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a>. Wij
                 reageren binnen 30 dagen.
               </p>
               <div class="mt-3">
@@ -266,10 +340,20 @@
                 </div>
                 <div class="recht-item">
                   <div class="recht-naam">
+                    <i class="bi bi-pause-circle me-2" style="opacity: 0.5"></i>Recht op beperking
+                  </div>
+                  <p class="recht-omschrijving">
+                    Je kan vragen om de verwerking van jouw gegevens tijdelijk stop te zetten,
+                    bijvoorbeeld terwijl we een vraag tot correctie nakijken.
+                  </p>
+                </div>
+                <div class="recht-item">
+                  <div class="recht-naam">
                     <i class="bi bi-slash-circle me-2" style="opacity: 0.5"></i>Recht op bezwaar
                   </div>
                   <p class="recht-omschrijving">
-                    Je kan bezwaar maken tegen de verwerking van jouw gegevens.
+                    Je kan bezwaar maken tegen een verwerking die op ons gerechtvaardigd belang
+                    steunt.
                   </p>
                 </div>
                 <div class="recht-item">
@@ -281,16 +365,30 @@
                     Je kan jouw gegevens opvragen in een leesbaar, overdraagbaar formaat.
                   </p>
                 </div>
+                <div class="recht-item">
+                  <div class="recht-naam">
+                    <i class="bi bi-arrow-counterclockwise me-2" style="opacity: 0.5"></i>Recht
+                    om toestemming in te trekken
+                  </div>
+                  <p class="recht-omschrijving">
+                    Gaf je toestemming, dan kan je die altijd intrekken. Dat verandert niets aan
+                    verwerkingen die al gebeurd zijn.
+                  </p>
+                </div>
               </div>
+              <p class="mt-3">
+                Wij nemen geen beslissingen over jou op basis van enkel geautomatiseerde verwerking.
+              </p>
             </div>
 
             <div class="artikel">
-              <div class="artikel-nummer">Artikel 8</div>
+              <div class="artikel-nummer">Artikel 9</div>
               <div class="artikel-titel" id="cookies">Cookies en analytics</div>
               <p>
                 <strong>Noodzakelijk.</strong> Voor de werking van de site en het spel bewaren we
-                enkele gegevens in je browser, zoals je sessiecode, de rol die je koos en je
-                cookiekeuze. Die zijn nodig om de site te laten werken en vragen geen toestemming.
+                enkele gegevens in je browser, zoals je sessiecode, de rol die je koos, je
+                anonieme login voor het spel en je cookiekeuze. Die zijn nodig om de site te laten
+                werken en vragen geen toestemming.
               </p>
               <p>
                 <strong>Analytisch (alleen met toestemming).</strong> Als je op "Accepteren" klikt,
@@ -310,11 +408,22 @@
             </div>
 
             <div class="artikel">
-              <div class="artikel-nummer">Artikel 9</div>
+              <div class="artikel-nummer">Artikel 10</div>
+              <div class="artikel-titel">Minderjarigen</div>
+              <p>
+                Ben je jonger dan 13 jaar, vraag dan een ouder of voogd om de sessie voor jou te
+                boeken en om toestemming te geven voor cookies of een review. Merken we dat we
+                zonder die toestemming gegevens van een kind onder 13 jaar hebben, dan verwijderen
+                we die.
+              </p>
+            </div>
+
+            <div class="artikel">
+              <div class="artikel-nummer">Artikel 11</div>
               <div class="artikel-titel">Klachten</div>
               <p>
-                Heb je een klacht over hoe wij omgaan met jouw gegevens? Je kan terecht bij de
-                Belgische toezichthoudende autoriteit:
+                Heb je een klacht over hoe wij omgaan met jouw gegevens? Neem gerust eerst contact
+                met ons op. Je kan ook altijd terecht bij de Belgische toezichthoudende autoriteit:
               </p>
               <div class="gba-blok mt-2">
                 <p>
@@ -332,12 +441,11 @@
             </div>
 
             <div class="artikel">
-              <div class="artikel-nummer">Artikel 10</div>
+              <div class="artikel-nummer">Artikel 12</div>
               <div class="artikel-titel">Wijzigingen aan dit beleid</div>
               <p>
-                Wij behouden het recht dit privacybeleid te wijzigen. De meest recente versie staat
-                altijd op deze pagina, met de datum van de laatste aanpassing vermeld in de metabalk
-                bovenaan.
+                Wij kunnen dit privacybeleid aanpassen. De meest recente versie staat altijd op
+                deze pagina, met de datum van de laatste aanpassing in de metabalk bovenaan.
               </p>
             </div>
 

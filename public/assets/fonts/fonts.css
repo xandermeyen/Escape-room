@@ -1,0 +1,23 @@
+/* Lokaal gehoste lettertypes (via Fontsource). Zo gaat er geen IP-adres van
+   bezoekers naar Google. Special Elite: Apache 2.0, Courier Prime: OFL 1.1. */
+@font-face {
+  font-family: 'Special Elite';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/assets/fonts/special-elite-latin-400-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Courier Prime';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/assets/fonts/courier-prime-latin-400-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Courier Prime';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(/assets/fonts/courier-prime-latin-700-normal.woff2) format('woff2');
+}

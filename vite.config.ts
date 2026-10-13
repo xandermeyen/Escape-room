@@ -6,7 +6,7 @@ export default defineConfig({
     // three.js (deeltjes op de homepage) is één lazy chunk van ~530 kB, pas na
     // het laden van de pagina. De rest blijft ruim onder deze grens.
     chunkSizeWarningLimit: 600,
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         // Hoofdpagina's
         main: resolve(import.meta.dirname, 'index.html'),
@@ -33,6 +33,14 @@ export default defineConfig({
         duaEinde: resolve(import.meta.dirname, 'experiences/dua/einde.html'),
         duaTijdVoorbij: resolve(import.meta.dirname, 'experiences/dua/tijd-voorbij.html'),
         duaHostPanel: resolve(import.meta.dirname, 'experiences/dua/host-panel.html'),
+      },
+      output: {
+        codeSplitting: {
+          // Bootstrap-JS (CommonJS) in een eigen chunk. Anders zet Rolldown zijn
+          // hulpcode in het privacy-chunk, en dan laadt de homepage via reviews
+          // ook de Bootstrap-CSS van de privacypagina, die .btn overschrijft.
+          groups: [{ name: 'bootstrap-js', test: /node_modules\/bootstrap\/dist\/js\// }],
+        },
       },
     },
   },
