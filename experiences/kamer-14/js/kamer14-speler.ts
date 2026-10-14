@@ -38,6 +38,7 @@ import {
   puzzelUitHintBlok,
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
+import { meetSpel } from '../../../shared/js/meet.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { maakTabsToegankelijk } from '../../../shared/js/toegankelijk.ts';
 import {
@@ -114,6 +115,7 @@ export function startSpelerPagina(config: SpelerConfig): void {
 
   // ── Sessie, navigatie, demo, timer ──
   const sessie = sessieUitUrl();
+  meetSpel('game_start', sessie, { rol });
   const schakelGuardUit = installeerNavigatieGuard();
   koppelDemoModus(
     sessie,

@@ -4,11 +4,13 @@
  */
 import './sentry.ts';
 import { sluitSessie } from './session.ts';
+import { meetSpel } from './meet.ts';
 
 /** Leest ?sessie= uit de URL en deactiveert die sessie (faalt stil met log). */
 export function sluitSessieUitUrl(): void {
   const sessie = new URLSearchParams(window.location.search).get('sessie');
   if (!sessie) return;
+  meetSpel('game_fail', sessie, { reden: 'tijd' });
   sluitSessie(sessie).catch((err: unknown) => {
     console.error('Sessie sluiten mislukt:', err);
   });

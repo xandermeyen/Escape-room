@@ -13,6 +13,7 @@ import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { haalEinde } from './dua-session.ts';
 import { fx } from './dua-audio.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
+import { meetSpel } from '../../../shared/js/meet.ts';
 
 /** Zo lang wachten we op de andere kant voor we de review toch tonen. */
 const MAX_WACHT_MS = 3 * 60 * 1000;
@@ -25,6 +26,7 @@ setTimeout(() => {
 const AANTAL_EGGS = 6;
 
 const sessie = sessieUitUrl();
+meetSpel('game_complete', sessie);
 
 requireEl('sys-case').textContent = `D.U.A. · eindrapport · Sessie ${sessie}`;
 

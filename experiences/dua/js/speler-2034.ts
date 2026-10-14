@@ -26,6 +26,7 @@ import {
   puzzelUitHintBlok,
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
+import { meetSpel } from '../../../shared/js/meet.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import {
   DUA_HASHES,
@@ -62,6 +63,7 @@ import {
 import { fx, koppelTypgeluid } from './dua-audio.ts';
 
 const sessie = leesSessie();
+meetSpel('game_start', sessie, { rol: '2034' });
 const rol = new URLSearchParams(window.location.search).get('rol') ?? 'archivaris';
 
 requireEl('sys-case').textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;

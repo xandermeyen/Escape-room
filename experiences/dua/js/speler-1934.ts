@@ -13,6 +13,7 @@ import {
   puzzelUitHintBlok,
 } from '../../../shared/js/speldata.ts';
 import { initHulp } from '../../../shared/js/hulp.ts';
+import { meetSpel } from '../../../shared/js/meet.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
 import { DUA_HASHES, DUA_REGELS, DUA_VRIJGAVE, DUA_BIJNA_KLUIS } from './dua-config.ts';
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
@@ -45,6 +46,7 @@ import {
 import { fx, koppelTypgeluid } from './dua-audio.ts';
 
 const sessie = leesSessie();
+meetSpel('game_start', sessie, { rol: '1934' });
 const rol = new URLSearchParams(window.location.search).get('rol') ?? 'schrijver';
 
 requireEl('sys-case').textContent = `D.U.A. · Dossier 1934/RR · Sessie ${sessie}`;

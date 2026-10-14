@@ -25,6 +25,7 @@ import {
   volgendeStap,
 } from './einde-verloop.ts';
 import { koppelRouteKaart } from './route-kaart.ts';
+import { meetSpel } from '../../../shared/js/meet.ts';
 
 // ── Sessie ophalen (redirect + stop als die ontbreekt) ────
 const sessie = sessieUitUrl();
@@ -221,6 +222,7 @@ function toonPolitie(): void {
   if (politieGetoond) return;
   politieGetoond = true;
   toonScherm('scherm-politie');
+  meetSpel('game_fail', sessie, { reden: 'politie' });
   // Er komt geen rapport meer: de sessie sluiten zodat ze niet actief blijft.
   sluitSessie(sessie).catch((err: unknown) => console.error('Sessie sluiten mislukt:', err));
 }
@@ -283,6 +285,7 @@ luisterNaarRapport(sessie, rapport => {
   if (rapport?.ingediend && !mailGetoond && !politieGetoond) {
     mailGetoond = true;
     toonScherm('scherm-mail-an');
+    meetSpel('game_complete', sessie);
     vulStats();
   }
 });

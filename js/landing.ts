@@ -3,6 +3,7 @@
  * D.U.A.): navigatiebalk, gsm-menu, scroll-reveal, FAQ en het
  * boekingsformulier. Stond vroeger drie keer als los <script> in de HTML.
  */
+import { experienceUitPad, meetEvent } from '../shared/js/meet.ts';
 
 /** Navigatiebalk krijgt een achtergrond zodra je scrollt. */
 export function koppelNavbar(): void {
@@ -115,6 +116,7 @@ export function koppelBoekformulier(fetcher: typeof fetch = (...a) => fetch(...a
       if (!res.ok) throw new Error(`Formspree antwoordde ${res.status}`);
       form.style.display = 'none';
       if (ok) ok.style.display = 'block';
+      meetEvent('reservation_submit', { experience: experienceUitPad() });
     } catch (err) {
       console.error('Boeking versturen mislukt:', err);
       if (knop) {
