@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@firebase/rules-unit-testing": "^5.0.2",
+    "@firebase/rules-unit-testing": "^6.0.0",
     "@playwright/test": "~1.63.0",
     "@types/node": "^24.19.1",
     "@types/three": "^0.186.0",
@@ -39,7 +39,7 @@
     "@sentry/browser": "^11.6.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.2",
-    "firebase": "^12.19.0",
+    "firebase": "^13.0.0",
     "three": "^0.186.1"
   }
 }
