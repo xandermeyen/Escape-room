@@ -1,7 +1,7 @@
 import { db } from './firebase-config.ts';
 import { ref, set, get, update, onValue, serverTimestamp, runTransaction } from 'firebase/database';
-import { authReady } from './auth.ts';
-import { schrijf } from './verbinding.ts';
+import { authReady, authGelukt } from './auth.ts';
+import { schrijf, meldSchrijffout } from './verbinding.ts';
 
 export interface RapportInhoud {
   bestemming: string;
@@ -245,14 +245,30 @@ export async function haalTijden(sessieCode: string): Promise<SessieTijden> {
 export async function claimRol(sessieCode: string, rol: string): Promise<boolean> {
   await authReady;
   const rolRef = ref(db, `sessions/${sessieCode}/spelers/${rol}`);
-  const result = await schrijf(
-    'claimRol',
-    runTransaction(rolRef, huidig => {
+  try {
+    const result = await runTransaction(rolRef, huidig => {
       if (huidig !== null) return; // undefined = transaction afgebroken
       return 'bezet';
-    }),
+    });
+    return result.committed;
+  } catch (err) {
+    // Is de lokale cache nog leeg (rol-listener nog niet geladen) terwijl de
+    // rol op de server al 'bezet' is, dan stuurt de transaction toch een
+    // schrijfactie. De rules (`!data.exists()`) weigeren die vóór de server
+    // een retry vraagt: permission_denied in plaats van committed: false.
+    // Met een geldige login betekent dat dus gewoon "rol al bezet".
+    if (authGelukt && isPermissionDenied(err)) return false;
+    meldSchrijffout('claimRol', err);
+    throw err;
+  }
+}
+
+function isPermissionDenied(err: unknown): boolean {
+  const e = err as { code?: string; message?: string } | null;
+  return (
+    e?.code === 'PERMISSION_DENIED' ||
+    (typeof e?.message === 'string' && e.message.toLowerCase().includes('permission_denied'))
   );
-  return result.committed;
 }
 
 // Live luisteren naar welke rollen bezet zijn
