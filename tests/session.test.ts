@@ -16,7 +16,7 @@ vi.mock('../shared/js/firebase-config.ts', () => ({
   db: {},
 }));
 
-vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
+vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve(), authGelukt: true }));
 
 // Pas na de mocks importeren
 import { ref, set, get, update, onValue, runTransaction } from 'firebase/database';
@@ -135,6 +135,20 @@ describe('claimRol', () => {
 
     expect(updater(null)).toBe('bezet');
     expect(updater('bezet')).toBeUndefined();
+  });
+
+  it('behandelt permission_denied als "rol al bezet" (lokale cache liep achter)', async () => {
+    runTransactionMock.mockRejectedValue(new Error('permission_denied'));
+
+    const ok = await claimRol('ABC', 'spelerA');
+
+    expect(ok).toBe(false);
+  });
+
+  it('gooit andere fouten gewoon door', async () => {
+    runTransactionMock.mockRejectedValue(new Error('network error'));
+
+    await expect(claimRol('ABC', 'spelerA')).rejects.toThrow('network error');
   });
 });
 
