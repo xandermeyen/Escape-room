@@ -12,8 +12,8 @@ import {
   KAMER14_ANTWOORD_HASHES,
   KAMER14_ANTWOORD_REGELS,
   normaliseerDagen,
-  normaliseerAantal,
-  normaliseerNaam,
+  normaliseerCijfers,
+  woordVarianten,
   normaliseerTijd,
 } from '../experiences/kamer-14/js/kamer14-config.ts';
 
@@ -27,85 +27,67 @@ function beoordeel(puzzel: string, invoer: string) {
   );
 }
 
-/** Per puzzel: schrijfwijzen die juist moeten zijn, bijna, en fout. */
+/** Per puzzel of rapportveld: schrijfwijzen die juist moeten zijn, bijna, en fout. */
 const GEVALLEN: Record<string, { juist: string[]; bijna: string[]; fout: string[] }> = {
+  p0: {
+    juist: ['0304', '03/04', '03 04', '03-04'],
+    bijna: [],
+    fout: ['0403', '3042023', '1403', 'april'],
+  },
   p1: {
     juist: [
       'dinsdag donderdag',
       'Dinsdag Donderdag',
       'dinsdag en donderdag',
       'donderdag, dinsdag',
-      'donderdag en dinsdag',
       'di do',
-      'do di',
       'DI/DO',
-      'di en do',
-      'dinsdag & donderdag',
       'dinsdagen en donderdagen',
       'elke dinsdag en donderdag',
-      '  dinsdag    donderdag  ',
       'dinsdag-donderdag',
     ],
     bijna: ['dinsdag', 'donderdag', 'dinsdag vrijdag', 'maandag donderdag', 'di'],
-    fout: ['maandag woensdag', 'vrijdag', 'diest', 'weekend'],
+    fout: ['maandag woensdag', 'vrijdag', 'weekend'],
   },
   p2: {
-    juist: ['diest', 'Diest', 'DIEST', ' Diest. ', 'Diëst'],
+    juist: ['7394', '7 3 9 4', '7-3-9-4'],
     bijna: [],
-    fout: ['geel', 'turnhout', 'hasselt', 'diest geel'],
+    fout: ['7349', '2154', '0000'],
   },
   p3: {
-    juist: [
-      '7',
-      'zeven',
-      'Zeven',
-      '7 weken',
-      'zeven weken',
-      '07',
-      '7w',
-      '7 wk',
-      'een week of zeven',
-    ],
-    bijna: ['6', '8', 'acht', 'zes weken'],
-    fout: ['5', '9', '70', 'tien', 'veel'],
+    juist: ['10', '10u', '10 uur', '10:00', 'om 10u', '10h'],
+    bijna: [],
+    fout: ['9', '11', '8u', '10:30'],
   },
   p4: {
-    juist: [
-      'marie stas',
-      'Marie Stas',
-      'stas marie',
-      'Stas, Marie',
-      'marie-stas',
-      'mariestas',
-      'Marié Stas',
-      // één letter verschil
-      'mari stas',
-      'marie stass',
-      'maria stas',
-      'marie stsa',
-      'marei stas',
-    ],
-    bijna: ['marie', 'Stas', 'marie bogaert', 'lena stas'],
-    fout: ['an vermeersch', 'lena bogaert', 'maria stass', 'katrijn'],
+    juist: ['285', '€285', '285 euro', '2 8 5'],
+    bijna: [],
+    fout: ['245', '280', '325'],
   },
   p5: {
-    juist: [
-      '07:35',
-      '7:35',
-      '7u35',
-      '07u35',
-      '7.35',
-      '0735',
-      '735',
-      '7h35',
-      'om 7u35',
-      '7 35',
-      '07.35 uur',
-      '7u35 uur',
-      '7 uur 35',
-    ],
-    bijna: ['07:28', '7u00', '7', '07:45'],
-    fout: ['05:58', '9:12', '17:35', '11:35', 'bus'],
+    juist: ['07:50', '7u50', '7:50', '0750', 'om 7u50', '7.50 uur'],
+    bijna: ['07:35', '07:45', '7u30', '7'],
+    fout: ['08:30', '06:50'],
+  },
+  bestemming: {
+    juist: ['Diest', 'diest', 'Grote Markt Diest', 'op de Grote Markt in Diest', 'Diëst', 'dist'],
+    bijna: [],
+    fout: ['Geel', 'Turnhout', 'Grote Markt', 'Hasselt'],
+  },
+  wie: {
+    juist: ['haar dochter', 'Noor', 'bij Noor en Marie', 'dochter Noor', 'haar kind', 'dochtertje'],
+    bijna: [],
+    fout: ['Marie Stas', 'Katrijn', 'haar ouders'],
+  },
+  vervoer: {
+    juist: ['bus', 'met de bus', 'lijn 19', 'De Lijn', 'autobus'],
+    bijna: [],
+    fout: ['trein', 'met de auto van Luc', 'bus of trein'],
+  },
+  terug: {
+    juist: ['17:51', '17u51', '17:05', 'om 17u05', '1705'],
+    bijna: [],
+    fout: ['16:26', '18:32', '17u00', '5 uur'],
   },
 };
 
@@ -155,19 +137,25 @@ describe('normalizers per puzzel', () => {
     expect(normaliseerDagen('donderdag dinsdag diest')).toBe('dinsdag donderdag diest');
   });
 
-  it('P3 geeft alleen het cijfer terug', () => {
-    expect(normaliseerAantal('zeven weken')).toBe('7');
-    expect(normaliseerAantal('07')).toBe('7');
+  it('cijfersloten houden enkel de cijfers', () => {
+    expect(normaliseerCijfers('€ 285')).toBe('285');
+    expect(normaliseerCijfers('03/04')).toBe('0304');
+    expect(normaliseerCijfers('geen cijfers')).toBe('geen cijfers');
   });
 
-  it('P4 zet voor- en achternaam in vaste volgorde', () => {
-    expect(normaliseerNaam('stas marie')).toBe(normaliseerNaam('marie stas'));
+  it('rapport: elk woord van de zin is een kandidaat, met typfouten vanaf vier letters', () => {
+    const v = woordVarianten('bij de markt');
+    expect(v).toContain('bij');
+    expect(v).toContain('markt');
+    expect(v).toContain('mark');
+    expect(v).not.toContain('bi');
   });
 
-  it('P5 zet elke tijdnotatie om naar uu:mm', () => {
-    for (const t of ['7u35', '7 35', '0735', '735', '7h35', 'om 7u35']) {
-      expect(normaliseerTijd(normaliseerInvoer(t))).toBe('07:35');
+  it('tijden worden uu:mm', () => {
+    for (const t of ['7u50', '7 50', '0750', '750', '7h50', 'om 7u50']) {
+      expect(normaliseerTijd(normaliseerInvoer(t))).toBe('07:50');
     }
+    expect(normaliseerTijd('10')).toBe('10:00');
     expect(normaliseerTijd('25 99')).toBe('25 99');
   });
 });
@@ -196,14 +184,25 @@ describe('broncode', () => {
     ];
     for (const bestand of bestanden) {
       const bron = readFileSync(resolve(__dirname, bestand), 'utf8').toLowerCase();
-      for (const antwoord of ['diest', 'marie', 'stas', '07:35', '7u35', 'dinsdag donderdag']) {
+      for (const antwoord of [
+        'diest',
+        '0304',
+        '7394',
+        '285',
+        '07:50',
+        '7u50',
+        'dinsdag donderdag',
+      ]) {
         expect(bron.includes(antwoord), `${bestand} bevat "${antwoord}"`).toBe(false);
       }
     }
   });
 
-  it('heeft één hash per puzzel', () => {
-    for (const hashes of Object.values(KAMER14_ANTWOORD_HASHES)) expect(hashes).toHaveLength(1);
+  it('heeft één hash per puzzel; enkel de rapportvelden aanvaarden meerdere woorden', () => {
+    const verwacht: Record<string, number> = { terug: 2, wie: 4 };
+    for (const [sleutel, hashes] of Object.entries(KAMER14_ANTWOORD_HASHES)) {
+      expect(hashes, sleutel).toHaveLength(verwacht[sleutel] ?? 1);
+    }
   });
 });
 
@@ -234,11 +233,11 @@ describe('controleerAntwoordHash met regels', () => {
   }
 
   it('aanvaardt een andere tijdnotatie', async () => {
-    expect(await controleer('om 7u35')).toHaveBeenCalledOnce();
+    expect(await controleer('om 7u50')).toHaveBeenCalledOnce();
   });
 
   it('toont de bijna-melding bij het juiste uur met verkeerde minuten', async () => {
-    const onJuist = await controleer('07:28');
+    const onJuist = await controleer('07:35');
     expect(onJuist).not.toHaveBeenCalled();
     expect(document.getElementById('fb')!.textContent).toBe(BIJNA_TEKST);
     expect(BIJNA_TEKST).toBe('Je zit dicht bij het antwoord. Overleg nog eens.');

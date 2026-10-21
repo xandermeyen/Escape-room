@@ -166,7 +166,7 @@ describe('oplossing Kamer 14', () => {
     const zinnen = kamer14Oplossing();
     expect(zinnen).toHaveLength(5);
     expect(zinnen.join(' ')).toContain('Diest');
-    expect(zinnen.join(' ')).toContain('€35');
+    expect(zinnen.join(' ')).toContain('€285');
   });
 
   it('staat niet leesbaar in de bron', () => {

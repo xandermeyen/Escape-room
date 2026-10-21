@@ -76,7 +76,7 @@ test('Kamer 14 host-paneel: inloggen, sessie aanmaken, details en uitloggen', as
     c => JSON.parse(localStorage.getItem('e2e-firebase-db') ?? '{}').sessions[c],
     nieuweCode,
   );
-  expect(Object.keys(sessie.puzzels)).toEqual(['p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
+  expect(Object.keys(sessie.puzzels)).toEqual(['p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
 
   // Deactiveren via de knop in de rij
   await page.locator(`[data-actie="deactiveer"][data-code="${nieuweCode}"]`).click();
