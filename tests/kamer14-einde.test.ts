@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 // Firebase en de sessiefuncties afschermen: we testen enkel het verloop.
-const rapportLuisteraars: ((r: { ingediend?: boolean } | null) => void)[] = [];
+type Rapport = { ingediend?: boolean; inhoud?: { conclusie?: string } } | null;
+const rapportLuisteraars: ((r: Rapport) => void)[] = [];
 const diendRapportIn = vi.fn(() => Promise.resolve());
 const sluitSessie = vi.fn(() => Promise.resolve());
 
@@ -11,8 +12,7 @@ vi.mock('../shared/js/sentry.ts', () => ({}));
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {}, app: {} }));
 vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
 vi.mock('../shared/js/session.ts', () => ({
-  luisterNaarRapport: (_s: string, cb: (r: { ingediend?: boolean } | null) => void) =>
-    rapportLuisteraars.push(cb),
+  luisterNaarRapport: (_s: string, cb: (r: Rapport) => void) => rapportLuisteraars.push(cb),
   diendRapportIn: (...args: unknown[]) => diendRapportIn(...(args as [])),
   sluitSessie: (...args: unknown[]) => sluitSessie(...(args as [])),
   haalTijden: () => Promise.resolve({}),
@@ -24,7 +24,10 @@ vi.mock('../shared/js/verdeling.ts', () => ({
   percentielSneller: () => null,
   prestatieTekst: () => null,
 }));
-vi.mock('../experiences/kamer-14/js/audio.ts', () => ({ speelStem: () => {} }));
+vi.mock('../experiences/kamer-14/js/audio.ts', () => ({
+  speelStem: () => ({ addEventListener: () => {}, pause: () => {} }),
+  hervatAudio: () => {},
+}));
 
 import {
   volgendeStap,
@@ -32,6 +35,7 @@ import {
   bewaarFoutePogingen,
   MAX_FOUTE_POGINGEN,
 } from '../experiences/kamer-14/js/einde-verloop.ts';
+import { EINDES, KEUZES, isKeuze } from '../experiences/kamer-14/js/eindes.ts';
 
 const html = readFileSync(resolve(__dirname, '../experiences/kamer-14/einde.html'), 'utf8');
 const body = (html.match(/<body[^>]*>([\s\S]*)<\/body>/)?.[1] ?? '').replace(
@@ -47,7 +51,14 @@ const vul = (velden: Record<string, string>) => {
   }
 };
 const klik = (id: string) => document.getElementById(id)!.click();
-const JUIST = { bestemming: 'Diest', wie: 'Marie Stas', vervoer: 'bus', tijdstip: '7u35' };
+const kies = (keuze: string) =>
+  (document.querySelector(`input[name="keuze"][value="${keuze}"]`) as HTMLInputElement).click();
+const JUIST = {
+  bestemming: 'Grote Markt, Diest',
+  wie: 'haar dochter Noor',
+  vervoer: 'bus',
+  tijdstip: '17u51',
+};
 const FOUT = { ...JUIST, bestemming: 'Hasselt' };
 
 // ── Pure logica ───────────────────────────────────────────────────────────────
@@ -76,29 +87,29 @@ describe('einde-verloop: volgende stap', () => {
 
 // ── Teksten ───────────────────────────────────────────────────────────────────
 
-describe('einde: teksten', () => {
-  it('bevat de mail van An, de epiloog, de waarschuwing en de politietekst', () => {
-    expect(tekst).toContain('Marie nam op. Op de achtergrond hoorde ik Lena lachen.');
-    expect(tekst).toContain('De politie bel ik niet.');
-    expect(tekst).toContain('Woensdag 14 mei 2025, 10u00, kamer 4');
-    expect(tekst).toContain('zeven keer €35');
-    expect(tekst).toContain('Huidig adres: bekend.');
-    expect(tekst).toContain('Klopt het daarna nog niet, dan bel ik de politie.');
-    expect(tekst).toContain('Om 19u40 vinden twee agenten Lena');
+describe('einde: keuzes en eindes', () => {
+  it('elke keuze in het formulier heeft een eigen einde, plus vermist', () => {
+    const waarden = [...body.matchAll(/name="keuze" value="([a-z]+)"/g)].map(m => m[1]);
+    expect(waarden).toEqual([...KEUZES]);
+    expect(Object.keys(EINDES).sort()).toEqual([...KEUZES, 'vermist'].sort());
+    expect(isKeuze('morgen')).toBe(true);
+    expect(isKeuze('politie')).toBe(false);
   });
 
-  it('nieuwe teksten bevatten geen gedachtestreepjes', () => {
-    for (const id of ['scherm-mail-an', 'scherm-politie', 'scherm-epiloog', 'an-waarschuwing']) {
-      const blok = new DOMParser().parseFromString(body, 'text/html').getElementById(id);
-      expect(blok, id).not.toBeNull();
-      expect(blok!.textContent).not.toMatch(/[—–]/);
+  it('elk einde heeft een titel, tekst en minstens één opname', () => {
+    for (const einde of Object.values(EINDES)) {
+      expect(einde.titel).toBeTruthy();
+      expect(einde.alineas.length).toBeGreaterThanOrEqual(2);
+      expect(einde.audio.length).toBeGreaterThanOrEqual(1);
     }
   });
 
-  it('de epiloog sluit aan bij de herinnering in de prullenmand', () => {
-    const b = readFileSync(resolve(__dirname, '../experiences/kamer-14/speler-b.html'), 'utf8');
-    expect(b).toMatch(/Wo 14 mei · 10u00/);
-    expect(b).toMatch(/Kamer 4/);
+  it('teksten zonder gedachtestreepjes', () => {
+    expect(tekst).not.toMatch(/[—–]/);
+  });
+
+  it('de waarschuwing van An dreigt met een vermissing', () => {
+    expect(tekst).toContain('dan meld ik haar als vermist');
   });
 });
 
@@ -118,8 +129,19 @@ describe('einde: verloop in de pagina', () => {
     sluitSessie.mockClear();
   });
 
+  it('zonder keuze: niets ingediend en geen foute poging', async () => {
+    vul(JUIST);
+    klik('btn-indienen');
+    await vi.waitFor(() =>
+      expect(document.getElementById('fout-keuze')!.classList).toContain('zichtbaar'),
+    );
+    expect(diendRapportIn).not.toHaveBeenCalled();
+    expect(leesFoutePogingen('EIN-001')).toBe(0);
+  });
+
   it('eerste fout rapport: waarschuwing, geen indiening', async () => {
     vul(FOUT);
+    kies('morgen');
     klik('btn-indienen');
     await vi.waitFor(() =>
       expect(document.getElementById('an-waarschuwing')!.classList).toContain('zichtbaar'),
@@ -129,25 +151,26 @@ describe('einde: verloop in de pagina', () => {
     expect(actief()).toBe('scherm-rapport');
   });
 
-  it('daarna juist: indienen, mail van An, briefkaart, epiloog, slot', async () => {
+  it('daarna juist: indienen met de keuze, het gekozen einde, dan het slot', async () => {
     vul(JUIST);
+    kies('niets');
     klik('btn-indienen');
     await vi.waitFor(() => expect(diendRapportIn).toHaveBeenCalled());
-    expect(document.getElementById('an-waarschuwing')!.classList).not.toContain('zichtbaar');
+    expect(diendRapportIn.mock.calls[0]).toEqual([
+      'EIN-001',
+      expect.objectContaining({ conclusie: 'niets', bestemming: JUIST.bestemming }),
+    ]);
 
-    rapportLuisteraars.forEach(cb => cb({ ingediend: true }));
-    expect(actief()).toBe('scherm-mail-an');
-    klik('btn-mail-verder');
-    expect(actief()).toBe('scherm-briefkaart');
-    klik('btn-sluit-dossier');
-    expect(actief()).toBe('scherm-epiloog');
-    klik('btn-epiloog-verder');
+    rapportLuisteraars.forEach(cb => cb({ ingediend: true, inhoud: { conclusie: 'niets' } }));
+    expect(actief()).toBe('scherm-einde');
+    expect(document.getElementById('einde-titel')!.textContent).toBe(EINDES.niets.titel);
+    klik('btn-einde-verder');
     expect(actief()).toBe('scherm-slot');
   });
 });
 
 describe('einde: twee keer fout', () => {
-  it('toont de politie, sluit de sessie en slaat de briefkaart over', async () => {
+  it('toont "vermist", sluit de sessie en dient niets in', async () => {
     vi.resetModules();
     diendRapportIn.mockClear();
     sluitSessie.mockClear();
@@ -157,82 +180,20 @@ describe('einde: twee keer fout', () => {
     await import('../experiences/kamer-14/js/einde.ts');
 
     vul(FOUT);
+    kies('alles');
     klik('btn-indienen');
     await vi.waitFor(() =>
       expect(document.getElementById('an-waarschuwing')!.classList).toContain('zichtbaar'),
     );
     vul({ ...FOUT, wie: 'Marie' });
     klik('btn-indienen');
-    await vi.waitFor(() => expect(actief()).toBe('scherm-politie'));
+    await vi.waitFor(() => expect(actief()).toBe('scherm-einde'));
+    expect(document.getElementById('einde-titel')!.textContent).toBe(EINDES.vermist.titel);
     expect(sluitSessie).toHaveBeenCalled();
     expect(diendRapportIn).not.toHaveBeenCalled();
 
     // Een rapport van de andere speler verandert dit niet meer.
-    rapportLuisteraars.forEach(cb => cb({ ingediend: true }));
-    expect(actief()).toBe('scherm-politie');
-
-    klik('btn-politie-verder');
-    expect(actief()).toBe('scherm-slot');
-  });
-});
-
-// ── Route-finale ──────────────────────────────────────────────────────────────
-
-describe('route-finale', () => {
-  it('routeStand volgt de invoer, niet het juiste antwoord', async () => {
-    const { routeStand } = await import('../experiences/kamer-14/js/route-kaart.ts');
-    expect(routeStand({ vervoer: '', tijdstip: '', bestemming: '', wie: '' })).toEqual({
-      rit: false,
-      stad: '?',
-      adres: '',
-    });
-    expect(
-      routeStand({ vervoer: 'trein', tijdstip: '9u', bestemming: 'Hasselt', wie: 'Jan' }),
-    ).toEqual({
-      rit: true,
-      stad: 'Hasselt',
-      adres: 'bij Jan',
-    });
-    expect(routeStand({ vervoer: 'bus', tijdstip: '', bestemming: '', wie: '' }).rit).toBe(false);
-  });
-
-  it('lange invoer wordt ingekort op de kaart', async () => {
-    const { routeStand } = await import('../experiences/kamer-14/js/route-kaart.ts');
-    const stand = routeStand({ vervoer: '', tijdstip: '', bestemming: 'x'.repeat(40), wie: '' });
-    expect(stand.stad.length).toBeLessThanOrEqual(22);
-  });
-
-  it('de kaart verraadt de bestemming niet in de HTML', () => {
-    const kaart = new DOMParser().parseFromString(body, 'text/html').getElementById('route-kaart');
-    expect(kaart).not.toBeNull();
-    expect(kaart!.textContent).not.toMatch(/Diest|Marie|Stas|07:35|bus/i);
-  });
-
-  it('alle vier de velden staan in de route, met een label', () => {
-    const doc = new DOMParser().parseFromString(body, 'text/html');
-    for (const id of ['r-vervoer', 'r-tijdstip', 'r-bestemming', 'r-wie']) {
-      expect(doc.querySelector(`.route #${id}`), id).not.toBeNull();
-      expect(doc.querySelector(`label[for="${id}"]`), id).not.toBeNull();
-    }
-  });
-
-  it('de kaart tekent mee tijdens het typen', async () => {
-    vi.resetModules();
-    window.history.replaceState({}, '', '/experiences/kamer-14/einde.html?sessie=EIN-003');
-    document.body.innerHTML = body;
-    await import('../experiences/kamer-14/js/einde.ts');
-    const typ = (id: string, w: string) => {
-      const el = document.getElementById(id) as HTMLInputElement;
-      el.value = w;
-      el.dispatchEvent(new Event('input'));
-    };
-    expect(document.getElementById('route-rit')!.classList).not.toContain('getekend');
-    typ('r-vervoer', 'bus');
-    typ('r-tijdstip', '7u35');
-    expect(document.getElementById('route-rit')!.classList).toContain('getekend');
-    typ('r-bestemming', 'Diest');
-    expect(document.getElementById('route-label-stad')!.textContent).toBe('Diest');
-    typ('r-wie', 'Marie Stas');
-    expect(document.getElementById('route-label-adres')!.textContent).toBe('bij Marie Stas');
+    rapportLuisteraars.forEach(cb => cb({ ingediend: true, inhoud: { conclusie: 'alles' } }));
+    expect(document.getElementById('einde-titel')!.textContent).toBe(EINDES.vermist.titel);
   });
 });

@@ -15,21 +15,19 @@ import {
   KAMER14_VRIJGAVE,
   KAMER14_LAATSTE,
 } from '../experiences/kamer-14/js/kamer14-config.ts';
+import { KAMER14_HINTS } from '../experiences/kamer-14/js/hints.ts';
 
 const lees = (bestand: string) =>
   readFileSync(resolve(__dirname, '../experiences/kamer-14', bestand), 'utf8');
 
 /** De goedgekeurde tekst van de bladzijde, zonder regeleinden. */
 const GOEDGEKEURD = [
-  'Maandag 5 mei',
-  'Morgen ga ik. Ik heb het aan niemand gezegd en dat blijft zo tot ik in de bus zit.',
-  'Marie en ik zaten vroeger elke zomer bij haar oma in Diest, boven de bloemenwinkel. Vanaf de trap zag je de toren van de kerk. Die heb ik nu getekend, zonder te kijken.',
-  'Toen ik ziek werd, heb ik haar niet meer teruggebeld. Niet één keer. Ik schaamde me. Daarna wist ik niet meer waar ze woonde.',
-  'Op dinsdag zat ik in de bibliotheek. Eerst haar naam, dan oude adressen, dan de bloemenwinkel. Die bestaat nog. Ik heb een brief gestuurd en ze schreef terug.',
-  'Op donderdag ging ik naar Geel Markt. Welke bus, hoe laat, hoe lang, hoeveel. Ik heb alles twee keer opgeschreven.',
-  'Ik heb geld opzij gelegd, het geld voor Katrijn. Dat is niet eerlijk, ik weet het. Het is voor als het misloopt. Ik geef het terug, tot de laatste euro.',
-  'An zou meegaan als ik het vroeg. Ze zou het goed bedoelen. Maar dan is het een begeleid bezoek en geen vriendin die langskomt.',
-  'Dit wil ik één keer alleen doen.',
+  '6 mei',
+  'Vandaag word je tien. Tien jaar geleden lag ik in kamer 14 en hield ik je vast tot de verpleegster zei dat ik moest slapen. Ik heb niet geslapen.',
+  'Marie schrijft dat je soms nog naar mij vraagt. Katrijn zegt dat het niet mag, en dat ze me toch naar de bus brengt. Ik weet niet wat ik tegen je ga zeggen. Misschien niets. Misschien kijk ik alleen.',
+  'Het geld voor de fiets heb ik bij elkaar. Hij is groen, jouw kleur, toen toch.',
+  'Om vijf over vijf neem ik de bus terug. Dat beloof ik An, al weet ze het nog niet.',
+  'Lena',
 ].join(' ');
 
 describe('P6: de tekst van de bladzijde', () => {
@@ -86,40 +84,41 @@ describe('P6: volgorde', () => {
   });
 
   it('P6 komt na P5 en is de laatste puzzel', () => {
-    expect(KAMER14_PUZZELS).toEqual(['p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
+    expect(KAMER14_PUZZELS).toEqual(['p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
     expect(KAMER14_VRIJGAVE['p6']).toEqual(['p5']);
     expect(KAMER14_LAATSTE).toBe('p6');
   });
 });
 
 describe('P6: hints verwijzen naar echte strookranden', () => {
-  it('de laatste hint van A noemt hoe stroken van B eindigen', () => {
-    const a = lees('speler-a.html');
-    const eindesB = strokenVan('b').map(s => s.regels.at(-1)!.split(' ').at(-1));
-    expect(eindesB).toContain('Ik');
-    expect(a).toContain('eindigt op "Ik"');
-    expect(strokenVan('b')[1]!.regels.at(-1)).toMatch(/het geld voor$/);
-    expect(a).toContain('"het geld voor"');
+  const begin = (regel: string) => regel.split(' ').slice(0, 3).join(' ');
+
+  it('de laatste hint van A noemt het begin van stroken van A in de juiste volgorde', () => {
+    const hint = KAMER14_HINTS.a['p6']!.at(-1)!;
+    const a = strokenVan('a');
+    expect(a[1]!.regels[0]).toMatch(/^naar mij vraagt/);
+    expect(hint).toContain('naar mij vraagt');
+    expect(hint).toContain('fiets heb ik bij elkaar');
+    expect(a[0]!.regels[0]).toBe('6 mei');
   });
 
-  it('de laatste hint van B noemt hoe stroken van A eindigen', () => {
-    const b = lees('speler-b.html');
-    const eindesA = strokenVan('a').map(s => s.regels.at(-1)!);
-    expect(eindesA[0]).toMatch(/boven de$/);
-    expect(eindesA[1]).toMatch(/Ik heb een brief$/);
-    expect(eindesA[2]).toMatch(/Maar dan is het een$/);
-    for (const stuk of ['"boven de"', '"Ik heb een brief"', '"Maar dan is het een"']) {
-      expect(b).toContain(stuk);
-    }
+  it('de laatste hint van B noemt het begin van de stroken van B in de juiste volgorde', () => {
+    const hint = KAMER14_HINTS.b['p6']!.at(-1)!;
+    const delen = strokenVan('b').map(s => begin(s.regels[0]!).toLowerCase());
+    expect(delen.map(d => hint.toLowerCase().indexOf(d.split(' ').slice(0, 2).join(' ')))).toEqual(
+      [...delen.map(d => hint.toLowerCase().indexOf(d.split(' ').slice(0, 2).join(' ')))].sort(
+        (x, y) => x - y,
+      ),
+    );
   });
 
-  it("beide spelerpagina's hebben de tab, het paneel en een zesde voortgangsstap", () => {
+  it("beide spelerpagina's hebben een close-up met de stroken", () => {
     for (const bestand of ['speler-a.html', 'speler-b.html']) {
       const html = lees(bestand);
-      expect(html).toContain('id="tab-bladzijde"');
-      expect(html).toContain('id="panel-bladzijde"');
+      expect(html).toContain('id="cu-stroken"');
       expect(html).toContain('id="stroken-lijst"');
-      expect(html).toContain('id="vp6"');
+      expect(html).toContain('id="btn-p6"');
+      expect(html).toContain('id="bladzijde-volledig"');
     }
   });
 });
@@ -191,6 +190,6 @@ describe('P6: in de pagina', () => {
     toonVolledigeBladzijde(doel);
     expect(doel.hidden).toBe(false);
     expect(doel.children).toHaveLength(6);
-    expect(doel.textContent).toContain('Dit wil ik één keer alleen doen.');
+    expect(doel.textContent).toContain('Om vijf over vijf');
   });
 });

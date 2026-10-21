@@ -22,10 +22,14 @@ beforeEach(() => {
 
 describe('openPuzzels', () => {
   it('geeft de vrije, nog niet opgeloste puzzels', () => {
-    expect(openPuzzels({}, KAMER14_VRIJGAVE)).toEqual(['p1']);
-    expect(openPuzzels({ p1: true }, KAMER14_VRIJGAVE)).toEqual(['p2', 'p3']);
-    expect(openPuzzels({ p1: true, p2: true }, KAMER14_VRIJGAVE)).toEqual(['p3']);
-    expect(openPuzzels({ p1: true, p2: true, p3: true }, KAMER14_VRIJGAVE)).toEqual(['p4']);
+    expect(openPuzzels({}, KAMER14_VRIJGAVE)).toEqual(['p0']);
+    expect(openPuzzels({ p0: true }, KAMER14_VRIJGAVE)).toEqual(['p1']);
+    expect(openPuzzels({ p0: true, p1: true }, KAMER14_VRIJGAVE)).toEqual(['p2', 'p4']);
+    expect(openPuzzels({ p0: true, p1: true, p2: true, p4: true }, KAMER14_VRIJGAVE)).toEqual([
+      'p3',
+    ]);
+    const tot5 = { p0: true, p1: true, p2: true, p3: true, p4: true };
+    expect(openPuzzels(tot5, KAMER14_VRIJGAVE)).toEqual(['p5']);
   });
 });
 
@@ -71,6 +75,7 @@ describe('verhaalmelding bij inactiviteit', () => {
   it('elke puzzel heeft een melding voor beide spelers', () => {
     for (const rol of ['a', 'b'] as const) {
       expect(Object.keys(KAMER14_INACTIEF[rol]).sort()).toEqual([
+        'p0',
         'p1',
         'p2',
         'p3',
@@ -105,7 +110,7 @@ describe('initHulp', () => {
 
   it('toont na 8 minuten zonder activiteit een verhaalmelding', () => {
     const hulp = initHulp(cfg(), nu);
-    hulp.status({ p1: false });
+    hulp.status({ p0: true });
     klok = INACTIEF_NA_MS - 1000;
     vi.advanceTimersByTime(15_000);
     expect(document.getElementById('hulp-melding')).toBeNull();
@@ -128,10 +133,10 @@ describe('initHulp', () => {
 
   it('meldt na een opgeloste puzzel wat er vrijkwam, niet bij het laden', () => {
     const hulp = initHulp(cfg(), nu);
-    hulp.status({ p1: true });
+    hulp.status({ p0: true });
     expect(document.getElementById('hulp-melding')).toBeNull();
-    hulp.status({ p1: true, p2: true, p3: true });
-    expect(document.getElementById('hulp-melding')?.textContent).toContain('Intakefiche');
+    hulp.status({ p0: true, p1: true });
+    expect(document.getElementById('hulp-melding')?.textContent).toContain('ateliermap');
     hulp.stop();
   });
 
@@ -157,28 +162,31 @@ describe('bouwHulpKnop', () => {
 });
 
 describe('kamer14VrijgaveMelding', () => {
-  it('na P1 weet elke speler wat er nieuw is', () => {
-    expect(kamer14VrijgaveMelding('a', {}, { p1: true })?.tekst).toContain('Atelier');
-    expect(kamer14VrijgaveMelding('b', {}, { p1: true })?.tekst).toContain('Kas & Bonnen');
-  });
-
-  it('na P2 zonder P3: wat nog ontbreekt', () => {
-    expect(kamer14VrijgaveMelding('b', { p1: true }, { p1: true, p2: true })?.tekst).toContain(
-      'P3',
+  it('na P0 en P1 weet elke speler wat er nieuw is', () => {
+    expect(kamer14VrijgaveMelding('b', {}, { p0: true })?.tekst).toContain('schriften');
+    expect(kamer14VrijgaveMelding('a', { p0: true }, { p0: true, p1: true })?.tekst).toContain(
+      'ateliermap',
     );
   });
 
-  it('na P2 en P3: intakefiche en kamerinspectie', () => {
-    const oud = { p1: true, p2: true };
-    const nieuw = { p1: true, p2: true, p3: true };
-    expect(kamer14VrijgaveMelding('a', oud, nieuw)?.tekst).toContain('Intakefiche');
-    expect(kamer14VrijgaveMelding('b', oud, nieuw)?.tekst).toContain('Kamerinspectie');
+  it('na P2: de voicemail, en wie het uur noteert', () => {
+    const m = kamer14VrijgaveMelding('b', { p1: true }, { p1: true, p2: true })?.tekst;
+    expect(m).toContain('voicemail');
+    expect(m).toContain('Speler A');
   });
 
-  it('na P4, P5 en P6', () => {
-    expect(kamer14VrijgaveMelding('a', {}, { p4: true })?.tekst).toContain('Bijlage D');
-    expect(kamer14VrijgaveMelding('b', {}, { p5: true })?.tekst).toContain('Bladzijde');
+  it('de telefoon komt pas als P3 en P4 allebei open zijn', () => {
+    const basis = { p0: true, p1: true, p2: true };
+    const alleenP3 = kamer14VrijgaveMelding('a', basis, { ...basis, p3: true })?.tekst ?? '';
+    expect(alleenP3).not.toContain('buurman');
+    const voor = { ...basis, p3: true };
+    expect(kamer14VrijgaveMelding('a', voor, { ...voor, p4: true })?.tekst).toContain('buurman');
+    expect(kamer14VrijgaveMelding('b', voor, { ...voor, p4: true })?.tekst).toContain('logboek');
+  });
+
+  it('na P5 de stroken, na P6 het rapport', () => {
     expect(kamer14VrijgaveMelding('a', {}, { p5: true })?.tekst).toContain('Speler B');
+    expect(kamer14VrijgaveMelding('b', {}, { p5: true })?.tekst).toContain('Speler A');
     expect(kamer14VrijgaveMelding('b', { p5: true }, { p5: true, p6: true })?.tekst).toContain(
       'rapport',
     );

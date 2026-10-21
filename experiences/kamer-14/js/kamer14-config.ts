@@ -14,13 +14,32 @@ import { eenTypfoutVarianten, type AntwoordRegel } from '../../../shared/js/util
 //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('<vaste vorm>'))
 //     .then(b => console.log([...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join('')))
 export const KAMER14_ANTWOORD_HASHES: Record<string, string[]> = {
+  // P0 toegangscode terminal (startdatum plaatsing, DDMM)
+  p0: ['3812dd069593766d28dd6fe95a40d2540631adaffe8a6fead9a684fec89ddcfd'],
+  // P1 de twee late weekdagen
   p1: ['6d95368648b569fb1fe2adced89be071011bb3f9f82abf498daf495cc213116e'],
-  p2: ['0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9'],
-  p3: ['7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451'],
-  p4: ['91ada21b3f9f3b21939e6a7c3154c4f7cf002db220306095cb48010c84f4efaa'],
-  p5: ['89f2a5f508866dcf1498b9e2059f33663672ddfc2a553f97bd17373545a43f82'],
-  // Eindrapport, veld "vervoer" (geen puzzel, enkel in einde.html gecontroleerd)
+  // P2 pincode van de oude gsm
+  p2: ['b4755fa1bacc6873c8a0a2b26dc7dad18ca5e230db87418e571f7baca76fdc31'],
+  // P3 uur van de afspraak op de markt
+  p3: ['90e1062f1578fa30baaf182388e88d3ec46bc202cfb800325c3fb225f0d7bc4d'],
+  // P4 cijferslot van de spaardoos
+  p4: ['a0d177b4967a6d99f4ff117defe1c0d23d4e78ca4630febcb948ee9e4520eff3'],
+  // P5 hoe laat Katrijn ten vroegste thuis kon zijn
+  p5: ['7c4b96e4587b038445c10d2b4722827d2ba8a4baf9343db5ffcede2f713f0c61'],
+  // Eindrapport (geen puzzels, enkel in einde.html gecontroleerd)
+  bestemming: ['0ba7ea9cf252f255e39e41ea00307fe7995436e190d08bc4adf70da603d609e9'],
+  // "dochter", "noor", "kind", "dochtertje": één woord uit de zin volstaat
+  wie: [
+    'a795fc6be3ad1463ff4bfcb77cd459bd60189957d3d92a0eb5ec32ce89ca71c9',
+    '92a70799e19d8734fecfb8e59aa930e9f386f7645059a1f2f04eb8483c9b5f1d',
+    '0b27c158feb36ab18a10ff687909ec730ece6280581dd407e2672359be7725dd',
+    'fbc3ea80776e9064e4c10c0bd8973aab9309d564c5a2043c1aafd8a34c79849b',
+  ],
   vervoer: ['04e027e4990a203f4899f7e87c2d5ff6b9019e9565795619a59ce06c099560d4'],
+  terug: [
+    'b2398757b918b4169156035d58932102d5d72c26251693b3fd89bb7a03395e83',
+    'c01c4a36f5a17093d632590b7fcfcc36bbb9b64f44ff518a900030b3f3fb2f7b',
+  ],
 };
 
 // ── Normalizers per puzzel ────────────────────────────────
@@ -112,9 +131,24 @@ export function normaliseerAantal(basis: string): string {
   return keuze !== undefined ? String(GETALWOORDEN[keuze]) : basis;
 }
 
-/** P4: voor- en achternaam in vaste (alfabetische) volgorde. */
-export function normaliseerNaam(basis: string): string {
-  return basis.split(' ').filter(Boolean).sort().join(' ');
+/** Codes op een cijferslot: enkel de cijfers tellen. */
+export function normaliseerCijfers(basis: string): string {
+  const cijfers = basis.replace(/\D/g, '');
+  return cijfers || basis;
+}
+
+/**
+ * Rapport: elk woord van de zin is ook een kandidaat, zodat "op de Grote
+ * Markt in ..." of "bij haar ... en Marie" telt als het juiste woord erin staat.
+ * Met een typfout per woord, vanaf vier letters.
+ */
+export function woordVarianten(basis: string): string[] {
+  const uit: string[] = [];
+  for (const w of basis.split(' ').filter(Boolean)) {
+    uit.push(w);
+    if (w.length >= 4) uit.push(...eenTypfoutVarianten(w));
+  }
+  return uit;
 }
 
 /**
@@ -184,66 +218,63 @@ const BIJNA_HASHES = {
     '6840256bfd48d0fd13232873b39598f56713436ea2a7c420903f61c3beff836a',
     '6191fbd66df12698077ebe41ef598172d4fdb37ef4ba362ed72704b6d1e0f43b',
   ],
-  // één week ernaast
-  p3: [
-    'e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683',
-    '2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3',
-  ],
-  // alleen de voornaam of alleen de achternaam
-  p4: [
-    'c6d17a3613b9914e68707fcfac8410f097643bc5840681bb533030d73cbb18f8',
-    '6983682fa44129f21f376d56c3d534e1ddd42a8f14682f36f3ce627bb623ff68',
-  ],
-  // juiste uur, verkeerde minuten
+  // het juiste uur (bv. de bus van 07:35 ingevuld in plaats van thuiskomst)
   p5: ['19b100ab7725c612f3d80ff203ca53cea5cadaafae3bf0f88f0fb4089fe08815'],
 };
 
 const woorden = (vorm: string) => vorm.split(' ').filter(Boolean);
 
 export const KAMER14_ANTWOORD_REGELS: Record<string, AntwoordRegel> = {
+  p0: { normaliseer: normaliseerCijfers },
   p1: {
     normaliseer: normaliseerDagen,
     bijnaHashes: BIJNA_HASHES.p1,
     deelvormen: vorm => woorden(vorm).filter(w => WEEKDAGEN.includes(w)),
   },
-  p3: { normaliseer: normaliseerAantal, bijnaHashes: BIJNA_HASHES.p3 },
-  p4: {
-    normaliseer: normaliseerNaam,
-    // Eén letter verschil mag (typfout). De varianten worden van de invoer
-    // gemaakt en daarna gehasht, het antwoord zelf staat nergens.
-    varianten: basis => eenTypfoutVarianten(basis),
-    bijnaHashes: BIJNA_HASHES.p4,
-    deelvormen: woorden,
-  },
-  vervoer: { normaliseer: normaliseerVervoer },
+  p2: { normaliseer: normaliseerCijfers },
+  p3: { normaliseer: normaliseerTijd },
+  p4: { normaliseer: normaliseerCijfers },
   p5: {
     normaliseer: normaliseerTijd,
     bijnaHashes: BIJNA_HASHES.p5,
     deelvormen: vorm => (/^\d{2}:\d{2}$/.test(vorm) ? [vorm.slice(0, 2)] : []),
   },
+  bestemming: { varianten: woordVarianten },
+  wie: { varianten: woordVarianten },
+  vervoer: { normaliseer: normaliseerVervoer },
+  terug: { normaliseer: normaliseerTijd },
 };
 
 // ── Puzzels en vrijgave (voor de speldata) ────────────────
-/**
- * Puzzels met een tekstantwoord en een verhaalfragment (audio + tab Berichten).
- * Dit is de enige plek waar die lijst staat; audio.ts en berichten.ts lezen ze.
- */
-export const KAMER14_TEKST_PUZZELS = ['p1', 'p2', 'p3', 'p4', 'p5'] as const;
-export type Kamer14TekstPuzzel = (typeof KAMER14_TEKST_PUZZELS)[number];
+/** Alle puzzels van Kamer 14, in speelvolgorde. */
+export const KAMER14_PUZZELS: string[] = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6'];
 
-/** Alle puzzels van Kamer 14. P6 is de uitgescheurde bladzijde (bladzijde.ts). */
-export const KAMER14_PUZZELS: string[] = [...KAMER14_TEKST_PUZZELS, 'p6'];
+/** Korte naam per puzzel, voor het dashboard en de tests. */
+export const KAMER14_PUZZEL_NAMEN: Record<string, string> = {
+  p0: 'Toegangscode',
+  p1: 'Late dagen',
+  p2: 'Pincode gsm',
+  p3: 'Voicemail',
+  p4: 'Spaardoos',
+  p5: 'Alibi Katrijn',
+  p6: 'Dagboekstroken',
+};
 
-/** De laatste puzzel: daarna komt de balk naar het rapport. */
+/** Puzzels met een slot dat een antwoord controleert (P6 legt stroken). */
+export const KAMER14_SLOT_PUZZELS = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'] as const;
+export type Kamer14SlotPuzzel = (typeof KAMER14_SLOT_PUZZELS)[number];
+
+/** De laatste puzzel: daarna komt de knop naar het rapport. */
 export const KAMER14_LAATSTE = 'p6';
 
 // Welke puzzels opgelost moeten zijn voor een puzzel vrijkomt voor de groep.
 export const KAMER14_VRIJGAVE: Record<string, string[]> = {
-  p1: [],
+  p0: [],
+  p1: ['p0'],
   p2: ['p1'],
-  p3: ['p1'],
-  p4: ['p2', 'p3'],
-  p5: ['p4'],
+  p3: ['p2'],
+  p4: ['p1'],
+  p5: ['p3', 'p4'],
   p6: ['p5'],
 };
 
@@ -252,15 +283,13 @@ export const KAMER14_TIMER_WAARSCHUWINGEN: TimerWaarschuwing[] = [
   {
     minuten: 30,
     titel: 'Halverwege',
-    tekst:
-      'Het kantoor van An Vermeersch sluit om 17u00. U heeft nog 30 minuten om uw rapport in te dienen.',
+    tekst: 'Het is half vijf. Om vijf uur beslist An of ze Lena als vermist meldt.',
     urgent: false,
   },
   {
     minuten: 10,
     titel: '⚠ Dringend: nog 10 minuten',
-    tekst:
-      'Het intern dossier van Lena Bogaert wordt automatisch gesloten als er geen rapport is ingediend.',
+    tekst: 'Nog tien minuten. Zonder rapport meldt An een vermissing.',
     urgent: true,
   },
 ];

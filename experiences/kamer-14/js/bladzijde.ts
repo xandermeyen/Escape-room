@@ -1,9 +1,10 @@
 /**
- * bladzijde.ts: P6, de uitgescheurde bladzijde uit Lena's dagboek.
+ * bladzijde.ts: P6, de uitgescheurde bladzijde uit Lena's dagboek. Als ze
+ * past, leest Lena ze voor: zo horen de spelers wie Noor is en waarom kamer 14.
  *
  * De bladzijde is in zes stroken gescheurd. Speler A heeft de stroken 1, 3
  * en 5 (achter de tekening in de ateliermap), Speler B de stroken 2, 4 en 6
- * (achter het nachtkastje gevallen). Zinnen lopen over de scheuren heen:
+ * (Katrijn vond ze achter het nachtkastje). Zinnen lopen over de scheuren heen:
  * wie zijn eigen drie stroken in de juiste volgorde wil leggen, moet weten
  * hoe de stroken van de ander beginnen en eindigen.
  *
@@ -22,43 +23,40 @@ export const STROKEN: Strook[] = [
   {
     id: 'k7',
     regels: [
-      'Maandag 5 mei',
-      'Morgen ga ik. Ik heb het aan niemand gezegd en dat blijft zo tot ik in de bus zit.',
-      'Marie en ik zaten vroeger elke zomer bij haar oma in Diest, boven de',
+      '6 mei',
+      'Vandaag word je tien. Tien jaar geleden lag ik in kamer 14 en hield ik je vast tot de',
     ],
   },
   {
     id: 'r2',
     regels: [
-      'bloemenwinkel. Vanaf de trap zag je de toren van de kerk. Die heb ik nu getekend, zonder te kijken.',
-      'Toen ik ziek werd, heb ik haar niet meer teruggebeld. Niet één keer. Ik',
+      'verpleegster zei dat ik moest slapen. Ik heb niet geslapen.',
+      'Marie schrijft dat je soms nog',
     ],
   },
   {
     id: 'm4',
     regels: [
-      'schaamde me. Daarna wist ik niet meer waar ze woonde.',
-      'Op dinsdag zat ik in de bibliotheek. Eerst haar naam, dan oude adressen, dan de bloemenwinkel. Die bestaat nog. Ik heb een brief',
+      'naar mij vraagt. Katrijn zegt dat het niet mag, en dat ze me toch naar de bus brengt. Ik',
     ],
   },
   {
     id: 't9',
     regels: [
-      'gestuurd en ze schreef terug.',
-      'Op donderdag ging ik naar Geel Markt. Welke bus, hoe laat, hoe lang, hoeveel. Ik heb alles twee keer opgeschreven.',
-      'Ik heb geld opzij gelegd, het geld voor',
+      'weet niet wat ik tegen je ga zeggen. Misschien niets. Misschien kijk ik alleen.',
+      'Het geld voor',
     ],
   },
   {
     id: 'w3',
     regels: [
-      'Katrijn. Dat is niet eerlijk, ik weet het. Het is voor als het misloopt. Ik geef het terug, tot de laatste euro.',
-      'An zou meegaan als ik het vroeg. Ze zou het goed bedoelen. Maar dan is het een',
+      'de fiets heb ik bij elkaar. Hij is groen, jouw kleur, toen toch.',
+      'Om vijf over vijf',
     ],
   },
   {
     id: 'f5',
-    regels: ['begeleid bezoek en geen vriendin die langskomt.', 'Dit wil ik één keer alleen doen.'],
+    regels: ['neem ik de bus terug. Dat beloof ik An, al weet ze het nog niet.', 'Lena'],
   },
 ];
 

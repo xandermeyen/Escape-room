@@ -1,139 +1,122 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { describe, it, expect, afterEach, vi } from 'vitest';
+import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
-  KAMER14_BERICHTEN,
-  PUZZEL_NRS,
-  heeftBerichten,
-  zichtbareBerichten,
+  FRAGMENT_TEKST,
+  SPREKER,
+  VOICEMAIL_TEKST,
+  GELUIDSMELDING,
+  gehoordeFragmenten,
   toonBerichten,
   toonOndertitel,
   toonGeluidsmelding,
-  geluidsmeldingTekst,
 } from '../experiences/kamer-14/js/berichten.ts';
 import {
-  wachttijdFragment,
-  DUUR_A_SEC,
-  WACHT_NA_UNLOCK_MS,
-  PAUZE_TUSSEN_MS,
+  FRAGMENTEN,
+  FRAGMENT_NA_PUZZEL,
+  KORTJAKJE,
+  type FragmentId,
 } from '../experiences/kamer-14/js/audio.ts';
+import { EINDES } from '../experiences/kamer-14/js/eindes.ts';
+import { KAMER14_PUZZELS } from '../experiences/kamer-14/js/kamer14-config.ts';
 
-const lees = (bestand: string) =>
-  readFileSync(resolve(__dirname, '../experiences/kamer-14', bestand), 'utf8');
+const IDS = Object.keys(FRAGMENTEN) as FragmentId[];
 
-/** Vult tijdelijk een tekst in, en zet alles daarna terug. */
-const origineel = structuredClone(KAMER14_BERICHTEN);
 afterEach(() => {
-  Object.assign(KAMER14_BERICHTEN.a, origineel.a);
-  Object.assign(KAMER14_BERICHTEN.b, origineel.b);
   document.body.innerHTML = '';
 });
 
-describe('Kamer 14: volgorde van de fragmenten', () => {
-  it('A begint na het unlock-geluid', () => {
-    expect(wachttijdFragment('a', 'p1')).toBe(WACHT_NA_UNLOCK_MS);
+describe('Kamer 14: verhaalfragmenten', () => {
+  it('elk fragment heeft een spreker en een tekst', () => {
+    for (const id of IDS) {
+      expect(SPREKER[id]).toBeTruthy();
+      expect(FRAGMENT_TEKST[id].length).toBeGreaterThan(40);
+    }
   });
 
-  it.each(PUZZEL_NRS)('B wacht bij %s tot het fragment van A gedaan is', nr => {
-    const eindeA = WACHT_NA_UNLOCK_MS + DUUR_A_SEC[nr] * 1000;
-    expect(wachttijdFragment('b', nr)).toBeGreaterThanOrEqual(eindeA + PAUZE_TUSSEN_MS);
-  });
-
-  it('B gebruikt de echte lengte van het bestand als die gekend is', () => {
-    expect(wachttijdFragment('b', 'p1', 10)).toBe(WACHT_NA_UNLOCK_MS + 10_000 + PAUZE_TUSSEN_MS);
-  });
-});
-
-describe('Kamer 14: berichten', () => {
-  it('heeft een tekstveld voor elk opgenomen fragment', () => {
-    for (const rol of ['a', 'b'] as const) {
-      expect(Object.keys(KAMER14_BERICHTEN[rol])).toEqual(PUZZEL_NRS);
+  it('fragmenten volgen enkel op bestaande puzzels', () => {
+    for (const puzzel of Object.keys(FRAGMENT_NA_PUZZEL)) {
+      expect(KAMER14_PUZZELS).toContain(puzzel);
     }
   });
 
   it('teksten zonder gedachtestreepjes', () => {
-    for (const rol of ['a', 'b'] as const) {
-      for (const nr of PUZZEL_NRS) expect(KAMER14_BERICHTEN[rol][nr]).not.toMatch(/[—–]/);
-    }
+    const alle = [
+      ...Object.values(FRAGMENT_TEKST),
+      ...Object.values(VOICEMAIL_TEKST),
+      ...Object.values(EINDES).flatMap(e => e.alineas),
+    ];
+    for (const tekst of alle) expect(tekst).not.toMatch(/[—–]/);
   });
 
-  it('toont enkel berichten van opgeloste puzzels met een tekst', () => {
-    KAMER14_BERICHTEN.a.p1 = 'Tekst na vraag 1.';
-    KAMER14_BERICHTEN.a.p2 = 'Tekst na vraag 2.';
-    expect(heeftBerichten('a')).toBe(true);
-    expect(zichtbareBerichten('a', { p1: true })).toEqual([
-      { nr: 'p1', tekst: 'Tekst na vraag 1.' },
+  it('de voicemail noemt het uur nooit', () => {
+    const tekst = Object.values(VOICEMAIL_TEKST).join(' ');
+    expect(tekst).not.toMatch(/\b(tien|10)\b/i);
+  });
+
+  it('het beiaarddeuntje begint met do do sol sol la la sol', () => {
+    const [c, c2, g, g2, a, a2, g3] = KORTJAKJE;
+    expect(c).toBe(c2);
+    expect(g).toBe(g2);
+    expect(a).toBe(a2);
+    expect(g3).toBe(g);
+    expect(g! / c!).toBeCloseTo(1.5, 2); // kwint
+  });
+});
+
+describe('Kamer 14: berichten in de zijbalk', () => {
+  it('de briefing staat er altijd, de rest pas na zijn puzzel', () => {
+    expect(gehoordeFragmenten({})).toEqual(['briefing']);
+    expect(gehoordeFragmenten({ p4: true })).toEqual(['briefing', 'wending']);
+    expect(gehoordeFragmenten({ p4: true, p5: true, p6: true })).toEqual([
+      'briefing',
+      'wending',
+      'telefoon',
+      'dagboek',
     ]);
-
-    document.body.innerHTML = '<div id="berichten-lijst"></div>';
-    toonBerichten('a', { p1: true, p2: true, p3: true });
-    const lijst = document.getElementById('berichten-lijst');
-    expect(lijst?.querySelectorAll('.bericht')).toHaveLength(2);
-    expect(lijst?.textContent).toContain('An Vermeersch · na vraag 2');
   });
 
-  it('zonder teksten blijft de tab verborgen en noemt de melding hem niet', () => {
-    for (const rol of ['a', 'b'] as const) {
-      if (heeftBerichten(rol)) continue;
-      expect(geluidsmeldingTekst(rol)).not.toContain('tab Berichten');
-    }
-    for (const bestand of ['speler-a.html', 'speler-b.html']) {
-      expect(lees(bestand)).toMatch(/id="tab-berichten" hidden/);
-      expect(lees(bestand)).toContain('id="berichten-lijst"');
-    }
+  it('toont het nieuwste bericht bovenaan, met een knop om opnieuw te luisteren', () => {
+    const lijst = document.createElement('div');
+    const opnieuw = vi.fn();
+    toonBerichten({ p4: true }, lijst, opnieuw);
+    const koppen = [...lijst.querySelectorAll('summary')].map(s => s.textContent);
+    expect(koppen).toEqual([SPREKER.wending, SPREKER.briefing]);
+    lijst.querySelector<HTMLButtonElement>('.bericht-luister')!.click();
+    expect(opnieuw).toHaveBeenCalledWith('wending');
   });
 
-  it('de ondertitel verschijnt tijdens het fragment en verdwijnt erna', () => {
-    KAMER14_BERICHTEN.b.p3 = 'Sommige weken kreeg ik niets.';
+  it('de ondertitel verdwijnt als het fragment stopt', () => {
     const audio = document.createElement('audio');
-    toonOndertitel('b', 'p3', audio);
-    expect(document.getElementById('ondertitel')?.textContent).toBe(
-      'Katrijn: Sommige weken kreeg ik niets.',
-    );
+    toonOndertitel('Katrijn', 'Hallo', audio);
+    expect(document.getElementById('ondertitel')?.textContent).toBe('Katrijn: Hallo');
     audio.dispatchEvent(new Event('ended'));
     expect(document.getElementById('ondertitel')).toBeNull();
   });
 
-  it('geen ondertitel zonder tekst', () => {
-    KAMER14_BERICHTEN.b.p3 = '';
-    toonOndertitel('b', 'p3', document.createElement('audio'));
-    expect(document.getElementById('ondertitel')).toBeNull();
+  it('de geluidsmelding zet het geluid aan en sluit', () => {
+    const zetAan = vi.fn();
+    const el = toonGeluidsmelding(zetAan);
+    expect(el.textContent).toContain(GELUIDSMELDING);
+    el.querySelector<HTMLButtonElement>('.geluid-aan')!.click();
+    expect(zetAan).toHaveBeenCalledOnce();
+    expect(document.getElementById('geluidsmelding')).toBeNull();
   });
 });
 
-describe('Kamer 14: geluidsmelding', () => {
-  beforeEach(() => {
-    document.body.innerHTML = '<div class="tabs"></div>';
-  });
+describe('Kamer 14: opnames', () => {
+  const pad = (karakter: string, bestand: string) =>
+    resolve(__dirname, '../public/experiences/kamer-14/audio', karakter, `${bestand}.mp3`);
+  const alle = [
+    ...IDS.map(id => FRAGMENTEN[id]),
+    ...Object.values(EINDES).flatMap(e => e.audio),
+    { karakter: 'marie', bestand: 'voicemail-1' },
+    { karakter: 'marie', bestand: 'voicemail-2' },
+  ];
 
-  it('staat boven de tabs en zet het geluid aan met één klik', () => {
-    let aan = 0;
-    const el = toonGeluidsmelding('a', () => aan++);
-    expect(el.nextElementSibling?.className).toBe('tabs');
-    expect(el.textContent).toContain('bericht van An Vermeersch');
-    el.querySelector<HTMLButtonElement>('.geluid-aan')?.click();
-    expect(aan).toBe(1);
-    expect(document.getElementById('geluidsmelding')).toBeNull();
-  });
-
-  it('verschijnt maar één keer tegelijk', () => {
-    toonGeluidsmelding('b', () => {});
-    toonGeluidsmelding('b', () => {});
-    expect(document.querySelectorAll('#geluidsmelding')).toHaveLength(1);
-  });
-
-  it('noemt de tab Berichten zodra er teksten zijn', () => {
-    KAMER14_BERICHTEN.b.p1 = 'Iets.';
-    expect(geluidsmeldingTekst('b')).toContain('tab Berichten');
-  });
-
-  it("beide spelerpagina's tonen de melding bij de start", () => {
-    // Gedeelde code van Speler A en B (speler-a.ts en speler-b.ts roepen ze aan)
-    const gedeeld = lees('js/kamer14-speler.ts');
-    expect(gedeeld).toMatch(/\n {2}toonGeluidsmelding\(rol, zetGeluidAan\);/);
-    expect(gedeeld).toMatch(/bijFout: \(\) => toonGeluidsmelding/);
-    for (const bestand of ['js/speler-a.ts', 'js/speler-b.ts']) {
-      expect(lees(bestand)).toContain('startSpelerPagina(');
-    }
+  // Zodra de opnames er zijn, moet elk bestand bestaan. Tot dan: overslaan.
+  const aanwezig = alle.some(a => existsSync(pad(a.karakter, a.bestand)));
+  it.skipIf(!aanwezig).each(alle)('$karakter/$bestand.mp3 bestaat', ({ karakter, bestand }) => {
+    expect(existsSync(pad(karakter, bestand))).toBe(true);
   });
 });
