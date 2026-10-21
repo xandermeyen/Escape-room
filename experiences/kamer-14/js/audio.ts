@@ -1,20 +1,21 @@
 /**
- * audio.js — Geluidsmodule voor Kamer 14 (v2)
+ * audio.ts: geluid voor Kamer 14.
  *
- * Achtergrondsfeer (synthesized, geen bestanden):
- *   Speler A (OPZ-dossier)  : koud, institutioneel — gebromm + fluorescentiezoem + elektrische drone
- *   Speler B (Buurtdossier) : warm, huiselijk       — zachte kamerlucht + luchtstroom + trage adem
+ * Achtergrondsfeer (synthetisch, geen bestanden):
+ *   Speler A (bureau OPZ)  : koud, institutioneel
+ *   Speler B (kamer Lena)  : warm, huiselijk
  *
- * Verhaalfragmenten (MP3):
- *   Na elke puzzeloplossing speelt automatisch het vaste fragment voor die puzzel.
- *   Speler A : an-vermeersch/verhaal-p1 t/m p5
- *   Speler B : katrijn/verhaal-p1 t/m p5
- *   Speciaal : lena/briefkaart.mp3 bij omdraaien envelop (Speler B)
+ * Verhaalfragmenten (MP3, ingesproken met ElevenLabs):
+ *   briefing  An Vermeersch, bij de start
+ *   wending   An Vermeersch, na de spaardoos (P4)
+ *   telefoon  Katrijn, na het alibi (P5)
+ *   dagboek   Lena, na de dagboekstroken (P6)
+ *   voicemail Marie, op de oude gsm (Speler B), met beiaard en bus
+ *   eindes    zie einde.ts
  *
- * Browsers blokkeren audio tot eerste gebruikersinteractie.
- * Roep startAchtergrond('a') of startAchtergrond('b') aan bij eerste klik.
+ * Geluidseffecten (sloten, papier, beiaard, bus) zijn synthetisch.
+ * Browsers blokkeren audio tot de eerste klik.
  */
-import type { Kamer14TekstPuzzel } from './kamer14-config.ts';
 
 declare global {
   interface Window {
@@ -284,134 +285,154 @@ export function speelEnvelopGeluid(): void {
   source.stop(t + duur + 0.05);
 }
 
-// ── Verhaalfragmenten na puzzeloplossing ──────────────────
-/**
- * Elk fragment is specifiek gekoppeld aan de puzzel die net opgelost werd.
- * Bestandsnaamconventie: audio/<karakter>/<fragment>.mp3
- *
- * Om een fragment toe te voegen: neem het op, zet het in de juiste map,
- * en vervang null door de bestandsnaam (zonder .mp3).
- *
- * De tekst van elk fragment staat in berichten.ts (tab Berichten en ondertitel).
- */
-export type SpelerType = 'a' | 'b';
-export type PuzzelNr = Kamer14TekstPuzzel;
+// ── Klik, slot open, slot dicht ───────────────────────────
 
-// Per puzzel een vast verhaalfragment, ingesproken door het
-// personage van de eigen kant (A: An Vermeersch, B: Katrijn).
-const VERHAAL_FRAGMENTEN: Record<SpelerType, Record<PuzzelNr, string>> = {
-  a: {
-    p1: 'verhaal-p1',
-    p2: 'verhaal-p2',
-    p3: 'verhaal-p3',
-    p4: 'verhaal-p4',
-    p5: 'verhaal-p5',
-  },
-  b: {
-    p1: 'verhaal-p1',
-    p2: 'verhaal-p2',
-    p3: 'verhaal-p3',
-    p4: 'verhaal-p4',
-    p5: 'verhaal-p5',
-  },
-};
-
-const KARAKTER: Record<SpelerType, string> = {
-  a: 'an-vermeersch',
-  b: 'katrijn',
-};
-
-// ── Volgorde A en B ───────────────────────────────────────
-// Zitten A en B in dezelfde kamer, dan mogen hun fragmenten niet door elkaar
-// spelen. A spreekt eerst; B wacht tot het fragment van A gedaan is.
-
-/** Wachttijd na het unlock-geluid, zodat dat eerst klinkt. */
-export const WACHT_NA_UNLOCK_MS = 1800;
-/** Stilte tussen het fragment van A en dat van B. */
-export const PAUZE_TUSSEN_MS = 1500;
-
-/**
- * Lengte van de fragmenten van An Vermeersch in seconden, gemeten op de
- * mp3-bestanden. Enkel reserve: de echte lengte wordt bij het afspelen uit
- * het bestand gelezen. Neem je een fragment opnieuw op, pas dit dan aan.
- */
-export const DUUR_A_SEC: Record<PuzzelNr, number> = {
-  p1: 25.4,
-  p2: 29.0,
-  p3: 32.8,
-  p4: 34.0,
-  p5: 33.9,
-};
-
-/** Hoe lang een speler wacht voor zijn fragment start (ms). */
-export function wachttijdFragment(
-  spelerType: SpelerType,
-  puzzelNr: PuzzelNr,
-  duurASec: number = DUUR_A_SEC[puzzelNr],
-): number {
-  if (spelerType === 'a') return WACHT_NA_UNLOCK_MS;
-  return WACHT_NA_UNLOCK_MS + Math.round(duurASec * 1000) + PAUZE_TUSSEN_MS;
+/** Korte mechanische klik (toets, wieltje). */
+export function speelKlik(): void {
+  try {
+    speelTonen([[1400, 0, 0.04]], 0.05);
+  } catch {
+    /* geen audio */
+  }
 }
 
-/** Leest de lengte van het fragment van A uit het bestand, met reserve. */
-function duurVanA(puzzelNr: PuzzelNr): Promise<number> {
-  const reserve = DUUR_A_SEC[puzzelNr];
-  return new Promise(klaar => {
-    const audio = new Audio();
-    audio.preload = 'metadata';
-    const timer = setTimeout(() => klaar(reserve), 3000);
-    audio.addEventListener(
-      'loadedmetadata',
-      () => {
-        clearTimeout(timer);
-        klaar(Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : reserve);
-      },
-      { once: true },
-    );
-    audio.addEventListener(
-      'error',
-      () => {
-        clearTimeout(timer);
-        klaar(reserve);
-      },
-      { once: true },
-    );
-    audio.src = `audio/${KARAKTER.a}/${VERHAAL_FRAGMENTEN.a[puzzelNr]}.mp3`;
+/** Fout antwoord: twee lage tonen. */
+export function speelFout(): void {
+  speelTonen(
+    [
+      [196, 0, 0.18],
+      [165, 0.12, 0.26],
+    ],
+    0.12,
+  );
+}
+
+// ── Beiaard en bus (voor de voicemail) ────────────────────
+
+/** Noten van het begin van "Altijd is Kortjakje ziek" (do do sol sol la la sol). */
+export const KORTJAKJE: number[] = [523.25, 523.25, 783.99, 783.99, 880, 880, 783.99];
+
+/** Eén klok: grondtoon met de typische boventonen van een beiaardklok. */
+function slaKlok(c: AudioContext, doel: AudioNode, freq: number, t: number, volume: number): void {
+  const boventonen: [number, number, number][] = [
+    [0.5, 0.35, 2.4], // hum
+    [1, 1, 2.2], // grondtoon
+    [1.2, 0.45, 1.6], // kleine terts, typisch voor klokken
+    [1.5, 0.3, 1.2],
+    [2, 0.4, 1.0],
+    [2.67, 0.18, 0.7],
+  ];
+  for (const [ratio, rel, duur] of boventonen) {
+    const osc = c.createOscillator();
+    const g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq * ratio;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(volume * rel, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + duur);
+    osc.connect(g);
+    g.connect(doel);
+    osc.start(t);
+    osc.stop(t + duur + 0.05);
+  }
+}
+
+/**
+ * Speelt het deuntje van de beiaard, van ver weg (een beetje gedempt).
+ * Geeft de duur in seconden terug.
+ */
+export function speelBeiaard(noten: number[] = KORTJAKJE, tempo = 0.62): number {
+  const c = getCtx();
+  const filter = c.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 3200;
+  filter.connect(c.destination);
+  const start = c.currentTime + 0.05;
+  noten.forEach((f, i) => {
+    const lang = i === noten.length - 1;
+    slaKlok(c, filter, f, start + i * tempo, lang ? 0.16 : 0.13);
   });
+  return noten.length * tempo + 1.6;
 }
+
+/**
+ * Een bus die voorbijrijdt: een lage motor die aanzwelt en weer wegsterft.
+ * Overstemt wat er tegelijk gezegd of geslagen wordt.
+ */
+export function speelBus(duur = 5.5): void {
+  const c = getCtx();
+  const lengte = Math.floor(c.sampleRate * duur);
+  const buffer = c.createBuffer(1, lengte, c.sampleRate);
+  const data = buffer.getChannelData(0);
+  let vorige = 0;
+  for (let i = 0; i < lengte; i++) {
+    vorige = 0.97 * vorige + 0.03 * (Math.random() * 2 - 1); // bruine ruis
+    data[i] = vorige * 6;
+  }
+  const bron = c.createBufferSource();
+  bron.buffer = buffer;
+  const filter = c.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 420;
+  const motor = c.createOscillator();
+  motor.type = 'sawtooth';
+  motor.frequency.value = 48;
+  const motorGain = c.createGain();
+  motorGain.gain.value = 0.05;
+  const gain = c.createGain();
+  const t = c.currentTime;
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(0.55, t + duur * 0.45);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + duur);
+  motor.frequency.linearRampToValueAtTime(62, t + duur * 0.45);
+  motor.frequency.linearRampToValueAtTime(44, t + duur);
+  bron.connect(filter);
+  motor.connect(motorGain);
+  motorGain.connect(filter);
+  filter.connect(gain);
+  gain.connect(c.destination);
+  bron.start(t);
+  motor.start(t);
+  bron.stop(t + duur);
+  motor.stop(t + duur);
+}
+
+// ── Verhaalfragmenten ─────────────────────────────────────
+
+export type FragmentId = 'briefing' | 'wending' | 'telefoon' | 'dagboek';
+
+/** Wie spreekt welk fragment in, en welk bestand (audio/<karakter>/<bestand>.mp3). */
+export const FRAGMENTEN: Record<FragmentId, { karakter: string; bestand: string }> = {
+  briefing: { karakter: 'an', bestand: 'briefing' },
+  wending: { karakter: 'an', bestand: 'wending' },
+  telefoon: { karakter: 'katrijn', bestand: 'telefoon' },
+  dagboek: { karakter: 'lena', bestand: 'dagboek' },
+};
+
+/** Na welke puzzel speelt welk fragment. */
+export const FRAGMENT_NA_PUZZEL: Record<string, FragmentId> = {
+  p4: 'wending',
+  p5: 'telefoon',
+  p6: 'dagboek',
+};
 
 export interface FragmentOpties {
   /** Het fragment begint: bv. ondertitel tonen. */
   bijStart?: (audio: HTMLAudioElement) => void;
   /** Afspelen geblokkeerd of mislukt: bv. de geluidsmelding tonen. */
   bijFout?: () => void;
+  /** Wachttijd in ms, zodat het slotgeluid eerst klinkt. */
+  wacht?: number;
 }
 
-/**
- * Speelt het verhaalfragment dat bij de opgegeven puzzel hoort.
- * Speler A start na het unlock-geluid, speler B pas als A klaar is.
- *
- * @param spelerType - 'a' of 'b'
- * @param puzzelNr   - een puzzel uit KAMER14_TEKST_PUZZELS
- */
-export function speelVerhaalFragment(
-  spelerType: SpelerType,
-  puzzelNr: PuzzelNr,
-  opties: FragmentOpties = {},
-): void {
-  const fragment = VERHAAL_FRAGMENTEN[spelerType]?.[puzzelNr];
-  const karakter = KARAKTER[spelerType];
-  if (!fragment || !karakter) return;
+/** Wachttijd na het geluid van een opengaand slot. */
+export const WACHT_NA_UNLOCK_MS = 1800;
 
-  const speel = (wacht: number) =>
-    setTimeout(() => {
-      const audio = speelStem(karakter, fragment, opties.bijFout);
-      opties.bijStart?.(audio);
-    }, wacht);
-
-  if (spelerType === 'a') {
-    speel(wachttijdFragment('a', puzzelNr));
-  } else {
-    void duurVanA(puzzelNr).then(duur => speel(wachttijdFragment('b', puzzelNr, duur)));
-  }
+/** Speelt een verhaalfragment. Beide spelers horen het tegelijk. */
+export function speelFragment(id: FragmentId, opties: FragmentOpties = {}): void {
+  const { karakter, bestand } = FRAGMENTEN[id];
+  setTimeout(() => {
+    const audio = speelStem(karakter, bestand, opties.bijFout);
+    opties.bijStart?.(audio);
+  }, opties.wacht ?? WACHT_NA_UNLOCK_MS);
 }

@@ -8,6 +8,8 @@ export interface RapportInhoud {
   wie: string;
   vervoer: string;
   tijdstip: string;
+  /** Vrije conclusie of keuze van de spelers (Kamer 14: alles, morgen, niets). */
+  conclusie?: string;
 }
 
 interface RapportData {

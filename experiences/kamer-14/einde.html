@@ -4,365 +4,142 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Kamer 14 - Intern Rapport</title>
+    <title>Kamer 14 - Rapport voor An</title>
     <link rel="stylesheet" href="/assets/fonts/fonts.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="css/kamer14.css" />
     <link rel="stylesheet" href="css/einde.css" />
   </head>
   <body>
-    <!-- ══════════════════════════════════════════
-       SCHERM 1  -  RAPPORT INDIENEN
-  ══════════════════════════════════════════ -->
+    <!-- ═════════ Rapport voor An ═════════ -->
     <div id="scherm-rapport" class="einde-scherm actief">
-      <div class="systeembalk">
-        <div style="display: flex; align-items: center">
-          <span class="sys-logo">Bureau X</span>
-          <span class="sys-sep">|</span>
-          <span class="sys-case" id="sys-case-rapport">Intern rapport · laden…</span>
+      <header class="kop">
+        <div class="kop-titel">
+          <span class="kop-naam">Kamer 14</span>
+          <span class="kop-plek">Rapport voor An Vermeersch, OPZ Geel</span>
         </div>
-        <div class="sys-rechts">
-          <span class="sys-badge">Rapport</span>
+        <div class="kop-rechts">
+          <span class="kop-sessie">Sessie <span id="rapport-sessie-label">-</span></span>
         </div>
-      </div>
+      </header>
 
-      <div class="rapport-wrapper">
-        <div class="rapport-header">
-          <div>
-            <div class="rapport-org">
-              OPZ Geel - Afdeling gezinsverpleging<br />
-              Intern onderzoeksrapport · Ref. OPZ-2025-0506-LB
-            </div>
-            <div class="rapport-titel">Locatiebepaling kostganger</div>
-          </div>
-          <div class="rapport-stempel">Vertrouwelijk</div>
-        </div>
+      <main class="rapport-veld-wrap">
+        <div class="papier rapport-papier">
+          <p class="papier-kop">OPZ Geel · afdeling gezinsverpleging · dossier OPZ-2025-0506</p>
+          <h1 class="rapport-titel">Waar is Lena Bogaert?</h1>
+          <p class="rapport-intro">
+            Dinsdag 6 mei, kort voor vijf uur. Vul samen in wat jullie weten. Eén van jullie typt,
+            de ander kijkt mee. Het rapport gaat in één keer naar An.
+          </p>
 
-        <div class="rapport-meta">
-          <div>Dossierhouder:&nbsp;<span>Bogaert, Lena M.</span></div>
-          <div>Datum verdwijning:&nbsp;<span>di. 6 mei 2025</span></div>
-          <div>Gastgezin:&nbsp;<span>Martens-Peeters, Geel</span></div>
-          <div>Sessie:&nbsp;<span id="rapport-sessie-label"> - </span></div>
-        </div>
-
-        <div class="rapport-sectie-titel">De route van Lena, dinsdag 6 mei</div>
-
-        <svg
-          class="route-kaart"
-          id="route-kaart"
-          viewBox="0 0 320 210"
-          role="img"
-          aria-labelledby="route-kaart-titel"
-        >
-          <title id="route-kaart-titel">
-            Kaart van de route van Geel naar de bestemming van Lena
-          </title>
-          <!-- Gasthuisstraat → Geel Markt: te voet, altijd getekend -->
-          <path class="route-lijn te-voet getekend" d="M262 34 L226 58" />
-          <!-- Geel Markt → bestemming: bus -->
-          <path class="route-lijn rit" id="route-rit" d="M226 58 C 200 100, 150 120, 104 158" />
-          <!-- bestemming → adres: te voet -->
-          <path class="route-lijn te-voet" id="route-laatste" d="M104 158 L68 182" />
-
-          <circle class="route-punt getekend" cx="262" cy="34" r="5" />
-          <circle class="route-punt getekend" cx="226" cy="58" r="5" />
-          <circle class="route-punt" id="route-punt-stad" cx="104" cy="158" r="6" />
-          <circle class="route-punt" id="route-punt-adres" cx="68" cy="182" r="5" />
-
-          <text class="route-label" x="272" y="30">Geel</text>
-          <text class="route-label klein" x="236" y="68">Geel Markt</text>
-          <text class="route-label" id="route-label-stad" x="116" y="160">?</text>
-          <text class="route-label klein" id="route-label-adres" x="80" y="196"></text>
-        </svg>
-
-        <ol class="route">
-          <li class="route-stop">
-            <div class="route-tijd">07u00</div>
-            <div class="route-inhoud">
-              <div class="route-titel">Gasthuisstraat 44, Geel</div>
-              <div class="route-sub">
-                Ontbijt bij het gastgezin. Rond kwart over zeven gaat de voordeur dicht.
+          <ol class="rapport-vragen">
+            <li>
+              <label class="rapport-veld-label" for="r-bestemming">Waar is Lena?</label>
+              <input class="rapport-input" id="r-bestemming" maxlength="60" autocomplete="off" />
+              <div class="rapport-veld-fout" id="fout-bestemming">
+                Welk plein tekende Lena? De tekening en de prentkaart weten het.
               </div>
-            </div>
-          </li>
-          <li class="route-stop">
-            <div class="route-tijd">te voet</div>
-            <div class="route-inhoud">
-              <div class="route-titel">Halte Geel Markt</div>
-              <div class="route-sub">Een kwartier wandelen.</div>
-            </div>
-          </li>
-          <li class="route-stop">
-            <div class="route-tijd">vertrek</div>
-            <div class="route-inhoud">
-              <label class="rapport-veld-label" for="r-vervoer">Hoe reisde ze verder?</label>
-              <input
-                class="rapport-input"
-                id="r-vervoer"
-                placeholder="wijze van verplaatsing…"
-                maxlength="60"
-                autocomplete="off"
-              />
+            </li>
+            <li>
+              <label class="rapport-veld-label" for="r-wie">Bij wie is ze?</label>
+              <input class="rapport-input" id="r-wie" maxlength="60" autocomplete="off" />
+              <div class="rapport-veld-fout" id="fout-wie">
+                Voor wie was de spaardoos? Lees de foto en de dagboekbladzijde nog eens.
+              </div>
+            </li>
+            <li>
+              <label class="rapport-veld-label" for="r-vervoer">Hoe geraakte ze er?</label>
+              <input class="rapport-input" id="r-vervoer" maxlength="60" autocomplete="off" />
               <div class="rapport-veld-fout" id="fout-vervoer">
-                Welk vervoermiddel nam Lena? Kijk wat Speler B in de prullenmand vond.
+                Waar zwaaide Katrijn om 7u35 naar?
               </div>
-              <label class="rapport-veld-label route-tweede" for="r-tijdstip"
-                >Vertrektijdstip (uu:mm)</label
-              >
+            </li>
+            <li>
+              <label class="rapport-veld-label" for="r-tijdstip">Wanneer komt ze terug?</label>
               <input
                 class="rapport-input"
                 id="r-tijdstip"
-                placeholder="uu:mm"
                 maxlength="20"
                 autocomplete="off"
+                placeholder="uu:mm"
               />
               <div class="rapport-veld-fout" id="fout-tijdstip">
-                Vergelijk de dienstregeling lijn 19 (Speler A) met het logboekmoment van Speler B.
+                Wat schrijft Lena op het einde van de bladzijde? Kijk in de dienstregeling.
               </div>
+            </li>
+          </ol>
+
+          <fieldset class="keuze">
+            <legend>An vraagt: "Wat zet ik in mijn melding?"</legend>
+            <label class="keuze-optie">
+              <input type="radio" name="keuze" value="alles" />
+              <span class="keuze-titel">Alles</span>
+              <span class="keuze-uitleg"
+                >Ook dat Katrijn loog en dat Lena haar dochter zag buiten Pleegzorg om. Correct,
+                maar Katrijn kan haar erkenning als gastgezin verliezen.</span
+              >
+            </label>
+            <label class="keuze-optie">
+              <input type="radio" name="keuze" value="morgen" />
+              <span class="keuze-titel">Dat ze veilig is, de rest morgen</span>
+              <span class="keuze-uitleg"
+                >Geen vermissing. Wat er gebeurde, bespreekt An morgen met iedereen aan tafel.</span
+              >
+            </label>
+            <label class="keuze-optie">
+              <input type="radio" name="keuze" value="niets" />
+              <span class="keuze-titel">Niets, geef Lena haar dag</span>
+              <span class="keuze-uitleg"
+                >An schrijft enkel dat Lena bij een kennis is en vanavond terugkomt. Menselijk, maar
+                An zwijgt over de rest.</span
+              >
+            </label>
+            <div class="rapport-veld-fout" id="fout-keuze">
+              Kies samen wat An in haar melding zet.
             </div>
-          </li>
-          <li class="route-stop">
-            <div class="route-tijd">aankomst</div>
-            <div class="route-inhoud">
-              <label class="rapport-veld-label" for="r-bestemming">Naar welke stad?</label>
-              <input
-                class="rapport-input"
-                id="r-bestemming"
-                placeholder="stad of locatie…"
-                maxlength="40"
-                autocomplete="off"
-              />
-              <div class="rapport-veld-fout" id="fout-bestemming">
-                Kijk naar de tekening en het vrijetijdsmateriaal - welke stad herkende je?
-              </div>
+          </fieldset>
+
+          <article class="an-waarschuwing" id="an-waarschuwing" aria-live="polite">
+            <p class="an-waarschuwing-kop">An Vermeersch</p>
+            <p>
+              Ik heb jullie rapport gelezen. Niet alles klopt met wat ik zelf zie, ik heb aangeduid
+              wat niet past. Kijk het nog één keer na. Klopt het daarna nog niet, dan meld ik haar
+              als vermist.
+            </p>
+          </article>
+
+          <div class="rapport-actie">
+            <div class="rapport-validatie-bericht" id="rapport-validatie-bericht">
+              Kijk de aangeduide vragen na.
             </div>
-          </li>
-          <li class="route-stop">
-            <div class="route-tijd">bij</div>
-            <div class="route-inhoud">
-              <label class="rapport-veld-label" for="r-wie">Bij wie is ze?</label>
-              <input
-                class="rapport-input"
-                id="r-wie"
-                placeholder="voor- en achternaam…"
-                maxlength="40"
-                autocomplete="off"
-              />
-              <div class="rapport-veld-fout" id="fout-wie">
-                Combineer de intakefiche (Speler A) met de brief op het prikbord (Speler B).
-              </div>
-            </div>
-          </li>
-        </ol>
-
-        <article
-          class="einde-mail an-waarschuwing"
-          id="an-waarschuwing"
-          aria-labelledby="an-waarschuwing-onderwerp"
-          aria-live="polite"
-        >
-          <dl class="einde-mail-kop">
-            <dt>Van</dt>
-            <dd>An Vermeersch, OPZ Geel</dd>
-            <dt>Onderwerp</dt>
-            <dd id="an-waarschuwing-onderwerp">Dit klopt niet</dd>
-          </dl>
-          <p>
-            Ik heb jullie rapport gelezen. Niet alles klopt met wat ik zelf in het dossier zie, ik
-            heb aangeduid wat niet past.
-          </p>
-          <p>Kijk het nog één keer na. Klopt het daarna nog niet, dan bel ik de politie.</p>
-          <p>An</p>
-        </article>
-
-        <div class="rapport-actie">
-          <div class="rapport-validatie-bericht" id="rapport-validatie-bericht">
-            <i class="bi bi-exclamation-triangle me-1"></i>Controleer de gemarkeerde velden.
-          </div>
-          <button class="rapport-btn" id="btn-indienen">
-            <i class="bi bi-check2-square me-2"></i>Rapport indienen
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-       SCHERM 2A  -  MAIL VAN AN (rapport klopt)
-  ══════════════════════════════════════════ -->
-    <div id="scherm-mail-an" class="einde-scherm">
-      <div class="systeembalk">
-        <div style="display: flex; align-items: center">
-          <span class="sys-logo">Bureau X</span>
-          <span class="sys-sep">|</span>
-          <span class="sys-case">Ref. OPZ-2025-0506-LB · Rapport ingediend</span>
-        </div>
-      </div>
-
-      <div class="briefkaart-wrapper">
-        <div class="briefkaart-melding">Nieuw bericht</div>
-        <div class="briefkaart-melding-sub">Dinsdag 6 mei 2025</div>
-
-        <article class="einde-mail" aria-labelledby="mail-an-onderwerp">
-          <dl class="einde-mail-kop">
-            <dt>Van</dt>
-            <dd>An Vermeersch, OPZ Geel</dd>
-            <dt>Aan</dt>
-            <dd>Bureau X</dd>
-            <dt>Onderwerp</dt>
-            <dd id="mail-an-onderwerp">Gevonden</dd>
-          </dl>
-          <p>
-            Ik heb de bloemenwinkel in de Stationsstraat gebeld. Marie nam op. Op de achtergrond
-            hoorde ik Lena lachen.
-          </p>
-          <p>
-            Ik vroeg of ze veilig is. Ja. Ik vroeg of ze terugkomt. Donderdag, voor het ontbijt.
-          </p>
-          <p>De politie bel ik niet. Bedankt.</p>
-          <p>An</p>
-        </article>
-
-        <button class="briefkaart-verder-btn einde-verder-btn" id="btn-mail-verder">Verder</button>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-       SCHERM 2B  -  POLITIE (rapport twee keer fout)
-  ══════════════════════════════════════════ -->
-    <div id="scherm-politie" class="einde-scherm">
-      <div class="systeembalk">
-        <div style="display: flex; align-items: center">
-          <span class="sys-logo">Bureau X</span>
-          <span class="sys-sep">|</span>
-          <span class="sys-case">Ref. OPZ-2025-0506-LB · Geen bruikbaar rapport</span>
-        </div>
-      </div>
-
-      <div class="briefkaart-wrapper">
-        <div class="briefkaart-melding">Dinsdag 6 mei 2025, 17u00</div>
-        <div class="briefkaart-melding-sub">Het rapport klopte niet.</div>
-
-        <article class="einde-mail politie-tekst">
-          <p>An belt om 17u00 de politie.</p>
-          <p>
-            Om 19u40 vinden twee agenten Lena in een bloemenwinkel in Diest. Ze is veilig, maar ze
-            rijdt die avond in een politiewagen terug naar Geel.
-          </p>
-        </article>
-
-        <button class="briefkaart-verder-btn einde-verder-btn" id="btn-politie-verder">
-          Sluit het dossier
-        </button>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-       SCHERM 2  -  BRIEFKAART REVEAL
-  ══════════════════════════════════════════ -->
-    <div id="scherm-briefkaart" class="einde-scherm">
-      <div class="systeembalk">
-        <div style="display: flex; align-items: center">
-          <span class="sys-logo">Bureau X</span>
-          <span class="sys-sep">|</span>
-          <span class="sys-case">Ref. OPZ-2025-0506-LB · Rapport ingediend</span>
-        </div>
-        <div class="sys-rechts">
-          <span
-            class="sys-badge"
-            style="color: var(--k-accent-licht); border-color: var(--k-accent)"
-            >Dossier gesloten</span
-          >
-        </div>
-      </div>
-
-      <div class="briefkaart-wrapper">
-        <div class="briefkaart-melding">Woensdag 7 mei 2025</div>
-        <div class="briefkaart-melding-sub">
-          Een briefkaart is gearriveerd bij het gastgezin Martens-Peeters.
-        </div>
-
-        <div class="postkaart-scene">
-          <div class="postkaart" id="postkaart">
-            <!-- Voorkant -->
-            <div class="postkaart-zijde postkaart-voorkant">
-              <div class="postkaart-icoon">⛪</div>
-              <div class="postkaart-stad">Diest</div>
-              <div class="postkaart-ondertitel">Grote Markt · Sint-Sulpitiuskerk</div>
-              <div class="postkaart-poststempel">Di. 6 mei</div>
-            </div>
-
-            <!-- Achterkant -->
-            <div class="postkaart-zijde postkaart-achterkant">
-              <div class="postkaart-scheidslijn"></div>
-              <div class="postkaart-tekst">
-                Lieve Katrijn en kinderen,<br /><br />
-                Ik heb Marie gevonden. Ze woont boven een bloemenzaak. We hebben thee gedronken en
-                ze huilde een beetje. Ik ook.<br /><br />
-                Ik kom donderdag terug voor het ontbijt. Ik heb de sleutel bij mij.
-              </div>
-              <div class="postkaart-handtekening">- Lena</div>
-            </div>
+            <button class="rapport-btn" id="btn-indienen">Geef het rapport aan An</button>
           </div>
         </div>
-
-        <div class="briefkaart-hint" id="briefkaart-hint">
-          Klik op de briefkaart om ze om te draaien
-        </div>
-
-        <button class="briefkaart-verder-btn" id="btn-sluit-dossier">Verder</button>
-      </div>
+      </main>
     </div>
 
-    <!-- ══════════════════════════════════════════
-       SCHERM 2C  -  EPILOOG
-  ══════════════════════════════════════════ -->
-    <div id="scherm-epiloog" class="einde-scherm">
-      <div class="systeembalk">
-        <div style="display: flex; align-items: center">
-          <span class="sys-logo">Bureau X</span>
-          <span class="sys-sep">|</span>
-          <span class="sys-case">Ref. OPZ-2025-0506 · Dossiernotitie</span>
+    <!-- ═════════ Het einde (tekst volgt de keuze, zie js/eindes.ts) ═════════ -->
+    <div id="scherm-einde" class="einde-scherm">
+      <section class="einde-verhaal" aria-labelledby="einde-titel">
+        <p class="einde-tijd" id="einde-tijd">Dinsdag 6 mei, 17u00</p>
+        <h1 class="einde-titel" id="einde-titel"></h1>
+        <div class="einde-tekst" id="einde-tekst"></div>
+        <div class="einde-knoppen">
+          <button class="einde-luister" id="btn-einde-luister" type="button">Luister</button>
+          <button class="rapport-btn" id="btn-einde-verder" type="button">Sluit het dossier</button>
         </div>
-      </div>
-
-      <div class="briefkaart-wrapper">
-        <div class="briefkaart-melding">Een week later</div>
-        <div class="briefkaart-melding-sub">Dossiernotities, An Vermeersch</div>
-
-        <article class="einde-mail" aria-labelledby="epiloog-titel">
-          <dl class="einde-mail-kop">
-            <dt>Datum</dt>
-            <dd id="epiloog-titel">Woensdag 14 mei 2025, 10u00, kamer 4</dd>
-          </dl>
-          <p>Lena kwam op tijd. Ze had een envelop mee voor Katrijn: zeven keer €35.</p>
-          <p>
-            Ze vertelde over Marie, over de zomers in Diest en waarom ze het alleen wilde doen. Ik
-            heb gezegd dat ik dat begrijp, en dat ik de volgende keer graag een briefje heb. Ze
-            lachte. "Een briefje. Geen toestemming." Afgesproken.
-          </p>
-          <p>
-            Nieuw in het weekrooster: elke eerste vrijdag van de maand naar Diest. Retour: wanneer
-            ze wil.
-          </p>
-          <p>
-            Vertrouwenspersoon bijgewerkt: Marie Stas, Stationsstraat 7, Diest. Huidig adres:
-            bekend.
-          </p>
-        </article>
-
-        <button class="briefkaart-verder-btn einde-verder-btn" id="btn-epiloog-verder">
-          <i class="bi bi-archive me-2"></i>Sluit het dossier
-        </button>
-      </div>
+      </section>
     </div>
 
     <!-- ══════════════════════════════════════════
        SCHERM 3  -  SLOTSCHERM & CREDITS
   ══════════════════════════════════════════ -->
     <div id="scherm-slot" class="einde-scherm">
-      <div class="systeembalk" style="justify-content: center">
-        <span class="sys-logo">Bureau X · Kamer 14</span>
-      </div>
+      <header class="kop">
+        <div class="kop-titel">
+          <span class="kop-naam">Kamer 14</span><span class="kop-plek">Dossier gesloten</span>
+        </div>
+      </header>
 
       <div class="slot-wrapper">
         <img

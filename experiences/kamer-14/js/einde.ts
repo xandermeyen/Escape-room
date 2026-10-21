@@ -7,16 +7,11 @@ import {
   type RapportInhoud,
 } from '../../../shared/js/session.ts';
 import { beoordeelAntwoord, sessieUitUrl } from '../../../shared/js/utils.ts';
-import {
-  KAMER14_ANTWOORD_HASHES,
-  KAMER14_ANTWOORD_REGELS,
-  KAMER14_PUZZELS,
-} from './kamer14-config.ts';
+import { KAMER14_ANTWOORD_HASHES, KAMER14_ANTWOORD_REGELS } from './kamer14-config.ts';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
-import { speelStem } from './audio.ts';
-import { maakKlikbaar } from '../../../shared/js/toegankelijk.ts';
+import { speelStem, hervatAudio } from './audio.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
 import {
   bewaarFoutePogingen,
@@ -24,22 +19,17 @@ import {
   MAX_FOUTE_POGINGEN,
   volgendeStap,
 } from './einde-verloop.ts';
-import { koppelRouteKaart } from './route-kaart.ts';
+import { EINDES, isKeuze, type EindeId } from './eindes.ts';
 import { meetSpel } from '../../../shared/js/meet.ts';
 
 // ── Sessie ophalen (redirect + stop als die ontbreekt) ────
 const sessie = sessieUitUrl();
 
-// Sessie tonen in systeembalk en meta
-const sysCaseRapport = document.getElementById('sys-case-rapport');
-if (sysCaseRapport)
-  sysCaseRapport.textContent = `Intern rapport · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
-
-const statPuzzels = document.getElementById('stat-puzzels');
-if (statPuzzels) statPuzzels.textContent = `${KAMER14_PUZZELS.length}/${KAMER14_PUZZELS.length}`;
-
 const rapportSessieLabel = document.getElementById('rapport-sessie-label');
 if (rapportSessieLabel) rapportSessieLabel.textContent = sessie;
+
+const statPuzzels = document.getElementById('stat-puzzels');
+if (statPuzzels) statPuzzels.textContent = '7/7';
 
 // ── Scherm-overgangen ─────────────────────────────────────
 function toonScherm(id: string): void {
@@ -51,71 +41,54 @@ function toonScherm(id: string): void {
   }
 }
 
-// ── Validatie helpers ─────────────────────────────────────
+// ── Validatie ─────────────────────────────────────────────
 // Antwoorden staan als SHA-256 hash in de bundle, niet als plain-text.
-// Zelfde hashes en normalisatie als de puzzels in speler-a.ts / speler-b.ts:
-// bestemming = P2, wie = P4, tijdstip = P5; vervoer heeft een eigen regel.
-// De velden staan als route onder de kaart (zie route-kaart.ts).
-const VELD_PUZZEL: Record<string, string> = {
-  bestemming: 'p2',
-  wie: 'p4',
+// Het veld "tijdstip" bewaart wanneer Lena terugkomt (regel "terug").
+const VELD_REGEL: Record<string, string> = {
+  bestemming: 'bestemming',
+  wie: 'wie',
   vervoer: 'vervoer',
-  tijdstip: 'p5',
+  tijdstip: 'terug',
 };
+const VELDEN = Object.keys(VELD_REGEL);
 
 function veldKlopt(veld: string, waarde: string): Promise<boolean> {
-  const puzzel = VELD_PUZZEL[veld] ?? '';
+  const regel = VELD_REGEL[veld] ?? '';
   return beoordeelAntwoord(
     waarde,
-    KAMER14_ANTWOORD_HASHES[puzzel] ?? [],
-    KAMER14_ANTWOORD_REGELS[puzzel],
+    KAMER14_ANTWOORD_HASHES[regel] ?? [],
+    KAMER14_ANTWOORD_REGELS[regel],
   ).then(oordeel => oordeel === 'juist');
 }
 
-function resetVeld(id: string): void {
-  const input = document.getElementById(`r-${id}`);
-  const foutMsg = document.getElementById(`fout-${id}`);
-  if (input) input.classList.remove('fout');
-  if (foutMsg) foutMsg.style.display = 'none';
+const waarde = (veld: string) =>
+  (document.getElementById(`r-${veld}`) as HTMLInputElement | null)?.value.trim() ?? '';
+
+function markeer(veld: string, fout: boolean): void {
+  document.getElementById(`r-${veld}`)?.classList.toggle('fout', fout);
+  document.getElementById(`fout-${veld}`)?.classList.toggle('zichtbaar', fout);
 }
 
-function markeerFout(id: string): void {
-  const input = document.getElementById(`r-${id}`);
-  const foutMsg = document.getElementById(`fout-${id}`);
-  if (input) input.classList.add('fout');
-  if (foutMsg) foutMsg.style.display = 'block';
+function gekozen(): string | null {
+  return document.querySelector<HTMLInputElement>('input[name="keuze"]:checked')?.value ?? null;
 }
 
 // ── Rapport indienen ──────────────────────────────────────
 async function diendIn(): Promise<void> {
-  const bestemming = (document.getElementById('r-bestemming') as HTMLInputElement).value;
-  const wie = (document.getElementById('r-wie') as HTMLInputElement).value;
-  const vervoer = (document.getElementById('r-vervoer') as HTMLInputElement).value.trim();
-  const tijdstip = (document.getElementById('r-tijdstip') as HTMLInputElement).value;
-
-  // Reset
-  ['bestemming', 'wie', 'vervoer', 'tijdstip'].forEach(resetVeld);
   const validatieBericht = document.getElementById('rapport-validatie-bericht');
-  if (validatieBericht) validatieBericht.style.display = 'none';
   const waarschuwing = document.getElementById('an-waarschuwing');
+  validatieBericht?.classList.remove('zichtbaar');
+
+  // Zonder keuze sturen we niets: dat telt niet als foute poging.
+  const keuze = gekozen();
+  markeer('keuze', !keuze);
+  if (!keuze) return;
 
   let geldig = true;
-
-  if (!(await veldKlopt('bestemming', bestemming))) {
-    markeerFout('bestemming');
-    geldig = false;
-  }
-  if (!(await veldKlopt('wie', wie))) {
-    markeerFout('wie');
-    geldig = false;
-  }
-  if (!(await veldKlopt('vervoer', vervoer))) {
-    markeerFout('vervoer');
-    geldig = false;
-  }
-  if (!(await veldKlopt('tijdstip', tijdstip))) {
-    markeerFout('tijdstip');
-    geldig = false;
+  for (const veld of VELDEN) {
+    const ok = await veldKlopt(veld, waarde(veld));
+    markeer(veld, !ok);
+    if (!ok) geldig = false;
   }
 
   const fouteVoorDeze = leesFoutePogingen(sessie);
@@ -123,105 +96,103 @@ async function diendIn(): Promise<void> {
   if (stap === 'waarschuwing') {
     bewaarFoutePogingen(sessie, fouteVoorDeze + 1);
     waarschuwing?.classList.add('zichtbaar');
+    validatieBericht?.classList.add('zichtbaar');
     waarschuwing?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
   if (stap === 'politie') {
     bewaarFoutePogingen(sessie, fouteVoorDeze + 1);
-    toonPolitie();
+    toonVermist();
     return;
   }
   waarschuwing?.classList.remove('zichtbaar');
 
-  // Indienen
   const btn = document.getElementById('btn-indienen') as HTMLButtonElement;
   btn.disabled = true;
-  btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Indienen…';
+  btn.textContent = 'An leest het rapport…';
 
   const inhoud: RapportInhoud = {
-    bestemming: (document.getElementById('r-bestemming') as HTMLInputElement).value.trim(),
-    wie: (document.getElementById('r-wie') as HTMLInputElement).value.trim(),
-    vervoer,
-    tijdstip: (document.getElementById('r-tijdstip') as HTMLInputElement).value.trim(),
+    bestemming: waarde('bestemming'),
+    wie: waarde('wie'),
+    vervoer: waarde('vervoer'),
+    tijdstip: waarde('tijdstip'),
+    conclusie: keuze,
   };
 
   try {
     await diendRapportIn(sessie, inhoud);
     await sluitSessie(sessie); // sessie deactiveren zodat ze niet eeuwig actief blijft
-    // luisterNaarRapport vangt de statuswijziging op en toont de mail van An
+    // luisterNaarRapport vangt de statuswijziging op en toont het einde
   } catch (err) {
     console.error('Firebase fout bij indienen rapport:', err);
     btn.disabled = false;
-    btn.innerHTML = '<i class="bi bi-check2-square me-2"></i>Rapport indienen';
+    btn.textContent = 'Geef het rapport aan An';
     if (validatieBericht) {
       validatieBericht.textContent = 'Verbindingsfout. Probeer opnieuw.';
-      validatieBericht.style.display = 'block';
+      validatieBericht.classList.add('zichtbaar');
     }
   }
 }
 
-document.getElementById('btn-indienen')?.addEventListener('click', diendIn);
-
-// Kaart tekent mee terwijl de route ingevuld wordt
-koppelRouteKaart();
-
-// Enter werkt op alle inputvelden
-['r-bestemming', 'r-wie', 'r-vervoer', 'r-tijdstip'].forEach(id => {
-  document.getElementById(id)?.addEventListener('keydown', (e: Event) => {
-    if ((e as KeyboardEvent).key === 'Enter') diendIn();
+document.getElementById('btn-indienen')?.addEventListener('click', () => void diendIn());
+VELDEN.forEach(veld => {
+  document.getElementById(`r-${veld}`)?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter') void diendIn();
   });
 });
 
-// ── Postkaart omdraaien ───────────────────────────────────
-const postkaartEl = document.getElementById('postkaart');
-if (postkaartEl) maakKlikbaar(postkaartEl, 'Briefkaart omdraaien');
-let omgedraaid: boolean = false;
+// ── Het einde ─────────────────────────────────────────────
+let eindeGetoond: EindeId | null = null;
+let eindeAudio: HTMLAudioElement | null = null;
 
-document.getElementById('postkaart')?.addEventListener('click', () => {
-  omgedraaid = !omgedraaid;
-  document.getElementById('postkaart')?.classList.toggle('omgedraaid', omgedraaid);
+function speelEinde(id: EindeId): void {
+  hervatAudio();
+  eindeAudio?.pause();
+  const delen = EINDES[id].audio;
+  const speel = (i: number) => {
+    const deel = delen[i];
+    if (!deel) return;
+    eindeAudio = speelStem(deel.karakter, deel.bestand);
+    eindeAudio.addEventListener('ended', () => speel(i + 1), { once: true });
+  };
+  speel(0);
+}
 
-  if (omgedraaid) {
-    speelStem('lena', 'briefkaart');
+function toonEinde(id: EindeId): void {
+  if (eindeGetoond) return;
+  eindeGetoond = id;
+  const einde = EINDES[id];
+  const titel = document.getElementById('einde-titel');
+  const tijd = document.getElementById('einde-tijd');
+  const tekst = document.getElementById('einde-tekst');
+  if (titel) titel.textContent = einde.titel;
+  if (tijd) tijd.textContent = einde.tijd;
+  if (tekst) {
+    tekst.replaceChildren(
+      ...einde.alineas.map(a => {
+        const p = document.createElement('p');
+        p.textContent = a;
+        return p;
+      }),
+    );
   }
+  document.getElementById('scherm-einde')?.setAttribute('data-einde', id);
+  toonScherm('scherm-einde');
+  // Wie net indiende, klikte al: dan mag het geluid meteen spelen.
+  speelEinde(id);
+}
 
-  const hint = document.getElementById('briefkaart-hint');
-  const btn = document.getElementById('btn-sluit-dossier') as HTMLButtonElement | null;
-
-  if (omgedraaid) {
-    if (hint) hint.textContent = 'Klik opnieuw om de voorkant te zien';
-    setTimeout(() => {
-      if (btn) btn.style.display = 'inline-block';
-    }, 750);
-  } else {
-    if (hint) hint.textContent = 'Klik op de briefkaart om ze om te draaien';
-  }
+document.getElementById('btn-einde-luister')?.addEventListener('click', () => {
+  if (eindeGetoond) speelEinde(eindeGetoond);
 });
-
-// ── Verloop na het rapport ────────────────────────────────
-// Klopt het rapport: mail van An → briefkaart → epiloog → slot.
-// Twee keer fout: politie → slot (geen briefkaart, Lena is die avond al terug).
-document.getElementById('btn-mail-verder')?.addEventListener('click', () => {
-  toonScherm('scherm-briefkaart');
-});
-
-document.getElementById('btn-sluit-dossier')?.addEventListener('click', () => {
-  toonScherm('scherm-epiloog');
-});
-
-document.getElementById('btn-epiloog-verder')?.addEventListener('click', () => {
+document.getElementById('btn-einde-verder')?.addEventListener('click', () => {
+  eindeAudio?.pause();
   toonScherm('scherm-slot');
 });
 
-document.getElementById('btn-politie-verder')?.addEventListener('click', () => {
-  toonScherm('scherm-slot');
-});
-
-let politieGetoond = false;
-function toonPolitie(): void {
-  if (politieGetoond) return;
-  politieGetoond = true;
-  toonScherm('scherm-politie');
+function toonVermist(): void {
+  if (eindeGetoond) return;
+  toonEinde('vermist');
   meetSpel('game_fail', sessie, { reden: 'politie' });
   // Er komt geen rapport meer: de sessie sluiten zodat ze niet actief blijft.
   sluitSessie(sessie).catch((err: unknown) => console.error('Sessie sluiten mislukt:', err));
@@ -280,15 +251,13 @@ koppelDeelKnop('btn-deel-resultaat', () =>
 );
 
 // ── Firebase: luisteren naar rapport-status ───────────────
-let mailGetoond = false;
 luisterNaarRapport(sessie, rapport => {
-  if (rapport?.ingediend && !mailGetoond && !politieGetoond) {
-    mailGetoond = true;
-    toonScherm('scherm-mail-an');
-    meetSpel('game_complete', sessie);
-    vulStats();
-  }
+  if (!rapport?.ingediend || eindeGetoond) return;
+  const keuze = rapport.inhoud?.conclusie;
+  toonEinde(isKeuze(keuze) ? keuze : 'morgen');
+  meetSpel('game_complete', sessie, { keuze: isKeuze(keuze) ? keuze : 'onbekend' });
+  void vulStats();
 });
 
-// Eerder twee keer fout ingediend op dit toestel (bv. na herladen): politie.
-if (leesFoutePogingen(sessie) >= MAX_FOUTE_POGINGEN) toonPolitie();
+// Eerder twee keer fout ingediend op dit toestel (bv. na herladen): vermist.
+if (leesFoutePogingen(sessie) >= MAX_FOUTE_POGINGEN) toonVermist();

@@ -1,12 +1,13 @@
 /**
- * kamer14-speler.ts: alles wat Speler A en Speler B van Kamer 14 gemeen
- * hebben. speler-a.ts en speler-b.ts geven enkel nog door wat verschilt:
- * welke tabs en vragen wanneer vrijkomen, en eigen extra's (de
- * kamerinspectie en de brief bij B).
+ * kamer14-speler.ts: alles wat Speler A (het bureau van An) en Speler B (de
+ * kamer van Lena) gemeen hebben. speler-a.ts en speler-b.ts geven enkel nog
+ * hun rol en eigen extra's mee (bij B de voicemail).
  *
- * Vroeger stond dit twee keer, bijna regel voor regel gelijk. Een wijziging
- * (zoals P6) moest dan op twee plaatsen, en dat ging een keer mis: de vraag
- * van P4 bleef bij Speler B maandenlang verborgen.
+ * De pagina is een tekening met klikbare voorwerpen. Een voorwerp opent een
+ * close-up (<dialog class="closeup">) met documenten en soms een slot.
+ * Wat pas later vrijkomt, draagt data-na="p1 p3": het blijft verborgen tot
+ * al die puzzels opgelost zijn. data-weg-na="p2" verdwijnt juist zodra p2
+ * opgelost is. Zo staat de hele vrijgave in de HTML en niet verspreid in code.
  */
 import '../../../shared/js/sentry.ts';
 import {
@@ -15,19 +16,14 @@ import {
   bewaakSessieGesloten,
 } from '../../../shared/js/session.ts';
 import { controleerAntwoordHash, koppelHints, sessieUitUrl } from '../../../shared/js/utils.ts';
-import {
-  updateVoortgang,
-  markeerVoltooid,
-  installeerNavigatieGuard,
-} from '../../../shared/js/game.ts';
+import { installeerNavigatieGuard } from '../../../shared/js/game.ts';
 import {
   KAMER14_ANTWOORD_HASHES,
   KAMER14_ANTWOORD_REGELS,
   KAMER14_TIMER_WAARSCHUWINGEN,
   KAMER14_VRIJGAVE,
   KAMER14_LAATSTE,
-  KAMER14_PUZZELS,
-  KAMER14_TEKST_PUZZELS,
+  KAMER14_SLOT_PUZZELS,
 } from './kamer14-config.ts';
 import { initBladzijde, toonVolledigeBladzijde } from './bladzijde.ts';
 import {
@@ -40,40 +36,46 @@ import {
 import { initHulp } from '../../../shared/js/hulp.ts';
 import { meetSpel } from '../../../shared/js/meet.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
-import { maakTabsToegankelijk } from '../../../shared/js/toegankelijk.ts';
 import {
   KAMER14_INACTIEF,
   KAMER14_HULP_HTML,
   kamer14VrijgaveMelding,
   type Kamer14Rol,
 } from './kamer14-hulp.ts';
-import { startAchtergrond, speelUnlock, speelVerhaalFragment, hervatAudio } from './audio.ts';
+import {
+  startAchtergrond,
+  speelUnlock,
+  speelFout,
+  speelKlik,
+  speelEnvelopGeluid,
+  speelFragment,
+  hervatAudio,
+  FRAGMENT_NA_PUZZEL,
+  type FragmentId,
+} from './audio.ts';
 import { initialiseerTimer } from '../../../shared/js/timer.ts';
 import { initRapportDoel, updateRapportDoel } from './rapport-doel.ts';
-import { heeftBerichten, toonBerichten, toonOndertitel, toonGeluidsmelding } from './berichten.ts';
+import {
+  toonBerichten,
+  toonOndertitel,
+  toonGeluidsmelding,
+  FRAGMENT_TEKST,
+  SPREKER,
+} from './berichten.ts';
+import { hintBlokId, initHints, updateHints } from './hints.ts';
+import { initSloten } from './sloten.ts';
 
 type Status = Record<string, boolean>;
 
-/**
- * Een tab die op slot staat tot bepaalde puzzels opgelost zijn. Het paneel is
- * `panel-<data-tab>`, zoals bij elke tab.
- */
-export interface TabVrijgave {
-  tab: string;
-  label: string;
-  na: string[];
-}
-
 export interface SpelerConfig {
   rol: Kamer14Rol;
-  /** Voor de systeembalk, bv. "Intern dossier". */
-  dossier: string;
-  /** Tabs die vrijkomen (de Bladzijde na P5 komt er voor beiden bij). */
-  tabs: TabVrijgave[];
-  /** Vragen die verborgen starten: puzzelblok-id → nodig. */
-  vragen?: Record<string, string[]>;
-  /** Eigen extra's van deze speler. Krijgt zorgVoorAudio mee. */
-  extra?: (ctx: { zorgVoorAudio: () => void }) => void;
+  /** Eigen extra's van deze speler. */
+  extra?: (ctx: SpelerContext) => void;
+}
+
+export interface SpelerContext {
+  sessie: string;
+  zorgVoorAudio: () => void;
 }
 
 const ANDER: Record<Kamer14Rol, { naam: string; pagina: string }> = {
@@ -82,22 +84,43 @@ const ANDER: Record<Kamer14Rol, { naam: string; pagina: string }> = {
 };
 const NAAM: Record<Kamer14Rol, string> = { a: 'Speler A', b: 'Speler B' };
 
-const BLADZIJDE: TabVrijgave = { tab: 'tab-bladzijde', label: 'Bladzijde', na: ['p5'] };
-
-/** Zijn alle puzzels in `na` opgelost? */
+/** Zijn alle puzzels in de lijst opgelost? Een lege lijst is altijd vrij. */
 export function isVrij(p: Status, na: string[]): boolean {
   return na.every(nr => !!p[nr]);
 }
 
-/** Fragmenten enkel voor puzzels die opgelost worden terwijl de pagina open is. */
+/** Leest data-na / data-weg-na ("p1 p3") als lijst. */
+export function puzzelLijst(waarde: string | undefined): string[] {
+  return (waarde ?? '').split(/\s+/).filter(Boolean);
+}
+
+/**
+ * Past de zichtbaarheid toe volgens data-na en data-weg-na. Geeft de
+ * elementen terug die net zichtbaar werden (voor de gele "nieuw"-gloed).
+ */
+export function pasZichtbaarheidToe(p: Status, root: ParentNode = document): Element[] {
+  const nieuw: Element[] = [];
+  root.querySelectorAll('[data-na]').forEach(el => {
+    const zichtbaar = isVrij(p, puzzelLijst((el as HTMLElement).dataset['na']));
+    if (zichtbaar && el.hasAttribute('hidden')) nieuw.push(el);
+    el.toggleAttribute('hidden', !zichtbaar);
+  });
+  root.querySelectorAll('[data-weg-na]').forEach(el => {
+    el.toggleAttribute('hidden', isVrij(p, puzzelLijst((el as HTMLElement).dataset['wegNa'])));
+  });
+  return nieuw;
+}
+
+/** Een fragment pas afspelen als de puzzel opgelost wordt terwijl de pagina open is. */
 const WACHT_NA_LADEN = 4000; // ms; de eerste snapshot van Firebase duurt doorgaans < 2 s
+const BRIEFING_SLEUTEL = 'kamer14-briefing-gehoord';
 
 export function startSpelerPagina(config: SpelerConfig): void {
   const { rol } = config;
   const ander = ANDER[rol];
-  const hintSuffix = rol === 'a' ? '' : `-${rol}`;
   const paginaLaadtijd = Date.now();
   const fragmentenAfgespeeld = new Set<string>();
+  let eersteStatus = true;
 
   // ── Audio ──
   let audioGestart = false;
@@ -107,11 +130,29 @@ export function startSpelerPagina(config: SpelerConfig): void {
     audioGestart = true;
     startAchtergrond(rol);
   };
-  /** Knop "Geluid aan" in de geluidsmelding: start de audio en speelt een testtoon. */
-  const zetGeluidAan = (): void => {
+
+  const speelMetOndertitel = (id: FragmentId, wacht?: number): void => {
+    zorgVoorAudio();
+    speelFragment(id, {
+      wacht,
+      bijStart: audio => toonOndertitel(SPREKER[id], FRAGMENT_TEKST[id], audio),
+      bijFout: () => toonGeluidsmelding(zetGeluidAan),
+    });
+  };
+
+  /** "Geluid aan": start de sfeer en (één keer per toestel) de briefing van An. */
+  function zetGeluidAan(): void {
     zorgVoorAudio();
     speelUnlock();
-  };
+    let gehoord = false;
+    try {
+      gehoord = sessionStorage.getItem(BRIEFING_SLEUTEL) === sessie;
+      sessionStorage.setItem(BRIEFING_SLEUTEL, sessie);
+    } catch {
+      /* geen opslag: de briefing speelt gewoon */
+    }
+    if (!gehoord) speelMetOndertitel('briefing', 900);
+  }
 
   // ── Sessie, navigatie, demo, timer ──
   const sessie = sessieUitUrl();
@@ -127,96 +168,61 @@ export function startSpelerPagina(config: SpelerConfig): void {
     waarschuwingen: KAMER14_TIMER_WAARSCHUWINGEN,
     voorRedirect: schakelGuardUit,
   });
-  // Host kan de sessie deactiveren → naar het tijd-voorbij-scherm
   bewaakSessieGesloten(sessie, () => {
     schakelGuardUit();
     window.location.href = `tijd-voorbij.html?sessie=${encodeURIComponent(sessie)}`;
   });
 
   const sysCase = document.getElementById('sys-case');
-  if (sysCase) sysCase.textContent = `${config.dossier} · Ref. OPZ-2025-0506-LB · Sessie ${sessie}`;
+  if (sysCase) sysCase.textContent = `Sessie ${sessie}`;
 
-  // ── Hulp: hint-tip, verhaalmeldingen, vrijgave en "Hulp nodig?" ──
+  // ── Hints en hulp ──
+  initHints(rol);
   const hulp = initHulp({
-    hintBlokVoor: puzzel => `hint-${puzzel}${hintSuffix}`,
+    hintBlokVoor: puzzel => hintBlokId(rol, puzzel),
     vrijgave: KAMER14_VRIJGAVE,
     inactiefMeldingen: KAMER14_INACTIEF[rol],
     vrijgaveMelding: (oud, nieuw) => kamer14VrijgaveMelding(rol, oud, nieuw),
     hulpHtml: KAMER14_HULP_HTML,
   });
 
-  // ── Tabs: één klikhandler; tabs op slot doen niets ──
-  const tabs = document.querySelector<HTMLElement>('.tabs');
-  tabs?.addEventListener('click', e => {
-    const tab = e.target instanceof Element ? e.target.closest<HTMLElement>('.tab') : null;
-    if (!tab || tab.classList.contains('slot')) return;
+  // ── Close-ups ──
+  const openCloseup = (id: string, opener: HTMLElement): void => {
+    const dialoog = document.getElementById(id) as HTMLDialogElement | null;
+    if (!dialoog || dialoog.open) return;
     zorgVoorAudio();
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('actief', 'nieuw-doc'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('actief'));
-    tab.classList.add('actief');
-    document.getElementById(`panel-${tab.dataset['tab']}`)?.classList.add('actief');
+    speelEnvelopGeluid();
+    document.querySelectorAll(`[data-open="${id}"]`).forEach(el => {
+      el.classList.remove('nieuw');
+      el.classList.add('gezien');
+    });
+    dialoog.showModal();
+    dialoog.addEventListener('close', () => opener.focus(), { once: true });
+  };
+  document.addEventListener('click', e => {
+    const doel = e.target instanceof Element ? e.target : null;
+    const opener = doel?.closest<HTMLElement>('[data-open]');
+    if (opener) {
+      openCloseup(opener.dataset['open'] ?? '', opener);
+      return;
+    }
+    const sluit = doel?.closest<HTMLElement>('[data-sluit]');
+    if (sluit) sluit.closest('dialog')?.close();
+  });
+  // Klik naast het papier (op de achtergrond van de dialoog) sluit ook.
+  document.querySelectorAll<HTMLDialogElement>('dialog.closeup').forEach(d => {
+    d.addEventListener('click', e => {
+      if (e.target === d) d.close();
+    });
   });
 
-  const ontgrendel = ({ tab: id, label }: TabVrijgave): void => {
-    const tab = document.getElementById(id);
-    if (!tab?.classList.contains('slot')) return;
-    zorgVoorAudio();
-    speelUnlock();
-    tab.classList.remove('slot');
-    tab.textContent = label;
-    tab.classList.add('nieuw-doc');
-  };
-
-  const toonEindeLink = (): void => {
-    if (document.getElementById('einde-link')) return;
-    const balk = document.createElement('a');
-    balk.id = 'einde-link';
-    balk.href = `einde.html?sessie=${encodeURIComponent(sessie)}`;
-    balk.className = 'einde-link-balk';
-    const icoon = document.createElement('i');
-    icoon.className = 'bi bi-arrow-right-circle me-2';
-    balk.append(icoon, 'Alle puzzels opgelost. Dien samen het rapport in');
-    balk.addEventListener('click', () => schakelGuardUit());
-    tabs?.insertAdjacentElement('afterend', balk);
-  };
-
-  // ── Alles bijwerken na een statuswijziging ──
-  const update = (p: Status): void => {
-    [...config.tabs, BLADZIJDE].forEach(t => {
-      if (isVrij(p, t.na)) ontgrendel(t);
-    });
-    for (const [blok, na] of Object.entries(config.vragen ?? {})) {
-      if (isVrij(p, na)) document.getElementById(blok)?.classList.remove('verborgen');
-    }
-
-    // Verhaalfragment na elke opgeloste tekstpuzzel
-    KAMER14_TEKST_PUZZELS.forEach(nr => {
-      if (!p[nr] || fragmentenAfgespeeld.has(nr)) return;
-      fragmentenAfgespeeld.add(nr);
-      if (Date.now() - paginaLaadtijd <= WACHT_NA_LADEN) return;
-      zorgVoorAudio();
-      speelVerhaalFragment(rol, nr, {
-        bijStart: audio => toonOndertitel(rol, nr, audio),
-        bijFout: () => toonGeluidsmelding(rol, zetGeluidAan),
-      });
-    });
-
-    // Opgeloste puzzels verbergen
-    KAMER14_PUZZELS.forEach(nr => {
-      if (p[nr]) markeerVoltooid(`puzzel-${nr.slice(1)}`);
-    });
-
-    if (p['p6']) {
-      const volledig = document.getElementById('bladzijde-volledig');
-      if (volledig) toonVolledigeBladzijde(volledig);
-    }
-    if (p[KAMER14_LAATSTE]) toonEindeLink();
-  };
-
-  // ── Tekstpuzzels (P6 heeft een eigen aanpak, zie bladzijde.ts) ──
-  KAMER14_TEKST_PUZZELS.forEach(nr => {
+  // ── Sloten ──
+  initSloten(speelKlik);
+  KAMER14_SLOT_PUZZELS.forEach(nr => {
+    const knop = document.getElementById(`btn-${nr}`);
+    if (!knop) return; // dit slot staat bij de andere speler
     const puzzelNr = parseInt(nr.slice(1), 10);
-    document.getElementById(`btn-${nr}`)?.addEventListener('click', () =>
+    knop.addEventListener('click', () =>
       controleerAntwoordHash(
         nr,
         `input-${nr}`,
@@ -227,16 +233,21 @@ export function startSpelerPagina(config: SpelerConfig): void {
           void puzzelVoltooid(sessie, puzzelNr);
           void registreerOpgelost(sessie, nr);
         },
-        `Niet correct. Overleg opnieuw met ${ander.naam}.`,
+        `Dat klopt niet. Overleg met ${ander.naam}.`,
         KAMER14_ANTWOORD_REGELS,
         oordeel => {
           hulp.poging(nr, oordeel);
-          if (oordeel !== 'juist') void registreerPoging(sessie, nr, oordeel);
+          if (oordeel !== 'juist') {
+            speelFout();
+            void registreerPoging(sessie, nr, oordeel);
+            knop.closest('.slot-paneel')?.classList.add('schud');
+            setTimeout(() => knop.closest('.slot-paneel')?.classList.remove('schud'), 500);
+          }
         },
       ),
     );
     document.getElementById(`input-${nr}`)?.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter') document.getElementById(`btn-${nr}`)?.click();
+      if (e.key === 'Enter') knop.click();
     });
   });
 
@@ -255,28 +266,84 @@ export function startSpelerPagina(config: SpelerConfig): void {
         void registreerOpgelost(sessie, 'p6');
       },
       bijFout: () => {
+        speelFout();
         hulp.poging('p6', 'fout');
         void registreerPoging(sessie, 'p6', 'fout');
       },
     });
   }
 
-  koppelHints();
-  config.extra?.({ zorgVoorAudio });
-  maakTabsToegankelijk(tabs);
-  initRapportDoel();
+  const toonRapportKnop = (): void => {
+    // In de zijbalk én onder de volledige bladzijde, waar de spelers dan kijken.
+    document.querySelectorAll('[data-rapport-knop]').forEach(plek => {
+      if (plek.childElementCount > 0) return;
+      const link = document.createElement('a');
+      link.href = `einde.html?sessie=${encodeURIComponent(sessie)}`;
+      link.className = 'rapport-knop';
+      link.textContent = 'Schrijf het rapport voor An';
+      link.addEventListener('click', () => schakelGuardUit());
+      plek.append(link);
+    });
+  };
 
-  // ── Audio volgbaar: tab Berichten en melding over het geluid ──
-  if (heeftBerichten(rol)) document.getElementById('tab-berichten')?.removeAttribute('hidden');
-  toonGeluidsmelding(rol, zetGeluidAan);
+  // ── Alles bijwerken na een statuswijziging ──
+  const update = (p: Status): void => {
+    document.body.dataset['opgelost'] = Object.keys(p)
+      .filter(k => p[k])
+      .join(' ');
+
+    const nieuw = pasZichtbaarheidToe(p);
+    if (!eersteStatus) {
+      let geluid = false;
+      for (const el of nieuw) {
+        if (el.matches('.voorwerp')) {
+          el.classList.add('nieuw');
+          geluid = true;
+        } else if (el.matches('li')) {
+          el.querySelector('[data-open]')?.classList.add('nieuw');
+        }
+      }
+      if (geluid) speelUnlock();
+    }
+
+    // Opgeloste sloten tonen als open
+    document.querySelectorAll<HTMLElement>('.slot-paneel[data-puzzel]').forEach(paneel => {
+      const klaar = !!p[paneel.dataset['puzzel'] ?? ''];
+      paneel.classList.toggle('opgelost', klaar);
+      paneel.querySelectorAll<HTMLInputElement | HTMLButtonElement>('input, button').forEach(el => {
+        if (klaar) el.disabled = true;
+      });
+    });
+
+    // Verhaalfragment na een puzzel die nu opgelost wordt
+    for (const [puzzel, id] of Object.entries(FRAGMENT_NA_PUZZEL)) {
+      if (!p[puzzel] || fragmentenAfgespeeld.has(puzzel)) continue;
+      fragmentenAfgespeeld.add(puzzel);
+      if (Date.now() - paginaLaadtijd <= WACHT_NA_LADEN) continue;
+      speelUnlock();
+      speelMetOndertitel(id);
+    }
+
+    if (p['p6']) {
+      const volledig = document.getElementById('bladzijde-volledig');
+      if (volledig) toonVolledigeBladzijde(volledig);
+    }
+    if (p[KAMER14_LAATSTE]) toonRapportKnop();
+    updateHints(p);
+    updateRapportDoel(p);
+    toonBerichten(p, undefined, id => speelMetOndertitel(id, 0));
+    eersteStatus = false;
+  };
+
+  koppelHints();
+  config.extra?.({ sessie, zorgVoorAudio });
+  initRapportDoel();
+  toonGeluidsmelding(zetGeluidAan);
 
   // ── Firebase live luisteren ──
   const stop = luisterNaarStatus(sessie, puzzels => {
     const p = puzzels || {};
-    updateVoortgang(p);
     update(p);
-    updateRapportDoel(p);
-    toonBerichten(rol, p);
     registreerVrijgaves(sessie, p, KAMER14_VRIJGAVE);
     hulp.status(p);
   });

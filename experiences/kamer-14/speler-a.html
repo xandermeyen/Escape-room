@@ -4,511 +4,789 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Kamer 14 - OPZ-dossier</title>
+    <title>Kamer 14 - Het bureau van An</title>
     <link rel="stylesheet" href="/assets/fonts/fonts.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="css/kamer14.css" />
   </head>
-  <body>
-    <!-- Systeembalk -->
-    <div class="systeembalk">
-      <div style="display: flex; align-items: center">
-        <span class="sys-logo">Bureau X</span>
-        <span class="sys-sep">|</span>
-        <span class="sys-case" id="sys-case">Intern dossier · laden…</span>
+  <body class="rol-a">
+    <header class="kop">
+      <div class="kop-titel">
+        <span class="kop-naam">Kamer 14</span>
+        <span class="kop-plek">Het bureau van An Vermeersch, OPZ Geel</span>
       </div>
-      <div class="sys-rechts">
-        <span class="sys-speler">Speler A - OPZ-dossier</span>
-        <span class="sys-badge">Actief onderzoek</span>
+      <div class="kop-rechts">
+        <span class="kop-rol">Jij bent Speler A</span>
+        <span class="kop-sessie" id="sys-case">Sessie laden…</span>
       </div>
-    </div>
+    </header>
 
-    <!-- Dossier header -->
-    <div class="dossier-header">
-      <div class="dossier-meta">
-        <div>
-          <div class="dossier-naam">Bogaert, Lena M.</div>
-          <div class="dossier-sub">
-            Kostgangster · Gastgezin Martens-Peeters · Geel · Ref. OPZ-2025-0506
-          </div>
-        </div>
-        <div class="stempel">Intern · Vertrouwelijk</div>
-      </div>
-      <div class="voortgang">
-        <span class="vp-label">Dossier</span>
-        <div class="vp-stap" id="vp1"></div>
-        <div class="vp-stap" id="vp2"></div>
-        <div class="vp-stap" id="vp3"></div>
-        <div class="vp-stap" id="vp4"></div>
-        <div class="vp-stap" id="vp5"></div>
-        <div class="vp-stap" id="vp6"></div>
-      </div>
-    </div>
+    <main class="speelveld">
+      <section class="scene-kolom" aria-labelledby="scene-titel">
+        <h1 class="visueel-verborgen" id="scene-titel">Het bureau van An</h1>
+        <p class="scene-intro">
+          Dinsdag 6 mei, kwart over negen. Lena is weg. Alles wat het OPZ over haar weet, ligt op
+          dit bureau. Klik op wat je wilt bekijken.
+        </p>
 
-    <!-- Doel: de vragen uit het rapport voor An (zie js/rapport-doel.ts) -->
-    <details class="rapport-doel" id="rapport-doel" open>
-      <summary>Rapport voor An, uiterlijk 17u00 <span class="doel-teller">0/4</span></summary>
-      <ul>
-        <li data-puzzel="p2">
-          Waar is Lena naartoe?<span class="doel-status visueel-verborgen"></span>
-        </li>
-        <li data-puzzel="p4">Bij wie is ze?<span class="doel-status visueel-verborgen"></span></li>
-        <li data-puzzel="p5">
-          Hoe geraakte ze er?<span class="doel-status visueel-verborgen"></span>
-        </li>
-        <li data-puzzel="p5">
-          Wanneer vertrok ze?<span class="doel-status visueel-verborgen"></span>
-        </li>
-      </ul>
-    </details>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <div class="tab actief" data-tab="rooster">Weekrooster</div>
-      <div class="tab" data-tab="notities">Dossiernotities</div>
-      <div class="tab slot" data-tab="atelier" id="tab-atelier">🔒 Atelier</div>
-      <div class="tab slot" data-tab="intakefiche" id="tab-intakefiche">🔒 Intakefiche</div>
-      <div class="tab slot" data-tab="bijlage" id="tab-bijlage">🔒 Bijlage D</div>
-      <div class="tab slot" data-tab="bladzijde" id="tab-bladzijde">🔒 Bladzijde</div>
-      <div class="tab" data-tab="berichten" id="tab-berichten" hidden>Berichten</div>
-    </div>
-
-    <!-- Tab content -->
-    <div class="content-wrapper">
-      <!-- PANEL 1: Weekrooster (altijd zichtbaar) -->
-      <div class="tab-panel actief" id="panel-rooster">
-        <div class="doc-label">
-          Weekrooster kostganger opgesteld door OPZ Geel, afdeling gezinsverpleging
-        </div>
-        <table class="rooster">
-          <tr>
-            <td>Maandag</td>
-            <td>Bakker, Gasthuisstraat - retour voor 10u00</td>
-          </tr>
-          <tr>
-            <td>Dinsdag</td>
-            <td>Wandeling langs het kanaal - retour voor 11u00</td>
-          </tr>
-          <tr>
-            <td>Woensdag</td>
-            <td>Atelier OPZ, afdeling tekenen - retour voor 15u00</td>
-          </tr>
-          <tr>
-            <td>Donderdag</td>
-            <td>Bakker, Gasthuisstraat - retour voor 10u30</td>
-          </tr>
-          <tr>
-            <td>Vrijdag</td>
-            <td>Vrij - geen verwachte retour</td>
-          </tr>
-        </table>
-
-        <div class="hint-blok" id="hint-p1">
-          <button class="hint-knop" data-actie="hint">
-            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
-          </button>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 1 / 3</span>
-            Bekijk het rooster dag per dag en vraag Speler B de werkelijke retourtijden uit het
-            huishoudlogboek. Niet elke dag vertoont een afwijking.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 2 / 3</span>
-            Op welke twee weekdagen is het verschil tussen verwachte en werkelijke retourtijd
-            consistent groot - week na week?
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 3 / 3</span>
-            De te late retours vallen telkens op de wandeling langs het kanaal en op de bakkerdag
-            met retour voor 10u30. Zoek in het rooster op welke weekdagen dat is.
-          </div>
-          <button class="hint-verder verborgen" data-actie="hint">Volgende aanwijzing →</button>
-        </div>
-
-        <div class="puzzel-blok" id="puzzel-1">
-          <div class="puzzel-vraag">
-            Overleg met Speler B. Op welke twee dagen keerde Lena de laatste weken consequent later
-            terug?
-          </div>
-          <div class="puzzel-invoer-rij">
-            <input class="puzzel-input" id="input-p1" placeholder="twee woorden…" maxlength="30" />
-            <button class="puzzel-btn" id="btn-p1">Bevestig</button>
-          </div>
-          <div class="puzzel-feedback" id="feedback-p1"></div>
-        </div>
-      </div>
-
-      <!-- PANEL 2: Dossiernotities (altijd zichtbaar, bevat P3 aanwijzing) -->
-      <div class="tab-panel" id="panel-notities">
-        <div class="doc-label">
-          Dossiernotities - An Vermeersch, maatschappelijk werkster OPZ Geel
-        </div>
-
-        <div class="notitie">
-          <div class="notitie-datum">1 februari</div>
-          Op vraag van Lena akkoord gegaan dat ze haar leefgeld voortaan zelf beheert en haar
-          wekelijkse bijdrage aan het gastgezin zelf afgeeft. Bijdrage: €35 per week. Ze doet het
-          netjes. Goede stap in zelfstandigheid.
-        </div>
-
-        <div class="notitie">
-          <div class="notitie-datum">10 maart</div>
-          Lena vroeg of ze mij iets mocht vragen. Ze vroeg hoe je iemand kunt opzoeken van wie je
-          het adres niet meer hebt. Ik heb uitgelegd dat ze naar het gemeentehuis kan gaan of via
-          via kan navragen. Ze bedankte me en veranderde van onderwerp.
-        </div>
-
-        <div class="notitie">
-          <div class="notitie-datum">12 maart</div>
-          Atelier vandaag. Lena werkte aan een tekening van een stadsplein. Ze zei:
-          <em>"Ik ben er ooit geweest."</em> Welke stad vroeg ik. Ze glimlachte maar zei niets.
-        </div>
-
-        <div class="hint-blok" id="hint-p3">
-          <button class="hint-knop" data-actie="hint">
-            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
-          </button>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 1 / 3</span>
-            Lena gaf haar bijdrage van €35 per week zelf af aan het gastgezin. Vraag Speler B het
-            kasoverzicht van het gastgezin te bekijken.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 2 / 3</span>
-            Speler B ziet hoeveel weken Lena haar wekelijkse bijdrage aan het gastgezin niet
-            betaalde. Tel die weken.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 3 / 3</span>
-            Laat Speler B de rijen met €0 tellen, niet die met €35. Ze staan verspreid tussen
-            februari en eind april.
-          </div>
-          <button class="hint-verder verborgen" data-actie="hint">Volgende aanwijzing →</button>
-        </div>
-
-        <div class="puzzel-blok" id="puzzel-3">
-          <div class="puzzel-vraag">
-            Overleg met Speler B. Hoeveel weken hield Lena haar bijdrage aan het gastgezin bewust
-            achter?
-          </div>
-          <div class="puzzel-invoer-rij">
-            <input class="puzzel-input" id="input-p3" placeholder="aantal weken…" maxlength="20" />
-            <button class="puzzel-btn" id="btn-p3">Bevestig</button>
-          </div>
-          <div class="puzzel-feedback" id="feedback-p3"></div>
-        </div>
-      </div>
-
-      <!-- PANEL 3: Atelier (vrijgegeven na P1) -->
-      <div class="tab-panel" id="panel-atelier">
-        <div class="doc-label">Atelierverslag - afdeling tekenen, OPZ Geel</div>
-
-        <div class="doc-tekst">
-          Tijdens het woensdagse atelier werkte Lena Bogaert de afgelopen weken consequent aan één
-          tekening. Het betreft een stadsplein met een opvallende gotische kerktoren: een lichte,
-          achtzijdige spits boven een vierkante toren. De tekening is technisch precies: de
-          verhoudingen kloppen, de arcering geeft diepte. In de rechterhoek, in klein handschrift:
-          <em>"Zo zag ik het vroeger."</em>
-        </div>
-
-        <div style="margin: 14px 0 10px 0">
-          <picture>
-            <source srcset="../../assets/img/TekeningKerkV2.webp" type="image/webp" />
-            <img
-              src="../../assets/img/TekeningKerkV2.png"
-              alt="Potloodtekening van Lena: een stadsplein met een gotische kerk, een achtzijdige spits boven een vierkante toren"
-              width="900"
-              height="600"
-              loading="lazy"
-              decoding="async"
-              style="
-                width: 100%;
-                height: auto;
-                max-width: 420px;
-                display: block;
-                border: 1px solid var(--k-rand);
-              "
-            />
-          </picture>
-          <div
-            style="
-              font-size: 9px;
-              color: var(--k-tekst-grijs);
-              margin-top: 3px;
-              letter-spacing: 0.05em;
-            "
+        <div class="scene" id="scene">
+          <svg
+            class="scene-tekening"
+            viewBox="0 0 1200 620"
+            role="img"
+            aria-label="Een bureau in een kantoor van het OPZ. Een oude computer, een notitieblok, een telefoon, een prikbord met een rooster en een raam met ochtendlicht."
           >
-            Bijlage - scan van tekening Lena Bogaert, ateliermap woensdag · OPZ Geel
-          </div>
+            <defs>
+              <linearGradient id="a-raam" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#c6d4dc" />
+                <stop offset="1" stop-color="#8ea6b4" />
+              </linearGradient>
+              <radialGradient id="a-licht" cx="0.78" cy="0.25" r="0.75">
+                <stop offset="0" stop-color="#c6d4dc" stop-opacity="0.18" />
+                <stop offset="1" stop-color="#c6d4dc" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="a-blad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#6b5442" />
+                <stop offset="1" stop-color="#4c3c30" />
+              </linearGradient>
+              <linearGradient id="a-scherm" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1d3328" />
+                <stop offset="1" stop-color="#11211a" />
+              </linearGradient>
+            </defs>
+            <!-- muur -->
+            <rect width="1200" height="620" fill="#2b3843" />
+            <rect width="1200" height="620" fill="url(#a-licht)" />
+            <rect x="0" y="330" width="1200" height="8" fill="#24303a" />
+            <!-- raam -->
+            <rect x="838" y="52" width="300" height="236" rx="4" fill="#1c262e" />
+            <rect x="852" y="66" width="272" height="208" fill="url(#a-raam)" />
+            <g stroke="#a9bcc7" stroke-width="3" opacity="0.7">
+              <line x1="852" y1="96" x2="1124" y2="96" />
+              <line x1="852" y1="126" x2="1124" y2="126" />
+              <line x1="852" y1="156" x2="1124" y2="156" />
+              <line x1="852" y1="186" x2="1124" y2="186" />
+            </g>
+            <line x1="988" y1="66" x2="988" y2="274" stroke="#1c262e" stroke-width="8" />
+            <rect x="828" y="286" width="320" height="12" rx="2" fill="#3a4852" />
+            <!-- klok -->
+            <circle cx="272" cy="96" r="40" fill="#e3e1da" stroke="#1c262e" stroke-width="6" />
+            <g stroke="#2a2f33" stroke-linecap="round">
+              <line x1="272" y1="96" x2="272" y2="68" stroke-width="3" />
+              <line x1="272" y1="96" x2="288" y2="102" stroke-width="5" />
+            </g>
+            <circle cx="272" cy="96" r="4" fill="#2a2f33" />
+            <!-- prikbord -->
+            <g transform="translate(330 0)">
+              <rect x="84" y="62" width="380" height="238" rx="6" fill="#8c6c4a" />
+              <rect x="96" y="74" width="356" height="214" fill="#a3825c" />
+              <g transform="rotate(-2 200 180)">
+                <rect x="128" y="92" width="156" height="184" fill="#e9e7e1" />
+                <rect x="144" y="110" width="96" height="8" fill="#5e7a6e" />
+                <g fill="#9aa1a6">
+                  <rect x="144" y="134" width="124" height="5" />
+                  <rect x="144" y="154" width="112" height="5" />
+                  <rect x="144" y="174" width="124" height="5" />
+                  <rect x="144" y="194" width="104" height="5" />
+                  <rect x="144" y="214" width="120" height="5" />
+                  <rect x="144" y="234" width="88" height="5" />
+                </g>
+                <circle cx="206" cy="96" r="6" fill="#a3423a" />
+              </g>
+              <g transform="rotate(4 360 140)">
+                <rect x="318" y="100" width="98" height="92" fill="#e6d48a" />
+                <rect x="330" y="122" width="70" height="4" fill="#8a7a3a" />
+                <rect x="330" y="138" width="58" height="4" fill="#8a7a3a" />
+              </g>
+              <rect
+                x="320"
+                y="214"
+                width="112"
+                height="60"
+                fill="#d8dde0"
+                transform="rotate(-3 376 244)"
+              />
+            </g>
+            <!-- bureaublad -->
+            <path d="M0 372 L1200 372 L1200 620 L0 620 Z" fill="url(#a-blad)" />
+            <rect x="0" y="366" width="1200" height="12" fill="#7a604b" />
+            <!-- terminal -->
+            <g>
+              <rect x="128" y="158" width="292" height="232" rx="14" fill="#cfc6b0" />
+              <rect x="150" y="178" width="248" height="176" rx="8" fill="url(#a-scherm)" />
+              <g
+                class="a-scherm-tekst"
+                fill="#7fc79a"
+                font-family="Courier Prime, monospace"
+                font-size="15"
+              >
+                <text x="166" y="210">OPZ GEEL</text>
+                <text x="166" y="234">DOSSIER 2025-0506</text>
+                <text x="166" y="270">CODE: _ _ _ _</text>
+              </g>
+              <rect x="248" y="390" width="52" height="30" fill="#bdb39c" />
+              <rect x="150" y="420" width="250" height="44" rx="6" fill="#d8d0bb" />
+              <g fill="#b8ae97">
+                <rect x="164" y="430" width="222" height="7" rx="2" />
+                <rect x="164" y="444" width="222" height="7" rx="2" />
+              </g>
+            </g>
+            <!-- koffiemok -->
+            <g>
+              <path
+                d="M446 418 L446 470 Q446 482 458 482 L484 482 Q496 482 496 470 L496 418 Z"
+                fill="#e3e1da"
+              />
+              <path
+                d="M496 430 Q518 432 516 448 Q514 462 496 462"
+                fill="none"
+                stroke="#e3e1da"
+                stroke-width="7"
+              />
+              <ellipse cx="471" cy="418" rx="25" ry="6" fill="#4a3426" />
+            </g>
+            <!-- notitieblok -->
+            <g transform="rotate(-4 600 500)">
+              <rect x="532" y="420" width="150" height="176" fill="#f0eee6" />
+              <rect x="532" y="420" width="150" height="16" fill="#5e7a6e" />
+              <g stroke="#9db2c4" stroke-width="2">
+                <line x1="544" y1="460" x2="670" y2="460" />
+                <line x1="544" y1="484" x2="670" y2="484" />
+                <line x1="544" y1="508" x2="670" y2="508" />
+                <line x1="544" y1="532" x2="670" y2="532" />
+                <line x1="544" y1="556" x2="670" y2="556" />
+              </g>
+              <path
+                d="M552 474 q14 -10 28 0 t28 0 t28 0"
+                fill="none"
+                stroke="#3b4a6b"
+                stroke-width="2"
+              />
+            </g>
+            <!-- ateliermap (na P1) -->
+            <g class="scene-voorwerp" data-na="p1">
+              <rect
+                x="716"
+                y="404"
+                width="236"
+                height="170"
+                rx="6"
+                fill="#4f6370"
+                transform="rotate(3 834 489)"
+              />
+              <rect
+                x="728"
+                y="416"
+                width="212"
+                height="146"
+                rx="4"
+                fill="#5d7381"
+                transform="rotate(3 834 489)"
+              />
+              <rect
+                x="776"
+                y="470"
+                width="110"
+                height="26"
+                rx="3"
+                fill="#e9e7e1"
+                transform="rotate(3 834 489)"
+              />
+              <path
+                d="M940 404 l18 -26"
+                stroke="#f2c230"
+                stroke-width="10"
+                stroke-linecap="round"
+              />
+            </g>
+            <!-- stroken (na P5) -->
+            <g class="scene-voorwerp" data-na="p5">
+              <rect
+                x="70"
+                y="512"
+                width="170"
+                height="20"
+                fill="#f3f0e6"
+                transform="rotate(-6 155 522)"
+              />
+              <rect
+                x="96"
+                y="540"
+                width="160"
+                height="20"
+                fill="#f3f0e6"
+                transform="rotate(4 176 550)"
+              />
+              <rect
+                x="80"
+                y="566"
+                width="150"
+                height="18"
+                fill="#f3f0e6"
+                transform="rotate(-2 155 575)"
+              />
+            </g>
+            <!-- telefoon -->
+            <g>
+              <path d="M990 470 L1150 470 L1166 560 L974 560 Z" fill="#cfc6b0" />
+              <rect x="1012" y="486" width="114" height="56" rx="6" fill="#bfb69f" />
+              <g fill="#e3ddcc">
+                <circle cx="1036" cy="502" r="7" />
+                <circle cx="1068" cy="502" r="7" />
+                <circle cx="1100" cy="502" r="7" />
+                <circle cx="1036" cy="526" r="7" />
+                <circle cx="1068" cy="526" r="7" />
+                <circle cx="1100" cy="526" r="7" />
+              </g>
+              <path d="M978 448 Q1070 420 1162 448 L1158 470 Q1070 446 982 470 Z" fill="#d8d0bb" />
+            </g>
+          </svg>
+
+          <!-- Klikbare voorwerpen. Posities in procenten van de tekening. -->
+          <button
+            class="voorwerp"
+            data-open="cu-terminal"
+            style="left: 10%; top: 24%; width: 26%; height: 52%"
+          >
+            <span class="voorwerp-label">Computer</span>
+          </button>
+          <button
+            class="voorwerp"
+            data-open="cu-rooster"
+            style="left: 37%; top: 13%; width: 15%; height: 33%"
+          >
+            <span class="voorwerp-label">Weekrooster</span>
+          </button>
+          <button
+            class="voorwerp"
+            data-open="cu-notitieblok"
+            style="left: 43%; top: 66%; width: 15%; height: 31%"
+          >
+            <span class="voorwerp-label">Notitieblok</span>
+          </button>
+          <button
+            class="voorwerp"
+            data-open="cu-ateliermap"
+            data-na="p1"
+            style="left: 59%; top: 64%; width: 21%; height: 31%"
+          >
+            <span class="voorwerp-label">Ateliermap van Lena</span>
+          </button>
+          <button
+            class="voorwerp"
+            data-open="cu-stroken"
+            data-na="p5"
+            style="left: 5%; top: 80%; width: 18%; height: 16%"
+          >
+            <span class="voorwerp-label">Stroken papier</span>
+          </button>
+          <button
+            class="voorwerp"
+            data-open="cu-telefoon"
+            data-na="p3 p4"
+            style="left: 81%; top: 69%; width: 17%; height: 23%"
+          >
+            <span class="voorwerp-label">Telefoon</span>
+          </button>
         </div>
 
-        <div class="notitie" style="margin-top: 14px">
-          <div class="notitie-datum">
-            Bijlage - Vrijetijdsmateriaal voor kostgangers (uittreksel)
-          </div>
-          <div class="doc-tekst" style="margin-top: 6px">Uitstaplocaties in de regio:</div>
-          <ul class="uitstaplijst">
-            <li>
-              Turnhout: het Begijnhof, UNESCO-werelderfgoed. Witte huisjes rond een stille
-              binnentuin, met een eigen kerkje.
+        <ul class="voorwerpen-lijst" aria-label="Op het bureau">
+          <li><button data-open="cu-terminal">Computer</button></li>
+          <li><button data-open="cu-rooster">Weekrooster</button></li>
+          <li><button data-open="cu-notitieblok">Notitieblok</button></li>
+          <li data-na="p1"><button data-open="cu-ateliermap">Ateliermap van Lena</button></li>
+          <li data-na="p3 p4"><button data-open="cu-telefoon">Telefoon</button></li>
+          <li data-na="p5"><button data-open="cu-stroken">Stroken papier</button></li>
+        </ul>
+      </section>
+
+      <aside class="zijbalk">
+        <section class="rapport-doel" id="rapport-doel" aria-labelledby="doel-titel">
+          <h2 id="doel-titel">Rapport voor An <span class="doel-teller">0/4</span></h2>
+          <p class="zij-uitleg">Om 17u00 beslist An of ze Lena als vermist meldt.</p>
+          <ul>
+            <li data-puzzel="p2">
+              Waar is Lena?<span class="doel-status visueel-verborgen"></span>
             </li>
-            <li>
-              Diest: de Grote Markt met de gotische Sint-Sulpitiuskerk. Vierkante toren met
-              daarboven een achtzijdige spits.
+            <li data-puzzel="p4">
+              Bij wie is ze?<span class="doel-status visueel-verborgen"></span>
             </li>
-            <li>
-              Hasselt: het Nationaal Jenevermuseum in een oude stokerij. Rondleiding met proeverij.
+            <li data-puzzel="p5">
+              Hoe geraakte ze er?<span class="doel-status visueel-verborgen"></span>
+            </li>
+            <li data-puzzel="p6">
+              Wanneer komt ze terug?<span class="doel-status visueel-verborgen"></span>
             </li>
           </ul>
-        </div>
+          <div id="rapport-knop-plek" data-rapport-knop></div>
+        </section>
+        <section class="hints" aria-labelledby="hints-titel">
+          <h2 id="hints-titel">Vast?</h2>
+          <p class="zij-uitleg">Hints gaan stap voor stap verder en kosten niets.</p>
+          <div id="hints-lijst"></div>
+        </section>
+        <section class="berichten" aria-labelledby="berichten-titel">
+          <h2 id="berichten-titel">Berichten</h2>
+          <div id="berichten-lijst"></div>
+        </section>
+      </aside>
+    </main>
 
-        <div class="hint-blok" id="hint-p2">
-          <button class="hint-knop" data-actie="hint">
-            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
-          </button>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 1 / 3</span>
-            Lees de beschrijving van de kerktoren in het atelierverslag aandachtig. Vergelijk elk
-            detail met de lijst van uitstaplocaties eronder.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 2 / 3</span>
-            Zoek in de uitstaplijst naar een kerk met een achtzijdige spits boven een vierkante
-            toren. Slechts één stad heeft die combinatie.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 3 / 3</span>
-            Twee details beslissen: de achtzijdige spits en de vierkante toren. Lees bij elke
-            bestemming wat er over het gebouw staat. Maar één ervan past bij de tekening.
-          </div>
-          <button class="hint-verder verborgen" data-actie="hint">Volgende aanwijzing →</button>
-        </div>
+    <!-- ═════════ Close-ups ═════════ -->
 
-        <div class="puzzel-blok" id="puzzel-2">
-          <div class="puzzel-vraag">Overleg met Speler B. Welke stad heeft Lena getekend?</div>
-          <div class="puzzel-invoer-rij">
-            <input class="puzzel-input" id="input-p2" placeholder="stadsnaam…" maxlength="20" />
-            <button class="puzzel-btn" id="btn-p2">Bevestig</button>
+    <dialog class="closeup" id="cu-terminal" aria-labelledby="cu-terminal-titel">
+      <div class="closeup-binnen">
+        <header class="closeup-kop">
+          <h2 id="cu-terminal-titel">Computer · digitaal dossier</h2>
+          <button class="closeup-sluit" data-sluit>Terug naar het bureau</button>
+        </header>
+        <div class="crt">
+          <p class="crt-regel">OPZ GEEL · GEZINSVERPLEGING</p>
+          <p class="crt-regel">DOSSIER BOGAERT, LENA M. · REF. OPZ-2025-0506</p>
+          <div class="slot-paneel" data-puzzel="p0">
+            <p class="crt-regel crt-vraag">
+              TOEGANG: STARTDATUM PLAATSING IN HET GASTGEZIN (DAG + MAAND)
+            </p>
+            <div class="toetsenslot crt-slot">
+              <label class="visueel-verborgen" for="input-p0">Toegangscode, vier cijfers</label>
+              <input
+                class="slot-invoer"
+                id="input-p0"
+                inputmode="numeric"
+                maxlength="4"
+                autocomplete="off"
+                placeholder="DDMM"
+              />
+              <div class="toetsen" data-voor="input-p0"></div>
+              <button class="slot-open" id="btn-p0">Inloggen</button>
+            </div>
+            <div class="puzzel-feedback" id="feedback-p0" aria-live="polite"></div>
           </div>
-          <div class="puzzel-feedback" id="feedback-p2"></div>
-        </div>
-      </div>
-
-      <!-- PANEL 4: Intakefiche (vrijgegeven na P2 + P3) -->
-      <div class="tab-panel" id="panel-intakefiche">
-        <div class="doc-label">Intakefiche kostganger - bij aanvang plaatsing, OPZ Geel</div>
-
-        <table class="rooster">
-          <tr>
-            <td>Naam</td>
-            <td>Bogaert, Lena Maria</td>
-          </tr>
-          <tr>
-            <td>Geboortedatum</td>
-            <td>14 maart 1992 · Turnhout</td>
-          </tr>
-          <tr>
-            <td>Startdatum plaatsing</td>
-            <td>3 april 2023</td>
-          </tr>
-          <tr>
-            <td>Gastgezin</td>
-            <td>Martens-Peeters, Geel (Gasthuisstraat 44)</td>
-          </tr>
-          <tr>
-            <td>Begeleider</td>
-            <td>An Vermeersch, maatschappelijk werkster</td>
-          </tr>
-        </table>
-
-        <div class="notitie" style="margin-top: 14px">
-          <div class="notitie-datum">Vertrouwenspersonen bij aanvang plaatsing</div>
-          <div class="doc-tekst" style="margin-top: 4px">
-            - Familie Bogaert, Turnhout (ouders) · tel. 014/xx.xx.xx<br />
-            - Marie Stas, Turnhout - vriendin. Huidig adres: onbekend.
+          <div class="crt-inhoud" data-na="p0">
+            <p class="crt-regel crt-ok">TOEGANG VERLEEND</p>
+            <div class="papier getypt">
+              <h3>Intakefiche kostganger</h3>
+              <dl class="fiche">
+                <dt>Naam</dt>
+                <dd>Bogaert, Lena Maria</dd>
+                <dt>Geboren</dt>
+                <dd>14 maart 1992, Turnhout</dd>
+                <dt>Gastgezin</dt>
+                <dd>Katrijn Peeters en Luc Martens, Gasthuisstraat 44, Geel</dd>
+                <dt>Begeleider</dt>
+                <dd>An Vermeersch, maatschappelijk werkster</dd>
+                <dt>Vertrouwenspersonen</dt>
+                <dd>Ouders, familie Bogaert, Turnhout</dd>
+                <dt>Gezinssituatie</dt>
+                <dd>
+                  <span class="stempel">Afgeschermd</span> Niet bespreken zonder akkoord van de
+                  begeleider.
+                </dd>
+              </dl>
+            </div>
+            <div class="papier getypt">
+              <h3>Dossiernotities, An Vermeersch</h3>
+              <p>
+                <b>1 februari.</b> Op vraag van Lena akkoord dat ze haar leefgeld voortaan zelf
+                beheert en haar wekelijkse bijdrage van €35 zelf aan het gastgezin geeft. Ze laat
+                Katrijn elke week tekenen in een kwitantieboekje. Netjes.
+              </p>
+              <p>
+                <b>10 maart.</b> Lena vroeg hoe je iemand terugvindt van wie je het adres niet meer
+                hebt. Ik zei: het gemeentehuis, of via via. Ze bedankte me en begon over iets
+                anders.
+              </p>
+              <p>
+                <b>12 maart.</b> Atelier. Lena tekent al weken aan hetzelfde plein. Ik vroeg welke
+                stad. Ze glimlachte en zei niets.
+              </p>
+              <p>
+                <b>6 mei, 08u40.</b> Katrijn belt: Lena is weg. Kleren mee, geen briefje. Bureau X
+                ingeschakeld. Om 17u00 moet ik beslissen of ik een vermissing meld.
+              </p>
+            </div>
           </div>
-        </div>
-
-        <div class="hint-blok" id="hint-p4">
-          <button class="hint-knop" data-actie="hint">
-            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
-          </button>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 1 / 3</span>
-            Bekijk de vertrouwenspersonen op de intakefiche. Vraag Speler B wat er gevonden is op
-            het prikbord in Lena's kamer.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 2 / 3</span>
-            Er staat een vriendin vermeld met "huidig adres: onbekend". Speler B heeft in de
-            kamerinspectie een brief gevonden van iemand die in Diest woont.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 3 / 3</span>
-            De brief op het prikbord is ondertekend met alleen een voornaam. Op je intakefiche staat
-            één vriendin met die voornaam en een onbekend adres. Haar volledige naam is wat je
-            zoekt.
-          </div>
-          <button class="hint-verder verborgen" data-actie="hint">Volgende aanwijzing →</button>
-        </div>
-
-        <div class="puzzel-blok" id="puzzel-4">
-          <div class="puzzel-vraag">
-            Overleg met Speler B. Wie ging Lena opzoeken in Diest? Geef de volledige naam.
-          </div>
-          <div class="puzzel-invoer-rij">
-            <input
-              class="puzzel-input"
-              id="input-p4"
-              placeholder="voor- en achternaam…"
-              maxlength="30"
-            />
-            <button class="puzzel-btn" id="btn-p4">Bevestig</button>
-          </div>
-          <div class="puzzel-feedback" id="feedback-p4"></div>
         </div>
       </div>
+    </dialog>
 
-      <!-- PANEL 5: Bijlage D (vrijgegeven na P4) -->
-      <div class="tab-panel" id="panel-bijlage">
-        <div class="doc-label">
-          Bijlage D - Praktische verplaatsingen voor kostgangers · De Lijn, lijn 19
-        </div>
-
-        <div class="doc-tekst">
-          Halte Geel Markt ligt op een kwartier wandelen van de Gasthuisstraat.
-        </div>
-        <div class="doc-tekst" style="margin-top: 8px">Dienstregeling Geel → Diest (werkdagen)</div>
-        <table class="rooster" style="margin-top: 8px">
-          <tr>
-            <td>Geel Markt</td>
-            <td>05:58</td>
-            <td>→</td>
-            <td>Diest Grote Markt</td>
-            <td>06:44</td>
-          </tr>
-          <tr>
-            <td>Geel Markt</td>
-            <td>07:20</td>
-            <td>→</td>
-            <td>Diest Grote Markt</td>
-            <td>08:06</td>
-          </tr>
-          <tr>
-            <td>Geel Markt</td>
-            <td>07:35</td>
-            <td>→</td>
-            <td>Diest Grote Markt</td>
-            <td>08:20</td>
-          </tr>
-          <tr>
-            <td>Geel Markt</td>
-            <td>09:12</td>
-            <td>→</td>
-            <td>Diest Grote Markt</td>
-            <td>09:58</td>
-          </tr>
-          <tr>
-            <td>Geel Markt</td>
-            <td>11:35</td>
-            <td>→</td>
-            <td>Diest Grote Markt</td>
-            <td>12:21</td>
-          </tr>
-        </table>
-
-        <div class="notitie" style="margin-top: 14px">
-          <div class="notitie-datum">Retour Diest → Geel (werkdagen, selectie)</div>
-          <div class="doc-tekst" style="margin-top: 4px">
-            17:05 - 17:51 &nbsp;|&nbsp; 18:32 - 19:18 &nbsp;|&nbsp; 19:55 - 20:41
-          </div>
-        </div>
-
-        <div class="hint-blok" id="hint-p5">
-          <button class="hint-knop" data-actie="hint">
-            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
-          </button>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 1 / 3</span>
-            Vraag Speler B wat het gastgezin op dinsdagochtend 6 mei noteerde. Wanneer verliet Lena
-            het huis?
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 2 / 3</span>
-            Lena moest nog naar de halte wandelen. Lees de regel boven de dienstregeling en tel die
-            tijd erbij.
-          </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 3 / 3</span>
-            Rond kwart over zeven ging de voordeur dicht. Met een kwartier wandelen stond ze rond
-            half acht aan de halte. Welke bus vertrok daarna als eerste?
-          </div>
-          <button class="hint-verder verborgen" data-actie="hint">Volgende aanwijzing →</button>
-        </div>
-
-        <div class="puzzel-blok" id="puzzel-5">
-          <div class="puzzel-vraag">
-            Welke bus nam Lena op dinsdagochtend 6 mei? Geef het vertrektijdstip.
-          </div>
-          <div class="puzzel-invoer-rij">
-            <input class="puzzel-input" id="input-p5" placeholder="uu:mm" maxlength="20" />
-            <button class="puzzel-btn" id="btn-p5">Bevestig</button>
-          </div>
-          <div class="puzzel-feedback" id="feedback-p5"></div>
+    <dialog class="closeup" id="cu-rooster" aria-labelledby="cu-rooster-titel">
+      <div class="closeup-binnen">
+        <header class="closeup-kop">
+          <h2 id="cu-rooster-titel">Weekrooster op het prikbord</h2>
+          <button class="closeup-sluit" data-sluit>Terug naar het bureau</button>
+        </header>
+        <div class="papier getypt">
+          <p class="papier-kop">OPZ Geel · afdeling gezinsverpleging · weekrooster kostganger</p>
+          <table class="rooster">
+            <thead>
+              <tr>
+                <th>Dag</th>
+                <th>Activiteit</th>
+                <th>Terug thuis voor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Maandag</td>
+                <td>Helpen in bakkerij Wouters, Gasthuisstraat</td>
+                <td>10u00</td>
+              </tr>
+              <tr>
+                <td>Dinsdag</td>
+                <td>Wandeling langs het kanaal</td>
+                <td>11u00</td>
+              </tr>
+              <tr>
+                <td>Woensdag</td>
+                <td>Atelier OPZ, afdeling tekenen</td>
+                <td>15u00</td>
+              </tr>
+              <tr>
+                <td>Donderdag</td>
+                <td>Helpen in bakkerij Wouters, Gasthuisstraat</td>
+                <td>10u30</td>
+              </tr>
+              <tr>
+                <td>Vrijdag</td>
+                <td>Vrij</td>
+                <td>Geen afspraak</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- P6: uitgescheurde bladzijde (zie js/bladzijde.ts) -->
-      <div class="tab-panel" id="panel-bladzijde">
-        <div class="doc-label">Ateliermap Lena Bogaert · achter de tekening</div>
-        <div class="notitie">
-          <div class="notitie-datum">Notitie An Vermeersch</div>
-          In Lena's ateliermap, achter de tekening van het plein, vond ik drie stroken papier. Uit
-          haar dagboek gescheurd, denk ik. Katrijn vond er thuis ook een paar.
-        </div>
+    </dialog>
 
-        <div class="hint-blok" id="hint-p6">
-          <button class="hint-knop" data-actie="hint">
-            <i class="bi bi-lightbulb me-1"></i>Hint aanvragen
-          </button>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 1 / 3</span>
-            De bladzijde is in zes stroken gescheurd. Jij hebt er drie, Speler B de andere drie.
-            Lees elkaar voor hoe elke strook begint en eindigt.
+    <dialog class="closeup" id="cu-notitieblok" aria-labelledby="cu-notitieblok-titel">
+      <div class="closeup-binnen">
+        <header class="closeup-kop">
+          <h2 id="cu-notitieblok-titel">Notitieblok van An</h2>
+          <button class="closeup-sluit" data-sluit>Terug naar het bureau</button>
+        </header>
+        <div class="blok-papier">
+          <div class="slot-paneel blok-vraag" data-puzzel="p1">
+            <p class="an-hand">
+              Lena kwam de laatste weken telkens te laat thuis. Op welke twee dagen?
+            </p>
+            <div class="regel-slot" data-na="p0">
+              <label class="visueel-verborgen" for="input-p1">De twee weekdagen</label>
+              <input
+                class="slot-invoer regel"
+                id="input-p1"
+                maxlength="40"
+                autocomplete="off"
+                placeholder="… en …"
+              />
+              <button class="slot-open" id="btn-p1">Noteren</button>
+            </div>
+            <p class="blok-wacht" data-weg-na="p0">
+              Eerst moet je in het dossier op de computer kunnen.
+            </p>
+            <div class="puzzel-feedback" id="feedback-p1" aria-live="polite"></div>
           </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 2 / 3</span>
-            Een zin die halverwege stopt, loopt verder op een strook van Speler B. Zoek welke strook
-            van Speler B erop aansluit, en welke van jou daarna komt.
+          <div class="slot-paneel blok-vraag" data-puzzel="p3" data-na="p2">
+            <p class="an-hand">Iemand sprak met Lena af op een markt. Hoe laat?</p>
+            <div class="regel-slot">
+              <label class="visueel-verborgen" for="input-p3">Uur van de afspraak</label>
+              <input
+                class="slot-invoer regel"
+                id="input-p3"
+                maxlength="12"
+                autocomplete="off"
+                placeholder="… uur"
+              />
+              <button class="slot-open" id="btn-p3">Noteren</button>
+            </div>
+            <div class="puzzel-feedback" id="feedback-p3" aria-live="polite"></div>
           </div>
-          <div class="hint-stap verborgen">
-            <span class="hint-nr">Aanwijzing 3 / 3</span>
-            De strook met de datum ligt bovenaan. Vraag Speler B welke strook eindigt op "Ik" en
-            welke op "het geld voor". Wat daarop volgt, ligt bij jou.
-          </div>
-          <button class="hint-verder verborgen" data-actie="hint">Volgende aanwijzing →</button>
         </div>
+      </div>
+    </dialog>
 
-        <div class="puzzel-blok" id="puzzel-6">
-          <div class="puzzel-vraag">
-            Leg jouw stroken in de juiste volgorde. De zinnen lopen verder op de stroken van Speler
-            B.
+    <dialog class="closeup" id="cu-ateliermap" aria-labelledby="cu-ateliermap-titel">
+      <div class="closeup-binnen breed">
+        <header class="closeup-kop">
+          <h2 id="cu-ateliermap-titel">Ateliermap van Lena</h2>
+          <button class="closeup-sluit" data-sluit>Terug naar het bureau</button>
+        </header>
+        <p class="closeup-uitleg">
+          An haalde de map op in het atelier. Lena tekende hier elke woensdag.
+        </p>
+        <figure class="tekening-kader">
+          <svg
+            class="tekening"
+            viewBox="0 0 760 380"
+            role="img"
+            aria-labelledby="tekening-beschrijving"
+          >
+            <title id="tekening-beschrijving">
+              Lena's tekening van een plein: zeven gevels voor een kerk met een afgebroken toren en
+              een bolvormig torentje. In vier gevels is één raam geel ingekleurd.
+            </title>
+            <rect width="760" height="380" fill="#f3f1ea" />
+            <g stroke="#3b362d" stroke-width="2" fill="#ece8dc" stroke-linejoin="round">
+              <path
+                d="M318 175 L318 52 L328 48 L338 55 L350 47 L362 54 L372 49 L380 56 L380 175 Z"
+              />
+              <rect x="334" y="80" width="12" height="26" fill="#f3f1ea" />
+              <rect x="352" y="80" width="12" height="26" fill="#f3f1ea" />
+              <path d="M380 175 L380 120 L520 120 L520 175 Z" />
+              <rect x="438" y="88" width="26" height="34" />
+              <ellipse cx="451" cy="72" rx="20" ry="18" />
+              <rect x="447" y="44" width="8" height="12" />
+              <line x1="451" y1="44" x2="451" y2="26" />
+              <line x1="445" y1="32" x2="457" y2="32" />
+            </g>
+            <g stroke="#3b362d" stroke-width="2" stroke-linejoin="round">
+              <path
+                d="M15 340 L15 200 L25 200 L25 186 L37 186 L37 172 L49 172 L49 158 L65 158 L65 144 L81 144 L81 158 L93 158 L93 172 L105 172 L105 186 L115 186 L115 340 Z"
+                fill="#ece8dc"
+              />
+              <g fill="#f3f1ea">
+                <rect x="32" y="215" width="20" height="28" />
+                <rect x="78" y="215" width="20" height="28" />
+                <rect x="32" y="262" width="20" height="28" />
+                <rect x="78" y="262" width="20" height="28" />
+              </g>
+              <rect x="55" y="300" width="20" height="40" fill="#d5cbb5" />
+              <rect x="120" y="165" width="95" height="175" fill="#e6e8e4" />
+              <rect x="135" y="185" width="20" height="28" fill="#f2c230" />
+              <g fill="#f3f1ea">
+                <rect x="180" y="185" width="20" height="28" />
+                <rect x="135" y="235" width="20" height="28" />
+                <rect x="180" y="235" width="20" height="28" />
+              </g>
+              <rect x="157" y="300" width="22" height="40" fill="#d5cbb5" />
+              <line x1="172" y1="272" x2="200" y2="272" />
+              <rect x="178" y="274" width="22" height="20" fill="#f3f1ea" />
+              <path
+                d="M182 290 L182 280 L186 285 L189 278 L192 285 L196 280 L196 290 Z"
+                fill="#c9a227"
+                stroke-width="1.2"
+              />
+              <rect x="250" y="150" width="62" height="190" fill="#efe5dd" />
+              <path d="M253 205 L309 205 L316 213 L316 250 L246 250 L246 213 Z" fill="#efe5dd" />
+              <rect x="262" y="214" width="16" height="26" fill="#f3f1ea" />
+              <rect x="284" y="214" width="16" height="26" fill="#f2c230" />
+              <rect x="270" y="170" width="20" height="24" fill="#f3f1ea" />
+              <rect x="270" y="300" width="20" height="40" fill="#d5cbb5" />
+              <rect x="318" y="185" width="140" height="155" fill="#f0ebdf" />
+              <path d="M312 188 L388 140 L464 188 Z" fill="#f0ebdf" />
+              <circle cx="388" cy="168" r="13" fill="#f3f1ea" />
+              <line x1="388" y1="168" x2="388" y2="159" />
+              <line x1="388" y1="168" x2="395" y2="168" />
+              <g fill="#f3f1ea">
+                <rect x="333" y="205" width="20" height="30" />
+                <rect x="378" y="205" width="20" height="30" />
+                <rect x="423" y="205" width="20" height="30" />
+                <rect x="333" y="255" width="20" height="30" />
+                <rect x="423" y="255" width="20" height="30" />
+              </g>
+              <path d="M372 340 L372 300 Q388 284 404 300 L404 340 Z" fill="#d5cbb5" />
+              <rect x="465" y="170" width="90" height="170" fill="#ebe6da" />
+              <g fill="#f3f1ea">
+                <rect x="480" y="190" width="20" height="28" />
+                <rect x="522" y="190" width="20" height="28" />
+                <rect x="522" y="236" width="20" height="28" />
+              </g>
+              <rect x="480" y="236" width="20" height="28" fill="#f2c230" />
+              <path d="M490 288 A20 20 0 0 1 530 288 Z" fill="#f3f1ea" />
+              <line x1="510" y1="288" x2="497" y2="276" stroke-width="1" />
+              <line x1="510" y1="288" x2="510" y2="270" stroke-width="1" />
+              <line x1="510" y1="288" x2="523" y2="276" stroke-width="1" />
+              <rect x="500" y="300" width="20" height="40" fill="#d5cbb5" />
+              <rect x="560" y="160" width="85" height="180" fill="#efe9dc" />
+              <rect x="556" y="156" width="93" height="8" fill="#d5cbb5" />
+              <g fill="#f3f1ea">
+                <rect x="575" y="182" width="18" height="28" />
+                <rect x="575" y="232" width="18" height="28" />
+                <rect x="615" y="232" width="18" height="28" />
+              </g>
+              <rect x="615" y="182" width="18" height="28" fill="#f2c230" />
+              <g fill="#6f9a68">
+                <rect x="568" y="182" width="7" height="28" />
+                <rect x="593" y="182" width="7" height="28" />
+                <rect x="608" y="182" width="7" height="28" />
+                <rect x="633" y="182" width="7" height="28" />
+                <rect x="568" y="232" width="7" height="28" />
+                <rect x="593" y="232" width="7" height="28" />
+                <rect x="608" y="232" width="7" height="28" />
+                <rect x="633" y="232" width="7" height="28" />
+              </g>
+              <rect x="592" y="300" width="22" height="40" fill="#d5cbb5" />
+              <path
+                d="M650 340 L650 196 L664 196 L664 178 L680 178 L680 160 L715 160 L715 178 L731 178 L731 196 L745 196 L745 340 Z"
+                fill="#ece8dc"
+              />
+              <g fill="#f3f1ea">
+                <rect x="665" y="215" width="20" height="28" />
+                <rect x="710" y="215" width="20" height="28" />
+                <rect x="665" y="262" width="20" height="28" />
+                <rect x="710" y="262" width="20" height="28" />
+              </g>
+              <rect x="687" y="300" width="20" height="40" fill="#d5cbb5" />
+            </g>
+            <line x1="0" y1="340" x2="760" y2="340" stroke="#3b362d" stroke-width="2" />
+            <text x="742" y="368" text-anchor="end" class="lena-svg">Zo zag ik het vroeger.</text>
+          </svg>
+          <figcaption>
+            Potlood en waskrijt. Het gele krijt gebruikte Lena voor vier ramen en nergens anders.
+          </figcaption>
+        </figure>
+
+        <div class="papier-rij">
+          <div class="papier folder">
+            <p class="papier-kop">Folder · uitstappen voor kostgangers</p>
+            <p>
+              <b>Diest.</b> Op de Grote Markt staat de Sint-Sulpitiuskerk. De westertoren werd nooit
+              afgewerkt. Boven de kruising staat een torentje met een bolle bekroning, in de
+              volksmond de Mosterdpot. Daarin hangt de beiaard. Elk heel uur speelt de beiaard een
+              ander bekend deuntje, daarna slaat de klok het uur.
+            </p>
+            <table class="klein-tabel">
+              <thead>
+                <tr>
+                  <th>Uur</th>
+                  <th>Deuntje</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>8u</td>
+                  <td>Vader Jacob</td>
+                </tr>
+                <tr>
+                  <td>9u</td>
+                  <td>In de maneschijn</td>
+                </tr>
+                <tr>
+                  <td>10u</td>
+                  <td>Altijd is Kortjakje ziek</td>
+                </tr>
+                <tr>
+                  <td>11u</td>
+                  <td>Ode an die Freude</td>
+                </tr>
+                <tr>
+                  <td>12u</td>
+                  <td>Sinterklaas kapoentje</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              <b>Turnhout.</b> Het Begijnhof, Unesco-werelderfgoed. Witte huisjes rond een stille
+              binnentuin.
+            </p>
           </div>
+          <div class="papier kwitanties">
+            <p class="papier-kop">Kwitantieboekje · bijdrage gastgezin</p>
+            <p class="klein">
+              Elk strookje: "Ontvangen van Lena Bogaert: €35, bijdrage gastgezin."
+            </p>
+            <ol class="kwitantie-lijst">
+              <li>3 feb <span class="katrijn-hand">K. Peeters</span></li>
+              <li>10 feb <span class="katrijn-hand">K. Peeters</span></li>
+              <li>17 feb <span class="katrijn-hand">K. Peeters</span></li>
+              <li>24 feb <span class="katrijn-hand">K. Peeters</span></li>
+              <li>3 mrt <span class="katrijn-hand">K. Peeters</span></li>
+              <li>10 mrt <span class="katrijn-hand">K. Peeters</span></li>
+              <li>17 mrt <span class="katrijn-hand">K. Peeters</span></li>
+              <li>24 mrt <span class="katrijn-hand">K. Peeters</span></li>
+              <li>31 mrt <span class="katrijn-hand">K. Peeters</span></li>
+              <li>7 apr <span class="katrijn-hand">K. Peeters</span></li>
+              <li>14 apr <span class="katrijn-hand">K. Peeters</span></li>
+              <li>21 apr <span class="katrijn-hand">K. Peeters</span></li>
+              <li>28 apr <span class="katrijn-hand">K. Peeters</span></li>
+              <li>5 mei <span class="katrijn-hand">K. Peeters</span></li>
+            </ol>
+          </div>
+          <div class="papier briefje">
+            <p class="katrijn-hand groot">
+              Lena, merci voor de vier donderdagen met de paasdrukte. Hier zijn je €40, eerlijk
+              verdiend. Niet alles in één keer opdoen, hé!<br />Rita, bakkerij Wouters
+            </p>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="closeup" id="cu-telefoon" aria-labelledby="cu-telefoon-titel">
+      <div class="closeup-binnen">
+        <header class="closeup-kop">
+          <h2 id="cu-telefoon-titel">Telefoon en notities</h2>
+          <button class="closeup-sluit" data-sluit>Terug naar het bureau</button>
+        </header>
+        <div class="papier getypt">
+          <p class="papier-kop">OPZ Geel · telefoonnotitie</p>
+          <p><b>6 mei, 09u10.</b> Jos Verlinden, Markt 3, Geel, belt na de oproep in de buurt.</p>
+          <p>
+            Rond 7u35 zag hij Katrijn Peeters op de Markt naar een vertrekkende bus zwaaien. Daarna
+            wandelde ze alleen terug richting Gasthuisstraat. Hij vond het raar, "want Katrijn neemt
+            nooit de bus".
+          </p>
+        </div>
+        <div class="papier getypt">
+          <p class="papier-kop">Bijlage D · verplaatsingen voor kostgangers · De Lijn, lijn 19</p>
+          <p>
+            Halte Geel Markt ligt op een kwartier wandelen van de Gasthuisstraat. Dagpassen betaalt
+            de kostganger uit het eigen leefgeld.
+          </p>
+          <table class="klein-tabel">
+            <thead>
+              <tr>
+                <th>Vertrek Geel Markt</th>
+                <th>Aankomst Diest Grote Markt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>05:58</td>
+                <td>06:44</td>
+              </tr>
+              <tr>
+                <td>07:20</td>
+                <td>08:06</td>
+              </tr>
+              <tr>
+                <td>07:35</td>
+                <td>08:20</td>
+              </tr>
+              <tr>
+                <td>09:12</td>
+                <td>09:58</td>
+              </tr>
+              <tr>
+                <td>11:35</td>
+                <td>12:21</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="klein">Terug Diest → Geel: 15:40 tot 16:26, 17:05 tot 17:51, 18:32 tot 19:18</p>
+        </div>
+        <p class="closeup-uitleg">Speler B heeft het logboek van Katrijn.</p>
+      </div>
+    </dialog>
+
+    <dialog class="closeup" id="cu-stroken" aria-labelledby="cu-stroken-titel">
+      <div class="closeup-binnen">
+        <header class="closeup-kop">
+          <h2 id="cu-stroken-titel">Stroken uit Lena's dagboek</h2>
+          <button class="closeup-sluit" data-sluit>Terug naar het bureau</button>
+        </header>
+        <div class="slot-paneel" data-puzzel="p6">
+          <p class="closeup-uitleg">
+            Achter de tekening in de ateliermap zaten drie stroken. Katrijn vond de andere drie. De
+            zinnen lopen over de scheuren heen.
+          </p>
           <ol class="stroken-lijst" id="stroken-lijst" aria-label="Jouw stroken"></ol>
-          <div class="puzzel-invoer-rij" style="margin-top: 14px">
-            <button class="puzzel-btn" id="btn-p6">Bevestig</button>
-          </div>
+          <button class="slot-open" id="btn-p6">Dit is de volgorde</button>
           <div class="puzzel-feedback" id="feedback-p6" aria-live="polite"></div>
         </div>
-
         <div class="bladzijde-volledig" id="bladzijde-volledig" hidden></div>
+        <div class="bladzijde-rapport" data-rapport-knop></div>
       </div>
-      <!-- Berichten: tekst van de verhaalfragmenten (zie js/berichten.ts) -->
-      <div class="tab-panel" id="panel-berichten">
-        <div class="doc-label">Berichten bij de opgeloste vragen</div>
-        <div id="berichten-lijst"></div>
-      </div>
-    </div>
-    <!-- /content-wrapper -->
+    </dialog>
 
     <script type="module" src="js/speler-a.ts"></script>
     <script type="module" src="/src/bootstrap.ts"></script>
