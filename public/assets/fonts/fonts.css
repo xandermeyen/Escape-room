@@ -21,3 +21,34 @@
   font-weight: 700;
   src: url(/assets/fonts/courier-prime-latin-700-normal.woff2) format('woff2');
 }
+/* Kamer 14: Atkinson Hyperlegible (OFL 1.1) voor de interface, Kalam (OFL
+   1.1) voor het handschrift van Katrijn, Nothing You Could Do (OFL 1.1) voor
+   dat van Lena. */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(/assets/fonts/atkinson-hyperlegible-latin-700-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Kalam';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/assets/fonts/kalam-latin-400-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Nothing You Could Do';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/assets/fonts/nothing-you-could-do-latin-400-normal.woff2) format('woff2');
+}
