@@ -354,6 +354,31 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       );
     });
 
+    it('hamers: precies de zes letters, in welke volgorde ook', async () => {
+      await seed(`sessions/${CODE}/dua`, dua);
+      await assertSucceeds(speler().ref(`sessions/${CODE}/dua/hamers`).set('KNRSTU'));
+      await assertFails(speler().ref(`sessions/${CODE}/dua/hamers`).set('KNRSTX'));
+      await assertFails(speler().ref(`sessions/${CODE}/dua/hamers`).set('KNRST'));
+    });
+
+    it("gekozen letters: alleen cijfers en komma's, en niet meer na P1", async () => {
+      await seed(`sessions/${CODE}/dua`, dua);
+      await assertSucceeds(speler().ref(`sessions/${CODE}/dua/letterKeuze`).set('3,1,2'));
+      await assertSucceeds(speler().ref(`sessions/${CODE}/dua/letterKeuze`).set(''));
+      await assertFails(speler().ref(`sessions/${CODE}/dua/letterKeuze`).set('abc'));
+      await seed(`sessions/${CODE}/puzzels/p1`, true);
+      await assertFails(speler().ref(`sessions/${CODE}/dua/letterKeuze`).set('1,2'));
+    });
+
+    it('werkkamerklok: een getal, te wissen, en niet meer na P4', async () => {
+      await seed(`sessions/${CODE}/dua`, dua);
+      await assertSucceeds(speler().ref(`sessions/${CODE}/dua/kamerEinde`).set(1760000000000));
+      await assertFails(speler().ref(`sessions/${CODE}/dua/kamerEinde`).set('straks'));
+      await assertSucceeds(speler().ref(`sessions/${CODE}/dua/kamerEinde`).remove());
+      await seed(`sessions/${CODE}/puzzels/p4`, true);
+      await assertFails(speler().ref(`sessions/${CODE}/dua/kamerEinde`).set(1760000000000));
+    });
+
     it('brief 14 kan niet meer gewijzigd worden na verzegelen', async () => {
       await seed(`sessions/${CODE}/dua`, dua);
       await assertSucceeds(

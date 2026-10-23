@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 // dua-ui.ts importeert Firebase; voor maakSvgToegankelijk is dat niet nodig.
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {}, app: {} }));
 vi.mock('firebase/database', () => ({ ref: vi.fn(), onValue: vi.fn() }));
+vi.mock('../shared/js/session.ts', () => ({ valideerSessie: vi.fn() }));
 vi.mock('../experiences/dua/js/dua-session.ts', () => ({ telHint: vi.fn(), zetBadge: vi.fn() }));
 vi.mock('../shared/js/timer.ts', () => ({
   formateerTijd: vi.fn(),

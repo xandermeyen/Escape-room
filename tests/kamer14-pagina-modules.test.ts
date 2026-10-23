@@ -3,7 +3,9 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 vi.mock('../shared/js/sentry.ts', () => ({}));
-vi.mock('../shared/js/tijd-voorbij.ts', () => ({ sluitSessieUitUrl: vi.fn() }));
+vi.mock('../shared/js/tijd-voorbij.ts', () => ({
+  sluitSessieUitUrl: vi.fn(() => Promise.resolve(false)),
+}));
 vi.mock('../shared/js/review-form.ts', () => ({ koppelReviewFormulier: vi.fn() }));
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {} }));
 vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));

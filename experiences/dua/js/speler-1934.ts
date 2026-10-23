@@ -15,6 +15,7 @@ import {
 import { initHulp } from '../../../shared/js/hulp.ts';
 import { meetSpel } from '../../../shared/js/meet.ts';
 import { koppelDemoModus } from '../../../shared/js/demo.ts';
+import { serverNu } from '../../../shared/js/timer.ts';
 import { DUA_HASHES, DUA_REGELS, DUA_VRIJGAVE, DUA_BIJNA_KLUIS } from './dua-config.ts';
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
@@ -23,11 +24,17 @@ import {
   zetBrief,
   gomBrief,
   zetKluisNummer,
-  zetVerstopPlek,
+  zetHamers,
+  zetLetterKeuze,
+  startKamer,
+  verstopMapje,
+  kamerVerlopen,
   zetPin1934,
   zetBrief14,
   verhoogVerdenking,
   BRIEFTEKST,
+  HAMERS_START,
+  HAMERS_GOED,
   type DuaState,
 } from './dua-session.ts';
 import {
@@ -39,6 +46,8 @@ import {
   duaHint,
   koppelMuteKnop,
   koppelEasterEggs,
+  herstelHints,
+  controleerSessie,
   leesSessie,
   maakSvgToegankelijk,
   type PuzzelStatus,
@@ -99,15 +108,24 @@ function tekenZegel(): void {
 }
 
 // ═══════════════════ P1a: HAMERPUZZEL ═══════════════════
-const HAMER_SLOTS = ['K', 'N', 'R', 'S', 'T', 'U'];
-const hamers = ['R', 'U', 'K', 'T', 'S', 'N'];
+// De volgorde van de hamers staat in dua.hamers: beide 1934-spelers zien dezelfde
+// machine en een herlaad raakt niets kwijt. Alleen de gekozen hamer is lokaal.
+const HAMER_SLOTS = [...HAMERS_GOED];
+const HAMER_STATUS_STANDAARD = 'Pas als de machine hersteld is, kan brief XII getypt worden.';
 let hamerSel = -1;
-let hamersHersteld = false;
+let hamersAlHersteld: boolean | null = null;
+
+const hamerVolgorde = (): string[] => [...(dua.hamers ?? HAMERS_START)];
+// Is de brief al verstuurd, dan was de machine per definitie heel.
+const isHersteld = (): boolean =>
+  hamerVolgorde().join('') === HAMERS_GOED || !!dua.brief?.verstuurd;
 
 function bouwHamers(): void {
   const rij = requireEl('hamerrij');
   rij.innerHTML = '';
-  hamers.forEach((h, i) => {
+  const hersteld = isHersteld();
+  const volgorde = hersteld ? HAMER_SLOTS : hamerVolgorde();
+  volgorde.forEach((h, i) => {
     const div = document.createElement('div');
     div.className = 'hamerslot';
     // Veilig: HAMER_SLOTS is een vaste constante, geen externe invoer.
@@ -115,7 +133,7 @@ function bouwHamers(): void {
     div.innerHTML = `<div class="label">vak ${HAMER_SLOTS[i]}</div>`;
     const knop = document.createElement('button');
     knop.type = 'button';
-    knop.className = `hamer${i === hamerSel ? ' gekozen' : ''}${hamersHersteld ? ' goedzo' : ''}`;
+    knop.className = `hamer${i === hamerSel ? ' gekozen' : ''}${hersteld ? ' goedzo' : ''}`;
     knop.textContent = h;
     knop.setAttribute('aria-label', `Hamer ${h} in vak ${HAMER_SLOTS[i]}`);
     knop.setAttribute('aria-pressed', String(i === hamerSel));
@@ -129,8 +147,25 @@ function bouwHamers(): void {
   });
 }
 
+/** Tekent de machine en de afhankelijke stukken (brief ontgrendelen). */
+function tekenHamers(): void {
+  bouwHamers();
+  const hersteld = isHersteld();
+  document.getElementById('s-hamers')?.classList.toggle('klaar', hersteld);
+  requireEl('hamer-status').textContent = hersteld
+    ? 'Mechaniek hersteld. De machine wacht op de Schrijver.'
+    : HAMER_STATUS_STANDAARD;
+  document.getElementById('s-brief')?.classList.toggle('slot', !hersteld);
+  // Alleen bij een echte overgang (ook als de ander ze herstelde), niet bij het laden.
+  if (hamersAlHersteld === false && hersteld && !dua.brief?.verstuurd) {
+    fx.kerkklok(1);
+    melding('De typemachine doet het weer.');
+  }
+  hamersAlHersteld = hersteld;
+}
+
 function hamerKlik(i: number): void {
-  if (hamersHersteld) return;
+  if (isHersteld()) return;
   if (!puzzels['p0']) {
     fx.fout();
     melding('Doe eerst de handdruk (oefenronde ⓪): zo leren jullie hoe de tijd werkt.');
@@ -139,21 +174,18 @@ function hamerKlik(i: number): void {
   fx.klik();
   if (hamerSel < 0) {
     hamerSel = i;
-  } else {
-    [hamers[hamerSel], hamers[i]] = [hamers[i] ?? '', hamers[hamerSel] ?? ''];
-    hamerSel = -1;
-    fx.typDiep();
-    if (hamers.every((h, j) => h === HAMER_SLOTS[j])) {
-      hamersHersteld = true;
-      document.getElementById('s-hamers')?.classList.add('klaar');
-      requireEl('hamer-status').textContent =
-        'Mechaniek hersteld. De machine wacht op de Schrijver.';
-      document.getElementById('s-brief')?.classList.remove('slot');
-      fx.kerkklok(1);
-      melding('De typemachine doet het weer.');
-    }
+    bouwHamers();
+    return;
   }
-  bouwHamers();
+  const volgorde = hamerVolgorde();
+  [volgorde[hamerSel], volgorde[i]] = [volgorde[i] ?? '', volgorde[hamerSel] ?? ''];
+  hamerSel = -1;
+  fx.typDiep();
+  dua.hamers = volgorde.join('');
+  tekenHamers();
+  zetHamers(sessie, dua.hamers).catch(() => {
+    /* schrijf() toont de verbindingsbalk */
+  });
 }
 bouwHamers();
 
@@ -208,7 +240,7 @@ document.getElementById('typvel')?.addEventListener('keydown', (e: KeyboardEvent
 });
 
 function kiesLetter(i: number): void {
-  if (!hamersHersteld) {
+  if (!isHersteld()) {
     fx.fout();
     melding('De typemachine is stuk. Herstel eerst de letterhamers.');
     return;
@@ -225,15 +257,23 @@ function kiesLetter(i: number): void {
     fx.fout();
   }
   bouwTypvel();
-  requireEl('brief-status').textContent =
-    briefLetters.length < 5
+  tekenBriefStatus();
+  zetLetterKeuze(sessie, briefLetters).catch(() => {
+    /* schrijf() toont de verbindingsbalk */
+  });
+}
+
+function tekenBriefStatus(): void {
+  requireEl('brief-status').textContent = dua.brief?.verstuurd
+    ? 'Doorslag verstuurd. In 2034 ligt er nu een brief in het archief.'
+    : briefLetters.length < 5
       ? `Nog ${5 - briefLetters.length} letters te kiezen.`
       : 'Vijf letters gekozen. Sla door wanneer je zeker bent.';
 }
 bouwTypvel();
 
 document.getElementById('btn-verstuur')?.addEventListener('click', async () => {
-  if (!hamersHersteld) {
+  if (!isHersteld()) {
     fx.fout();
     melding('Eerst de machine herstellen.');
     return;
@@ -258,40 +298,46 @@ document.getElementById('btn-gom')?.addEventListener('click', async () => {
   fx.lade();
   await gomBrief(sessie);
   bouwTypvel();
-  requireEl('brief-status').textContent = 'Nog 5 letters te kiezen.';
+  tekenBriefStatus();
   document.getElementById('s-brief')?.classList.remove('klaar');
 });
 
 function tekenBrief(): void {
   const verstuurd = !!dua.brief?.verstuurd;
   document.getElementById('s-brief')?.classList.toggle('klaar', verstuurd);
-  if (verstuurd && dua.brief?.letters) {
-    briefLetters = dua.brief.letters.split(',').filter(Boolean).map(Number);
+  // Verstuurd: de doorslag telt. Anders de gedeelde (nog niet verstuurde) keuze,
+  // zodat een tweede speler meekijkt en een herlaad niets kwijtraakt.
+  const bron = verstuurd ? dua.brief?.letters : dua.letterKeuze;
+  const nieuw = (bron ?? '').split(',').filter(Boolean).map(Number);
+  if (nieuw.join(',') !== briefLetters.join(',')) {
+    briefLetters = nieuw;
     bouwTypvel();
   }
+  tekenBriefStatus();
 }
 
 // ═══════════════════ P2: WACHTER & KLUIS ═══════════════════
-let wachterPos = 10;
-let wachterDir = 1;
+// De wachter loopt op de gedeelde servertijd: elke 1934-speler ziet hem op
+// dezelfde plek, dus "buiten zicht" betekent voor iedereen hetzelfde.
+const WACHTER_MIN = 2;
+const WACHTER_MAX = 96;
+
+function wachterPositie(): number {
+  // Procent per seconde (voorheen 1,6 of 2,6 procent per tik van 120 ms).
+  const snelheid = toezichtVerscherpt ? 21.67 : 13.33;
+  const baan = WACHTER_MAX - WACHTER_MIN;
+  const afstand = ((serverNu() / 1000) * snelheid) % (2 * baan);
+  return WACHTER_MIN + (afstand < baan ? afstand : 2 * baan - afstand);
+}
 
 setInterval(() => {
-  const snelheid = toezichtVerscherpt ? 2.6 : 1.6;
-  wachterPos += wachterDir * snelheid;
-  if (wachterPos >= 96) {
-    wachterPos = 96;
-    wachterDir = -1;
-  }
-  if (wachterPos <= 2) {
-    wachterPos = 2;
-    wachterDir = 1;
-  }
+  const pos = wachterPositie();
   const w = document.getElementById('wachter');
-  if (w) w.style.left = `${wachterPos}%`;
-  if (wachterPos < 30 && Math.random() < 0.25 && !dua.kluisNummer) fx.voetstap();
+  if (w) w.style.left = `${pos}%`;
+  if (pos < 30 && Math.random() < 0.25 && !dua.kluisNummer) fx.voetstap();
 }, 120);
 
-const wachterVeilig = (): boolean => wachterPos >= 65;
+const wachterVeilig = (): boolean => wachterPositie() >= 65;
 
 document.getElementById('btn-deponeer')?.addEventListener('click', async () => {
   if (!puzzels['p1']) {
@@ -344,49 +390,58 @@ function tekenKluis(): void {
 }
 
 // ═══════════════════ P4: DE WERKKAMER ═══════════════════
-let kamerInterval: ReturnType<typeof setInterval> | null = null;
-let kamerActief = false;
-let kamerTijd = 0;
+// Eén gedeelde klok (dua.kamerEinde, servertijd): alle 1934-spelers zien de kamer
+// en de aftelling, en de politiestraf valt precies één keer.
+const KAMER_STATUS_STANDAARD = 'Vind eerst de sleutel.';
 let sleutelGevonden = false;
+let kamerAfgehandeld: number | null = null;
+let vorigeKamerEinde: number | null | undefined;
+let vorigePlek: string | null | undefined;
+let verstopt = false;
+
+const kamerRest = (): number =>
+  dua.kamerEinde ? Math.ceil((dua.kamerEinde - serverNu()) / 1000) : 0;
+const kamerBinnen = (): boolean => !!dua.kamerEinde && !dua.verstopPlek && kamerRest() > 0;
 
 document.getElementById('btn-kamer')?.addEventListener('click', () => {
   if (dua.verstopPlek) {
     melding(`Het mapje is al verstopt (${dua.verstopPlek}). Nu is het aan 2034.`);
     return;
   }
-  kamerActief = true;
-  sleutelGevonden = false;
-  kamerTijd = toezichtVerscherpt ? 60 : 90;
-  requireEl('kamer').style.display = 'block';
-  requireEl<HTMLButtonElement>('btn-kamer').style.display = 'none';
-  requireEl('kamer-status').textContent = 'Vind eerst de sleutel. "Waar het licht valt."';
+  if (dua.kamerEinde) return; // een teamgenoot is al binnen
+  const duur = toezichtVerscherpt ? 60 : 90;
   fx.lade();
-  kamerInterval = setInterval(async () => {
-    kamerTijd--;
-    requireEl('kamer-timer').textContent = `${kamerTijd}s`;
-    if (kamerTijd <= 10) fx.hartslag();
-    if (kamerTijd <= 0) {
-      kamerUit();
-      await verhoogVerdenking(sessie, 10);
-      fx.fluitje();
-      melding(
-        '⚠ De politie staat voor de deur. Wegwezen, zonder iets te verstoppen. Verdenking +10%',
-      );
-    }
-  }, 1000);
+  startKamer(sessie, serverNu() + duur * 1000).catch(() => {
+    /* schrijf() toont de verbindingsbalk */
+  });
 });
 
-function kamerUit(): void {
-  if (kamerInterval) clearInterval(kamerInterval);
-  kamerActief = false;
-  requireEl('kamer').style.display = 'none';
-  requireEl<HTMLButtonElement>('btn-kamer').style.display = 'inline-block';
-  requireEl('kamer-timer').textContent = '';
-}
+// De klok tikt op elke 1934-pagina; de transactie zorgt dat de straf één keer valt.
+setInterval(() => {
+  const einde = dua.kamerEinde;
+  if (!einde || dua.verstopPlek) return;
+  const rest = kamerRest();
+  if (rest > 0) {
+    requireEl('kamer-timer').textContent = `${rest}s`;
+    if (rest <= 10) fx.hartslag();
+    return;
+  }
+  if (kamerAfgehandeld === einde) return;
+  kamerAfgehandeld = einde;
+  void kamerVerlopen(sessie, einde)
+    .then(async eerste => {
+      if (!eerste) return; // een andere tab was eerst
+      await verhoogVerdenking(sessie, 10);
+      fx.fluitje();
+    })
+    .catch(() => {
+      /* schrijf() toont de verbindingsbalk */
+    });
+}, 1000);
 
 document.querySelectorAll<SVGElement>('#kamer [data-plek]').forEach(el => {
   el.addEventListener('click', async () => {
-    if (!kamerActief) return;
+    if (!kamerBinnen() || verstopt) return;
     const plek = el.getAttribute('data-plek');
     if (!plek) return;
     if (!sleutelGevonden) {
@@ -407,22 +462,55 @@ document.querySelectorAll<SVGElement>('#kamer [data-plek]').forEach(el => {
       requireEl('kamer-status').textContent = 'Daar lag de sleutel. Geen bergplaats.';
       return;
     }
-    if (kamerInterval) clearInterval(kamerInterval);
-    kamerActief = false;
+    verstopt = true;
     fx.lade();
-    requireEl('kamer-timer').textContent = '';
-    await zetVerstopPlek(sessie, plek);
-    melding('De werkkamer is verzegeld in de tijd. 2034 kan zoeken zodra P2 en P3 rond zijn.');
+    try {
+      await verstopMapje(sessie, plek);
+      melding('De werkkamer is verzegeld in de tijd. 2034 kan zoeken zodra P2 en P3 rond zijn.');
+    } catch {
+      /* schrijf() toont de verbindingsbalk */
+    } finally {
+      verstopt = false;
+    }
   });
 });
 
 function tekenKamer(): void {
-  const plek = dua.verstopPlek;
+  const plek = dua.verstopPlek ?? null;
+  const einde = dua.kamerEinde ?? null;
+  const eerstePaint = vorigePlek === undefined;
+  const binnen = !plek && !!einde;
   document.getElementById('s-kamer')?.classList.toggle('klaar', !!plek);
+  requireEl('kamer').style.display = binnen ? 'block' : 'none';
+  requireEl<HTMLButtonElement>('btn-kamer').style.display =
+    plek || binnen ? 'none' : 'inline-block';
+
   if (plek) {
-    requireEl('kamer').style.display = 'none';
     requireEl('kamer-status').textContent = `Mapje verstopt: ${plek}. Honderd jaar wachten maar.`;
+  } else if (!binnen) {
+    requireEl('kamer-status').textContent = KAMER_STATUS_STANDAARD;
   }
+  if (!binnen) requireEl('kamer-timer').textContent = '';
+
+  // Nieuwe ronde in de kamer: de sleutel moet opnieuw gezocht worden.
+  if (binnen && !vorigeKamerEinde) {
+    sleutelGevonden = false;
+    requireEl('kamer-status').textContent = 'Vind eerst de sleutel. "Waar het licht valt."';
+  }
+  if (!eerstePaint) {
+    if (vorigePlek && !plek && !puzzels['p4']) {
+      melding(
+        '2034 vond het mapje op een plek die de politie doorzocht: het is in beslag genomen. Ga opnieuw naar binnen en kies een veiligere plek.',
+      );
+    }
+    if (vorigeKamerEinde && !einde && !plek) {
+      melding(
+        '⚠ De politie staat voor de deur. Wegwezen, zonder iets te verstoppen. Verdenking +10%',
+      );
+    }
+  }
+  vorigePlek = plek;
+  vorigeKamerEinde = einde;
 }
 
 // ═══════════════════ P5: DE BERGPLAATS ═══════════════════
@@ -462,9 +550,22 @@ document.getElementById('btn-brief14')?.addEventListener('click', async () => {
     return;
   }
   fx.typmachine();
-  await zetBrief14(sessie, tekst);
-  window.location.href = `einde.html?sessie=${encodeURIComponent(sessie)}&era=1934`;
+  try {
+    await zetBrief14(sessie, tekst);
+  } catch {
+    // Een teamgenoot was je voor (de regels laten maar één brief toe): dan stuurt
+    // de live sync je hieronder gewoon door. Anders blijft de verbindingsbalk staan.
+    if (!dua.brief14?.klaar) return;
+  }
+  gaNaarEinde();
 });
+
+let naarEinde = false;
+function gaNaarEinde(): void {
+  if (naarEinde) return;
+  naarEinde = true;
+  window.location.href = `einde.html?sessie=${encodeURIComponent(sessie)}&era=1934`;
+}
 
 // ═══════════════════ LIVE SYNC ═══════════════════
 luisterDua(sessie, nieuw => {
@@ -474,6 +575,10 @@ luisterDua(sessie, nieuw => {
   tekenKluis();
   tekenKamer();
   tekenPin();
+  tekenHamers();
+  // Is de veertiende brief al geschreven (ook door een teamgenoot, of vóór een
+  // herlaad), dan is er voor 1934 niets meer te doen.
+  if (dua.brief14?.klaar) gaNaarEinde();
 });
 
 luisterNaarStatus(sessie, p => {
@@ -497,6 +602,8 @@ luisterNaarStatus(sessie, p => {
 
 // ═══════════════════ OPSTART ═══════════════════
 maakSvgToegankelijk('#kamer [data-plek], #kaart-1934 [data-plek]');
+herstelHints(sessie);
+controleerSessie(sessie);
 koppelMuteKnop();
 koppelTypgeluid();
 koppelEasterEggs(sessie);
