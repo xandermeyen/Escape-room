@@ -28,13 +28,13 @@ boekingsformulier een sessiecode krijgen.
 **Kamer 14** speelt zich af in Geel, rond de eeuwenoude gezinsverpleging. Kostgangster Lena
 is verdwenen. Speler A heeft het dossier van het psychiatrisch centrum, Speler B het logboek
 van het gastgezin en de kamer van Lena. Samen zoeken ze uit waar ze heen ging, bij wie, en
-met welke bus, en op een uitgescheurde dagboekbladzijde waarom ze niemand iets zei. Zes
-puzzels, 60 minuten, en een einde in drie stappen: een mail van An, een briefkaart en een
-epiloog een week later.
+met welke bus, en op een uitgescheurde dagboekbladzijde waarom ze niemand iets zei. Zeven
+puzzels (inclusief een opwarmer), 60 minuten, en een slot met een keuze: wat vertel je in het
+rapport? Daaruit volgt een van de vier eindes, van "De volledige waarheid" tot "Vermist".
 
 **D.U.A.** gaat over de diefstal van _De Rechtvaardige Rechters_ in 1934. Eén kant speelt in
 1934 en verstopt een spoor, de andere kant speelt in 2034 en vindt wat er een eeuw later van
-over is. Wat 1934 verknoeit, merkt 2034 pas later. Twee tot vier spelers.
+over is. Wat 1934 verknoeit, merkt 2034 pas later. Twee tot vier spelers; met drie speelt één speler zijn tijdperk alleen. De rollen zijn een label, per tijdperk zien alle spelers hetzelfde dossier.
 
 ## Zelf proberen (demo)
 

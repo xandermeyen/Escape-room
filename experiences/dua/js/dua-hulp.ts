@@ -135,7 +135,7 @@ export const DUA_HULP_HTML = `
   <ul>
     <li>Jullie spelen in twee tijdperken. 1934 doet dingen, 2034 vindt wat er honderd jaar later van overblijft.</li>
     <li>Bel of videobel en zeg hardop wat je doet en ziet. Wat 1934 verknoeit, merkt 2034 pas later.</li>
-    <li>Met z'n tweeën? Elk één tijdperk. Met meer? Verdeel de rollen per tijdperk; jullie zien hetzelfde dossier.</li>
+    <li>Met z'n tweeën? Elk één tijdperk. Met drie speelt één speler zijn tijdperk alleen. De rol is een label: wie in hetzelfde tijdperk staat, ziet hetzelfde dossier.</li>
     <li>De verdenkingsmeter stijgt bij risico's. Op 100% duiken jullie onder en verliezen jullie 5 minuten.</li>
   </ul>
   <h3>Vast?</h3>
