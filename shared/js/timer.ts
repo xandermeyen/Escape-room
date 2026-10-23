@@ -57,14 +57,25 @@ const waarschuwingGetoond = new Set<number>();
 
 let serverOffsetMs = 0;
 let offsetGekoppeld = false;
+let offsetKlaar: Promise<void> = Promise.resolve();
 
-/** Houdt het verschil tussen apparaatklok en servertijd bij. */
-export function koppelServerTijd(): void {
-  if (offsetGekoppeld) return;
+/**
+ * Houdt het verschil tussen apparaatklok en servertijd bij. De belofte
+ * resolveert zodra de eerste offset binnen is (of na 3 s), voor wie de tijd
+ * meteen eerlijk wil vergelijken.
+ */
+export function koppelServerTijd(): Promise<void> {
+  if (offsetGekoppeld) return offsetKlaar;
   offsetGekoppeld = true;
-  onValue(ref(db, '.info/serverTimeOffset'), snap => {
-    serverOffsetMs = typeof snap.val() === 'number' ? snap.val() : 0;
+  offsetKlaar = new Promise<void>(resolve => {
+    const noodUitgang = setTimeout(resolve, 3000);
+    onValue(ref(db, '.info/serverTimeOffset'), snap => {
+      serverOffsetMs = typeof snap.val() === 'number' ? snap.val() : 0;
+      clearTimeout(noodUitgang);
+      resolve();
+    });
   });
+  return offsetKlaar;
 }
 
 /** Huidige tijd volgens de server (valt terug op de apparaatklok). */

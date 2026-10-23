@@ -2,8 +2,6 @@ import { sluitSessieUitUrl } from '../../../shared/js/tijd-voorbij.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { kamer14Oplossing } from './kamer14-oplossing.ts';
 
-sluitSessieUitUrl();
-
 // ── Nieuwe post: na 4 seconden verschijnt de briefkaart van Lena ──
 export const WACHT_OP_POST_MS = 4000;
 
@@ -30,18 +28,20 @@ if (notif) {
 }
 
 // De oplossing, zodat ook groepen die niet klaar raakten het verhaal kennen.
-// Alleen met een sessiecode in de URL (die sessie is nu gesloten).
+// Verborgen tot vaststaat dat de tijd echt om is (en die sessie is dan gesloten):
+// een sessiecode in de URL volstaat niet.
 const lijst = document.getElementById('oplossing-lijst');
 const blok = document.getElementById('oplossing-blok');
-if (new URLSearchParams(window.location.search).get('sessie') && lijst) {
+if (blok) blok.hidden = true;
+void sluitSessieUitUrl().then(mag => {
+  if (!mag || !lijst || !blok) return;
   for (const zin of kamer14Oplossing()) {
     const li = document.createElement('li');
     li.textContent = zin;
     lijst.appendChild(li);
   }
-} else if (blok) {
-  blok.hidden = true;
-}
+  blok.hidden = false;
+});
 
 // Review na de briefkaart, ook voor wie de tijd niet haalde.
 koppelReviewFormulier('kamer-14', new URLSearchParams(window.location.search).get('sessie'));
