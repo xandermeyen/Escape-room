@@ -783,3 +783,45 @@ body.era-1934 .svg-kader {
   outline: 3px solid var(--d-goud);
   outline-offset: 2px;
 }
+
+/* ── Toast: nooit klikken tegenhouden ── */
+.d-melding {
+  pointer-events: none;
+}
+
+/* ── Smal scherm (gsm) ──
+   De plattegronden hebben een vaste verhouding. Zonder minimumbreedte krimpen
+   hun labels tot onleesbaar kleine tekst; liever een kaart die je zijwaarts
+   schuift dan een kaart die je niet kunt lezen. */
+@media (max-width: 700px) {
+  .stuk {
+    overflow-x: auto;
+  }
+  .svg-kader {
+    min-width: 440px;
+  }
+  /* Het "vastgelegd"-label kwam over de titel te liggen. */
+  .stuk.klaar::after {
+    position: static;
+    display: block;
+    margin-top: 8px;
+    text-align: right;
+  }
+  /* Meldingen bovenaan, zodat ze de knoppen onderaan vrij laten. */
+  .d-melding {
+    top: 64px;
+    bottom: auto;
+  }
+  .hulp-knop {
+    bottom: 12px;
+    left: 12px;
+    min-height: 40px;
+  }
+  body {
+    padding-bottom: 64px;
+  }
+  .sys-case {
+    display: block;
+    width: 100%;
+  }
+}

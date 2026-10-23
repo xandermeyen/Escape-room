@@ -12,6 +12,7 @@ import {
   serverNu,
 } from '../../../shared/js/timer.ts';
 import { volgendHint, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { valideerSessie } from '../../../shared/js/session.ts';
 import { telHint, zetBadge, type DuaMeta } from './dua-session.ts';
 import { fx, isGedempt, wisselGeluid } from './dua-audio.ts';
 import { DUA_VRIJGAVE } from './dua-config.ts';
@@ -104,9 +105,51 @@ export function tekenVoortgang(p: PuzzelStatus): void {
 }
 
 // ── Hints: kamer-14-patroon + teller voor de eindstats ──────
+// Geopende hintstappen worden per toestel bewaard, zodat een herlaad ze niet
+// verbergt en dezelfde stap niet opnieuw in de eindstats meetelt.
+const hintSleutel = (code: string, blokId: string): string => `dua-hint:${code}:${blokId}`;
+
+function leesGeopend(code: string, blokId: string): number {
+  try {
+    return Number(localStorage.getItem(hintSleutel(code, blokId))) || 0;
+  } catch {
+    return 0;
+  }
+}
+
+function bewaarGeopend(code: string, blokId: string, n: number): void {
+  try {
+    localStorage.setItem(hintSleutel(code, blokId), String(n));
+  } catch {
+    /* opslag niet beschikbaar: dan blijft het bij de oude werking */
+  }
+}
+
+function aantalGeopend(blokId: string): number {
+  const stappen = document.querySelectorAll(`#${CSS.escape(blokId)} .hint-stap`);
+  return [...stappen].filter(s => !s.classList.contains('verborgen')).length;
+}
+
+/** Zet eerder geopende hintstappen terug, zonder events of tellers. */
+export function herstelHints(code: string): void {
+  document.querySelectorAll<HTMLElement>('.hint-blok[id]').forEach(blok => {
+    const n = leesGeopend(code, blok.id);
+    if (n <= 0) return;
+    const stappen = blok.querySelectorAll<HTMLElement>('.hint-stap');
+    stappen.forEach((stap, i) => stap.classList.toggle('verborgen', i >= n));
+    blok.querySelector('.hint-knop')?.classList.add('verborgen');
+    blok.querySelector('.hint-verder')?.classList.toggle('verborgen', n >= stappen.length);
+  });
+}
+
 export function duaHint(code: string, blokId: string): void {
+  const eerder = leesGeopend(code, blokId);
   volgendHint(blokId);
   fx.fluister();
+  const nu = aantalGeopend(blokId);
+  // Alleen een stap die nog nooit geopend werd telt mee.
+  if (nu <= eerder) return;
+  bewaarGeopend(code, blokId, nu);
   telHint(code).catch(() => {
     /* teller is nice-to-have */
   });
@@ -219,4 +262,19 @@ export function maakSvgToegankelijk(selector: string): void {
 // de pagina niet verder draait tegen een niet-bestaande sessie.
 export function leesSessie(): string {
   return sessieUitUrl();
+}
+
+/**
+ * Een spelerpagina met een onbekende of gesloten sessiecode hoort niet te
+ * draaien (anders start ze een klok en schrijft ze naar een sessie die er niet is).
+ * Terug naar de lobby, waar de code opnieuw ingevoerd kan worden.
+ */
+export function controleerSessie(code: string): void {
+  valideerSessie(code)
+    .then(geldig => {
+      if (!geldig) window.location.href = 'index.html';
+    })
+    .catch(() => {
+      /* bij een netwerkfout laten we de speler gewoon doorspelen */
+    });
 }

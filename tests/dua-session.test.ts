@@ -20,6 +20,16 @@ import {
   zetKluisNummer,
   verhoogVerdenking,
   telHint,
+  zetHamers,
+  zetLetterKeuze,
+  gomBrief,
+  startKamer,
+  verstopMapje,
+  kamerVerlopen,
+  wisVerstopPlekAls,
+  wisPin1934Als,
+  HAMERS_START,
+  HAMERS_GOED,
   STRAF_BIJ_HONDERD_MS,
 } from '../experiences/dua/js/dua-session.ts';
 
@@ -99,5 +109,68 @@ describe('telHint', () => {
       hints: 3,
     });
     expect(haal()(null)).toEqual({ verdenking: 0, strafMs: 0, hints: 1 });
+  });
+});
+
+describe('gedeelde puzzelstaat en werkkamer', () => {
+  it('de hamerletters zijn dezelfde zes, anders gerangschikt', () => {
+    expect([...HAMERS_START].sort().join('')).toBe([...HAMERS_GOED].sort().join(''));
+    expect(HAMERS_START).not.toBe(HAMERS_GOED);
+  });
+
+  it('zetHamers en zetLetterKeuze schrijven op het dua-pad', async () => {
+    await zetHamers('ABC', 'KNRSTU');
+    expect(updateMock).toHaveBeenCalledWith({ path: 'sessions/ABC/dua' }, { hamers: 'KNRSTU' });
+    await zetLetterKeuze('ABC', [3, 1, 2]);
+    expect(updateMock).toHaveBeenCalledWith({ path: 'sessions/ABC/dua' }, { letterKeuze: '3,1,2' });
+  });
+
+  it('een nieuw vel wist ook de gekozen letters', async () => {
+    await gomBrief('ABC');
+    expect(updateMock).toHaveBeenCalledWith(
+      { path: 'sessions/ABC/dua' },
+      { brief: { letters: '', verstuurd: false }, letterKeuze: '' },
+    );
+  });
+
+  it('startKamer zet het einde, verstopMapje zet de plek en stopt de klok in één keer', async () => {
+    await startKamer('ABC', 123456);
+    expect(updateMock).toHaveBeenCalledWith({ path: 'sessions/ABC/dua' }, { kamerEinde: 123456 });
+    await verstopMapje('ABC', 'schouw');
+    expect(updateMock).toHaveBeenCalledWith(
+      { path: 'sessions/ABC/dua' },
+      { verstopPlek: 'schouw', kamerEinde: null },
+    );
+  });
+
+  it('kamerVerlopen wist de klok alleen als het nog dezelfde ronde is', async () => {
+    let updater: (huidig: number | null) => number | null | undefined = () => undefined;
+    runTransactionMock.mockImplementation(async (_ref: unknown, fn: unknown) => {
+      updater = fn as typeof updater;
+      return { committed: true };
+    });
+    expect(await kamerVerlopen('ABC', 999)).toBe(true);
+    expect(updater(999)).toBeNull();
+    expect(updater(1000)).toBeUndefined();
+    expect(updater(null)).toBeUndefined();
+  });
+
+  it('kamerVerlopen meldt false als een andere tab de transactie won', async () => {
+    runTransactionMock.mockResolvedValue({ committed: false });
+    expect(await kamerVerlopen('ABC', 999)).toBe(false);
+  });
+
+  it('een verkeerde keuze wissen overschrijft geen nieuwe keuze van 1934', async () => {
+    let updater: (huidig: string | null) => string | null | undefined = () => undefined;
+    runTransactionMock.mockImplementation(async (_ref: unknown, fn: unknown) => {
+      updater = fn as typeof updater;
+      return { committed: true };
+    });
+    await wisVerstopPlekAls('ABC', 'bureau');
+    expect(updater('bureau')).toBeNull();
+    expect(updater('schouw')).toBeUndefined();
+    await wisPin1934Als('ABC', 'belfort');
+    expect(updater('belfort')).toBeNull();
+    expect(updater('sintbaafs')).toBeUndefined();
   });
 });

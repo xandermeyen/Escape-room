@@ -38,8 +38,9 @@ import {
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
   luisterDua,
-  zetVerstopPlek,
-  zetPin1934,
+  wisVerstopPlekAls,
+  wisPin1934Als,
+  luisterRapportIngediend,
   verhoogVerdenking,
   dienDuaRapportIn,
   zetBadge,
@@ -56,6 +57,8 @@ import {
   duaHint,
   koppelMuteKnop,
   koppelEasterEggs,
+  herstelHints,
+  controleerSessie,
   leesSessie,
   maakSvgToegankelijk,
   type PuzzelStatus,
@@ -119,7 +122,13 @@ koppelHints(blokId => duaHint(sessie, blokId));
 
 // ═══════════════════ P0: HET ZEGEL ═══════════════════
 function tekenZegel(): void {
-  if (!dua.p0zegel || puzzels['p0']) return;
+  // Is de handdruk al bevestigd (door jou, een teamgenoot of vóór een herlaad),
+  // dan hoort de bevestigknop er niet meer te staan.
+  if (puzzels['p0']) {
+    requireEl('zegel-actie').style.display = 'none';
+    return;
+  }
+  if (!dua.p0zegel) return;
   requireEl('zegel-tekst').textContent =
     'Op het vergeelde vel staat plots, honderd jaar oud en toch kraakvers:';
   requireEl('zegel-toon').innerHTML = '<span class="zegel">D.U.A.</span>';
@@ -325,7 +334,8 @@ document.querySelectorAll<SVGElement>('#museum-spel [data-plek]').forEach(el => 
         'Het verslag loog niet: hier zocht de politie in december 1934. Het mapje is toen in beslag genomen. 1934 moet opnieuw, op een veiligere plek. Verdenking +15%',
       );
       await verhoogVerdenking(sessie, 15);
-      await zetVerstopPlek(sessie, null);
+      // Alleen wissen als 1934 ondertussen niet al een nieuwe plek koos.
+      await wisVerstopPlekAls(sessie, plek);
       return;
     }
     el.style.fill = '#2a523f';
@@ -364,7 +374,8 @@ document.getElementById('kaart-2034')?.addEventListener('click', async (e: Event
       'Jullie vonden de plek… maar daar bleef niets bewaard: alles werd in de loop van de eeuw gerestaureerd, ontruimd of verbouwd. Het paneel is verloren. 1934 moet een betere plek kiezen. Verdenking +15%',
     );
     await verhoogVerdenking(sessie, 15);
-    await zetPin1934(sessie, null);
+    // Alleen wissen als 1934 ondertussen niet al een nieuwe plek koos.
+    await wisPin1934Als(sessie, doel);
     return;
   }
   fx.kerkklok(5, true);
@@ -385,13 +396,23 @@ document.getElementById('btn-rapport')?.addEventListener('click', async () => {
   try {
     await dienDuaRapportIn(sessie, tekst);
     await sluitSessie(sessie);
-    window.location.href = `einde.html?sessie=${encodeURIComponent(sessie)}&era=2034`;
+    gaNaarEinde();
   } catch (err) {
     console.error('Rapport indienen mislukt:', err);
     knop.disabled = false;
     melding('Verbindingsfout. Probeer opnieuw.');
   }
 });
+
+// Heeft een teamgenoot het rapport al ingediend (of gebeurde dat vóór een herlaad),
+// dan is het spel af: iedereen gaat mee naar het eindscherm.
+let naarEinde = false;
+function gaNaarEinde(): void {
+  if (naarEinde) return;
+  naarEinde = true;
+  window.location.href = `einde.html?sessie=${encodeURIComponent(sessie)}&era=2034`;
+}
+luisterRapportIngediend(sessie, gaNaarEinde);
 
 // ═══════════════════ EASTER EGGS (2034) ═══════════════════
 document.getElementById('btn-archief')?.addEventListener('click', () => {
@@ -437,6 +458,7 @@ luisterNaarStatus(sessie, p => {
   tekenVoortgang(p);
   registreerVrijgaves(sessie, p, DUA_VRIJGAVE);
   hulp.status(p);
+  tekenZegel(); // de bevestigknop weg zodra P0 klaar is, ook voor een teamgenoot
   tekenDoorslag();
   tekenTicket();
 
@@ -454,6 +476,8 @@ luisterNaarStatus(sessie, p => {
 
 // ═══════════════════ OPSTART ═══════════════════
 maakSvgToegankelijk('#museum-spel [data-plek], #kaart-2034 [data-plek]');
+herstelHints(sessie);
+controleerSessie(sessie);
 koppelMuteKnop();
 koppelTypgeluid();
 koppelEasterEggs(sessie);

@@ -12,6 +12,9 @@
  *   verstopPlek:  string | null           — werkkamer Wetteren
  *   pin1934:      string | null           — bergplaats op het stadsplan
  *   brief14:      { tekst: string, klaar: boolean }
+ *   hamers:       string                  — volgorde van de 6 letterhamers (gedeeld per tijdperk)
+ *   letterKeuze:  string                  — csv van de gekozen brief-indexen, nog niet verstuurd
+ *   kamerEinde:   number | null           — servertijd (ms) waarop de politie in de werkkamer staat
  *   meta:         { verdenking: number, strafMs: number, hints: number }
  *   badges:       { [naam]: true }
  */
@@ -35,9 +38,16 @@ export interface DuaMeta {
   hints: number;
 }
 
+// Letterhamers: begin- en eindvolgorde (de slots zijn K N R S T U).
+export const HAMERS_START = 'RUKTSN';
+export const HAMERS_GOED = 'KNRSTU';
+
 export interface DuaState {
   p0zegel?: boolean;
   brief?: { letters?: string; verstuurd?: boolean };
+  hamers?: string;
+  letterKeuze?: string;
+  kamerEinde?: number | null;
   kluisNummer?: string | null;
   verstopPlek?: string | null;
   pin1934?: string | null;
@@ -63,6 +73,8 @@ export async function initDua(code: string): Promise<void> {
         verstopPlek: null,
         pin1934: null,
         brief14: { tekst: '', klaar: false },
+        hamers: HAMERS_START,
+        letterKeuze: '',
         meta: { verdenking: 0, strafMs: 0, hints: 0 },
       }),
     );
@@ -100,7 +112,22 @@ export async function zetBrief(code: string, letters: number[]): Promise<void> {
 // gaat nooit terug naar false (database.rules.json dwingt dat ook af).
 export async function gomBrief(code: string): Promise<void> {
   await authReady;
-  await schrijf('gomBrief', update(duaRef(code), { brief: { letters: '', verstuurd: false } }));
+  await schrijf(
+    'gomBrief',
+    update(duaRef(code), { brief: { letters: '', verstuurd: false }, letterKeuze: '' }),
+  );
+}
+
+// Hamers en gekozen letters zijn gedeeld, zodat een tweede speler in hetzelfde
+// tijdperk meekijkt en een herlaad niets kwijtraakt.
+export async function zetHamers(code: string, volgorde: string): Promise<void> {
+  await authReady;
+  await schrijf('zetHamers', update(duaRef(code), { hamers: volgorde }));
+}
+
+export async function zetLetterKeuze(code: string, letters: number[]): Promise<void> {
+  await authReady;
+  await schrijf('zetLetterKeuze', update(duaRef(code), { letterKeuze: letters.join(',') }));
 }
 
 export async function zetKluisNummer(code: string, nummer: string): Promise<void> {
@@ -116,6 +143,55 @@ export async function zetVerstopPlek(code: string, plek: string | null): Promise
 export async function zetPin1934(code: string, plek: string | null): Promise<void> {
   await authReady;
   await schrijf('zetPin1934', update(duaRef(code), { pin1934: plek }));
+}
+
+// Wist een keuze alleen als ze nog dezelfde is. Zo overschrijft de reset na een
+// foute klik van 2034 geen nieuwe keuze die 1934 ondertussen maakte.
+export async function wisVerstopPlekAls(code: string, plek: string): Promise<void> {
+  await authReady;
+  await schrijf(
+    'wisVerstopPlekAls',
+    runTransaction(ref(db, `sessions/${code}/dua/verstopPlek`), (huidig: string | null) =>
+      huidig === plek ? null : undefined,
+    ),
+  );
+}
+
+export async function wisPin1934Als(code: string, plek: string): Promise<void> {
+  await authReady;
+  await schrijf(
+    'wisPin1934Als',
+    runTransaction(ref(db, `sessions/${code}/dua/pin1934`), (huidig: string | null) =>
+      huidig === plek ? null : undefined,
+    ),
+  );
+}
+
+// ── Werkkamer: één gedeelde klok voor alle 1934-spelers ──
+export async function startKamer(code: string, einde: number): Promise<void> {
+  await authReady;
+  await schrijf('startKamer', update(duaRef(code), { kamerEinde: einde }));
+}
+
+/** Het mapje is verstopt: de kamerklok stopt in dezelfde schrijfactie. */
+export async function verstopMapje(code: string, plek: string): Promise<void> {
+  await authReady;
+  await schrijf('verstopMapje', update(duaRef(code), { verstopPlek: plek, kamerEinde: null }));
+}
+
+/**
+ * De politie staat voor de deur. Meerdere 1934-tabs kunnen dit tegelijk
+ * merken, maar de transactie slaagt maar één keer: alleen dan geldt de straf.
+ */
+export async function kamerVerlopen(code: string, einde: number): Promise<boolean> {
+  await authReady;
+  const resultaat = await schrijf(
+    'kamerVerlopen',
+    runTransaction(ref(db, `sessions/${code}/dua/kamerEinde`), (huidig: number | null) =>
+      huidig === einde ? null : undefined,
+    ),
+  );
+  return resultaat.committed;
 }
 
 export async function zetBrief14(code: string, tekst: string): Promise<void> {
@@ -191,6 +267,13 @@ export async function haalDuaStats(code: string): Promise<DuaStats> {
     meta: data.dua?.meta ?? { verdenking: 0, strafMs: 0, hints: 0 },
     badges: Object.keys(data.dua?.badges ?? {}).length,
   };
+}
+
+// ── Is het rapport al ingediend? (stuurt de tweede 2034-speler door) ──
+export function luisterRapportIngediend(code: string, callback: () => void): () => void {
+  return onValue(ref(db, `sessions/${code}/rapport/ingediend`), snapshot => {
+    if (snapshot.val() === true) callback();
+  });
 }
 
 // ── Alles voor het eindscherm in één keer ──

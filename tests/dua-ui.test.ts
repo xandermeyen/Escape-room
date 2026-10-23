@@ -14,6 +14,16 @@ vi.mock('firebase/database', () => ({
 
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {}, app: {} }));
 vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
+vi.mock('../shared/js/session.ts', () => ({ valideerSessie: vi.fn() }));
+vi.mock('../experiences/dua/js/dua-audio.ts', () => ({
+  fx: new Proxy({}, { get: () => vi.fn() }),
+  isGedempt: vi.fn(),
+  wisselGeluid: vi.fn(),
+}));
+vi.mock('../experiences/dua/js/dua-session.ts', () => ({
+  telHint: vi.fn(() => Promise.resolve()),
+  zetBadge: vi.fn(),
+}));
 
 import { ontgrendeld, tekenVoortgang } from '../experiences/dua/js/dua-ui.ts';
 
@@ -91,5 +101,52 @@ describe('ontgrendeld volgt DUA_VRIJGAVE', () => {
       const alles = Object.fromEntries((DUA_VRIJGAVE[`p${i}`] ?? []).map(v => [v, true]));
       expect(ontgrendeld(alles, i)).toBe(true);
     }
+  });
+});
+
+// ── Hints: bewaard over een herlaad, en elke stap telt één keer ──────────────
+import { herstelHints, duaHint } from '../experiences/dua/js/dua-ui.ts';
+import { telHint } from '../experiences/dua/js/dua-session.ts';
+
+describe('hints bewaren', () => {
+  const blokHtml = `
+    <div class="hint-blok" id="hint-test">
+      <button class="hint-knop">Hint vragen</button>
+      <div class="hint-stap verborgen">een</div>
+      <div class="hint-stap verborgen">twee</div>
+      <div class="hint-stap verborgen">drie</div>
+      <button class="hint-verder verborgen">Nog een hint</button>
+    </div>`;
+  const open = () => document.querySelectorAll('.hint-stap:not(.verborgen)').length;
+
+  beforeEach(() => {
+    localStorage.clear();
+    document.body.innerHTML = blokHtml;
+    vi.mocked(telHint).mockClear();
+  });
+
+  it('een geopende stap blijft open na een herlaad en telt niet opnieuw', () => {
+    duaHint('SES', 'hint-test');
+    duaHint('SES', 'hint-test');
+    expect(open()).toBe(2);
+    expect(telHint).toHaveBeenCalledTimes(2);
+
+    document.body.innerHTML = blokHtml; // herlaad: alles weer verborgen
+    herstelHints('SES');
+    expect(open()).toBe(2);
+    expect(document.querySelector('.hint-knop')!.classList).toContain('verborgen');
+    expect(document.querySelector('.hint-verder')!.classList).not.toContain('verborgen');
+    expect(telHint).toHaveBeenCalledTimes(2);
+
+    duaHint('SES', 'hint-test'); // de derde stap is echt nieuw
+    expect(open()).toBe(3);
+    expect(telHint).toHaveBeenCalledTimes(3);
+  });
+
+  it('een andere sessie erft geen geopende hints', () => {
+    duaHint('SES', 'hint-test');
+    document.body.innerHTML = blokHtml;
+    herstelHints('ANDER');
+    expect(open()).toBe(0);
   });
 });

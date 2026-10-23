@@ -6,7 +6,7 @@
  * host-sessies-helpers, gefilterd op ervaringsId 'dua'.
  */
 import '../../../shared/js/sentry.ts';
-import { maakSessie, resetDemo } from '../../../shared/js/session.ts';
+import { maakSessie, geefRollenVrij, resetDemo } from '../../../shared/js/session.ts';
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, update } from 'firebase/database';
 import { koppelHostAuth } from '../../../shared/js/host-auth.ts';
@@ -177,6 +177,13 @@ async function laadLijst(): Promise<void> {
           <td>${lobbyLinkHtml(LOBBY_PAD, code)}</td>
           <td>
             ${
+              data.actief && data.spelers
+                ? `<button class="kopieer-knop" title="Rollen vrijgeven (speler zit vast op 'rol al bezet')" data-actie="rollen-vrij" data-code="${veiligeCode}" style="color:#555;">
+                    <i class="bi bi-people"></i>
+                  </button>`
+                : ''
+            }
+            ${
               data.actief
                 ? `<button class="kopieer-knop" title="Deactiveer sessie" data-actie="deactiveer" data-code="${veiligeCode}" style="color:#666;">
                   <i class="bi bi-stop-circle"></i>
@@ -290,6 +297,22 @@ async function deactiveer(code: string) {
   }
 }
 
+async function rollenVrij(code: string) {
+  if (
+    !confirm(
+      `Rollen van sessie ${code} vrijgeven? Gebruik dit als een speler op een ander toestel verder wil en "rol al bezet" ziet. Spelers die al in het spel zitten, blijven gewoon spelen.`,
+    )
+  )
+    return;
+  try {
+    await geefRollenVrij(code);
+    void laadLijst();
+  } catch (err) {
+    console.error('Rollen vrijgeven mislukt:', err);
+    alert('Rollen vrijgeven mislukt: ' + foutTekst(err));
+  }
+}
+
 function sluitVerlopen() {
   void verlopen.sluit();
 }
@@ -312,5 +335,6 @@ koppelActies({
   'toon-details': el => toonDetails(el.dataset['code'] ?? ''),
   deactiveer: el => void deactiveer(el.dataset['code'] ?? ''),
   'sluit-verlopen': () => sluitVerlopen(),
+  'rollen-vrij': el => void rollenVrij(el.dataset['code'] ?? ''),
   kopieer: el => kopieer(el.dataset['tekst'] ?? '', el),
 });
