@@ -39,7 +39,7 @@
     "@sentry/browser": "^11.6.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.2",
-    "firebase": "^12.19.0",
+    "firebase": "^13.1.0",
     "three": "^0.186.1"
   }
 }
