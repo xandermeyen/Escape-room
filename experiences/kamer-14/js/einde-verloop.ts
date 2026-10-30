@@ -8,8 +8,10 @@
  * - Tweede keer fout: An belt de politie. Geen briefkaart (Lena is die avond
  *   al terug), meteen het slotscherm.
  *
- * De pogingen worden per sessie bewaard in sessionStorage, zodat herladen
- * geen extra kans geeft. Lukt opslaan niet, dan telt de teller in het geheugen.
+ * De pogingen tellen voor de hele sessie: ze staan in Firebase
+ * (rapport/fouten), zodat beide spelers samen twee kansen hebben en hetzelfde
+ * einde zien. De teller hieronder in sessionStorage is het vangnet voor als
+ * de server niet bereikbaar is; herladen geeft ook dan geen extra kans.
  */
 export type RapportStap = 'indienen' | 'waarschuwing' | 'politie';
 

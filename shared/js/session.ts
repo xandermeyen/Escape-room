@@ -1,5 +1,14 @@
 import { db } from './firebase-config.ts';
-import { ref, set, get, update, onValue, serverTimestamp, runTransaction } from 'firebase/database';
+import {
+  ref,
+  set,
+  get,
+  update,
+  onValue,
+  serverTimestamp,
+  runTransaction,
+  increment,
+} from 'firebase/database';
 import { authReady, authGelukt } from './auth.ts';
 import { schrijf, meldSchrijffout } from './verbinding.ts';
 
@@ -16,6 +25,8 @@ interface RapportData {
   ingediend?: boolean;
   inhoud?: Partial<RapportInhoud>;
   tijdstip?: number;
+  /** Kamer 14: aantal foute rapporten in deze sessie (alle spelers samen). */
+  fouten?: number;
 }
 
 type PuzzelStatus = Record<string, boolean>;
@@ -190,6 +201,34 @@ export async function diendRapportIn(sessieCode: string, inhoud: RapportInhoud):
       tijdstip: serverTimestamp(),
     }),
   );
+}
+
+/**
+ * registreerFoutRapport (Kamer 14): telt een fout rapport voor de hele sessie
+ * (rapport/fouten, +1 op de server) en geeft het nieuwe totaal terug. Zo delen
+ * beide spelers dezelfde pogingen en hetzelfde einde. Staat de teller al op
+ * het maximum, dan weigeren de rules de +1; we lezen dan gewoon de stand.
+ * Gooit bij een verbindingsfout, zodat einde.ts kan terugvallen op de lokale
+ * teller.
+ */
+export async function registreerFoutRapport(sessieCode: string): Promise<number> {
+  await authReady;
+  const foutenRef = ref(db, `sessions/${sessieCode}/rapport/fouten`);
+  try {
+    await set(foutenRef, increment(1));
+  } catch (err) {
+    if (!isPermissionDenied(err)) throw err;
+  }
+  const snap = await get(foutenRef);
+  const waarde: unknown = snap.val();
+  return typeof waarde === 'number' ? waarde : 0;
+}
+
+/** Aantal foute rapporten van deze sessie, 0 als er nog geen zijn. */
+export async function haalFoutRapporten(sessieCode: string): Promise<number> {
+  const snap = await get(ref(db, `sessions/${sessieCode}/rapport/fouten`));
+  const waarde: unknown = snap.val();
+  return typeof waarde === 'number' ? waarde : 0;
 }
 
 // Luisteren naar rapport (voor briefkaart reveal)

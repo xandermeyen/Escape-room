@@ -14,7 +14,9 @@ import {
   luisterNaarStatus,
   puzzelVoltooid,
   bewaakSessieGesloten,
+  haalFoutRapporten,
 } from '../../../shared/js/session.ts';
+import { MAX_FOUTE_POGINGEN } from './einde-verloop.ts';
 import { controleerAntwoordHash, koppelHints, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { installeerNavigatieGuard } from '../../../shared/js/game.ts';
 import {
@@ -170,7 +172,14 @@ export function startSpelerPagina(config: SpelerConfig): void {
   });
   bewaakSessieGesloten(sessie, () => {
     schakelGuardUit();
-    window.location.href = `tijd-voorbij.html?sessie=${encodeURIComponent(sessie)}`;
+    // Sloot de sessie omdat de andere speler twee foute rapporten indiende,
+    // dan hoort deze speler het einde "Vermist" te zien, niet "tijd voorbij".
+    void haalFoutRapporten(sessie)
+      .catch(() => 0)
+      .then(fouten => {
+        const pagina = fouten >= MAX_FOUTE_POGINGEN ? 'einde.html' : 'tijd-voorbij.html';
+        window.location.href = `${pagina}?sessie=${encodeURIComponent(sessie)}`;
+      });
   });
 
   const sysCase = document.getElementById('sys-case');

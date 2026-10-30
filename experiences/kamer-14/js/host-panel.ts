@@ -154,10 +154,15 @@ async function laadLijst(): Promise<void> {
         const veiligeCode = escHtml(code);
         const aantalKlaar = aantalOpgelost(data, PUZZELS);
 
-        const rapport = data.rapport as { ingediend?: boolean } | undefined;
+        const rapport = data.rapport as { ingediend?: boolean; fouten?: unknown } | undefined;
+        const fouteRapporten = typeof rapport?.fouten === 'number' ? rapport.fouten : 0;
         const rapportBadge = rapport?.ingediend
           ? '<span class="badge-klaar"><i class="bi bi-check2 me-1"></i>Ingediend</span>'
-          : '<span style="color:#555; font-size:0.8rem;"> - </span>';
+          : fouteRapporten >= 2
+            ? '<span class="badge-verlopen"><i class="bi bi-x-lg me-1"></i>Vermist</span>'
+            : fouteRapporten === 1
+              ? '<span style="color:#888; font-size:0.8rem;">1 keer fout</span>'
+              : '<span style="color:#555; font-size:0.8rem;"> - </span>';
 
         return `<tr>
           <td class="code-cel">

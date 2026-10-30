@@ -15,6 +15,8 @@ vi.mock('../shared/js/session.ts', () => ({
   luisterNaarRapport: (_s: string, cb: (r: Rapport) => void) => rapportLuisteraars.push(cb),
   diendRapportIn: (...args: unknown[]) => diendRapportIn(...(args as [])),
   sluitSessie: (...args: unknown[]) => sluitSessie(...(args as [])),
+  // Geen server in deze tests: einde.ts valt terug op de lokale teller.
+  registreerFoutRapport: () => Promise.reject(new Error('offline')),
   haalTijden: () => Promise.resolve({}),
 }));
 vi.mock('../shared/js/review-form.ts', () => ({ koppelReviewFormulier: () => {} }));

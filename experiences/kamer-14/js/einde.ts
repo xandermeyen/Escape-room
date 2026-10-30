@@ -2,6 +2,7 @@ import '../../../shared/js/sentry.ts';
 import {
   luisterNaarRapport,
   diendRapportIn,
+  registreerFoutRapport,
   sluitSessie,
   haalTijden,
   type RapportInhoud,
@@ -78,7 +79,24 @@ function gekozen(): string | null {
 // tweede foute poging tellen (dat sprong meteen naar het einde "Vermist").
 let bezigMetIndienen = false;
 
+/**
+ * Telt een fout rapport voor de hele sessie (Firebase), zodat beide spelers
+ * samen twee kansen hebben en hetzelfde einde zien. De lokale teller blijft
+ * als vangnet: lukt de server niet, dan telt dit toestel zelf verder.
+ */
+async function telFoutRapport(): Promise<number> {
+  const lokaal = leesFoutePogingen(sessie) + 1;
+  bewaarFoutePogingen(sessie, lokaal);
+  try {
+    return Math.max(lokaal, await registreerFoutRapport(sessie));
+  } catch (err) {
+    console.error('Fout rapport registreren mislukt:', err);
+    return lokaal;
+  }
+}
+
 async function diendIn(): Promise<void> {
+  if (eindeGetoond) return;
   if (bezigMetIndienen) return;
   bezigMetIndienen = true;
   try {
@@ -105,18 +123,15 @@ async function beoordeelEnDienIn(): Promise<void> {
     if (!ok) geldig = false;
   }
 
-  const fouteVoorDeze = leesFoutePogingen(sessie);
-  const stap = volgendeStap(fouteVoorDeze, geldig);
-  if (stap === 'waarschuwing') {
-    bewaarFoutePogingen(sessie, fouteVoorDeze + 1);
+  if (!geldig) {
+    const fouten = await telFoutRapport();
+    if (volgendeStap(fouten - 1, false) === 'politie') {
+      toonVermist();
+      return;
+    }
     waarschuwing?.classList.add('zichtbaar');
     validatieBericht?.classList.add('zichtbaar');
     waarschuwing?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
-  if (stap === 'politie') {
-    bewaarFoutePogingen(sessie, fouteVoorDeze + 1);
-    toonVermist();
     return;
   }
   waarschuwing?.classList.remove('zichtbaar');
@@ -265,8 +280,17 @@ koppelDeelKnop('btn-deel-resultaat', () =>
 );
 
 // ── Firebase: luisteren naar rapport-status ───────────────
+// Ook de foute rapporten komen hier binnen: dient de andere speler een fout
+// rapport in, dan ziet iedereen de waarschuwing van An, en na twee keer fout
+// krijgt iedereen het einde "Vermist".
 luisterNaarRapport(sessie, rapport => {
-  if (!rapport?.ingediend || eindeGetoond) return;
+  if (eindeGetoond) return;
+  if (!rapport?.ingediend) {
+    const fouten = typeof rapport?.fouten === 'number' ? rapport.fouten : 0;
+    if (fouten >= MAX_FOUTE_POGINGEN) toonVermist();
+    else if (fouten > 0) document.getElementById('an-waarschuwing')?.classList.add('zichtbaar');
+    return;
+  }
   const keuze = rapport.inhoud?.conclusie;
   toonEinde(isKeuze(keuze) ? keuze : 'morgen');
   meetSpel('game_complete', sessie, { keuze: isKeuze(keuze) ? keuze : 'onbekend' });

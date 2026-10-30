@@ -34,6 +34,9 @@ Wat een speler mag (zie `firebase/database.rules.json`):
 - `spelers/<rol>`: één keer claimen met `"bezet"`. Vrijgeven kan alleen een beheerder.
 - `timerGestart`, `geopendOp`: één keer, en de waarde moet de servertijd zijn.
 - `rapport`: één keer indienen, daarna ligt het vast. Alleen gekende velden.
+- `rapport/fouten` (Kamer 14): aantal foute rapporten van de sessie, alleen +1 en
+  maximaal 2. Staat de teller op 2 (einde "Vermist"), dan kan niemand nog een
+  rapport indienen. Zo delen beide spelers dezelfde twee kansen.
 - `actief`: alleen naar `false` (sessie sluiten), nooit terug naar `true`.
 - `aangemaakt`, `ervaringsId`, `aantalSpelers`: niet aan te passen.
 - `dua/*`: per veld begrensd (kluisnummer twee cijfers en daarna vast, verstopplek
