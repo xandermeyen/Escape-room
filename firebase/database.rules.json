@@ -61,7 +61,7 @@
           },
           "fouten": {
             ".write": "auth != null && newData.exists() && data.parent().child('ingediend').val() !== true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2 && (!data.exists() || newData.val() === data.val() + 1)"
+            ".validate": "newData.isNumber() && newData.val() <= 2 && ((!data.exists() && newData.val() === 1) || (data.exists() && newData.val() === data.val() + 1))"
           },
           "$other": {
             ".validate": false
