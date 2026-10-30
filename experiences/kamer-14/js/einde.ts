@@ -74,7 +74,21 @@ function gekozen(): string | null {
 }
 
 // ── Rapport indienen ──────────────────────────────────────
+// Eén beoordeling tegelijk: een dubbelklik of twee keer Enter mag geen
+// tweede foute poging tellen (dat sprong meteen naar het einde "Vermist").
+let bezigMetIndienen = false;
+
 async function diendIn(): Promise<void> {
+  if (bezigMetIndienen) return;
+  bezigMetIndienen = true;
+  try {
+    await beoordeelEnDienIn();
+  } finally {
+    bezigMetIndienen = false;
+  }
+}
+
+async function beoordeelEnDienIn(): Promise<void> {
   const validatieBericht = document.getElementById('rapport-validatie-bericht');
   const waarschuwing = document.getElementById('an-waarschuwing');
   validatieBericht?.classList.remove('zichtbaar');

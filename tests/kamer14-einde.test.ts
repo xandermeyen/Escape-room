@@ -139,6 +139,23 @@ describe('einde: verloop in de pagina', () => {
     expect(leesFoutePogingen('EIN-001')).toBe(0);
   });
 
+  it('dubbelklik op een fout rapport telt als één poging', async () => {
+    bewaarFoutePogingen('EIN-001', 0);
+    vul(FOUT);
+    kies('morgen');
+    klik('btn-indienen');
+    klik('btn-indienen');
+    await vi.waitFor(() =>
+      expect(document.getElementById('an-waarschuwing')!.classList).toContain('zichtbaar'),
+    );
+    await new Promise(r => setTimeout(r, 50));
+    expect(leesFoutePogingen('EIN-001')).toBe(1);
+    expect(actief()).not.toBe('scherm-einde');
+    expect(sluitSessie).not.toHaveBeenCalled();
+    bewaarFoutePogingen('EIN-001', 0);
+    document.getElementById('an-waarschuwing')!.classList.remove('zichtbaar');
+  });
+
   it('eerste fout rapport: waarschuwing, geen indiening', async () => {
     vul(FOUT);
     kies('morgen');
