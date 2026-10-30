@@ -15,6 +15,8 @@ vi.mock('../shared/js/session.ts', () => ({
   luisterNaarRapport: (_s: string, cb: (r: Rapport) => void) => rapportLuisteraars.push(cb),
   diendRapportIn: (...args: unknown[]) => diendRapportIn(...(args as [])),
   sluitSessie: (...args: unknown[]) => sluitSessie(...(args as [])),
+  // Geen server in deze tests: einde.ts valt terug op de lokale teller.
+  registreerFoutRapport: () => Promise.reject(new Error('offline')),
   haalTijden: () => Promise.resolve({}),
 }));
 vi.mock('../shared/js/review-form.ts', () => ({ koppelReviewFormulier: () => {} }));
@@ -137,6 +139,23 @@ describe('einde: verloop in de pagina', () => {
     );
     expect(diendRapportIn).not.toHaveBeenCalled();
     expect(leesFoutePogingen('EIN-001')).toBe(0);
+  });
+
+  it('dubbelklik op een fout rapport telt als één poging', async () => {
+    bewaarFoutePogingen('EIN-001', 0);
+    vul(FOUT);
+    kies('morgen');
+    klik('btn-indienen');
+    klik('btn-indienen');
+    await vi.waitFor(() =>
+      expect(document.getElementById('an-waarschuwing')!.classList).toContain('zichtbaar'),
+    );
+    await new Promise(r => setTimeout(r, 50));
+    expect(leesFoutePogingen('EIN-001')).toBe(1);
+    expect(actief()).not.toBe('scherm-einde');
+    expect(sluitSessie).not.toHaveBeenCalled();
+    bewaarFoutePogingen('EIN-001', 0);
+    document.getElementById('an-waarschuwing')!.classList.remove('zichtbaar');
   });
 
   it('eerste fout rapport: waarschuwing, geen indiening', async () => {

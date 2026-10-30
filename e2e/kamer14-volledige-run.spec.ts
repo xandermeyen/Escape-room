@@ -223,3 +223,42 @@ test('twee keer een fout rapport: An meldt Lena als vermist', async ({ context }
   await expect(a.locator('#scherm-slot')).toBeVisible();
   expect(fouten).toEqual([]);
 });
+
+test('elke speler één fout rapport: allebei Vermist, en niemand kan nog indienen', async ({
+  context,
+}) => {
+  await nieuweContext(context);
+  const a = await context.newPage();
+  const b = await context.newPage();
+  const fouten = [...bewaakFouten(a, 'A'), ...bewaakFouten(b, 'B')];
+  await a.goto(`${K14}/einde.html?sessie=${CODE}`);
+  await b.goto(`${K14}/einde.html?sessie=${CODE}`);
+
+  const dienFoutIn = async (page: Page): Promise<void> => {
+    await page.check('input[name="keuze"][value="alles"]');
+    await page.fill('#r-vervoer', 'trein');
+    await page.fill('#r-tijdstip', '09:12');
+    await page.fill('#r-bestemming', 'Turnhout');
+    await page.fill('#r-wie', 'Katrijn');
+    await page.click('#btn-indienen');
+  };
+
+  // A faalt: An waarschuwt, ook bij B die zelf niets indiende.
+  await dienFoutIn(a);
+  await expect(a.locator('#an-waarschuwing')).toHaveClass(/zichtbaar/);
+  await expect(b.locator('#an-waarschuwing')).toHaveClass(/zichtbaar/);
+
+  // B faalt ook: dat is de tweede fout van de sessie, dus voor beiden Vermist.
+  await dienFoutIn(b);
+  await expect(b.locator('#einde-titel')).toHaveText('Vermist');
+  await expect(a.locator('#einde-titel')).toHaveText('Vermist');
+
+  const sessie = await a.evaluate(
+    code => JSON.parse(localStorage.getItem('e2e-firebase-db') ?? '{}').sessions[code],
+    CODE,
+  );
+  expect(sessie.rapport.fouten).toBe(2);
+  expect(sessie.rapport.ingediend).toBe(false);
+  expect(sessie.actief).toBe(false);
+  expect(fouten).toEqual([]);
+});

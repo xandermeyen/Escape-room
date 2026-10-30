@@ -242,6 +242,33 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
           .update({ ...rapport, inhoud: { iets: 'x' } }),
       );
     });
+
+    // Kamer 14: een fout rapport telt voor de hele sessie, niet per toestel.
+    const fouten = `sessions/${CODE}/rapport/fouten`;
+    const PLUS_EEN = { '.sv': { increment: 1 } };
+
+    it('foute rapporten: alleen +1, door elke speler, tot maximaal 2', async () => {
+      await assertFails(speler().ref(fouten).set(2));
+      await assertSucceeds(speler('speler-1').ref(fouten).set(PLUS_EEN));
+      await assertFails(speler().ref(fouten).set(1));
+      await assertSucceeds(speler('speler-2').ref(fouten).set(PLUS_EEN));
+      await assertFails(speler().ref(fouten).set(PLUS_EEN));
+      await assertFails(speler().ref(fouten).remove());
+      await assertFails(anoniemLoos().ref(fouten).set(PLUS_EEN));
+    });
+
+    it('na een fout rapport kan een juist rapport nog', async () => {
+      await assertSucceeds(speler().ref(fouten).set(PLUS_EEN));
+      await assertSucceeds(speler('speler-2').ref(`sessions/${CODE}/rapport`).update(rapport));
+      await assertFails(speler().ref(fouten).set(PLUS_EEN));
+    });
+
+    it('na twee foute rapporten (vermist) kan niemand nog indienen', async () => {
+      await seed(fouten, 2);
+      await assertFails(speler('speler-2').ref(`sessions/${CODE}/rapport`).update(rapport));
+      await assertFails(speler('speler-2').ref(`sessions/${CODE}/rapport/ingediend`).set(true));
+      await assertFails(speler('speler-2').ref(`sessions/${CODE}/rapport/inhoud/wie`).set('Noor'));
+    });
   });
 
   // ── Speldata ────────────────────────────────────────────

@@ -46,18 +46,22 @@
         },
         "rapport": {
           "ingediend": {
-            ".write": "auth != null && data.val() !== true && newData.val() === true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+            ".write": "auth != null && data.val() !== true && newData.val() === true && root.child('sessions').child($sessie).child('aangemaakt').exists() && (!data.parent().child('fouten').exists() || data.parent().child('fouten').val() < 2)",
             ".validate": "newData.isBoolean()"
           },
           "tijdstip": {
-            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.val() === now && root.child('sessions').child($sessie).child('aangemaakt').exists() && (!data.parent().child('fouten').exists() || data.parent().child('fouten').val() < 2)",
             ".validate": "newData.isNumber()"
           },
           "inhoud": {
-            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+            ".write": "auth != null && data.parent().child('ingediend').val() !== true && newData.exists() && root.child('sessions').child($sessie).child('aangemaakt').exists() && (!data.parent().child('fouten').exists() || data.parent().child('fouten').val() < 2)",
             "$veld": {
               ".validate": "$veld.matches(/^(bestemming|wie|vervoer|tijdstip|conclusie)$/) && newData.isString() && newData.val().length <= 4000"
             }
+          },
+          "fouten": {
+            ".write": "auth != null && newData.exists() && data.parent().child('ingediend').val() !== true && root.child('sessions').child($sessie).child('aangemaakt').exists()",
+            ".validate": "newData.isNumber() && newData.val() <= 2 && ((!data.exists() && newData.val() === 1) || (data.exists() && newData.val() === data.val() + 1))"
           },
           "$other": {
             ".validate": false

@@ -32,14 +32,18 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Product",
-        "additionalType": "https://schema.org/Game",
+        "@type": ["Product", "Game"],
+        "@id": "https://bureau-x.be/kamer-14/#spel",
         "name": "Kamer 14",
         "brand": { "@type": "Brand", "name": "Bureau X" },
         "description": "Online escape room voor twee spelers over de verdwijning van Lena Bogaert, gebaseerd op de Geelse traditie van gezinsverpleging. Ongeveer 45 minuten, 100% online, gratis.",
         "url": "https://bureau-x.be/kamer-14/",
         "image": "https://bureau-x.be/assets/img/kamer-14-preview.jpg",
         "category": "Online escape room",
+        "inLanguage": "nl",
+        "timeRequired": "PT45M",
+        "numberOfPlayers": { "@type": "QuantitativeValue", "minValue": 2, "maxValue": 2 },
+        "publisher": { "@id": "https://bureau-x.be/#organisatie" },
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -47,6 +51,27 @@
           "availability": "https://schema.org/InStock",
           "url": "https://bureau-x.be/kamer-14/#boek"
         }
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Bureau X",
+            "item": "https://bureau-x.be/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Kamer 14",
+            "item": "https://bureau-x.be/kamer-14/"
+          }
+        ]
       }
     </script>
 

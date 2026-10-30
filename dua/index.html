@@ -17,21 +17,25 @@
       content="Een tijdgespleten escape room rond de onopgeloste diefstal van De Rechtvaardige Rechters (Gent, 1934). Nu beschikbaar."
     />
     <meta property="og:url" content="https://bureau-x.be/dua/" />
-    <meta property="og:image" content="https://bureau-x.be/assets/img/rechtvaardige-rechters.jpg" />
+    <meta property="og:image" content="https://bureau-x.be/assets/img/dua-preview.jpg" />
     <meta property="og:locale" content="nl_BE" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Product",
-        "additionalType": "https://schema.org/Game",
+        "@type": ["Product", "Game"],
+        "@id": "https://bureau-x.be/dua/#spel",
         "name": "D.U.A.",
         "brand": { "@type": "Brand", "name": "Bureau X" },
         "description": "Online escape room rond de onopgeloste diefstal van De Rechtvaardige Rechters uit de Sint-Baafskathedraal (Gent, 1934). Twee teams spelen tegelijk, een in 1934 en een in 2034. Samen los je de zaak op, door de tijd heen. 100% online, gratis.",
         "url": "https://bureau-x.be/dua/",
-        "image": "https://bureau-x.be/assets/img/rechtvaardige-rechters.jpg",
+        "image": "https://bureau-x.be/assets/img/dua-preview.jpg",
         "category": "Online escape room",
+        "inLanguage": "nl",
+        "timeRequired": "PT60M",
+        "numberOfPlayers": { "@type": "QuantitativeValue", "minValue": 2, "maxValue": 4 },
+        "publisher": { "@id": "https://bureau-x.be/#organisatie" },
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -39,6 +43,27 @@
           "availability": "https://schema.org/InStock",
           "url": "https://bureau-x.be/dua/#boek"
         }
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Bureau X",
+            "item": "https://bureau-x.be/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "D.U.A.",
+            "item": "https://bureau-x.be/dua/"
+          }
+        ]
       }
     </script>
 
