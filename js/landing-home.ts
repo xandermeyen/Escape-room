@@ -34,29 +34,71 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;');
 }
 
+function sterAantal(rating: number): number {
+  return Math.max(1, Math.min(5, Math.round(rating)));
+}
+
+// Volle en lege sterren in aparte spans, zodat het verschil ook bij een
+// kleine lettergrootte zichtbaar blijft. Schermlezers krijgen een label
+// in plaats van "zwarte ster, zwarte ster, witte ster...".
 function sterrenHtml(rating: number): string {
-  const n = Math.max(1, Math.min(5, Math.round(rating)));
-  return '★'.repeat(n) + '☆'.repeat(5 - n);
+  const n = sterAantal(rating);
+  const vol = '<span class="ster">★</span>'.repeat(n);
+  const leeg = '<span class="ster leeg">☆</span>'.repeat(5 - n);
+  return vol + leeg;
+}
+
+// Maand + jaar volstaat: geloofwaardig zonder de nadruk op timing te leggen.
+function datumHtml(tijdstip: number | undefined): string {
+  if (!tijdstip) return '';
+  const d = new Date(tijdstip);
+  if (Number.isNaN(d.getTime())) return '';
+  const label = d.toLocaleDateString('nl-BE', { month: 'short', year: 'numeric' });
+  const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  return ` &middot; <time datetime="${iso}">${escapeHtml(label)}</time>`;
 }
 
 function reviewKaart(r: Review): string {
   const naam = r.naam ? escapeHtml(r.naam) : 'Anonieme speler';
   const exp = escapeHtml(ERVARING_LABELS[r.ervaring] ?? r.ervaring);
+  const n = sterAantal(r.rating);
   return (
-    `<div class="review-card reveal visible">` +
-    `<div class="review-quote">&ldquo;</div>` +
-    `<div class="review-stars">${sterrenHtml(r.rating)}</div>` +
-    `<p class="review-text">${escapeHtml(r.tekst)}</p>` +
-    `<div class="review-author">${naam}</div>` +
-    `<div class="review-exp">${exp}</div></div>`
+    `<article class="review-card reveal visible">` +
+    `<div class="review-quote" aria-hidden="true">&ldquo;</div>` +
+    `<div class="review-rating" role="img" aria-label="${n} van 5 sterren">` +
+    `${sterrenHtml(r.rating)}<span class="review-score">${n}/5</span></div>` +
+    `<blockquote class="review-text"><p>${escapeHtml(r.tekst)}</p></blockquote>` +
+    `<footer class="review-meta">` +
+    `<span class="review-author">${naam}</span>` +
+    `<span class="review-exp">${exp}${datumHtml(r.tijdstip)}</span>` +
+    `</footer></article>`
+  );
+}
+
+// Samenvatting pas vanaf een paar reviews: bij één of twee zegt een
+// gemiddelde weinig en trekt het onnodig de aandacht.
+const MIN_VOOR_SAMENVATTING = 3;
+
+function samenvattingHtml(reviews: Review[]): string {
+  const gem = reviews.reduce((som, r) => som + r.rating, 0) / reviews.length;
+  const gemTekst = gem.toLocaleString('nl-BE', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
+  return (
+    `<span class="reviews-gem">${gemTekst}</span>` +
+    `<span class="reviews-gem-van">/ 5</span>` +
+    `<span class="reviews-aantal">gemiddelde van ${reviews.length} reviews</span>`
   );
 }
 
 function marqueeItem(r: Review): string {
   const naam = r.naam ? escapeHtml(r.naam) : 'Anonieme speler';
   const kort = r.tekst.length > 90 ? r.tekst.slice(0, 88).trim() + '…' : r.tekst;
+  const n = sterAantal(r.rating);
   return (
-    `<div class="marquee-item"><span class="stars">${sterrenHtml(r.rating)}</span>` +
+    `<div class="marquee-item"><span class="stars" role="img" aria-label="${n} van 5 sterren">` +
+    `${sterrenHtml(r.rating)}</span>` +
     `"${escapeHtml(kort)}" &middot; ${naam}</div>`
   );
 }
@@ -127,6 +169,13 @@ async function laadReviews(): Promise<void> {
   // eslint-disable-next-line no-unsanitized/property
   grid.innerHTML = reviews.slice(0, 6).map(reviewKaart).join('');
   sectie.style.display = '';
+
+  const samenvatting = document.getElementById('reviews-summary');
+  if (samenvatting && reviews.length >= MIN_VOOR_SAMENVATTING) {
+    // eslint-disable-next-line no-unsanitized/property
+    samenvatting.innerHTML = samenvattingHtml(reviews);
+    samenvatting.hidden = false;
+  }
 
   if (marqueeWrap && marqueeTrack) {
     // Twee keer dezelfde set voor een naadloze lus.
