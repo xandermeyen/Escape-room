@@ -17,7 +17,7 @@ export const DUA_INACTIEF: Record<Tijdperk, Record<string, Melding>> = {
     p1: {
       titel: STEM_1934,
       tekst:
-        'Eerst elke hamer in zijn vak, dan vijf letters dieper. Welk woord moet 2034 straks lezen? Denk aan jullie eigen opdracht in het Noordstation.',
+        'De vakken dragen alleen een nummer en het briefje van de Loper staat in code. Wat jullie missen, ligt in 2034: hun restauratieverslag en de codekaart in hun archief.',
     },
     p2: {
       titel: STEM_1934,
@@ -48,7 +48,7 @@ export const DUA_INACTIEF: Record<Tijdperk, Record<string, Melding>> = {
     p1: {
       titel: DOSSIER_2034,
       tekst:
-        'De doorslag verschijnt pas als 1934 de brief verstuurt. Lees daarna de dieper gedrukte letters in volgorde.',
+        '1934 zit met een kapotte typemachine en een briefje in code. Jullie hebben het restauratieverslag, en de codekaart ligt in het archief bij brief XII.',
     },
     p2: {
       titel: DOSSIER_2034,
@@ -122,8 +122,8 @@ export function duaVrijgaveMelding(
     return {
       titel: 'De handdruk is gelukt',
       tekst: t1934
-        ? 'Herstel nu de typemachine en typ brief XII (①).'
-        : 'Wacht op de doorslag van brief XII (①). 1934 moet eerst de typemachine herstellen.',
+        ? 'Herstel nu de typemachine en typ brief XII (①). Wat jullie niet weten, weet 2034.'
+        : '1934 moet nu de typemachine herstellen en brief XII typen (①). Wat ze daarvoor nodig hebben, ligt bij jullie: het restauratieverslag en de codekaart in het archief.',
     };
   }
   return null;

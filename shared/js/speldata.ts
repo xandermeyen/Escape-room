@@ -7,16 +7,26 @@
  *   fout:      aantal foute pogingen
  *   bijna:     aantal bijna-juiste pogingen
  *   hints:     { <rol>: hoogste geopende hintstap }   (bv. a, b, 1934, 2034)
+ *   hintTijd:  { <rol>: { <stap>: servertijd waarop die stap opende } }
+ *   invoer:    { <pushId>: { w: wat er ingetikt werd, o: 'fout' | 'bijna', t } }
  *
  * Geen persoonsgegevens: alles hangt enkel aan de sessiecode. Elke
  * schrijfactie faalt stil: speldata mag een groep nooit blokkeren.
  * database.rules.json laat start/opgelost één keer toe (servertijd),
- * tellers alleen +1 en hintstappen alleen stijgend.
+ * tellers alleen +1 en hintstappen alleen stijgend. Invoer wordt ingekort tot
+ * INVOER_MAX tekens en kan niet meer gewijzigd worden.
  */
 import { db } from './firebase-config.ts';
-import { ref, get, set, runTransaction, serverTimestamp, increment } from 'firebase/database';
+import { ref, get, set, push, runTransaction, serverTimestamp, increment } from 'firebase/database';
 import { authReady } from './auth.ts';
 import { isDemoCode } from './demo.ts';
+
+export interface InvoerStat {
+  /** Wat de groep intikte of koos (ingekort). */
+  w: string;
+  o: 'fout' | 'bijna';
+  t: number;
+}
 
 export interface PuzzelStat {
   start?: number;
@@ -24,7 +34,12 @@ export interface PuzzelStat {
   fout?: number;
   bijna?: number;
   hints?: Record<string, number>;
+  hintTijd?: Record<string, Record<string, number>>;
+  invoer?: Record<string, InvoerStat>;
 }
+
+/** Maximale lengte van bewaarde invoer (database.rules.json dwingt dit ook af). */
+export const INVOER_MAX = 40;
 
 export type SessieStats = Record<string, PuzzelStat>;
 
@@ -52,13 +67,21 @@ async function zetEenmalig(code: string, pad: string): Promise<void> {
   await set(r, serverTimestamp());
 }
 
-/** Een foute of bijna-juiste poging tellen. */
+/**
+ * Een foute of bijna-juiste poging tellen. Met `invoer` wordt ook bewaard wat
+ * de groep probeerde, zodat de host ziet waar een puzzel op vastloopt.
+ */
 export function registreerPoging(
   code: string,
   puzzel: string,
   soort: 'fout' | 'bijna',
+  invoer?: string,
 ): Promise<void> {
-  return stil(code, () => set(statRef(code, `${puzzel}/${soort}`), increment(1)));
+  return stil(code, async () => {
+    await set(statRef(code, `${puzzel}/${soort}`), increment(1));
+    const w = (invoer ?? '').trim().slice(0, INVOER_MAX);
+    if (w) await push(statRef(code, `${puzzel}/invoer`), { w, o: soort, t: serverTimestamp() });
+  });
 }
 
 /** Een geopende hintstap bewaren (alleen de hoogste stap per rol telt). */
@@ -68,11 +91,13 @@ export function registreerHint(
   rol: string,
   stap: number,
 ): Promise<void> {
-  return stil(code, () =>
-    runTransaction(statRef(code, `${puzzel}/hints/${rol}`), (huidig: number | null) =>
+  return stil(code, async () => {
+    await runTransaction(statRef(code, `${puzzel}/hints/${rol}`), (huidig: number | null) =>
       typeof huidig === 'number' && huidig >= stap ? undefined : stap,
-    ),
-  );
+    );
+    // Wanneer de stap opende: toont of een groep snel of pas laat hulp zocht.
+    await zetEenmalig(code, `${puzzel}/hintTijd/${rol}/${stap}`);
+  });
 }
 
 /** Moment waarop een puzzel opgelost werd. */

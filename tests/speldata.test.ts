@@ -4,6 +4,7 @@ vi.mock('firebase/database', () => ({
   ref: vi.fn((_db: unknown, path: string) => ({ path })),
   get: vi.fn(),
   set: vi.fn(() => Promise.resolve()),
+  push: vi.fn(() => Promise.resolve()),
   runTransaction: vi.fn(() => Promise.resolve()),
   serverTimestamp: vi.fn(() => ({ '.sv': 'timestamp' })),
   increment: vi.fn((n: number) => ({ '.sv': { increment: n } })),
@@ -11,7 +12,7 @@ vi.mock('firebase/database', () => ({
 vi.mock('../shared/js/firebase-config.ts', () => ({ db: {} }));
 vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
 
-import { get, set, runTransaction } from 'firebase/database';
+import { get, set, push, runTransaction } from 'firebase/database';
 import {
   registreerPoging,
   registreerHint,
@@ -30,6 +31,7 @@ import { formateerDuur, statsDetailHtml, gemiddeldenHtml } from '../shared/js/ho
 const getMock = get as unknown as ReturnType<typeof vi.fn>;
 const setMock = set as unknown as ReturnType<typeof vi.fn>;
 const txMock = runTransaction as unknown as ReturnType<typeof vi.fn>;
+const pushMock = push as unknown as ReturnType<typeof vi.fn>;
 
 const wachtEven = () => new Promise(r => setTimeout(r, 0));
 
@@ -52,6 +54,38 @@ describe('speldata schrijven', () => {
       { path: 'sessions/ABC/stats/p5/bijna' },
       expect.anything(),
     );
+  });
+
+  it('bewaart de foute invoer, ingekort en met servertijd', async () => {
+    await registreerPoging('ABC', 'p1', 'fout', '  wachtzaal  ');
+    expect(pushMock).toHaveBeenCalledWith(
+      { path: 'sessions/ABC/stats/p1/invoer' },
+      { w: 'wachtzaal', o: 'fout', t: { '.sv': 'timestamp' } },
+    );
+
+    pushMock.mockClear();
+    await registreerPoging('ABC', 'p1', 'bijna', 'x'.repeat(60));
+    expect(pushMock.mock.calls[0]?.[1]).toMatchObject({ w: 'x'.repeat(40), o: 'bijna' });
+  });
+
+  it('zonder invoer (of lege invoer) wordt niets extra bewaard', async () => {
+    await registreerPoging('ABC', 'p1', 'fout');
+    await registreerPoging('ABC', 'p1', 'fout', '   ');
+    expect(pushMock).not.toHaveBeenCalled();
+  });
+
+  it('bewaart wanneer een hintstap opende, één keer per stap', async () => {
+    getMock.mockResolvedValueOnce({ exists: () => false });
+    await registreerHint('ABC', 'p1', '1934', 2);
+    expect(setMock).toHaveBeenCalledWith(
+      { path: 'sessions/ABC/stats/p1/hintTijd/1934/2' },
+      { '.sv': 'timestamp' },
+    );
+
+    setMock.mockClear();
+    getMock.mockResolvedValueOnce({ exists: () => true });
+    await registreerHint('ABC', 'p1', '1934', 2);
+    expect(setMock).not.toHaveBeenCalled();
   });
 
   it('zet opgelost enkel als het nog niet bestaat', async () => {
@@ -186,8 +220,33 @@ describe('host-stats', () => {
       { a: 'A', b: 'B' },
     );
     expect(html).toContain('1:30');
-    expect(html).toContain('A 2');
+    expect(html).toContain('A: stap 2');
     expect(html).toContain('P2');
+  });
+
+  it('details tonen wanneer elke hintstap opende en wat er fout ingetikt werd', () => {
+    const html = statsDetailHtml(
+      {
+        p1: {
+          start: 1_000,
+          opgelost: 600_000,
+          fout: 2,
+          hints: { '1934': 2 },
+          hintTijd: { '1934': { '2': 331_000, '1': 131_000 } },
+          invoer: {
+            b: { w: 'KLUIZ', o: 'bijna', t: 20 },
+            a: { w: '<b>WACHT</b>', o: 'fout', t: 10 },
+          },
+        },
+      },
+      ['p1'],
+      { '1934': '1934' },
+    );
+    expect(html).toContain('1934: stap 2');
+    expect(html).toContain('na 2:10 · 5:30');
+    // In volgorde van tijd, en altijd ge-escaped.
+    expect(html).toContain('&lt;b&gt;WACHT&lt;/b&gt;, KLUIZ (bijna)');
+    expect(html).not.toContain('<b>WACHT');
   });
 
   it('lege speldata geeft een duidelijke melding', () => {

@@ -264,6 +264,10 @@ body {
   font-size: 0.7rem;
   margin-left: 4px;
 }
+.stats-sub {
+  color: #8f8f8f;
+  font-size: 0.72rem;
+}
 .stats-leeg {
   color: #777;
   font-size: 0.85rem;

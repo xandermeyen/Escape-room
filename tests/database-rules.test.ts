@@ -305,6 +305,48 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       await assertFails(speler().ref(`${pad}/hints/Rol-X`).set(1));
     });
 
+    it('hintTijd: één keer per rol en stap, met servertijd', async () => {
+      await assertFails(speler().ref(`${pad}/hintTijd/1934/1`).set(123));
+      await assertSucceeds(speler().ref(`${pad}/hintTijd/1934/1`).set(SV_NU));
+      await assertFails(speler().ref(`${pad}/hintTijd/1934/1`).set(SV_NU));
+      await assertFails(speler().ref(`${pad}/hintTijd/1934/11`).set(SV_NU));
+      await assertFails(speler().ref(`${pad}/hintTijd/Rol-X/1`).set(SV_NU));
+    });
+
+    it('invoer: nieuw item met korte tekst, nooit wijzigen', async () => {
+      const id = '-Nabcdefghijklmnopqr';
+      const item = { w: 'wachtzaal', o: 'fout', t: SV_NU };
+      await assertSucceeds(speler().ref(`${pad}/invoer/${id}`).set(item));
+      await assertFails(
+        speler()
+          .ref(`${pad}/invoer/${id}`)
+          .set({ ...item, w: 'kluis' }),
+      );
+      await assertFails(speler().ref(`${pad}/invoer/${id}`).remove());
+      const ander = '-Nabcdefghijklmnopqs';
+      await assertFails(
+        speler()
+          .ref(`${pad}/invoer/${ander}`)
+          .set({ ...item, w: 'x'.repeat(41) }),
+      );
+      await assertFails(
+        speler()
+          .ref(`${pad}/invoer/${ander}`)
+          .set({ ...item, o: 'juist' }),
+      );
+      await assertFails(
+        speler()
+          .ref(`${pad}/invoer/${ander}`)
+          .set({ ...item, t: 123 }),
+      );
+      await assertFails(
+        speler()
+          .ref(`${pad}/invoer/${ander}`)
+          .set({ ...item, naam: 'Jan' }),
+      );
+      await assertFails(speler().ref(`${pad}/invoer/kort`).set(item));
+    });
+
     it('geen onbekende velden of puzzels', async () => {
       await assertFails(speler().ref(`${pad}/naam`).set('Jan'));
       await assertFails(speler().ref(`sessions/${CODE}/stats/p9/start`).set(SV_NU));
@@ -515,6 +557,12 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       await seed(`sessions/${CODE}/demo`, true);
       await assertFails(speler().ref(`sessions/${CODE}/stats/p1/start`).set(SV_NU));
       await assertFails(speler().ref(`sessions/${CODE}/stats/p1/hints/a`).set(1));
+      await assertFails(speler().ref(`sessions/${CODE}/stats/p1/hintTijd/a/1`).set(SV_NU));
+      await assertFails(
+        speler()
+          .ref(`sessions/${CODE}/stats/p1/invoer/-Nabcdefghijklmnopqr`)
+          .set({ w: 'x', o: 'fout', t: SV_NU }),
+      );
     });
 
     it('een beheerder kan de demo wissen en opnieuw aanmaken', async () => {
