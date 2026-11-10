@@ -5,7 +5,12 @@
  */
 import '../../../shared/js/sentry.ts';
 import { luisterNaarStatus, bewaakSessieGesloten } from '../../../shared/js/session.ts';
-import { requireEl, beoordeelAntwoord, koppelHints } from '../../../shared/js/utils.ts';
+import {
+  requireEl,
+  beoordeelAntwoord,
+  antwoordKlopt,
+  koppelHints,
+} from '../../../shared/js/utils.ts';
 import {
   registreerPoging,
   registreerVrijgaves,
@@ -97,14 +102,17 @@ document.getElementById('zegelknop')?.addEventListener('click', async () => {
   if (dua.p0zegel) return;
   fx.lade();
   await zetZegel(sessie);
-  melding('Het zegel staat. Vraag 2034 wat er zonet bij hen verscheen.');
+  melding(
+    'Het zegel staat. Vraag 2034 wat er zonet bij hen verscheen. Pas als zij het bevestigen, is de handdruk klaar.',
+  );
 });
 
 function tekenZegel(): void {
   if (!dua.p0zegel) return;
   requireEl('zegel-toon').innerHTML = '<span class="zegel">D.U.A.</span>';
   requireEl<HTMLButtonElement>('zegelknop').style.display = 'none';
-  document.getElementById('s-zegel')?.classList.add('klaar');
+  // Pas klaar als 2034 het zegel bevestigde (puzzels.p0), niet bij het drukken.
+  document.getElementById('s-zegel')?.classList.toggle('klaar', !!puzzels['p0']);
 }
 
 // ═══════════════════ P1a: HAMERPUZZEL ═══════════════════
@@ -128,14 +136,16 @@ function bouwHamers(): void {
   volgorde.forEach((h, i) => {
     const div = document.createElement('div');
     div.className = 'hamerslot';
-    // Veilig: HAMER_SLOTS is een vaste constante, geen externe invoer.
-    // eslint-disable-next-line no-unsanitized/property
-    div.innerHTML = `<div class="label">vak ${HAMER_SLOTS[i]}</div>`;
+    // De vakken dragen alleen een nummer: de volgorde staat in het verslag van 2034.
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = `vak ${i + 1}`;
+    div.appendChild(label);
     const knop = document.createElement('button');
     knop.type = 'button';
     knop.className = `hamer${i === hamerSel ? ' gekozen' : ''}${hersteld ? ' goedzo' : ''}`;
     knop.textContent = h;
-    knop.setAttribute('aria-label', `Hamer ${h} in vak ${HAMER_SLOTS[i]}`);
+    knop.setAttribute('aria-label', `Hamer ${h} in vak ${i + 1}`);
     knop.setAttribute('aria-pressed', String(i === hamerSel));
     knop.addEventListener('click', () => {
       hamerKlik(i);
@@ -168,7 +178,11 @@ function hamerKlik(i: number): void {
   if (isHersteld()) return;
   if (!puzzels['p0']) {
     fx.fout();
-    melding('Doe eerst de handdruk (oefenronde ⓪): zo leren jullie hoe de tijd werkt.');
+    melding(
+      dua.p0zegel
+        ? 'Wacht tot 2034 bevestigt dat ze het zegel zien (oefenronde ⓪). Pas dan werkt de machine.'
+        : 'Doe eerst de handdruk (oefenronde ⓪): zo leren jullie hoe de tijd werkt.',
+    );
     return;
   }
   fx.klik();
@@ -285,9 +299,28 @@ document.getElementById('btn-verstuur')?.addEventListener('click', async () => {
   }
   fx.typmachine();
   fx.lade();
-  await zetBrief(sessie, briefLetters);
-  melding('Doorslag gemaakt. In 2034 ligt er nu een brief in het archief.');
+  const letters = [...briefLetters];
+  await zetBrief(sessie, letters);
+  // De Schrijver leest de doorslag na: staat er het woord uit het briefje?
+  const woord = doorslagWoord(letters);
+  if (await antwoordKlopt(woord.toLowerCase(), DUA_HASHES.woord ?? [])) {
+    melding('Doorslag gemaakt. In 2034 ligt er nu een brief in het archief.');
+    return;
+  }
+  hulp.poging('p1', 'fout');
+  void registreerPoging(sessie, 'p1', 'fout', woord);
+  melding(
+    `De doorslag spelt "${woord}". Dat is niet wat de Loper vroeg. Neem een nieuw vel en vraag 2034 de code nog eens na.`,
+  );
 });
+
+/** Het woord op de doorslag: de dieper aangeslagen letters in leesvolgorde. */
+function doorslagWoord(letters: number[]): string {
+  return [...letters]
+    .sort((a, b) => a - b)
+    .map(i => BRIEFTEKST[i] ?? '')
+    .join('');
+}
 
 document.getElementById('btn-gom')?.addEventListener('click', async () => {
   if (puzzels['p1']) {
@@ -360,7 +393,7 @@ document.getElementById('btn-deponeer')?.addEventListener('click', async () => {
   if (oordeel !== 'juist') {
     fx.fout();
     hulp.poging('p2', oordeel);
-    void registreerPoging(sessie, 'p2', oordeel);
+    void registreerPoging(sessie, 'p2', oordeel, v);
     melding(
       oordeel === 'bijna'
         ? DUA_BIJNA_KLUIS
@@ -585,6 +618,7 @@ luisterNaarStatus(sessie, p => {
   const hadP5 = !!puzzels['p5'];
   puzzels = p;
   tekenVoortgang(p);
+  tekenZegel();
   registreerVrijgaves(sessie, p, DUA_VRIJGAVE);
   hulp.status(p);
   // Na P1 is een nieuw vel niet meer nodig.

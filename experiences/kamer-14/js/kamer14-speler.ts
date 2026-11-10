@@ -248,7 +248,8 @@ export function startSpelerPagina(config: SpelerConfig): void {
           hulp.poging(nr, oordeel);
           if (oordeel !== 'juist') {
             speelFout();
-            void registreerPoging(sessie, nr, oordeel);
+            const invoer = document.getElementById(`input-${nr}`) as HTMLInputElement | null;
+            void registreerPoging(sessie, nr, oordeel, invoer?.value);
             knop.closest('.slot-paneel')?.classList.add('schud');
             setTimeout(() => knop.closest('.slot-paneel')?.classList.remove('schud'), 500);
           }

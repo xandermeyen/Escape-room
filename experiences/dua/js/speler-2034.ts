@@ -34,6 +34,7 @@ import {
   DUA_VRIJGAVE,
   DUA_BIJNA_ROUTE,
   beoordeelDoorslag,
+  archiefNummer,
 } from './dua-config.ts';
 import { DUA_INACTIEF, DUA_HULP_HTML, duaVrijgaveMelding } from './dua-hulp.ts';
 import {
@@ -98,10 +99,10 @@ const hulp = initHulp({
   hulpHtml: DUA_HULP_HTML,
 });
 
-/** Een mislukte poging: hulp (hint-tip) en speldata. */
-function poging(puzzel: string, oordeel: Beoordeling): void {
+/** Een mislukte poging: hulp (hint-tip) en speldata, met wat er geprobeerd werd. */
+function poging(puzzel: string, oordeel: Beoordeling, invoer?: string): void {
   hulp.poging(puzzel, oordeel);
-  if (oordeel !== 'juist') void registreerPoging(sessie, puzzel, oordeel);
+  if (oordeel !== 'juist') void registreerPoging(sessie, puzzel, oordeel, invoer);
 }
 
 /** Puzzel opgelost: status voor beide tijdperken en speldata. */
@@ -194,7 +195,7 @@ document.getElementById('btn-woord')?.addEventListener('click', async () => {
 
   if (oordeel !== 'juist') {
     fx.fout();
-    poging('p1', oordeel);
+    poging('p1', oordeel, input.value);
     input.classList.add('fout');
     setTimeout(() => input.classList.remove('fout'), 1500);
     melding(
@@ -209,10 +210,11 @@ document.getElementById('btn-woord')?.addEventListener('click', async () => {
     await voltooi(1);
     melding('P1 opgelost: de brieven wijzen naar een KLUIS. P2 en P3 liggen open.');
   } else {
+    // Geen nieuwe poging tellen: 1934 kreeg deze foute doorslag al te zien bij het versturen.
     fx.fout();
-    poging('p1', 'fout');
+    hulp.poging('p1', 'fout');
     melding(
-      `De doorslag spelt "${woord.toUpperCase()}". Dat betekent niets. 1934 zal opnieuw moeten typen (nieuw vel).`,
+      `De doorslag spelt "${woord.toUpperCase()}". Dat is niet het woord uit het briefje van de Loper. Lees samen de code na op de codekaart (RR-12); 1934 neemt een nieuw vel.`,
     );
   }
 });
@@ -274,7 +276,7 @@ document.getElementById('btn-cijfer-ok')?.addEventListener('click', async () => 
       melding('P2 opgelost: de kluis zwaait open. Johannes de Doper, ongeschonden.');
     } else {
       fx.fout();
-      poging('p2', 'fout');
+      poging('p2', 'fout', kluisInvoer);
       kluisInvoer = '';
       requireEl('kluis-display').textContent = '__';
       melding('Het slot weigert. Verkeerde kluis.');
@@ -298,7 +300,7 @@ document.getElementById('btn-route')?.addEventListener('click', async () => {
     melding('P3 opgelost: sacristie, kooromgang, Vijdkapel, zijdeur. De buurman loog.');
   } else {
     fx.fout();
-    poging('p3', oordeel);
+    poging('p3', oordeel, input.value);
     input.classList.add('fout');
     setTimeout(() => input.classList.remove('fout'), 1500);
     melding(
@@ -322,14 +324,14 @@ document.querySelectorAll<SVGElement>('#museum-spel [data-plek]').forEach(el => 
     if (!plek) return;
     if (plek !== dua.verstopPlek) {
       fx.fout();
-      poging('p4', 'fout');
+      poging('p4', 'fout', plek);
       melding('Niets onder het stof. Vraag 1934 waar ze het lieten.');
       return;
     }
     if (DOORZOCHT.includes(plek)) {
       fx.fout();
       fx.fluitje();
-      poging('p4', 'fout');
+      poging('p4', 'fout', plek);
       melding(
         'Het verslag loog niet: hier zocht de politie in december 1934. Het mapje is toen in beslag genomen. 1934 moet opnieuw, op een veiligere plek. Verdenking +15%',
       );
@@ -362,14 +364,14 @@ document.getElementById('kaart-2034')?.addEventListener('click', async (e: Event
   }
   if (doel !== dua.pin1934) {
     fx.fout();
-    poging('p5', 'fout');
+    poging('p5', 'fout', doel);
     melding('Niet hier. Stel betere vragen aan 1934. Zonder de plek te laten verklappen.');
     return;
   }
   if (!(await antwoordKlopt(doel, HASH_PLEK))) {
     fx.fout();
     fx.fluitje();
-    poging('p5', 'fout');
+    poging('p5', 'fout', doel);
     melding(
       'Jullie vonden de plek… maar daar bleef niets bewaard: alles werd in de loop van de eeuw gerestaureerd, ontruimd of verbouwd. Het paneel is verloren. 1934 moet een betere plek kiezen. Verdenking +15%',
     );
@@ -414,14 +416,28 @@ function gaNaarEinde(): void {
 }
 luisterRapportIngediend(sessie, gaNaarEinde);
 
-// ═══════════════════ EASTER EGGS (2034) ═══════════════════
+// ═══════════════════ ARCHIEFZOEKER EN EASTER EGGS (2034) ═══════════════════
 document.getElementById('btn-archief')?.addEventListener('click', () => {
   const v = requireEl<HTMLInputElement>('archief-zoek').value.trim().toUpperCase();
-  if (v === 'RR-13' || v === '13') {
+  const nummer = archiefNummer(v);
+  if (nummer === 12) {
+    // P1: de codekaart van D.U.A.
+    const kaart = requireEl('codekaart');
+    kaart.classList.remove('verborgen');
+    fx.lade();
+    melding('Stuk RR-12 gevonden: de codekaart van D.U.A.');
+    kaart.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return;
+  }
+  if (nummer === 13) {
     document.getElementById('brief13')?.classList.remove('verborgen');
     fx.lade();
     zetBadge(sessie, 'de-dertiende-brief');
-    melding('Insigne gevonden: De Dertiende Brief');
+    melding(
+      puzzels['p1']
+        ? 'Insigne gevonden: De Dertiende Brief'
+        : 'Insigne gevonden: De Dertiende Brief. Geen codekaart bij dit stuk: die hoort bij brief XII.',
+    );
   } else {
     fx.fout();
     melding('Geen stuk gevonden onder dat nummer.');

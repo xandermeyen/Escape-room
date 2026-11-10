@@ -72,3 +72,9 @@ export const DUA_VRIJGAVE: Record<string, string[]> = {
 };
 
 export const DUA_PUZZELS = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'];
+
+/** "RR-12", "rr 12", "RR12" en "12" geven 12; iets anders null. */
+export function archiefNummer(invoer: string): number | null {
+  const m = /^(?:RR[\s-]*)?0*(\d{1,2})$/i.exec(invoer.trim());
+  return m ? Number(m[1]) : null;
+}

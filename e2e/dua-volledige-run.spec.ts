@@ -92,7 +92,7 @@ const speler = (rol: string, era: '1934' | '2034') =>
 
 /** Sorteert de hamers door twee aan twee te wisselen, op de plek van een van de tabs. */
 async function herstelHamers(page: Page): Promise<void> {
-  const doel = ['K', 'N', 'R', 'S', 'T', 'U'];
+  const doel = ['T', 'K', 'S', 'U', 'N', 'R']; // HAMERS_GOED, zie het restauratieverslag (2034)
   const knoppen = page.locator('#hamerrij .hamer');
   const huidig = (await knoppen.allTextContents()).map(t => t.trim());
   for (let i = 0; i < doel.length; i++) {
@@ -147,6 +147,28 @@ test('D.U.A. van begin tot einde met vier spelers', async ({ context }) => {
   await expect(restaurateur.locator('#zegel-actie')).toBeHidden();
 
   // ── P1: hamers en brief, gedeeld door Schrijver en Loper ──
+  // 1934 ziet alleen vaknummers; 2034 heeft het verslag en vindt de codekaart via RR-12.
+  await expect(schrijver.locator('#hamerrij .label').first()).toHaveText('vak 1');
+  await expect(archivaris.locator('#typekoppen .typekop-letter')).toHaveText([
+    'T',
+    'K',
+    'S',
+    'U',
+    'N',
+    'R',
+  ]);
+  await expect(archivaris.locator('#codekaart')).toBeHidden();
+  await archivaris.fill('#archief-zoek', 'rr-12');
+  await archivaris.click('#btn-archief');
+  await expect(archivaris.locator('#codekaart')).toBeVisible();
+  // De hint van 1934 is bereikbaar terwijl de brief nog vergrendeld is.
+  await schrijver.locator('#hint-p1a .hint-knop').click();
+  await expect(schrijver.locator('#hint-p1a .hint-stap').first()).toBeVisible();
+
+  // Een letter aanklikken in de vergrendelde brief zegt wat er eerst moet gebeuren.
+  await schrijver.locator('#typvel .lt').first().click();
+  await expect(schrijver.locator('#dua-melding')).toContainText('Herstel eerst de letterhamers');
+
   await herstelHamers(schrijver);
   await expect(loper.locator('#s-hamers')).toHaveClass(/klaar/);
   await loper.reload(); // een herlaad raakt de hersteld machine niet kwijt
@@ -160,6 +182,17 @@ test('D.U.A. van begin tot einde met vier spelers', async ({ context }) => {
   for (const i of indexen.slice(3)) await loper.locator(`#typvel .lt[data-i="${i}"]`).click();
   await expect(schrijver.locator('#typvel .lt.diep')).toHaveCount(5);
   await schrijver.reload(); // gekozen letters overleven een herlaad
+  await expect(schrijver.locator('#typvel .lt.diep')).toHaveCount(5);
+
+  // Eerst een fout woord: de Schrijver ziet meteen dat het niet klopt, en de host ziet wat het was.
+  await schrijver.locator(`#typvel .lt[data-i="${indexen[4]}"]`).click();
+  const andereT = (await schrijver.locator('#typvel').textContent())?.lastIndexOf('T') ?? -1; // KLUIT
+  await schrijver.locator(`#typvel .lt[data-i="${andereT}"]`).click();
+  await schrijver.click('#btn-verstuur');
+  await expect(schrijver.locator('#dua-melding')).toContainText('niet wat de Loper vroeg');
+  await expect.poll(() => dbWaarde(schrijver, 'stats/p1/fout')).toBe(1);
+  await schrijver.click('#btn-gom');
+  for (const i of indexen) await schrijver.locator(`#typvel .lt[data-i="${i}"]`).click();
   await expect(schrijver.locator('#typvel .lt.diep')).toHaveCount(5);
   await schrijver.click('#btn-verstuur');
 

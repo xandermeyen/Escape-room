@@ -38,9 +38,10 @@ export interface DuaMeta {
   hints: number;
 }
 
-// Letterhamers: begin- en eindvolgorde (de slots zijn K N R S T U).
+// Letterhamers: begin- en eindvolgorde. 1934 ziet alleen vaknummers; de juiste
+// volgorde staat in het restauratieverslag van 2034 (speler-2034.html).
 export const HAMERS_START = 'RUKTSN';
-export const HAMERS_GOED = 'KNRSTU';
+export const HAMERS_GOED = 'TKSUNR';
 
 export interface DuaState {
   p0zegel?: boolean;

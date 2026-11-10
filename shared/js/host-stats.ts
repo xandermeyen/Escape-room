@@ -20,12 +20,40 @@ export function formateerDuur(ms: number | null): string {
   return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
 }
 
+/** Tijd sinds de start van de puzzel, bv. "4:12", of null zonder start. */
+function naStart(stat: PuzzelStat | undefined, tijd: number | undefined): string | null {
+  if (typeof stat?.start !== 'number' || typeof tijd !== 'number') return null;
+  return formateerDuur(Math.max(0, tijd - stat.start));
+}
+
+/**
+ * Per rol de hoogste hintstap, met daaronder wanneer elke stap opende
+ * (gerekend vanaf de start van de puzzel). Bv. "1934: stap 3" + "na 2:10 · 5:30 · 9:00".
+ */
 function hintsTekst(stat: PuzzelStat | undefined, rollen: Record<string, string>): string {
   const hints = stat?.hints ?? {};
   const delen = Object.entries(rollen)
     .filter(([rol]) => hints[rol])
-    .map(([rol, label]) => `${escHtml(label)} ${hints[rol]}`);
-  return delen.length ? delen.join(' · ') : '-';
+    .map(([rol, label]) => {
+      const stappen = Object.entries(stat?.hintTijd?.[rol] ?? {})
+        .sort(([a], [b]) => Number(a) - Number(b))
+        .map(([, t]) => naStart(stat, t))
+        .filter((t): t is string => t !== null);
+      const wanneer = stappen.length
+        ? `<br><span class="stats-sub">na ${stappen.join(' · ')}</span>`
+        : '';
+      return `${escHtml(label)}: stap ${hints[rol]}${wanneer}`;
+    });
+  return delen.length ? delen.join('<br>') : '-';
+}
+
+/** Aantal foute pogingen, met daaronder wat er geprobeerd werd. */
+function foutTekst(stat: PuzzelStat | undefined): string {
+  const pogingen = Object.values(stat?.invoer ?? {})
+    .sort((a, b) => a.t - b.t)
+    .map(i => `${escHtml(i.w)}${i.o === 'bijna' ? ' (bijna)' : ''}`);
+  const lijst = pogingen.length ? `<br><span class="stats-sub">${pogingen.join(', ')}</span>` : '';
+  return `${stat?.fout ?? 0}${lijst}`;
 }
 
 /**
@@ -48,7 +76,7 @@ export function statsDetailHtml(
       return `<tr>
         <td>${escHtml(p.toUpperCase())}${status}</td>
         <td>${formateerDuur(puzzelDuur(s))}</td>
-        <td>${s?.fout ?? 0}</td>
+        <td>${foutTekst(s)}</td>
         <td>${s?.bijna ?? 0}</td>
         <td>${hintsTekst(s, rollen)}</td>
       </tr>`;
