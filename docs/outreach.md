@@ -17,33 +17,33 @@ Volgorde = prioriteit. Alles hieronder is gratis.
 | Facebook-groepen "Escape Room Enthousiastelingen België" / "Escape rooms Nederland" | Direct de doelgroep.                                                                                                | Eén nette post per groep + reageer op "tips voor online room?"-vragen.                                         |
 | [Tripadvisor](https://tripadvisor.be)                                               | Kan voor online experiences; levert reviews met domein-autoriteit.                                                  | Bedrijfsvermelding aanmaken (categorie "Escape Games").                                                        |
 
-**Tip:** gratis zijn is jullie sterkste argument — lijstjesmakers nemen gratis rooms vrijwel altijd op.
+**Tip:** gratis zijn is jullie sterkste argument: lijstjesmakers nemen gratis rooms vrijwel altijd op.
 
 ---
 
 ## 2. Partners met eigen bereik
 
-- **OPZ Geel** (communicatie@opzgeel.be / via opzgeel.be) — Kamer 14 eert hún traditie
+- **OPZ Geel** (communicatie@opzgeel.be / via opzgeel.be): Kamer 14 eert hún traditie
   en linkt al naar hen. Vraag of ze het willen delen; hun nieuwsbrief en socials
   bereiken exact de mensen die dit verhaal koesteren.
-- **Toerisme Geel / Visit Geel** — lokaal nieuws + "beleef Geel online".
-- **rechtvaardigerechters.be** — jullie linken al naar hen vanaf het D.U.A.-eindscherm;
+- **Toerisme Geel / Visit Geel**: lokaal nieuws + "beleef Geel online".
+- **rechtvaardigerechters.be**: jullie linken al naar hen vanaf het D.U.A.-eindscherm;
   vraag een wederlink ("speel de diefstal na").
-- **Sint-Dymphna / gezinsverpleging-erfgoedwerking** — zelfde logica als OPZ.
+- **Sint-Dymphna / gezinsverpleging-erfgoedwerking**: zelfde logica als OPZ.
 
 ---
 
 ## 3. Pers (lokale angle werkt)
 
-### Angle A — Geel (Kamer 14)
+### Angle A: Geel (Kamer 14)
 
 > "Gratis online escape room laat spelers de unieke Geelse gezinsverpleging beleven"
 
 Doelen: Nieuwsblad regio Kempen, Gazet van Antwerpen (Kempen), HLN Geel, RTV (regionale tv Kempen), Radio 2 Antwerpen.
 
-### Angle B — Gent (D.U.A.)
+### Angle B: Gent (D.U.A.)
 
-> "Online escape room laat je de diefstal van De Rechtvaardige Rechters 'oplossen' — in 1934 én 2034 tegelijk"
+> "Online escape room laat je de diefstal van De Rechtvaardige Rechters 'oplossen', in 1934 én 2034 tegelijk"
 
 Doelen: Nieuwsblad/HLN Gent, AVS (regionale tv), Radio 2 Oost-Vlaanderen.
 **Timing:** elk jaar rond 10–11 april (verjaardag van de diefstal) is dit gegarandeerd actueel; ook bij elk nieuw nieuwsfeit over het paneel (het parket zoekt nog geregeld).
@@ -56,10 +56,9 @@ Doelen: Nieuwsblad/HLN Gent, AVS (regionale tv), Radio 2 Oost-Vlaanderen.
 >
 > Ik ben Xander Meyen en ik bouwde bureau-x.be: gratis online escape rooms
 > over echte Belgische verhalen. [Kamer 14 speelt zich af binnen de Geelse
->
-> > gezinsverpleging, de eeuwenoude traditie van het OPZ / D.U.A. laat twee
-> > teams de diefstal van De Rechtvaardige Rechters onderzoeken — één team in
-> > 1934, één in 2034].
+> gezinsverpleging, de eeuwenoude traditie van het OPZ. / D.U.A. laat spelers de
+> diefstal van De Rechtvaardige Rechters beleven: de ene helft in 1934, de
+> andere in 2034.]
 >
 > Spelers spelen thuis, in de browser, volledig gratis. Sinds de lancering
 > speelden al [X] teams.
@@ -67,25 +66,27 @@ Doelen: Nieuwsblad/HLN Gent, AVS (regionale tv), Radio 2 Oost-Vlaanderen.
 > Speellink voor jullie redactie: [maak een sessie aan in het host-panel].
 > Beeldmateriaal en meer info stuur ik graag door.
 >
-> Groeten, Xander — bureau-x.be
+> Groeten, Xander
+> bureau-x.be
 
-### Template C — lijstjes-blogs
+### Template C: lijstjes-blogs
 
 > Onderwerp: Aanvulling voor je lijst met online escape rooms
 >
 > Dag [naam], leuk overzicht op [url]! Misschien een aanvulling: bureau-x.be
 > heeft twee gratis Nederlandstalige online escape rooms gebaseerd op echte
 > Belgische mysteries (de Geelse gezinsverpleging en de diefstal van De
-> Rechtvaardige Rechters). Gratis, geen account nodig — dus laagdrempelig
+> Rechtvaardige Rechters). Gratis, geen account nodig, dus laagdrempelig
 > voor je lezers. Speellink voor jou om te testen: [sessielink].
 
 ---
 
 ## 4. Terugkerende gewoontes (flywheel)
 
-1. **Elke goedgekeurde review** → staat automatisch op de site (met sterren in
-   Google via het nieuwe schema). Vraag enthousiaste reviewers per mail of ze
-   hun review ook op escapetalk willen zetten.
+1. **Elke goedgekeurde review** → staat automatisch op de homepage. Vraag
+   enthousiaste reviewers per mail of ze hun review ook op escapetalk willen zetten.
+   (Sterren in Google zitten er bewust niet in: reviews op je eigen site komen
+   daar niet voor in aanmerking.)
 2. **Eindscherm-deelknop** → spelers delen hun resultaat in groepschats; dat is
    de organische groeimotor. Niets meer voor nodig.
 3. **April = D.U.A.-maand** → jaarlijkse persronde rond de verjaardag van de
@@ -97,8 +98,9 @@ Doelen: Nieuwsblad/HLN Gent, AVS (regionale tv), Radio 2 Oost-Vlaanderen.
 
 ## 5. Meetbaarheid
 
-- Zet **Google Search Console** op voor bureau-x.be (gratis, domein verifiëren
-  via DNS): laat zien op welke zoektermen je verschijnt en of de rich results
-  (sterren, FAQ) opgepikt worden.
-- Dien daar de sitemap in: `https://bureau-x.be/sitemap.xml`.
-- Test de rich results na deploy: https://search.google.com/test/rich-results
+- **Google Search Console** staat op voor bureau-x.be: kijk daar op welke
+  zoektermen je verschijnt en of de FAQ van de homepage als rich result opgepikt
+  wordt. De sitemap is `https://bureau-x.be/sitemap.xml`.
+- **Google Analytics 4** (na cookietoestemming) telt reservaties, gestarte
+  spellen, opgeloste en mislukte sessies als key events.
+- Test rich results na een deploy: https://search.google.com/test/rich-results

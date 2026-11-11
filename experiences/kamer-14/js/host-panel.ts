@@ -20,6 +20,7 @@ import {
   datumHtml,
   geopendHtml,
   lobbyLinkHtml,
+  nieuweSessieCode,
 } from '../../../shared/js/host-sessies.ts';
 import { maakVerlopenKnop } from '../../../shared/js/host-verlopen.ts';
 import {
@@ -49,22 +50,8 @@ const PUZZELS = KAMER14_PUZZELS;
 const verlopen = maakVerlopenKnop(() => void laadLijst());
 const LOBBY_PAD = '/experiences/kamer-14/';
 
-function nieuweCode(): string {
-  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  const cijfers = '23456789';
-  const deel1 = Array.from(
-    { length: 3 },
-    () => letters[Math.floor(Math.random() * letters.length)],
-  ).join('');
-  const deel2 = Array.from(
-    { length: 3 },
-    () => cijfers[Math.floor(Math.random() * cijfers.length)],
-  ).join('');
-  return `${deel1}-${deel2}`;
-}
-
 function genereerCode() {
-  requireEl('gegenereerde-code').textContent = nieuweCode();
+  requireEl('gegenereerde-code').textContent = nieuweSessieCode();
   requireEl<HTMLInputElement>('eigen-code').value = '';
 }
 
