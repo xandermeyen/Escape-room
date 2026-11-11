@@ -18,6 +18,20 @@ export interface SessieRij {
 }
 
 /** Haalt alle sessies op die aan `filter` voldoen, nieuwste eerst. */
+/**
+ * Willekeurige sessiecode zoals "KQM-473" (of "DUA-KQM-473" met een voorvoegsel).
+ * Zonder I/O/0/1 om verwarring bij overtikken te vermijden. 24³ × 8³ ≈ 7 miljoen
+ * mogelijkheden, en niet oplopend: een code raden is dus niet zinvol.
+ */
+export function nieuweSessieCode(voorvoegsel = ''): string {
+  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const cijfers = '23456789';
+  const kies = (tekens: string): string => tekens[Math.floor(Math.random() * tekens.length)] ?? '';
+  const deel1 = Array.from({ length: 3 }, () => kies(letters)).join('');
+  const deel2 = Array.from({ length: 3 }, () => kies(cijfers)).join('');
+  return `${voorvoegsel}${deel1}-${deel2}`;
+}
+
 export async function haalSessies(
   filter: (data: Record<string, unknown>) => boolean,
 ): Promise<SessieRij[]> {

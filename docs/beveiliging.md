@@ -9,8 +9,7 @@ Tot oktober 2026 stond `sessions/$sessie` op `".write": true`. Dat gebeurde
 bewust (commit 7e7df54): Make.com maakte sessies aan via de REST API met een
 legacy database secret, die secret werkte niet meer, en `auth != null` gaf dan
 permission denied. Het gevolg was dat iedereen met de database-URL elke sessie
-kon aanpassen of verwijderen. D.U.A.-codes zijn bovendien opeenvolgend en dus
-te raden.
+kon aanpassen of verwijderen.
 
 Daarnaast telde elke e-mail/wachtwoordgebruiker als host. Zolang registratie
 in Firebase Auth openstaat, kan iedereen met de (publieke) API-key zo'n account
@@ -19,18 +18,18 @@ het type login.
 
 ## Het model
 
-| Wie                        | Hoe herkend                     | Mag                                                                                               |
-| -------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Bezoeker zonder login      | `auth == null`                  | een losse sessie lezen (lobby), goedgekeurde reviews lezen                                        |
-| Speler                     | anonieme login (`auth != null`) | bestaande sessies bijwerken binnen strikte regels, één review schrijven                           |
-| Beheerder (host, Make.com) | `beheerders/<uid> === true`     | alles: sessies aanmaken, resetten, verwijderen, alle sessies en reviews lezen, reviews goedkeuren |
+| Wie                        | Hoe herkend                     | Mag                                                                                                                    |
+| -------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Bezoeker zonder login      | `auth == null`                  | een losse sessie lezen (lobby), goedgekeurde reviews lezen, de tijdsverdeling (`verdeling/`) lezen                     |
+| Speler                     | anonieme login (`auth != null`) | bestaande sessies bijwerken binnen strikte regels, één review schrijven                                                |
+| Beheerder (host, Make.com) | `beheerders/<uid> === true`     | alles: sessies aanmaken, resetten, verwijderen, alle sessies en reviews lezen, reviews goedkeuren, `verdeling/` vullen |
 
 `beheerders/` is niet schrijfbaar vanuit de client. Je beheert het enkel in de
 Firebase-console.
 
 Wat een speler mag (zie `firebase/database.rules.json`):
 
-- `puzzels/pX`: alleen van `false` naar `true` (of aanmaken als `false`).
+- `puzzels/pX` (p0 tot p6): alleen van `false` naar `true`, of aanmaken.
 - `spelers/<rol>`: één keer claimen met `"bezet"`. Vrijgeven kan alleen een beheerder.
 - `timerGestart`, `geopendOp`: één keer, en de waarde moet de servertijd zijn.
 - `rapport`: één keer indienen, daarna ligt het vast. Alleen gekende velden.
@@ -38,27 +37,56 @@ Wat een speler mag (zie `firebase/database.rules.json`):
   maximaal 2. Staat de teller op 2 (einde "Vermist"), dan kan niemand nog een
   rapport indienen. Zo delen beide spelers dezelfde twee kansen.
 - `actief`: alleen naar `false` (sessie sluiten), nooit terug naar `true`.
-- `aangemaakt`, `ervaringsId`, `aantalSpelers`: niet aan te passen.
-- `dua/*`: per veld begrensd (kluisnummer twee cijfers en daarna vast, verstopplek
-  alleen gekende plekken, tijdstraf en hintteller kunnen alleen stijgen, ...).
+- `aangemaakt`, `ervaringsId`, `aantalSpelers`, `demo`: niet aan te passen.
+- `dua/*`: per veld begrensd (hamers enkel de zes letters, kluisnummer twee
+  cijfers en daarna vast, verstopplek alleen gekende plekken, tijdstraf en
+  hintteller kunnen alleen stijgen, insignes in `dua/badges` alleen op `true`, ...).
 - `stats/*`: zie [speldata](#speldata).
 - Niets verwijderen, behalve de D.U.A.-verstopplek en -pin zolang die puzzel nog
   open staat (2034 wist ze als 1934 een slechte plek koos).
 
+Elke schrijfregel van een speler eist bovendien dat de sessie al bestaat
+(`aangemaakt` is gezet), zodat niemand losse nepsessies kan aanmaken.
+
+### Wat nog openstaat
+
+Een speler kan elke sessie aanpassen waarvan hij de code kent, binnen de regels
+hierboven: rollen claimen, puzzels op opgelost zetten of de sessie sluiten.
+Codes zijn daarom willekeurig, nooit oplopend:
+
+- Boekingen (Kamer 14 en D.U.A.) krijgen hun code van Make.com: 6 hex-tekens,
+  ongeveer 16,7 miljoen mogelijkheden (zie
+  [make-scenario.md](make-scenario.md#module-12-tools--set-variable-sessiecode)).
+- Het host-paneel maakt codes zoals `KQM-473` (Kamer 14) of `DUA-KQM-473`
+  (D.U.A.), ongeveer 7 miljoen mogelijkheden (`nieuweSessieCode()` in
+  `shared/js/host-sessies.ts`). Tot november 2026 liepen D.U.A.-codes uit het
+  host-paneel op (`DUA-2026-001`, ...); oude sessies kunnen die vorm nog hebben.
+
+Wil je het nog strenger: bij `claimRol` de `auth.uid` opslaan
+(`spelers/<rol>: uid`) en schrijfregels laten eisen dat je een van de
+deelnemers bent.
+
 ## Speldata
 
 Per sessie bewaart het spel in `sessions/<code>/stats/<puzzel>` hoe lang een
-puzzel duurde, hoeveel foute en bijna-juiste pogingen er waren en welke
-hintstap elke rol opende. Geen namen of e-mailadressen, enkel de sessiecode.
+puzzel duurde, hoeveel foute en bijna-juiste pogingen er waren, wat er fout
+ingetikt werd en welke hintstap elke rol wanneer opende. Geen namen of
+e-mailadressen, enkel de sessiecode.
 
-| Veld                | Regel                                        |
-| ------------------- | -------------------------------------------- |
-| `start`, `opgelost` | één keer, alleen servertijd                  |
-| `fout`, `bijna`     | alleen +1 (ServerValue.increment), max. 1000 |
-| `hints/<rol>`       | 1 tot 10, alleen stijgend                    |
+| Veld                  | Regel                                                                                                                   |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `start`, `opgelost`   | één keer, alleen servertijd                                                                                             |
+| `fout`, `bijna`       | alleen +1 (ServerValue.increment), max. 1000                                                                            |
+| `hints/<rol>`         | 1 tot 10, alleen stijgend                                                                                               |
+| `hintTijd/<rol>/<nr>` | één keer per rol en stap (1 tot 10), alleen servertijd                                                                  |
+| `invoer/<pushId>`     | nieuw item `{ w, o, t }`: tekst max. 40 tekens, `o` is `fout` of `bijna`, `t` servertijd; nooit wijzigen of verwijderen |
 
-Elke schrijfregel van een speler eist bovendien dat de sessie al bestaat
-(`aangemaakt` is gezet), zodat niemand losse nepsessies kan aanmaken.
+- Alleen voor `p0` tot `p6`, en nooit in demo-sessies (`demo: true`).
+- `invoer` is vrije tekst van spelers. Het host-paneel toont die altijd via
+  `escHtml`. Iedereen met de sessiecode kan de sessie lezen, dus ook deze invoer.
+- `verdeling/<ervaring>/duren` bevat enkel de duur van afgeronde sessies (geen
+  codes). Alleen een beheerder schrijft die lijst, iedereen mag ze lezen voor
+  "sneller dan X% van de groepen" op het eindscherm.
 
 ## Uitrol: volgorde is belangrijk
 
@@ -91,9 +119,9 @@ kunnen spelers niet meer schrijven.
 
 ### 3. Make.com omzetten
 
-Zie [make-scenario.md](make-scenario.md#module-14-http--make-a-request-post-inloggen):
-een extra HTTP-module logt in met het Make-account, de PUT gebruikt daarna
-`?auth=<idToken>`. Doe een testrun (onder de oude rules werkt dit al).
+Zie [make-scenario.md](make-scenario.md#module-30-http--make-a-request-post-inloggen):
+in beide scenario's logt een HTTP-module in met het Make-account, de PUT
+gebruikt daarna `?auth=<idToken>`.
 
 ### 4. Code deployen
 
@@ -111,36 +139,40 @@ terugrol).
 
 Loop de [checklist](#handmatige-checklist) hieronder af.
 
-### 7. App Check (reCAPTCHA Enterprise / Fraud Defense)
+### 7. App Check (optioneel, staat uit)
 
-reCAPTCHA Classic (v3) is uitgefaseerd, daarom gebruikt de site de
-Enterprise-provider (in de console nu "Fraud Defense").
+App Check is bewust niet in gebruik: Fraud Defense (reCAPTCHA Enterprise) is
+(of kan worden) betalend, en Bureau X blijft bij gratis diensten. De rules
+hierboven zijn de echte beveiliging; App Check zou enkel een extra laag tegen
+scripts zijn.
+
+De code staat wel klaar en blijft slapen zolang `VITE_RECAPTCHA_SITE_KEY` leeg
+is: geen App Check, en de reCAPTCHA-melding in de lobby's en het privacybeleid
+blijft verborgen. Zorg dus dat de GitHub-secret `VITE_RECAPTCHA_SITE_KEY` niet
+bestaat of leeg is.
+
+Wil je het later toch aanzetten:
 
 1. **Google Cloud-console** (project `bureau-x`): zet de _reCAPTCHA Enterprise
    API_ aan en maak onder _Security > reCAPTCHA_ een **website**-sleutel aan
-   voor `bureau-x.be`, zonder checkbox-uitdaging. Er is enkel een sitesleutel,
-   geen geheime sleutel.
+   voor `bureau-x.be`, zonder checkbox-uitdaging.
 2. **Firebase-console > App Check > Apps**: registreer de web-app met
    **Fraud Defense** en die sitesleutel.
-3. GitHub: voeg de repository-secret `VITE_RECAPTCHA_SITE_KEY` toe (dezelfde
-   sitesleutel). De deploy-workflow geeft hem door aan de build.
-4. Laat App Check eerst een week op **monitoren** staan
-   (_App Check > APIs > Realtime Database_): je ziet dan welk deel van het
-   verkeer een geldig token heeft.
-5. **Enforcement aanzetten blokkeert ook Make.com**: een REST-call met een
-   ID-token heeft geen App Check-token. Zet enforcement pas aan als Make met een
-   service account werkt (OAuth2 `access_token`, valt buiten App Check), of
-   laat het op monitoren staan. De rules hierboven zijn de echte beveiliging;
-   App Check is een extra laag tegen scripts.
+3. GitHub: zet de sitesleutel in de repository-secret `VITE_RECAPTCHA_SITE_KEY`.
+   De deploy-workflow geeft hem door aan de build.
+4. Laat App Check eerst op **monitoren** staan
+   (_App Check > APIs > Realtime Database_).
+5. **Enforcement aanzetten blokkeert Make.com**: een REST-call met een ID-token
+   heeft geen App Check-token. Zet enforcement pas aan als Make met een service
+   account werkt (OAuth2 `access_token`).
 
-Lokaal ontwikkelen met enforcement aan: zet `VITE_APPCHECK_DEBUG_TOKEN` in
-`.env.development` en registreer dat token onder _App Check > Apps >
-Debugtokens beheren_.
+Lokaal met enforcement: zet `VITE_APPCHECK_DEBUG_TOKEN` in `.env.development`
+en registreer dat token onder _App Check > Apps > Debugtokens beheren_.
 
 ## Bewaking
 
 - **Rookproef** (`.github/workflows/rookproef.yml`, `scripts/rookproef.ts`): logt
-  elk uur anoniem in op productie, leest `DEMO-K14` en verwijdert de
+  elk uur (minuut 17) anoniem in op productie, leest `DEMO-K14` en verwijdert de
   testgebruiker. Faalt dat, dan mailt GitHub. Vangt instellingen in de
   Firebase-console die spelers blokkeren, zoals de sign-up hierboven.
 - **Sentry**: de regel "Send a notification for high priority issues" mailt bij
@@ -156,14 +188,15 @@ pnpm test:rules
 ```
 
 Dat start de emulator via `firebase-tools` (Java 21 nodig) en draait
-`tests/database-rules.test.ts`. In CI draait dit in een aparte job. Zonder
+`tests/database-rules.test.ts`. In CI draait dit in een aparte job, en de
+workflow "Firebase rules deployen" draait het opnieuw voor hij deployt. Zonder
 emulator slaat de gewone `pnpm test` dit bestand over.
 
 ### Handmatige checklist
 
 Na het deployen van de rules, met de live site:
 
-- [ ] Make.com maakt een sessie aan (testrun) en de spelers krijgen hun mail.
+- [ ] Make.com maakt een sessie aan (testrun, Kamer 14 én D.U.A.) en de spelers krijgen hun mail.
 - [ ] Host-paneel: inloggen lukt, sessielijst laadt, sessie aanmaken lukt.
 - [ ] Host-paneel met een account dat niet in `beheerders` staat: melding
       "geen beheerdersrechten", geen data.
@@ -171,6 +204,8 @@ Na het deployen van de rules, met de live site:
       briefkaart, review. Geen rode balk "Verbinding mislukt".
 - [ ] D.U.A. van begin tot einde met 1934 en 2034, inclusief een fout gekozen
       verstopplek (wordt gewist en opnieuw gekozen).
+- [ ] Host-paneel, sessiedetails: na een foute poging en een geopende hint staan
+      de foute invoer onder "Fout" en de hinttijden onder "Hints".
 - [ ] Rol vrijgeven en sessie deactiveren vanuit het host-paneel.
 - [ ] Host-paneel (Kamer 14 en D.U.A.): "Verlopen sessies sluiten" zet sessies die meer dan 24 uur
       geleden geopend werden en geen rapport hebben op `actief: false` (demo's niet).
@@ -184,4 +219,5 @@ Na het deployen van de rules, met de live site:
 ## Terugrollen
 
 Draai de rules-commit terug (`git revert`) en run de workflow opnieuw. De
-client-code werkt ook met de oude rules.
+client-code werkt ook met de oude rules, behalve dat de nieuwe speldata
+(`invoer`, `hintTijd`) dan stil geweigerd wordt.

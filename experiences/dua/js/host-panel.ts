@@ -1,7 +1,8 @@
 /**
  * host-panel.ts (D.U.A.) — operator-paneel.
  *
- * Codes lopen op als DUA-<jaar>-<volgnr>. Sessies worden aangemaakt via het
+ * Codes zijn willekeurig, bv. DUA-KQM-473 (niet oplopend, dus niet te raden).
+ * Sessies worden aangemaakt via het
  * gedeelde maakSessie() (atomisch) en de lijst komt uit de gedeelde
  * host-sessies-helpers, gefilterd op ervaringsId 'dua'.
  */
@@ -18,6 +19,7 @@ import {
   statusBadgeHtml,
   datumHtml,
   lobbyLinkHtml,
+  nieuweSessieCode,
 } from '../../../shared/js/host-sessies.ts';
 import { maakVerlopenKnop } from '../../../shared/js/host-verlopen.ts';
 import {
@@ -40,40 +42,21 @@ const verlopen = maakVerlopenKnop(() => void laadLijst());
 const ROLLEN = { '1934': '1934', '2034': '2034' };
 
 koppelHostAuth(() => {
-  void verversCode();
+  verversCode();
   void laadLijst();
   void laadReviews();
 });
 
-const JAAR = new Date().getFullYear();
 const LOBBY_PAD = '/experiences/dua/';
 // Voortgang in de lijst: P1 tot P5. P0 (het zegel) is de opwarmer en telt niet mee.
 const PUZZELS = DUA_PUZZELS.filter(p => p !== 'p0');
 
-// ── Volgende code berekenen ──
-async function berekenVolgendeCode(): Promise<string> {
-  const rijen = await haalSessies(() => true);
-  let hoogste = 0;
-  for (const { code } of rijen) {
-    const match = code.match(/^DUA-(\d{4})-(\d{3,})$/);
-    if (match && parseInt(match[1]) === JAAR) {
-      const nr = parseInt(match[2]);
-      if (nr > hoogste) hoogste = nr;
-    }
-  }
-  return `DUA-${JAAR}-${String(hoogste + 1).padStart(3, '0')}`;
-}
-
-async function verversCode(): Promise<void> {
+// ── Nieuwe code ──
+function verversCode(): void {
   const el = requireEl('volgende-code');
-  el.textContent = 'Berekenen…';
-  try {
-    const code = await berekenVolgendeCode();
-    el.textContent = code;
-    el.dataset.code = code;
-  } catch {
-    el.textContent = 'Fout';
-  }
+  const code = nieuweSessieCode('DUA-');
+  el.textContent = code;
+  el.dataset.code = code;
 }
 
 // ── Sessie aanmaken ──
@@ -84,7 +67,7 @@ async function maakSessieAan() {
   const spelers = parseInt(requireEl<HTMLSelectElement>('select-spelers').value);
 
   if (!code) {
-    toonStatus(status, 'Code nog niet geladen, probeer opnieuw.', false);
+    toonStatus(status, 'Nog geen code, probeer opnieuw.', false);
     return;
   }
 
@@ -98,13 +81,18 @@ async function maakSessieAan() {
       puzzelIds: DUA_PUZZELS,
     });
     if (!aangemaakt) {
-      toonStatus(status, `${code} bestaat al. Ververs en probeer opnieuw.`, false);
+      verversCode();
+      toonStatus(
+        status,
+        `${code} bestaat al. Er staat een nieuwe code klaar, probeer opnieuw.`,
+        false,
+      );
       return;
     }
 
     toonStatus(status, `✓ Sessie "${code}" aangemaakt! Lobby-link staat in de tabel.`, true);
     await laadLijst();
-    await verversCode();
+    verversCode();
   } catch (err) {
     console.error(err);
     toonStatus(status, 'Aanmaken mislukt: ' + foutTekst(err), false);

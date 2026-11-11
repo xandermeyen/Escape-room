@@ -53,7 +53,7 @@ host zet een demo vanuit het host-paneel met één knop terug naar het begin.
 Browser (Vite + TypeScript, statische pagina's)
    │  realtime sync, anonieme login
    ▼
-Firebase Realtime Database + Firebase Auth + App Check (reCAPTCHA Enterprise)
+Firebase Realtime Database + Firebase Auth
    ▲
    │  sessie aanmaken (REST, ingelogd als beheerder)
 Make.com  ◄── Formspree-boekingsformulier ── speler
@@ -63,7 +63,7 @@ Make.com  ◄── Formspree-boekingsformulier ── speler
 | ----------- | ----------------------------------------------------------------------- |
 | Frontend    | HTML, CSS, TypeScript (strict), Vite, Bootstrap 5                       |
 | Backend     | Firebase Realtime Database, Firebase Auth (anoniem + e-mail/wachtwoord) |
-| Beveiliging | Database-rules per veld, beheerders-lijst, Firebase App Check           |
+| Beveiliging | Database-rules per veld, beheerders-lijst                               |
 | Hosting     | GitHub Pages met eigen domein, deploy via GitHub Actions                |
 | Monitoring  | Sentry (alleen in productie)                                            |
 | Analytics   | Google Analytics 4 met Consent Mode, pas na toestemming                 |
@@ -96,19 +96,21 @@ het antwoord". Ook die controle gebeurt op hashes van de deelvormen.
 
 **Nooit vastzitten.** Na twee mislukte pogingen licht de hintknop op. Na acht minuten zonder
 voortgang verschijnt een korte verhaalmelding die richting geeft. Na elke opgeloste puzzel
-staat er wat er vrijkwam en wat de andere speler nu heeft. De laatste hintstap is een sterke
-duw, geen antwoord. En er is altijd een knop "Hulp nodig?".
+staat er wat er vrijkwam en wat de andere speler nu heeft. De hints lopen op: de eerste stap
+stuurt je naar je teamgenoot, de laatste geeft het antwoord zo goed als weg. En er is altijd
+een knop "Hulp nodig?".
 
 **Database-rules als echte beveiliging.** Spelers loggen anoniem in. Ze mogen enkel bestaande
 sessies aanpassen, en per veld enkel wat het spel nodig heeft: een puzzel van `false` naar
 `true`, een rol één keer claimen, een rapport één keer indienen, tellers enkel met +1.
 Aanmaken, resetten en alle sessies lezen kan alleen een beheerder uit `beheerders/<uid>`,
-niet zomaar elk account met een wachtwoord. App Check weert verkeer dat niet van de site
-komt. Zie [docs/beveiliging.md](docs/beveiliging.md).
+niet zomaar elk account met een wachtwoord. Zie [docs/beveiliging.md](docs/beveiliging.md).
 
 **Speldata zonder persoonsgegevens.** Per puzzel worden de tijd, de foute en bijna-pogingen
-en de gebruikte hintstappen bewaard, enkel gekoppeld aan de sessiecode. Het host-paneel toont
-gemiddelden per puzzel en markeert de moeilijkste. Spelers zien op het eindscherm "sneller dan
+(met wat er ingetikt werd) en de gebruikte hintstappen (met wanneer ze opengingen) bewaard,
+enkel gekoppeld aan de sessiecode. Het host-paneel toont dat per sessie, plus gemiddelden per
+puzzel met de moeilijkste gemarkeerd. Zo werd D.U.A.-puzzel 1 herwerkt nadat elke groep er de
+laatste hint voor nodig had. Spelers zien op het eindscherm "sneller dan
 X% van de groepen", op basis van een anonieme lijst met tijden die alleen een beheerder kan
 schrijven.
 
@@ -166,8 +168,8 @@ nog kunnen inloggen.
 
 ## Meer documentatie
 
-- [docs/beveiliging.md](docs/beveiliging.md): rules, beheerders, App Check en een testchecklist
-- [docs/make-scenario.md](docs/make-scenario.md): de boekingsautomatisering in Make.com
+- [docs/beveiliging.md](docs/beveiliging.md): rules, beheerders, speldata en een testchecklist
+- [docs/make-scenario.md](docs/make-scenario.md): de twee boekingsscenario's in Make.com
 
 ---
 
