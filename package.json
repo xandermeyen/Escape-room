@@ -23,7 +23,6 @@
     "@firebase/rules-unit-testing": "^6.0.0",
     "@playwright/test": "~1.64.0",
     "@types/node": "^24.19.2",
-    "@types/three": "^0.186.0",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-no-unsanitized": "^4.1.5",
@@ -39,7 +38,6 @@
     "@sentry/browser": "^11.6.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.2",
-    "firebase": "^12.19.0",
-    "three": "^0.186.1"
+    "firebase": "^12.19.0"
   }
 }

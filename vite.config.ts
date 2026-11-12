@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { faqSchemaPlugin } from './scripts/vite-faq-schema.ts';
 
 export default defineConfig({
+  // FAQPage-schema wordt gegenereerd uit de zichtbare FAQ (zie scripts/vite-faq-schema.ts)
+  plugins: [faqSchemaPlugin()],
   build: {
-    // three.js (deeltjes op de homepage) is één lazy chunk van ~530 kB, pas na
-    // het laden van de pagina. De rest blijft ruim onder deze grens.
-    chunkSizeWarningLimit: 600,
     rolldownOptions: {
       input: {
         // Hoofdpagina's

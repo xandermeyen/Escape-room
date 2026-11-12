@@ -1,8 +1,13 @@
 name: Deploy naar GitHub Pages
 
+# Deployt pas als de volledige CI (kwaliteit, rules-tests, e2e) op main
+# geslaagd is. Handmatig deployen kan via "Run workflow".
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,10 +20,17 @@ concurrency:
 
 jobs:
   build:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Exact de commit die CI goedkeurde, niet wat er intussen op main staat
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: pnpm installeren
         uses: pnpm/action-setup@v6
@@ -46,13 +58,7 @@ jobs:
           EOF
 
       - name: Dependencies installeren
-        run: pnpm install
-
-      - name: Linten
-        run: pnpm lint
-
-      - name: Tests draaien
-        run: pnpm test
+        run: pnpm install --frozen-lockfile
 
       - name: Bouwen
         run: pnpm build
