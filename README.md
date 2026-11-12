@@ -56,7 +56,7 @@ Browser (Vite + TypeScript, statische pagina's)
 Firebase Realtime Database + Firebase Auth
    ▲
    │  sessie aanmaken (REST, ingelogd als beheerder)
-Make.com  ◄── Formspree-boekingsformulier ── speler
+Make.com  ◄── boekingsformulier (webhook, directe link) ── speler
 ```
 
 | Onderdeel   | Keuze                                                                   |
@@ -67,7 +67,7 @@ Make.com  ◄── Formspree-boekingsformulier ── speler
 | Hosting     | GitHub Pages met eigen domein, deploy via GitHub Actions                |
 | Monitoring  | Sentry (alleen in productie)                                            |
 | Analytics   | Google Analytics 4 met Consent Mode, pas na toestemming                 |
-| Boekingen   | Formspree, Make.com, Combell SMTP                                       |
+| Boekingen   | Make.com-webhook (link meteen op het scherm), Combell SMTP              |
 | Kwaliteit   | Vitest, ESLint, Prettier, html-validate, rules-tests met de emulator    |
 | Bewaking    | Rookproef elk uur op productie (anonieme login), Sentry-alerts          |
 

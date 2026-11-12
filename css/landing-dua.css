@@ -1009,3 +1009,50 @@ body::after {
   padding-bottom: 1.25rem;
   line-height: 1.75;
 }
+
+.form-opt {
+  color: var(--text-faint);
+  font-size: 0.85em;
+}
+
+.boek-ok-titel {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.boek-ok-code {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+}
+
+.boek-ok-acties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.boek-ok-open {
+  display: inline-block;
+  width: auto;
+  margin-top: 0;
+  padding: 0.9rem 1.75rem;
+  text-decoration: none;
+}
+
+.boek-ok-kopieer {
+  background: none;
+  border: 1px solid currentColor;
+  color: var(--text-dim);
+  font-family: var(--ff);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  padding: 0.9rem 1.5rem;
+  cursor: pointer;
+}
+
+.boek-ok-kopieer:hover {
+  color: var(--text);
+}

@@ -233,8 +233,8 @@
             <div class="step-num">1</div>
             <h3 class="step-title">Boek een sessie</h3>
             <p class="step-desc">
-              Vul het formulier in. Gratis. Binnen 24 uur ontvangen jullie een persoonlijke spellink
-              per mail.
+              Vul het formulier in. Gratis. Jullie krijgen meteen een persoonlijke spellink per
+              mail.
             </p>
           </div>
           <div class="step reveal">
@@ -383,11 +383,10 @@
         <form
           class="boek-form reveal"
           id="boekForm"
-          action="https://formspree.io/f/xvzlanbj"
+          action="https://hook.eu1.make.com/i3kal4r1xmikgdfm2cyre7i6acx8j8cx"
           method="POST"
         >
-          <input type="hidden" name="_subject" value="Kamer 14 Reservaties" />
-          <input type="hidden" name="experience" value="Kamer 14" />
+          <input type="hidden" name="experience" value="kamer-14" />
           <input
             type="text"
             name="_gotcha"
@@ -412,9 +411,9 @@
             </div>
             <div class="form-field">
               <label class="form-label" for="boek-datum"
-                >Gewenste datum <span class="form-req">*</span></label
+                >Wanneer spelen jullie? <span class="form-opt">(optioneel)</span></label
               >
-              <input id="boek-datum" class="form-input" type="date" name="datum" required />
+              <input id="boek-datum" class="form-input" type="date" name="datum" />
             </div>
           </div>
 
@@ -445,14 +444,22 @@
             />
           </div>
 
-          <button class="boek-btn" type="submit">Sessie aanvragen</button>
+          <button class="boek-btn" type="submit">Start de sessie</button>
           <p class="form-note">
-            Je ontvangt binnen 24 uur een bevestiging met de spellinks voor beide spelers.
+            Jullie link verschijnt meteen hier en komt ook per mail bij beide spelers.
           </p>
         </form>
-        <p class="boek-ok" id="boek-ok">
-          &#10003; Aanvraag ontvangen. Jullie spellinks worden zo snel mogelijk verstuurd.
-        </p>
+        <div class="boek-ok" id="boek-ok" role="status">
+          <p class="boek-ok-titel">&#10003; Jullie sessie staat klaar</p>
+          <p class="boek-ok-code">Sessiecode: <strong data-boek="code"></strong></p>
+          <div class="boek-ok-acties">
+            <a class="boek-btn boek-ok-open" data-boek="link" href="#">Open het dossier</a>
+            <button type="button" class="boek-ok-kopieer" data-boek="kopieer">Kopieer link</button>
+          </div>
+          <p class="form-note">
+            Stuur de link door naar je medespeler. Hij staat ook in jullie mailbox.
+          </p>
+        </div>
         <p class="boek-fout" id="boek-fout" role="alert" hidden></p>
       </div>
     </section>

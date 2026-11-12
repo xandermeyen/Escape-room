@@ -7,17 +7,33 @@ import {
   koppelGsmMenu,
   vandaagIso,
   BOEK_FOUT_TEKST,
+  datumAlsTekst,
+  leesBoekAntwoord,
 } from '../js/landing.ts';
 
 const lees = (pad: string) => readFileSync(resolve(__dirname, '..', pad), 'utf8');
 
+const HOOK = 'https://hook.eu1.make.com/test';
 const FORM = `
-  <form id="boekForm" action="https://formspree.io/f/test">
+  <form id="boekForm" action="${HOOK}">
+    <input type="hidden" name="experience" value="kamer-14" />
+    <input name="email_speler_1" value=" a@b.be " />
     <input name="datum" type="date" />
-    <button type="submit">Sessie aanvragen</button>
+    <button type="submit">Start de sessie</button>
   </form>
-  <p id="boek-ok" style="display:none"></p>
+  <div id="boek-ok" style="display:none">
+    <strong data-boek="code"></strong>
+    <a data-boek="link" href="#">Open</a>
+    <button type="button" data-boek="kopieer">Kopieer link</button>
+  </div>
   <p id="boek-fout" hidden></p>`;
+
+const GOED = {
+  sessieCode: 'AB12CD34',
+  link: 'https://bureau-x.be/experiences/kamer-14/?sessie=AB12CD34',
+};
+const antwoord = (body: unknown, status = 200) =>
+  vi.fn(() => Promise.resolve(new Response(JSON.stringify(body), { status })));
 
 const verstuur = () =>
   document.getElementById('boekForm')!.dispatchEvent(new Event('submit', { cancelable: true }));
@@ -50,17 +66,41 @@ describe('boekingsformulier', () => {
     expect(datum.min).toBe(vandaagIso());
   });
 
-  it('gelukt: formulier weg, bevestiging zichtbaar', async () => {
-    const fetcher = vi.fn(() => Promise.resolve(new Response('{}', { status: 200 })));
+  it('gelukt: formulier weg, code en link meteen zichtbaar', async () => {
+    const fetcher = antwoord(GOED);
     koppelBoekformulier(fetcher as unknown as typeof fetch);
     verstuur();
     await vi.waitFor(() => expect(document.getElementById('boek-ok')!.style.display).toBe('block'));
-    expect(fetcher).toHaveBeenCalledWith('https://formspree.io/f/test', expect.anything());
     expect(document.getElementById('boekForm')!.style.display).toBe('none');
+    expect(document.querySelector('[data-boek="code"]')!.textContent).toBe('AB12CD34');
+    expect(document.querySelector<HTMLAnchorElement>('[data-boek="link"]')!.href).toBe(GOED.link);
+  });
+
+  it('stuurt een simple request (form-urlencoded) naar de webhook, met getrimde velden', async () => {
+    const fetcher = antwoord(GOED);
+    koppelBoekformulier(fetcher as unknown as typeof fetch);
+    verstuur();
+    await vi.waitFor(() => expect(fetcher).toHaveBeenCalled());
+    const [url, init] = fetcher.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe(HOOK);
+    expect(init.headers).toBeUndefined();
+    const body = init.body as URLSearchParams;
+    expect(body.get('experience')).toBe('kamer-14');
+    expect(body.get('email_speler_1')).toBe('a@b.be');
+    expect(body.get('datumTekst')).toBe('');
+  });
+
+  it('antwoord zonder geldige code of met een vreemde link telt als mislukt', async () => {
+    const fetcher = antwoord({ sessieCode: 'x', link: 'https://elders.be' });
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    koppelBoekformulier(fetcher as unknown as typeof fetch);
+    verstuur();
+    await vi.waitFor(() => expect(document.getElementById('boek-fout')!.hidden).toBe(false));
+    expect(document.getElementById('boek-ok')!.style.display).toBe('none');
   });
 
   it('mislukt: formulier blijft, knop opnieuw bruikbaar, en een zichtbare foutmelding', async () => {
-    const fetcher = vi.fn(() => Promise.resolve(new Response('{}', { status: 500 })));
+    const fetcher = antwoord({}, 500);
     vi.spyOn(console, 'error').mockImplementation(() => {});
     koppelBoekformulier(fetcher as unknown as typeof fetch);
     verstuur();
@@ -69,8 +109,29 @@ describe('boekingsformulier', () => {
     expect(fout.textContent).toBe(BOEK_FOUT_TEKST);
     const knop = document.querySelector<HTMLButtonElement>('button[type="submit"]')!;
     expect(knop.disabled).toBe(false);
-    expect(knop.textContent).toBe('Sessie aanvragen');
+    expect(knop.textContent).toBe('Start de sessie');
     expect(document.getElementById('boek-ok')!.style.display).toBe('none');
+  });
+});
+
+describe('boekingshulpjes', () => {
+  it('leesBoekAntwoord aanvaardt enkel onze eigen links', () => {
+    expect(leesBoekAntwoord(GOED)).toEqual(GOED);
+    expect(() => leesBoekAntwoord('Accepted')).toThrow();
+    expect(() => leesBoekAntwoord({ ...GOED, link: 'javascript:alert(1)' })).toThrow();
+  });
+
+  it('datumAlsTekst geeft een leesbare datum of leeg', () => {
+    expect(datumAlsTekst('2026-11-20')).toMatch(/vrijdag 20 november/);
+    expect(datumAlsTekst('')).toBe('');
+    expect(datumAlsTekst('onzin')).toBe('');
+  });
+
+  it.each(['kamer-14/index.html', 'dua/index.html'])('%s post naar de Make-webhook', pad => {
+    const html = lees(pad);
+    expect(html).toContain('action="https://hook.eu1.make.com/');
+    expect(html).not.toContain('formspree');
+    expect(html).toMatch(/name="experience" value="(kamer-14|dua)"/);
   });
 });
 

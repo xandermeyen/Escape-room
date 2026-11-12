@@ -84,10 +84,63 @@ export function vandaagIso(nu = new Date()): string {
 export const BOEK_FOUT_TEKST =
   'Versturen lukte niet. Probeer het opnieuw of mail naar info@bureau-x.be.';
 
+/** Antwoord van de Make-webhook na een geslaagde boeking. */
+export interface BoekAntwoord {
+  sessieCode: string;
+  link: string;
+}
+
+/** Alleen een antwoord met een geldige code en een link naar onze eigen site telt als gelukt. */
+export function leesBoekAntwoord(data: unknown): BoekAntwoord {
+  const d = data as Partial<BoekAntwoord> | null;
+  if (
+    typeof d?.sessieCode !== 'string' ||
+    !/^[A-Z0-9-]{3,20}$/.test(d.sessieCode) ||
+    typeof d.link !== 'string' ||
+    !d.link.startsWith('https://bureau-x.be/experiences/')
+  ) {
+    throw new Error('Onverwacht antwoord van de boekingsdienst');
+  }
+  return { sessieCode: d.sessieCode, link: d.link };
+}
+
+/** yyyy-mm-dd als leesbare datum ("vrijdag 20 november"), of leeg. */
+export function datumAlsTekst(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return '';
+  const datum = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return datum.toLocaleDateString('nl-BE', { weekday: 'long', day: 'numeric', month: 'long' });
+}
+
+/** Vult het bevestigingsblok met de code, de link en een kopieerknop. */
+function toonBevestiging(ok: HTMLElement, antwoord: BoekAntwoord): void {
+  const code = ok.querySelector<HTMLElement>('[data-boek="code"]');
+  if (code) code.textContent = antwoord.sessieCode;
+  const link = ok.querySelector<HTMLAnchorElement>('[data-boek="link"]');
+  if (link) link.href = antwoord.link;
+  const kopieer = ok.querySelector<HTMLButtonElement>('[data-boek="kopieer"]');
+  kopieer?.addEventListener('click', () => {
+    void navigator.clipboard
+      ?.writeText(antwoord.link)
+      .then(() => {
+        kopieer.textContent = 'Gekopieerd';
+      })
+      .catch(() => {
+        kopieer.textContent = antwoord.link;
+      });
+  });
+  ok.style.display = 'block';
+}
+
 /**
- * Boekingsformulier (Formspree): versturen zonder de pagina te verlaten.
- * Lukt het, dan verschijnt #boek-ok. Lukt het niet, dan blijft het formulier
- * staan en verschijnt #boek-fout, zodat niemand denkt dat de boeking binnen is.
+ * Boekingsformulier: stuurt de gegevens naar de Make-webhook (form.action).
+ * Make maakt de sessie aan, antwoordt meteen met de code en de link, en mailt
+ * daarna alle spelers. De pagina toont de link dus direct. Lukt het niet, dan
+ * blijft het formulier staan en verschijnt #boek-fout, zodat niemand denkt dat
+ * de boeking binnen is. Zie docs/make-scenario.md.
+ *
+ * Bewust een "simple request" (form-urlencoded, geen eigen headers): zo is er
+ * geen CORS-preflight nodig richting Make.
  */
 export function koppelBoekformulier(fetcher: typeof fetch = (...a) => fetch(...a)): void {
   const form = document.getElementById('boekForm') as HTMLFormElement | null;
@@ -98,7 +151,7 @@ export function koppelBoekformulier(fetcher: typeof fetch = (...a) => fetch(...a
   const ok = document.getElementById('boek-ok');
   const fout = document.getElementById('boek-fout');
   const knop = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-  const knopTekst = knop?.textContent ?? 'Sessie aanvragen';
+  const knopTekst = knop?.textContent ?? 'Start de sessie';
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -108,14 +161,18 @@ export function koppelBoekformulier(fetcher: typeof fetch = (...a) => fetch(...a
       knop.textContent = 'Bezig…';
     }
     try {
-      const res = await fetcher(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' },
+      const velden = new URLSearchParams();
+      new FormData(form).forEach((waarde, naam) => {
+        if (typeof waarde === 'string') velden.append(naam, waarde.trim());
       });
-      if (!res.ok) throw new Error(`Formspree antwoordde ${res.status}`);
+      velden.set('datumTekst', datumAlsTekst(velden.get('datum') ?? ''));
+
+      const res = await fetcher(form.action, { method: 'POST', body: velden });
+      if (!res.ok) throw new Error(`Boekingsdienst antwoordde ${res.status}`);
+      const antwoord = leesBoekAntwoord(await res.json());
+
       form.style.display = 'none';
-      if (ok) ok.style.display = 'block';
+      if (ok) toonBevestiging(ok, antwoord);
       meetEvent('reservation_submit', { experience: experienceUitPad() });
     } catch (err) {
       console.error('Boeking versturen mislukt:', err);
