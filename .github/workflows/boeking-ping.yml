@@ -1,0 +1,34 @@
+name: Boekingen bewaken
+
+# Eén keer per dag: stuurt experience=ping naar de Make-webhook. Een actief
+# scenario antwoordt meteen {"pong":true}, zonder login, sessie of mail (2
+# Make-credits). Staat het scenario uit (Make zet het uit na 3 fouten op rij),
+# dan antwoordt Make "Accepted" en faalt deze workflow. GitHub stuurt dan een
+# mail, net als bij de rookproef. Zie docs/make-scenario.md.
+#
+# Let op: GitHub zet geplande workflows uit na 60 dagen zonder activiteit in de
+# repo. Je krijgt daar vooraf een mail over; één klik op "Enable" volstaat.
+
+on:
+  schedule:
+    - cron: '41 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Webhook pingen
+        env:
+          HOOK: https://hook.eu1.make.com/i3kal4r1xmikgdfm2cyre7i6acx8j8cx
+        run: |
+          antwoord=$(curl -sS --max-time 60 --retry 2 --retry-all-errors -X POST "$HOOK" --data 'experience=ping')
+          echo "Make antwoordde: $antwoord"
+          if [ "$antwoord" != '{"pong":true}' ]; then
+            echo "::error::Het boekingsscenario in Make antwoordt niet. Staat 'Boekingen (webhook)' nog aan?"
+            exit 1
+          fi

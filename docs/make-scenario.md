@@ -35,20 +35,30 @@ bewust **niet** in.
 
 ```
 1.  Webhooks     : Custom webhook          (Bureau X boekingen)
-2.  Tools        : Set variables           filter "Geldige boeking"
-3.  HTTP         : Make a request (POST)   inloggen als make@bureau-x.be → idToken
-4.  Router
-    ├─ filter "Kamer 14"  (experience = kamer-14)
-    │   5.  HTTP     : PUT sessie (if-match: null_etag)
-    │   6.  Webhooks : Webhook response   {sessieCode, link}
-    │   7.  Email    : mail naar speler 1 en 2
-    └─ filter "D.U.A."    (experience = dua)
-        8.  HTTP     : PUT sessie met aantalSpelers (if-match: null_etag)
-        9.  Webhooks : Webhook response   {sessieCode, link}
-        10. Email    : mail naar alle opgegeven spelers
+12. Router
+    ├─ filter "Ping (bewaking)" (experience = ping)
+    │   11. Webhooks : Webhook response   {"pong":true}
+    └─ (alle andere)
+        2.  Tools    : Set variables      filter "Geldige boeking"
+        3.  HTTP     : POST inloggen als make@bureau-x.be → idToken
+        4.  Router
+            ├─ filter "Kamer 14"  (experience = kamer-14)
+            │   5.  HTTP     : PUT sessie (if-match: null_etag)
+            │   6.  Webhooks : Webhook response   {sessieCode, link}
+            │   7.  Email    : mail naar speler 1 en 2
+            └─ filter "D.U.A."    (experience = dua)
+                8.  HTTP     : PUT sessie met aantalSpelers (if-match: null_etag)
+                9.  Webhooks : Webhook response   {sessieCode, link}
+                10. Email    : mail naar alle opgegeven spelers
 ```
 
-Scheduling: **Immediately** (instant trigger). Een boeking kost ongeveer 6 credits.
+Scheduling: **Immediately** (instant trigger). Een boeking kost ongeveer 6 credits,
+een ping 2.
+
+De volledige blueprint (zonder wachtwoord) staat in
+[make-boekingen.blueprint.json](make-boekingen.blueprint.json).
+`tests/make-contract.test.ts` controleert die tegen de site: veldnamen in de
+formulieren, de vorm van het antwoord, de puzzels per experience en de ping.
 
 ---
 
@@ -168,9 +178,11 @@ De response komt **vóór** de mail, zodat de speler niet op de SMTP-server wach
 
 - **Gratis plan**: maximaal 2 actieve scenario's en 1000 credits per maand.
   Credits staan in Make onder Organization > Subscription.
-- **Fouten**: na 3 opeenvolgende fouten zet Make het scenario uit (`maxErrors`).
-  Ook als het scenario uit staat, weigert de site de boeking netjes met de
-  foutmelding, maar zet het dan meteen terug aan.
+- **Fouten en bewaking**: na 3 opeenvolgende fouten zet Make het scenario uit
+  (`maxErrors`). De site weigert dan elke boeking netjes met de foutmelding. De
+  workflow **"Boekingen bewaken"** (`.github/workflows/boeking-ping.yml`) stuurt
+  elke ochtend `experience=ping` en faalt als er geen `{"pong":true}` terugkomt;
+  GitHub mailt je dan. Zet het scenario in dat geval meteen terug aan.
 - **Spam**: de webhook-URL is publiek. Het filter en de honeypot vangen simpele
   bots. Komt er toch spam, voeg dan Cloudflare Turnstile toe (gratis, zonder
   cookies) en controleer het token in een extra HTTP-module vóór module 2.
@@ -181,6 +193,7 @@ De response komt **vóór** de mail, zodat de speler niet op de SMTP-server wach
 
 ## Blueprint bewaren
 
-Scenario openen, **Edit**, onderaan **More**, **Export Blueprint**. Bewaar als
+Pas je het scenario aan in Make, exporteer het dan opnieuw: scenario openen,
+**Edit**, onderaan **More**, **Export Blueprint**. Overschrijf
 `docs/make-boekingen.blueprint.json` en vervang eerst het wachtwoord in module 3
-door `<wachtwoord>`.
+door `<wachtwoord>` (de contracttest faalt anders). Draai daarna `pnpm test`.

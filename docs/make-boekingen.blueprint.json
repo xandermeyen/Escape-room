@@ -1,0 +1,305 @@
+{
+  "name": "Boekingen (webhook)",
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "designer": { "orphans": [] },
+    "scenario": {
+      "dlq": false,
+      "slots": null,
+      "dataloss": false,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "roundtrips": 1,
+      "sequential": false,
+      "confidential": false,
+      "freshVariables": false,
+      "autoCommitTriggerLast": true
+    }
+  },
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": { "hook": 4092683, "maxResults": 1 },
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0, "name": "Boeking ontvangen" } }
+    },
+    {
+      "id": 12,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": { "designer": { "x": 300, "y": 0 } },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 11,
+              "module": "gateway:WebhookRespond",
+              "version": 1,
+              "filter": {
+                "name": "Ping (bewaking)",
+                "conditions": [[{ "a": "{{1.experience}}", "o": "text:equal", "b": "ping" }]]
+              },
+              "parameters": {},
+              "mapper": {
+                "status": "200",
+                "body": "{\"pong\":true}",
+                "headers": [
+                  { "key": "Content-Type", "value": "application/json" },
+                  { "key": "Access-Control-Allow-Origin", "value": "*" }
+                ]
+              },
+              "metadata": { "designer": { "x": 600, "y": -300, "name": "Pong" } }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 2,
+              "module": "util:SetVariables",
+              "version": 1,
+              "filter": {
+                "name": "Geldige boeking",
+                "conditions": [
+                  [
+                    { "a": "{{1.`_gotcha`}}", "o": "text:equal", "b": "" },
+                    { "a": "{{1.experience}}", "o": "text:equal", "b": "kamer-14" },
+                    {
+                      "a": "{{1.email_speler_1}}",
+                      "o": "text:pattern",
+                      "b": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                    },
+                    {
+                      "a": "{{1.email_speler_2}}",
+                      "o": "text:pattern",
+                      "b": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                    }
+                  ],
+                  [
+                    { "a": "{{1.`_gotcha`}}", "o": "text:equal", "b": "" },
+                    { "a": "{{1.experience}}", "o": "text:equal", "b": "dua" },
+                    {
+                      "a": "{{1.email_speler_1}}",
+                      "o": "text:pattern",
+                      "b": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                    },
+                    {
+                      "a": "{{1.email_speler_2}}",
+                      "o": "text:pattern",
+                      "b": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                    },
+                    {
+                      "a": "{{1.email_speler_3}}",
+                      "o": "text:pattern",
+                      "b": "^$|^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                    },
+                    {
+                      "a": "{{1.email_speler_4}}",
+                      "o": "text:pattern",
+                      "b": "^$|^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                  {
+                    "name": "sessieCode",
+                    "value": "{{upper(substring(replace(uuid; \"-\"; emptystring); 0; 8))}}"
+                  },
+                  {
+                    "name": "ontvangersTekst",
+                    "value": "{{1.email_speler_1}},{{1.email_speler_2}},{{1.email_speler_3}},{{1.email_speler_4}}"
+                  },
+                  {
+                    "name": "datumTekst",
+                    "value": "{{ifempty(1.datumTekst; \"zodra jullie klaar zijn\")}}"
+                  }
+                ]
+              },
+              "metadata": { "designer": { "x": 600, "y": 0, "name": "Code en ontvangers" } }
+            },
+            {
+              "id": 3,
+              "module": "http:MakeRequest",
+              "version": 4,
+              "parameters": { "tlsType": "", "authenticationType": "noAuth" },
+              "mapper": {
+                "url": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA7HtoKiFqWnopUXOAo4Niz-s17vtihT1Y",
+                "method": "post",
+                "timeout": "40",
+                "contentType": "json",
+                "inputMethod": "jsonString",
+                "shareCookies": false,
+                "parseResponse": true,
+                "allowRedirects": true,
+                "stopOnHttpError": true,
+                "jsonStringBodyContent": "{\"email\":\"make@bureau-x.be\",\"password\":\"<wachtwoord>\",\"returnSecureToken\":true}",
+                "requestCompressedContent": true
+              },
+              "metadata": {
+                "designer": { "x": 900, "y": 0, "name": "Inloggen als make@bureau-x.be" }
+              }
+            },
+            {
+              "id": 4,
+              "module": "builtin:BasicRouter",
+              "version": 1,
+              "mapper": null,
+              "metadata": { "designer": { "x": 1200, "y": 0 } },
+              "routes": [
+                {
+                  "flow": [
+                    {
+                      "id": 5,
+                      "module": "http:MakeRequest",
+                      "version": 4,
+                      "filter": {
+                        "name": "Kamer 14",
+                        "conditions": [
+                          [{ "a": "{{1.experience}}", "o": "text:equal", "b": "kamer-14" }]
+                        ]
+                      },
+                      "parameters": { "tlsType": "", "authenticationType": "noAuth" },
+                      "mapper": {
+                        "url": "https://bureau-x-default-rtdb.europe-west1.firebasedatabase.app/sessions/{{2.sessieCode}}.json?auth={{3.data.idToken}}",
+                        "method": "put",
+                        "headers": [{ "name": "if-match", "value": "null_etag" }],
+                        "contentType": "json",
+                        "inputMethod": "jsonString",
+                        "shareCookies": false,
+                        "parseResponse": true,
+                        "allowRedirects": true,
+                        "stopOnHttpError": true,
+                        "jsonStringBodyContent": "{\n  \"aangemaakt\": { \".sv\": \"timestamp\" },\n  \"actief\": true,\n  \"ervaringsId\": \"kamer-14\",\n  \"puzzels\": { \"p0\": false, \"p1\": false, \"p2\": false, \"p3\": false, \"p4\": false, \"p5\": false, \"p6\": false },\n  \"rapport\": { \"ingediend\": false, \"inhoud\": {} },\n  \"timerGestart\": null\n}",
+                        "requestCompressedContent": true
+                      },
+                      "metadata": {
+                        "designer": { "x": 1500, "y": -150, "name": "Sessie aanmaken (Kamer 14)" }
+                      }
+                    },
+                    {
+                      "id": 6,
+                      "module": "gateway:WebhookRespond",
+                      "version": 1,
+                      "parameters": {},
+                      "mapper": {
+                        "status": "200",
+                        "body": "{\"sessieCode\":\"{{2.sessieCode}}\",\"link\":\"https://bureau-x.be/experiences/kamer-14/?sessie={{2.sessieCode}}\"}",
+                        "headers": [
+                          { "key": "Content-Type", "value": "application/json" },
+                          { "key": "Access-Control-Allow-Origin", "value": "*" }
+                        ]
+                      },
+                      "metadata": {
+                        "designer": { "x": 1800, "y": -150, "name": "Link terugsturen" }
+                      }
+                    },
+                    {
+                      "id": 7,
+                      "module": "email:ActionSendEmail",
+                      "version": 7,
+                      "parameters": { "account": 8064756, "saveAfterSent": false },
+                      "mapper": {
+                        "cc": [],
+                        "to": ["{{1.email_speler_1}}", "{{1.email_speler_2}}"],
+                        "bcc": [],
+                        "from": "",
+                        "sender": "",
+                        "headers": [],
+                        "replyTo": "",
+                        "subject": "Jouw spellink voor Kamer 14",
+                        "priority": "normal",
+                        "inReplyTo": "",
+                        "references": [],
+                        "attachments": [],
+                        "contentType": "html",
+                        "html": "<!DOCTYPE html>\n<html lang=\"nl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Jouw spellink voor Kamer 14</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:#1c1a17;font-family:Arial,Helvetica,sans-serif;\">\n  <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:#1c1a17;\">\n    <tr>\n      <td align=\"center\" style=\"padding:40px 16px;\">\n        <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:600px;width:100%;\">\n          <tr>\n            <td align=\"center\" style=\"padding-bottom:32px;\">\n              <table cellpadding=\"0\" cellspacing=\"0\">\n                <tr>\n                  <td style=\"padding-right:14px;vertical-align:middle;\">\n                    <table cellpadding=\"0\" cellspacing=\"0\" style=\"border:1.5px solid #f5f0e8;width:44px;height:44px;\">\n                      <tr><td align=\"center\" valign=\"middle\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;color:#f5f0e8;line-height:1;\">X</td></tr>\n                    </table>\n                  </td>\n                  <td style=\"vertical-align:middle;\">\n                    <div style=\"font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:500;letter-spacing:6px;color:#f5f0e8;\">BUREAU X</div>\n                    <div style=\"border-top:0.75px solid #f5f0e8;margin-top:4px;padding-top:4px;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:3px;color:#f5f0e8;\">ESCAPE ROOMS</div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;border-bottom:1px solid #c49a2a;padding:12px 0;text-align:center;\">\n              <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#f5f0e8;\">Intern dossier · OPZ Geel · Bevestiging reservering</span>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"background-color:#2e2b26;padding:40px 36px;border-left:1px solid #c49a2a;border-right:1px solid #c49a2a;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#f5f0e8;margin:0 0 16px 0;\">Geachte deelnemers</p>\n              <p style=\"color:#f5f0e8;font-size:15px;line-height:1.7;margin:0 0 16px 0;\">\n                Uw dossier voor <strong>Kamer 14</strong> staat klaar. Gepland: <strong style=\"color:#c49a2a;\">{{2.datumTekst}}</strong>.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 16px 0;font-style:italic;\">\n                Lena Bogaert, kostgangster bij het OPZ Geel, is vanochtend vertrokken zonder iets te zeggen. Om vijf uur beslist haar begeleidster of ze haar als vermist meldt. Eén speler zit aan het bureau van het OPZ, de ander staat in de kamer van Lena. U heeft 60 minuten.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 32px 0;\">\n                Speel met twee, elk op een eigen toestel. Bel of videobel met elkaar tijdens het spel en zet het geluid aan: er zijn stemmen en geluiden.\n              </p>\n              <table cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 auto 32px auto;\">\n                <tr>\n                  <td style=\"background-color:#c49a2a;padding:14px 36px;text-align:center;\">\n                    <a href=\"https://bureau-x.be/experiences/kamer-14/?sessie={{2.sessieCode}}\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#1c1a17;text-decoration:none;font-weight:700;\">Open dossier</a>\n                  </td>\n                </tr>\n              </table>\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-top:1px solid #c49a2a;\">\n                <tr>\n                  <td style=\"padding-top:24px;\">\n                    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n                      <tr>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Sessiecode</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">{{2.sessieCode}}</span>\n                        </td>\n                        <td width=\"20\"></td>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Tijdslimiet</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">60 MIN</span>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;padding:20px 0;text-align:center;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;margin:0;text-transform:uppercase;\">Bureau X · Escape Rooms · bureau-x.be</p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>"
+                      },
+                      "metadata": { "designer": { "x": 2100, "y": -150, "name": "Mail Kamer 14" } }
+                    }
+                  ]
+                },
+                {
+                  "flow": [
+                    {
+                      "id": 8,
+                      "module": "http:MakeRequest",
+                      "version": 4,
+                      "filter": {
+                        "name": "D.U.A.",
+                        "conditions": [[{ "a": "{{1.experience}}", "o": "text:equal", "b": "dua" }]]
+                      },
+                      "parameters": { "tlsType": "", "authenticationType": "noAuth" },
+                      "mapper": {
+                        "url": "https://bureau-x-default-rtdb.europe-west1.firebasedatabase.app/sessions/{{2.sessieCode}}.json?auth={{3.data.idToken}}",
+                        "method": "put",
+                        "headers": [{ "name": "if-match", "value": "null_etag" }],
+                        "contentType": "json",
+                        "inputMethod": "jsonString",
+                        "shareCookies": false,
+                        "parseResponse": true,
+                        "allowRedirects": true,
+                        "stopOnHttpError": true,
+                        "jsonStringBodyContent": "{\n  \"aangemaakt\": { \".sv\": \"timestamp\" },\n  \"actief\": true,\n  \"ervaringsId\": \"dua\",\n  \"aantalSpelers\": {{length(remove(split(2.ontvangersTekst; \",\"); emptystring))}},\n  \"puzzels\": { \"p0\": false, \"p1\": false, \"p2\": false, \"p3\": false, \"p4\": false, \"p5\": false },\n  \"rapport\": { \"ingediend\": false, \"inhoud\": {} },\n  \"timerGestart\": null\n}",
+                        "requestCompressedContent": true
+                      },
+                      "metadata": {
+                        "designer": { "x": 1500, "y": 150, "name": "Sessie aanmaken (D.U.A.)" }
+                      }
+                    },
+                    {
+                      "id": 9,
+                      "module": "gateway:WebhookRespond",
+                      "version": 1,
+                      "parameters": {},
+                      "mapper": {
+                        "status": "200",
+                        "body": "{\"sessieCode\":\"{{2.sessieCode}}\",\"link\":\"https://bureau-x.be/experiences/dua/?sessie={{2.sessieCode}}\"}",
+                        "headers": [
+                          { "key": "Content-Type", "value": "application/json" },
+                          { "key": "Access-Control-Allow-Origin", "value": "*" }
+                        ]
+                      },
+                      "metadata": {
+                        "designer": { "x": 1800, "y": 150, "name": "Link terugsturen" }
+                      }
+                    },
+                    {
+                      "id": 10,
+                      "module": "email:ActionSendEmail",
+                      "version": 7,
+                      "parameters": { "account": 8064756, "saveAfterSent": false },
+                      "mapper": {
+                        "cc": [],
+                        "to": "{{remove(split(2.ontvangersTekst; \",\"); emptystring)}}",
+                        "bcc": [],
+                        "from": "",
+                        "sender": "",
+                        "headers": [],
+                        "replyTo": "",
+                        "subject": "Jouw opdracht van Bureau X: D.U.A.",
+                        "priority": "normal",
+                        "inReplyTo": "",
+                        "references": [],
+                        "attachments": [],
+                        "contentType": "html",
+                        "html": "<div style=\"background:#1d3a2f;padding:40px 20px;font-family:'Courier New',Courier,monospace;\">\n  <div style=\"max-width:560px;margin:0 auto;background:#f5f0e8;padding:40px 36px;\">\n    <p style=\"margin:0 0 24px;font-size:11px;letter-spacing:0.18em;color:#8a7a5a;text-transform:uppercase;\">\n      Bureau X · Dossier 1934/RR · Strikt vertrouwelijk\n    </p>\n    <h1 style=\"margin:0 0 4px;font-size:28px;letter-spacing:0.12em;color:#1d3a2f;font-family:Georgia,serif;\">D.U.A.</h1>\n    <p style=\"margin:0 0 28px;font-size:12px;letter-spacing:0.1em;color:#8a7a5a;text-transform:uppercase;\">De Ultieme Archiefmissie</p>\n    <p style=\"margin:0 0 16px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      Jullie sessie is aangemaakt. Gepland: <strong>{{2.datumTekst}}</strong>.\n    </p>\n    <p style=\"margin:0 0 24px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      {{switch(length(remove(split(2.ontvangersTekst; \",\"); emptystring)); 2; \"Jullie spelen met <strong>2 personen</strong>. Elk tijdperk heeft één onderzoeker. Spreek voor de start af wie <strong>1934</strong> op zich neemt (de Schrijver &amp; de Loper) en wie <strong>2034</strong> (de Archivaris &amp; de Restaurateur). Je ziet in de lobby beide rollen van je tijdperk.\"; 3; \"Jullie spelen met <strong>3 personen</strong>. Eén tijdperk krijgt twee onderzoekers, het andere één. Spreek voor de start af hoe jullie de tijdperken verdelen: <strong>1934</strong> (Schrijver + Loper) en <strong>2034</strong> (Archivaris + Restaurateur). Wie alleen staat, ziet beide rollen van zijn tijdperk.\"; \"Jullie spelen met <strong>4 personen</strong>. Elk van jullie kiest een eigen rol in de lobby: <strong>De Schrijver</strong> of <strong>De Loper</strong> in 1934, <strong>De Archivaris</strong> of <strong>De Restaurateur</strong> in 2034. Er moet minstens één iemand in elk tijdperk staan.\")}}\n    </p>\n    <div style=\"background:#1d3a2f;padding:16px 20px;margin:0 0 28px;\">\n      <p style=\"margin:0 0 4px;font-size:10px;letter-spacing:0.2em;color:#b9974e;text-transform:uppercase;\">Sessiecode</p>\n      <p style=\"margin:0;font-size:22px;letter-spacing:0.22em;color:#f5f0e8;font-family:Georgia,serif;\">{{2.sessieCode}}</p>\n    </div>\n    <a href=\"https://bureau-x.be/experiences/dua/?sessie={{2.sessieCode}}\" style=\"display:inline-block;background:#b9974e;color:#1d3a2f;text-decoration:none;padding:13px 28px;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;font-family:'Courier New',Courier,monospace;\">Open de lijn →</a>\n    <p style=\"margin:28px 0 0;font-size:12px;line-height:1.7;color:#8a7a5a;\">\n      Iedereen krijgt dezelfde link. Open die elk op je eigen toestel.<br>\n      De sessie start zodra de eerste speler een rol claimt in de lobby.\n    </p>\n    <hr style=\"margin:28px 0;border:none;border-top:1px solid #d4c9a8;\">\n    <p style=\"margin:0;font-size:11px;color:#b0a080;line-height:1.6;\">\n      Bureau X · <a href=\"https://bureau-x.be\" style=\"color:#b0a080;\">bureau-x.be</a><br>\n      Vragen? Stuur een mail naar info@bureau-x.be\n    </p>\n  </div>\n</div>"
+                      },
+                      "metadata": { "designer": { "x": 2100, "y": 150, "name": "Mail D.U.A." } }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

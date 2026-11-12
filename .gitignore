@@ -22,6 +22,18 @@ Thumbs.db
 # Sleutels en service-accounts (bv. firebase-sa.json uit de rules-workflow)
 *-sa.json
 *.pem
+*.key
+*.p12
+*.pfx
+
+# Firebase CLI-cache en logs van de emulator
+.firebase/
+*-debug.log
+
+# Make.com: enkel de opgeschoonde export hoort in git (zie docs/make-scenario.md).
+# Een rauwe export bevat het wachtwoord van make@bureau-x.be.
+*.blueprint.json
+!docs/make-boekingen.blueprint.json
 
 # Editor directories and files
 .vscode/*

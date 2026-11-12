@@ -1,8 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * End-to-end-tests: een volledige run van Kamer 14 met twee spelers in twee
- * tabbladen, tegen de site met een nep-Firebase (zie vite.e2e.config.ts).
+ * End-to-end-tests tegen de site met een nep-Firebase (zie vite.e2e.config.ts):
+ * volledige runs van Kamer 14 en D.U.A. met meerdere spelers in eigen
+ * tabbladen, de lobby per spelersaantal, en het boekingsformulier met een
+ * nagebootste Make-webhook.
  *
  * Lokaal: pnpm exec playwright install chromium (eenmalig), dan pnpm test:e2e.
  * Met een eigen Chromium: PW_CHROMIUM=/pad/naar/chromium pnpm test:e2e.
