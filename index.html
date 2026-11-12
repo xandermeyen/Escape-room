@@ -6,7 +6,7 @@
     <title>Bureau X - Online Escape Rooms</title>
     <meta
       name="description"
-      content="Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel Kamer 14, een gratis online escape room voor duo's over de Geelse traditie van gezinsverpleging."
+      content="Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen. Speel gratis Kamer 14 (Geel, 2 spelers) of D.U.A. (Gent, 2 tot 4 spelers), vanuit huis in je browser."
     />
     <link rel="canonical" href="https://bureau-x.be/" />
     <meta property="og:type" content="website" />
@@ -31,7 +31,10 @@
         "url": "https://bureau-x.be/",
         "logo": "https://bureau-x.be/assets/img/favicon-192x192.png",
         "description": "Bureau X maakt online escape rooms gebaseerd op echte plaatsen, tradities en verhalen.",
-        "email": "info@bureau-x.be"
+        "email": "info@bureau-x.be",
+        "areaServed": { "@type": "Country", "name": "België" },
+        "knowsLanguage": "nl",
+        "sameAs": ["https://escapetalk.nl/games/bureau-x/"]
       }
     </script>
     <script type="application/ld+json">
@@ -55,7 +58,7 @@
             "name": "Is Bureau X echt gratis?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Ja, volledig gratis. Geen abonnement, geen in-app aankopen. Je boekt een sessie, ontvangt een spellink per mail en speelt."
+              "text": "Ja, volledig gratis. Geen abonnement, geen account, geen in-app aankopen. Je boekt een sessie, iedere speler krijgt een spellink per mail en jullie spelen."
             }
           },
           {
@@ -63,7 +66,15 @@
             "name": "Wat heb ik nodig om te spelen?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Alleen een browser en een manier om met je medespeler te communiceren, zoals een telefoongesprek of videocall. Geen downloads, geen speciale software."
+              "text": "Een browser op je telefoon, tablet of computer en een manier om met je medespelers te bellen of videobellen. Zet je geluid aan: beide experiences hebben ingesproken stemmen. Geen downloads, geen speciale software."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Moeten we op dezelfde plek zijn?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nee. Iedereen speelt vanuit huis op een eigen scherm. Je kunt dus perfect samen spelen met vrienden of familie die verder weg wonen."
             }
           },
           {
@@ -71,7 +82,7 @@
             "name": "Hoeveel spelers heb ik nodig?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Kamer 14 is gemaakt voor precies 2 spelers. D.U.A., onze tweede experience, is speelbaar met 2 tot 4 spelers."
+              "text": "Kamer 14 is gemaakt voor precies 2 spelers. D.U.A. speel je met 2 tot 4: een deel van het team speelt in 1934, de rest in 2034."
             }
           },
           {
@@ -79,7 +90,7 @@
             "name": "Hoe lang duurt een sessie?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Kamer 14 duurt gemiddeld 45 minuten. Jullie hebben maximaal 60 minuten: in het verhaal beslist An om vijf uur of ze Lena als vermist meldt."
+              "text": "Kamer 14 duurt gemiddeld 45 minuten, met een maximum van 60. Voor D.U.A. hebben jullie 60 minuten."
             }
           },
           {
@@ -87,7 +98,7 @@
             "name": "Zijn de verhalen echt?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Ja. Kamer 14 is gebaseerd op de echte Geelse traditie van gezinsverpleging bij het OPZ Geel. D.U.A. is gebaseerd op de tot op vandaag onopgeloste diefstal van De Rechtvaardige Rechters uit de Sint-Baafskathedraal in 1934."
+              "text": "De achtergrond wel. Kamer 14 speelt zich af binnen de echte Geelse gezinsverpleging van het OPZ Geel, maar Lena Bogaert en haar verdwijning zijn fictief. D.U.A. draait rond de echte, tot vandaag onopgeloste diefstal van De Rechtvaardige Rechters uit de Sint-Baafskathedraal in 1934. De 2034-kant is verzonnen."
             }
           }
         ]
@@ -111,7 +122,7 @@
       </a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#experiences">Experiences</a></li>
-        <li><a href="#reviews">Reviews</a></li>
+        <li id="navReviews" style="display: none"><a href="#reviews">Reviews</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#experiences" class="btn-nav">Boek nu</a></li>
       </ul>
@@ -174,7 +185,7 @@
               <span class="exp-tab">Dossier 14 &middot; Geel</span>
               <h3 class="exp-title">Kamer 14</h3>
               <p class="exp-meta">
-                Online escape room &nbsp;&middot;&nbsp; Geel, Belgie &nbsp;&middot;&nbsp; Duo
+                Online escape room &nbsp;&middot;&nbsp; Geel, België &nbsp;&middot;&nbsp; Duo
               </p>
               <p class="exp-desc">
                 Op dinsdagochtend 6 mei is Lena Bogaert na het ontbijt verdwenen uit haar kamer bij
@@ -201,7 +212,7 @@
               <span class="exp-tab">Dossier 1934/RR &middot; Gent</span>
               <h3 class="exp-title">D.U.A.</h3>
               <p class="exp-meta">
-                Online escape room &nbsp;&middot;&nbsp; Gent, Belgie &nbsp;&middot;&nbsp; 2 tot 4
+                Online escape room &nbsp;&middot;&nbsp; Gent, België &nbsp;&middot;&nbsp; 2 tot 4
                 spelers
               </p>
               <p class="exp-desc">
@@ -299,24 +310,24 @@
             <div class="step-num">1</div>
             <h3 class="step-title">Boek een sessie</h3>
             <p class="step-desc">
-              Vul het formulier in. Gratis, geen account nodig. Binnen 24 uur ontvang je een
-              persoonlijke spellink per mail.
+              Kies een experience en vul de e-mailadressen van alle spelers in. Gratis, geen account
+              nodig. Binnen 24 uur krijgt iedereen een eigen spellink per mail.
             </p>
           </div>
           <div class="step reveal">
             <div class="step-num">2</div>
-            <h3 class="step-title">Stuur de link door</h3>
+            <h3 class="step-title">Open je dossier</h3>
             <p class="step-desc">
-              Stuur de link naar je medespeler. Ieder opent zijn eigen dossier in de browser. Geen
-              download, geen installatie.
+              Spreek een moment af. Ieder opent zijn eigen spellink in de browser, elk vanuit zijn
+              eigen huis. Geen download, geen installatie.
             </p>
           </div>
           <div class="step reveal">
             <div class="step-num">3</div>
             <h3 class="step-title">Los het samen op</h3>
             <p class="step-desc">
-              Bel of chat met je medespeler. Jullie dossiers vullen elkaar aan. Samen kom je
-              erachter wat er echt gebeurd is.
+              Bel of videobel met elkaar. Jullie dossiers vullen elkaar aan. Samen kom je erachter
+              wat er echt gebeurd is.
             </p>
           </div>
         </div>
@@ -335,8 +346,8 @@
             </button>
             <div class="faq-a">
               <p>
-                Ja, volledig gratis. Geen abonnement, geen in-app aankopen. Je boekt een sessie,
-                ontvangt een spellink per mail en speelt.
+                Ja, volledig gratis. Geen abonnement, geen account, geen in-app aankopen. Je boekt
+                een sessie, iedere speler krijgt een spellink per mail en jullie spelen.
               </p>
             </div>
           </div>
@@ -346,8 +357,20 @@
             </button>
             <div class="faq-a">
               <p>
-                Alleen een browser en een manier om met je medespeler te communiceren, zoals een
-                telefoongesprek of videocall. Geen downloads, geen speciale software.
+                Een browser op je telefoon, tablet of computer en een manier om met je medespelers
+                te bellen of videobellen. Zet je geluid aan: beide experiences hebben ingesproken
+                stemmen. Geen downloads, geen speciale software.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Moeten we op dezelfde plek zijn? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p>
+                Nee. Iedereen speelt vanuit huis op een eigen scherm. Je kunt dus perfect samen
+                spelen met vrienden of familie die verder weg wonen.
               </p>
             </div>
           </div>
@@ -357,8 +380,8 @@
             </button>
             <div class="faq-a">
               <p>
-                Kamer 14 is gemaakt voor precies 2 spelers. D.U.A., onze tweede experience, is
-                speelbaar met 2 tot 4 spelers.
+                Kamer 14 is gemaakt voor precies 2 spelers. D.U.A. speel je met 2 tot 4: een deel
+                van het team speelt in 1934, de rest in 2034.
               </p>
             </div>
           </div>
@@ -368,8 +391,8 @@
             </button>
             <div class="faq-a">
               <p>
-                Kamer 14 duurt gemiddeld 45 minuten. Jullie hebben maximaal 60 minuten: in het
-                verhaal beslist An om vijf uur of ze Lena als vermist meldt.
+                Kamer 14 duurt gemiddeld 45 minuten, met een maximum van 60. Voor D.U.A. hebben
+                jullie 60 minuten.
               </p>
             </div>
           </div>
@@ -379,9 +402,10 @@
             </button>
             <div class="faq-a">
               <p>
-                Ja. Kamer 14 is gebaseerd op de echte Geelse traditie van gezinsverpleging bij het
-                OPZ Geel. D.U.A. is gebaseerd op de tot op vandaag onopgeloste diefstal van De
-                Rechtvaardige Rechters uit de Sint-Baafskathedraal in 1934.
+                De achtergrond wel. Kamer 14 speelt zich af binnen de echte Geelse gezinsverpleging
+                van het OPZ Geel, maar Lena Bogaert en haar verdwijning zijn fictief. D.U.A. draait
+                rond de echte, tot vandaag onopgeloste diefstal van De Rechtvaardige Rechters uit de
+                Sint-Baafskathedraal in 1934. De 2034-kant is verzonnen.
               </p>
             </div>
           </div>
@@ -392,16 +416,13 @@
     <section class="cta-section">
       <p class="label" style="text-align: center">Klaar voor het onderzoek?</p>
       <h2 class="cta-title">Start je eerste dossier</h2>
-      <p class="cta-sub">Kamer 14 wacht. Jullie ook?</p>
-      <a
-        href="/kamer-14/#boek"
-        class="btn btn-gold"
-        style="font-size: 0.95rem; padding: 1rem 2.5rem"
-        >Boek Kamer 14 &rarr;</a
+      <p class="cta-sub">Twee dossiers liggen klaar. Welk neem jij?</p>
+      <a href="#experiences" class="btn btn-gold" style="font-size: 0.95rem; padding: 1rem 2.5rem"
+        >Kies je dossier &rarr;</a
       >
       <span class="cta-footnote"
-        >Volledig gratis &nbsp;&middot;&nbsp; Geen account nodig &nbsp;&middot;&nbsp; Zo
-        gespeeld</span
+        >Volledig gratis &nbsp;&middot;&nbsp; Geen account nodig &nbsp;&middot;&nbsp; Vanuit
+        huis</span
       >
     </section>
 

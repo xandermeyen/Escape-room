@@ -169,6 +169,8 @@ async function laadReviews(): Promise<void> {
   // eslint-disable-next-line no-unsanitized/property
   grid.innerHTML = reviews.slice(0, 6).map(reviewKaart).join('');
   sectie.style.display = '';
+  const navReviews = document.getElementById('navReviews');
+  if (navReviews) navReviews.style.display = '';
 
   const samenvatting = document.getElementById('reviews-summary');
   if (samenvatting && reviews.length >= MIN_VOOR_SAMENVATTING) {

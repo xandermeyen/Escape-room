@@ -1,0 +1,23 @@
+# Bureau X
+
+> Bureau X (bureau-x.be) maakt gratis, Nederlandstalige online escape rooms gebaseerd op echte Belgische plaatsen en verhalen. Je speelt vanuit huis in de browser, elk op je eigen scherm, terwijl je met je medespelers belt of videobelt. Geen download, geen account, geen kosten.
+
+Bureau X is een Belgisch project uit de Kempen. Alle experiences zijn volledig gratis en in het Nederlands. Je boekt een sessie via de website en krijgt per speler een spellink per mail.
+
+## Experiences
+
+- [Kamer 14](https://bureau-x.be/kamer-14/): online escape room voor precies 2 spelers, ongeveer 45 minuten (maximaal 60). Speelt zich af in Geel en gaat over de verdwijning van Lena Bogaert binnen de eeuwenoude Geelse traditie van gezinsverpleging (OPZ Geel). Gratis.
+- [D.U.A.](https://bureau-x.be/dua/): online escape room voor 2 tot 4 spelers, 60 minuten. Gebaseerd op de onopgeloste diefstal van het paneel De Rechtvaardige Rechters uit het Lam Gods (Sint-Baafskathedraal, Gent, 1934). De ene helft van het team speelt in 1934, de andere in 2034; samen lossen ze de zaak op. Gratis.
+
+## Veelgestelde vragen
+
+- Kost het iets? Nee, alles is gratis. Geen abonnement, geen in-app aankopen.
+- Wat heb ik nodig? Een browser (telefoon, tablet of computer) en een manier om met je medespelers te bellen.
+- Moeten we op dezelfde plek zijn? Nee, iedereen speelt vanuit huis op een eigen scherm.
+- In welke taal? Nederlands.
+
+## Meer
+
+- [Homepage](https://bureau-x.be/)
+- [Bureau X op escapetalk.nl](https://escapetalk.nl/games/bureau-x/)
+- Contact: info@bureau-x.be

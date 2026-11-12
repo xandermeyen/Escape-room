@@ -30,6 +30,7 @@
         "brand": { "@type": "Brand", "name": "Bureau X" },
         "description": "Online escape room rond de onopgeloste diefstal van De Rechtvaardige Rechters uit de Sint-Baafskathedraal (Gent, 1934). Twee teams spelen tegelijk, een in 1934 en een in 2034. Samen los je de zaak op, door de tijd heen. 100% online, gratis.",
         "url": "https://bureau-x.be/dua/",
+        "sameAs": ["https://escapetalk.nl/games/bureau-x/dua/"],
         "image": "https://bureau-x.be/assets/img/dua-preview.jpg",
         "category": "Online escape room",
         "inLanguage": "nl",
@@ -41,7 +42,8 @@
           "price": "0",
           "priceCurrency": "EUR",
           "availability": "https://schema.org/InStock",
-          "url": "https://bureau-x.be/dua/#boek"
+          "url": "https://bureau-x.be/dua/#boek",
+          "areaServed": { "@type": "Country", "name": "België" }
         }
       }
     </script>
@@ -62,6 +64,55 @@
             "position": 2,
             "name": "D.U.A.",
             "item": "https://bureau-x.be/dua/"
+          }
+        ]
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is D.U.A. gratis?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Volledig gratis. Geen account, geen abonnement, geen in-app aankopen. Jullie boeken, jullie spelen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Met hoeveel spelers speel je D.U.A.?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Met 2 tot 4 spelers. Er staat altijd minstens één speler in 1934 en één in 2034. Met vier deelt elk tijdperk twee spelers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Hoe spelen we samen online?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ieder opent zijn eigen spellink in de browser en kiest een rol. Bel of videobel met elkaar terwijl je speelt. Geen download of installatie nodig."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Hoe lang duurt het?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Jullie hebben 60 minuten om de zaak op te lossen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is het verhaal echt gebeurd?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. In de nacht van 10 op 11 april 1934 werd het paneel De Rechtvaardige Rechters uit het Lam Gods in de Sint-Baafskathedraal in Gent gestolen. Het is tot vandaag niet teruggevonden. De 2034-kant van het spel is fictie."
+            }
           }
         ]
       }
@@ -93,6 +144,7 @@
         <li><a href="/#experiences">Experiences</a></li>
         <li><a href="#verhaal">De zaak</a></li>
         <li><a href="#spelen">Hoe het werkt</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="/" class="btn-nav">Terug naar Bureau X</a></li>
       </ul>
       <button
@@ -444,6 +496,71 @@
                   <a href="https://www.museagent.be" target="_blank" rel="noopener">Musea Gent</a>
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    <section
+      class="section"
+      id="faq"
+      style="background: var(--bg-2); border-top: 1px solid var(--border-gold)"
+    >
+      <div class="container container--narrow">
+        <p class="label reveal">Vragen</p>
+        <h2 class="heading reveal">Veelgestelde vragen</h2>
+        <div class="faq-list reveal">
+          <div class="faq-item">
+            <button class="faq-q">Is D.U.A. gratis? <span class="faq-arrow">&#9662;</span></button>
+            <div class="faq-a">
+              <p>
+                Volledig gratis. Geen account, geen abonnement, geen in-app aankopen. Jullie boeken,
+                jullie spelen.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Met hoeveel spelers speel je D.U.A.? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p>
+                Met 2 tot 4 spelers. Er staat altijd minstens één speler in 1934 en één in 2034. Met
+                vier deelt elk tijdperk twee spelers.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Hoe spelen we samen online? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p>
+                Ieder opent zijn eigen spellink in de browser en kiest een rol. Bel of videobel met
+                elkaar terwijl je speelt. Geen download of installatie nodig.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Hoe lang duurt het? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p>Jullie hebben 60 minuten om de zaak op te lossen.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Is het verhaal echt gebeurd? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p>
+                Ja. In de nacht van 10 op 11 april 1934 werd het paneel De Rechtvaardige Rechters
+                uit het Lam Gods in de Sint-Baafskathedraal in Gent gestolen. Het is tot vandaag
+                niet teruggevonden. De 2034-kant van het spel is fictie.
+              </p>
             </div>
           </div>
         </div>
