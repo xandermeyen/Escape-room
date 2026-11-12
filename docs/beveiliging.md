@@ -54,9 +54,11 @@ Een speler kan elke sessie aanpassen waarvan hij de code kent, binnen de regels
 hierboven: rollen claimen, puzzels op opgelost zetten of de sessie sluiten.
 Codes zijn daarom willekeurig, nooit oplopend:
 
-- Boekingen (Kamer 14 en D.U.A.) krijgen hun code van Make.com: 6 hex-tekens,
-  ongeveer 16,7 miljoen mogelijkheden (zie
-  [make-scenario.md](make-scenario.md#module-12-tools--set-variable-sessiecode)).
+- Boekingen (Kamer 14 en D.U.A.) krijgen hun code van Make.com: 8 hex-tekens uit
+  een `uuid`, ongeveer 4,3 miljard mogelijkheden. De PUT gebruikt
+  `if-match: null_etag`, zodat een (onwaarschijnlijke) botsing nooit een bestaande
+  sessie overschrijft (zie
+  [make-scenario.md](make-scenario.md#module-2-set-variables-met-filter-geldige-boeking)).
 - Het host-paneel maakt codes zoals `KQM-473` (Kamer 14) of `DUA-KQM-473`
   (D.U.A.), ongeveer 7 miljoen mogelijkheden (`nieuweSessieCode()` in
   `shared/js/host-sessies.ts`). Tot november 2026 liepen D.U.A.-codes uit het
@@ -119,13 +121,13 @@ kunnen spelers niet meer schrijven.
 
 ### 3. Make.com omzetten
 
-Zie [make-scenario.md](make-scenario.md#module-30-http--make-a-request-post-inloggen):
-in beide scenario's logt een HTTP-module in met het Make-account, de PUT
-gebruikt daarna `?auth=<idToken>`.
+Zie [make-scenario.md](make-scenario.md#module-3-inloggen): in het
+boekingsscenario logt een HTTP-module in met het Make-account, de PUT gebruikt
+daarna `?auth=<idToken>`.
 
 ### 4. Code deployen
 
-Push naar `main`. De site deployt automatisch.
+Push naar `main`. De site deployt automatisch zodra de volledige CI geslaagd is.
 
 ### 5. Rules deployen
 
@@ -196,7 +198,7 @@ emulator slaat de gewone `pnpm test` dit bestand over.
 
 Na het deployen van de rules, met de live site:
 
-- [ ] Make.com maakt een sessie aan (testrun, Kamer 14 én D.U.A.) en de spelers krijgen hun mail.
+- [ ] Een boeking via het formulier (Kamer 14 én D.U.A.) toont meteen de link en de spelers krijgen hun mail.
 - [ ] Host-paneel: inloggen lukt, sessielijst laadt, sessie aanmaken lukt.
 - [ ] Host-paneel met een account dat niet in `beheerders` staat: melding
       "geen beheerdersrechten", geen data.

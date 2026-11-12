@@ -120,6 +120,15 @@ formulier kort wat beter kan; dat ziet alleen de host.
 **Toestemming voor cookies.** Google Analytics laadt pas na "Accepteren" (Consent Mode v2).
 Wie weigert, laadt het script helemaal niet.
 
+**Boeken zonder wachten.** Het formulier post naar een Make-webhook. Make maakt de sessie
+aan, antwoordt meteen met de code en de link, en mailt pas daarna. De speler kan dus direct
+beginnen. De site rekent een boeking enkel als gelukt bij een geldige code en een link naar
+bureau-x.be zelf.
+
+**FAQ-schema uit de zichtbare FAQ.** Een kleine Vite-plugin (`scripts/vite-faq-schema.ts`)
+maakt het FAQPage-schema bij de build uit de zichtbare vragen. Schema en tekst kunnen zo
+nooit uit elkaar lopen, en een handgeschreven schema laat de build falen.
+
 **Toegankelijkheid.** Tabs, kamerzones, rolkaarten, de typemachine en de stadsplannen werken
 met het toetsenbord (Tab, Enter/spatie, pijltjes, Escape). Kleuren halen minstens 4,5:1
 contrast. Klikdoelen op gsm zijn minstens 44 px.
@@ -161,15 +170,15 @@ pnpm dev                           # http://localhost:5173
 | `pnpm build`        | Productiebuild naar `dist/`                             |
 | `pnpm rookproef`    | Anonieme login en demo-sessie op productie controleren  |
 
-CI draait dit allemaal bij elke push. Een push naar `main` bouwt en deployt naar GitHub
-Pages. Wijzigen de database-rules, dan test en deployt de workflow "Firebase rules
+CI draait dit allemaal bij elke push. Op `main` deployt de site pas naar GitHub Pages
+als de volledige CI (kwaliteit, rules-tests en e2e) geslaagd is. Wijzigen de database-rules, dan test en deployt de workflow "Firebase rules
 deployen" ze automatisch. Elk uur controleert een rookproef of spelers op de live site
 nog kunnen inloggen.
 
 ## Meer documentatie
 
 - [docs/beveiliging.md](docs/beveiliging.md): rules, beheerders, speldata en een testchecklist
-- [docs/make-scenario.md](docs/make-scenario.md): de twee boekingsscenario's in Make.com
+- [docs/make-scenario.md](docs/make-scenario.md): het boekingsscenario (webhook) in Make.com
 
 ---
 
