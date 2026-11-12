@@ -722,6 +722,17 @@ body.era-1934 .svg-kader {
   margin-top: 8px;
 }
 
+.review-escapetalk {
+  font-size: 13px;
+  line-height: 1.6;
+  opacity: 0.85;
+  margin-top: 10px;
+}
+
+.review-escapetalk a {
+  color: var(--d-goud);
+}
+
 /* ── Terugkeer-banner in de lobby ── */
 .rol-hervat {
   display: flex;

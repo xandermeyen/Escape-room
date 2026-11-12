@@ -171,6 +171,9 @@ De response komt **vóór** de mail, zodat de speler niet op de SMTP-server wach
   `{{remove(split(2.ontvangersTekst; ","); emptystring)}}`. De rolverdeling in de
   tekst komt uit één `switch()` op het aantal spelers (2, 3 of 4), in plaats van
   drie aparte routes zoals vroeger.
+- Beide mails eindigen met een regel die na afloop naar de pagina van de game op
+  escapetalk.nl verwijst. Op het eindscherm staat dezelfde uitnodiging (zie
+  `ESCAPETALK` in `shared/js/review-form.ts`).
 
 ---
 

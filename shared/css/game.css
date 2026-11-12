@@ -539,6 +539,17 @@ body {
   margin-top: 8px;
 }
 
+.review-blok .review-escapetalk {
+  font-size: 0.85em;
+  line-height: 1.6;
+  opacity: 0.85;
+  margin-top: 10px;
+}
+
+.review-blok .review-escapetalk a {
+  color: var(--kleur-accent-licht);
+}
+
 /* ── Terugkeer-banner in de lobby ── */
 .rol-hervat {
   display: flex;

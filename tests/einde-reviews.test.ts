@@ -7,7 +7,7 @@ vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
 vi.mock('../shared/js/reviews.ts', () => ({ schrijfReview: vi.fn(() => Promise.resolve()) }));
 
 import { schrijfReview } from '../shared/js/reviews.ts';
-import { koppelReviewFormulier, LAGE_SCORE } from '../shared/js/review-form.ts';
+import { koppelReviewFormulier, LAGE_SCORE, ESCAPETALK } from '../shared/js/review-form.ts';
 import { reviewSamenvattingHtml, reviewKaartHtml } from '../shared/js/host-reviews.ts';
 import {
   onderzoekstijd,
@@ -88,6 +88,55 @@ describe('reviewformulier', () => {
       'true',
       'false',
     ]);
+  });
+});
+
+describe('reviewformulier: uitnodiging voor escapetalk', () => {
+  const verstuur = async (score: number) => {
+    ster(score);
+    document.querySelector<HTMLTextAreaElement>('#review-tekst')!.value = 'Echt spannend!';
+    document.getElementById('btn-review-verstuur')!.click();
+    await vi.waitFor(() =>
+      expect(document.getElementById('review-escapetalk')!.textContent).toContain('Wil je hem ook'),
+    );
+  };
+
+  it.each(['kamer-14', 'dua'])(
+    '%s: link naar de eigen escapetalk-pagina, in een nieuw tabblad',
+    ervaring => {
+      koppelReviewFormulier(ervaring, 'ABC');
+      const link = document.querySelector<HTMLAnchorElement>('#review-escapetalk a')!;
+      expect(link.href).toBe(ESCAPETALK[ervaring]);
+      expect(link.target).toBe('_blank');
+      expect(link.rel).toBe('noopener');
+    },
+  );
+
+  it.each([1, 3, 5])(
+    'na het versturen met %i sterren: uitnodiging voor iedereen, tekst op het klembord',
+    async score => {
+      const schrijf = vi.fn(() => Promise.resolve());
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: schrijf },
+        configurable: true,
+      });
+      koppelReviewFormulier('kamer-14', 'ABC');
+      await verstuur(score);
+      expect(schrijf).toHaveBeenCalledWith('Echt spannend!');
+      expect(document.getElementById('review-escapetalk')!.textContent).toContain('klembord');
+    },
+  );
+
+  it('zonder klembord: geen belofte dat de tekst gekopieerd is', async () => {
+    Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true });
+    koppelReviewFormulier('dua', 'ABC');
+    await verstuur(4);
+    expect(document.getElementById('review-escapetalk')!.textContent).not.toContain('klembord');
+  });
+
+  it('demosessie: geen uitnodiging', () => {
+    koppelReviewFormulier('kamer-14', 'DEMO-K14');
+    expect(document.getElementById('review-escapetalk')).toBeNull();
   });
 });
 

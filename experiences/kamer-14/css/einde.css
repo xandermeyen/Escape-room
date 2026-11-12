@@ -467,6 +467,17 @@
   color: var(--k-accent);
   margin-top: 4px;
 }
+
+.review-escapetalk {
+  font-size: 12px;
+  line-height: 1.6;
+  opacity: 0.85;
+  margin-top: 10px;
+}
+
+.review-escapetalk a {
+  color: var(--k-accent);
+}
 /* ── Route-finale ── */
 .route-kaart {
   display: block;
