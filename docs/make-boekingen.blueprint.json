@@ -191,7 +191,7 @@
                 "authenticationType": "noAuth"
               },
               "mapper": {
-                "url": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA7HtoKiFqWnopUXOAo4Niz-s17vtihT1Y",
+                "url": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=<FIREBASE_API_KEY>",
                 "method": "post",
                 "timeout": "40",
                 "contentType": "json",
