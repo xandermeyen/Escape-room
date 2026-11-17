@@ -894,3 +894,7 @@ body {
     gap: 2rem;
   }
 }
+
+.hero-h1 .hero-eyebrow {
+  display: block;
+}

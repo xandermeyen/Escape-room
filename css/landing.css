@@ -234,3 +234,18 @@ html {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ── H1 met zoekwoord-regel (SEO) ──
+   De bovenregel staat in de H1, zodat "online escape room" in de kop zit.
+   Visueel identiek aan de vroegere losse eyebrow + titel. */
+.hero-h1 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: normal;
+}
+
+.hero-h1 .hero-title,
+.hero-h1 .dua-title {
+  display: block;
+  font-weight: bold;
+}
