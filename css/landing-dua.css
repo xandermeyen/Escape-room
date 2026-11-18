@@ -2,6 +2,14 @@
  * Landingspagina D.U.A. (/dua/)
  */
 
+/*
+ * De gedeelde basis eerst, via @import en niet via een aparte <link>: zo staat
+ * landing.css altijd vóór deze regels, hoe Vite de CSS ook bundelt. Met twee
+ * <link>-tags draaide de volgorde om zodra nog een pagina landing.css laadde,
+ * en won .btn { border: none } van .btn-outline.
+ */
+@import './landing.css';
+
 :root {
   --bg: #0c0b09;
   --bg-2: #131210;

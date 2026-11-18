@@ -165,16 +165,19 @@ cp .env.example .env.development   # vul je eigen Firebase-config in
 pnpm dev                           # http://localhost:5173
 ```
 
-| Commando            | Wat het doet                                            |
-| ------------------- | ------------------------------------------------------- |
-| `pnpm test`         | Vitest-unittests (jsdom)                                |
-| `pnpm test:rules`   | Database-rules testen tegen de emulator (Java 21 nodig) |
-| `pnpm lint`         | ESLint, met een regel tegen onveilige `innerHTML`       |
-| `pnpm lint:html`    | Alle HTML-pagina's valideren                            |
-| `pnpm format:check` | Prettier-controle                                       |
-| `pnpm typecheck`    | TypeScript zonder build                                 |
-| `pnpm build`        | Productiebuild naar `dist/`                             |
-| `pnpm rookproef`    | Anonieme login en demo-sessie op productie controleren  |
+| Commando             | Wat het doet                                            |
+| -------------------- | ------------------------------------------------------- |
+| `pnpm test`          | Vitest-unittests (jsdom)                                |
+| `pnpm test:coverage` | Unittests met dekkingsrapport in `coverage/`            |
+| `pnpm test:rules`    | Database-rules testen tegen de emulator (Java 21 nodig) |
+| `pnpm test:e2e`      | Volledige spelruns en boeken in Playwright (devserver)  |
+| `pnpm test:opmaak`   | Opmaak van de productiebuild controleren (Playwright)   |
+| `pnpm lint`          | ESLint, met een regel tegen onveilige `innerHTML`       |
+| `pnpm lint:html`     | Alle HTML-pagina's valideren                            |
+| `pnpm format:check`  | Prettier-controle                                       |
+| `pnpm typecheck`     | TypeScript zonder build                                 |
+| `pnpm build`         | Productiebuild naar `dist/`                             |
+| `pnpm rookproef`     | Anonieme login en demo-sessie op productie controleren  |
 
 CI draait dit allemaal bij elke push. Op `main` deployt de site pas naar GitHub Pages
 als de volledige CI (kwaliteit, rules-tests en e2e) geslaagd is. Wijzigen de database-rules, dan test en deployt de workflow "Firebase rules

@@ -1,25 +1,17 @@
 /**
  * review-kaart.ts: HTML voor de reviews op de homepage (kaarten, marquee en
  * samenvatting). Reviews zijn tekst van spelers, dus alles wat van hen komt
- * gaat door escapeHtml voor het via innerHTML op de pagina komt.
+ * gaat door escHtml voor het via innerHTML op de pagina komt.
  * Zuivere functies, los getest in tests/review-kaart.test.ts.
  */
 import { locale, teksten } from '../shared/js/i18n.ts';
 import type { Review } from '../shared/js/reviews.ts';
+import { escHtml } from '../shared/js/utils.ts';
 
 export const ERVARING_LABELS: Record<string, string> = {
   'kamer-14': 'Kamer 14',
   dua: 'D.U.A.',
 };
-
-export function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 export function sterAantal(rating: number): number {
   return Math.max(1, Math.min(5, Math.round(rating)));
@@ -42,19 +34,19 @@ export function datumHtml(tijdstip: number | undefined): string {
   if (Number.isNaN(d.getTime())) return '';
   const label = d.toLocaleDateString(locale(), { month: 'short', year: 'numeric' });
   const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-  return ` &middot; <time datetime="${iso}">${escapeHtml(label)}</time>`;
+  return ` &middot; <time datetime="${iso}">${escHtml(label)}</time>`;
 }
 
 export function reviewKaart(r: Review): string {
-  const naam = r.naam ? escapeHtml(r.naam) : escapeHtml(teksten().anoniemeSpeler);
-  const exp = escapeHtml(ERVARING_LABELS[r.ervaring] ?? r.ervaring);
+  const naam = r.naam ? escHtml(r.naam) : escHtml(teksten().anoniemeSpeler);
+  const exp = escHtml(ERVARING_LABELS[r.ervaring] ?? r.ervaring);
   const n = sterAantal(r.rating);
   return (
     `<article class="review-card reveal visible">` +
     `<div class="review-quote" aria-hidden="true">&ldquo;</div>` +
-    `<div class="review-rating" role="img" aria-label="${escapeHtml(teksten().sterrenLabel(n))}">` +
+    `<div class="review-rating" role="img" aria-label="${escHtml(teksten().sterrenLabel(n))}">` +
     `${sterrenHtml(r.rating)}<span class="review-score">${n}/5</span></div>` +
-    `<blockquote class="review-text"><p>${escapeHtml(r.tekst)}</p></blockquote>` +
+    `<blockquote class="review-text"><p>${escHtml(r.tekst)}</p></blockquote>` +
     `<footer class="review-meta">` +
     `<span class="review-author">${naam}</span>` +
     `<span class="review-exp">${exp}${datumHtml(r.tijdstip)}</span>` +
@@ -75,17 +67,17 @@ export function samenvattingHtml(reviews: Review[]): string {
   return (
     `<span class="reviews-gem">${gemTekst}</span>` +
     `<span class="reviews-gem-van">/ 5</span>` +
-    `<span class="reviews-aantal">${escapeHtml(teksten().reviewsGemiddelde(reviews.length))}</span>`
+    `<span class="reviews-aantal">${escHtml(teksten().reviewsGemiddelde(reviews.length))}</span>`
   );
 }
 
 export function marqueeItem(r: Review): string {
-  const naam = r.naam ? escapeHtml(r.naam) : escapeHtml(teksten().anoniemeSpeler);
+  const naam = r.naam ? escHtml(r.naam) : escHtml(teksten().anoniemeSpeler);
   const kort = r.tekst.length > 90 ? r.tekst.slice(0, 88).trim() + '…' : r.tekst;
   const n = sterAantal(r.rating);
   return (
-    `<div class="marquee-item"><span class="stars" role="img" aria-label="${escapeHtml(teksten().sterrenLabel(n))}">` +
+    `<div class="marquee-item"><span class="stars" role="img" aria-label="${escHtml(teksten().sterrenLabel(n))}">` +
     `${sterrenHtml(r.rating)}</span>` +
-    `"${escapeHtml(kort)}" &middot; ${naam}</div>`
+    `"${escHtml(kort)}" &middot; ${naam}</div>`
   );
 }

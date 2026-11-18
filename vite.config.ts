@@ -55,5 +55,17 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     include: ['tests/**/*.test.ts'],
+    // pnpm test:coverage: rapport in coverage/ (gitignored), samenvatting in de terminal.
+    coverage: {
+      provider: 'v8',
+      include: [
+        'shared/js/**/*.ts',
+        'experiences/**/*.ts',
+        'js/**/*.ts',
+        'i18n/**/*.ts',
+        'scripts/**/*.ts',
+      ],
+      reporter: ['text-summary', 'html'],
+    },
   },
 });

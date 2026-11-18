@@ -2,6 +2,8 @@
  * 404-pagina (404.html). Bouwt verder op landing.css (navigatie en knoppen).
  */
 
+@import './landing.css';
+
 :root {
   --bg: #0c0b09;
   --bg-2: #131210;

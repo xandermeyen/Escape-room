@@ -6,7 +6,7 @@ import prettier from 'eslint-config-prettier';
 export default tseslint.config(
   {
     // Build output en dependencies nooit linten
-    ignores: ['dist/**', 'node_modules/**', 'public/**'],
+    ignores: ['dist/**', 'dist-e2e/**', 'coverage/**', 'node_modules/**', 'public/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

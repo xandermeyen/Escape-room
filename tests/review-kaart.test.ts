@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Review } from '../shared/js/reviews.ts';
-import { escapeHtml, marqueeItem, reviewKaart, sterAantal } from '../js/review-kaart.ts';
+import { marqueeItem, reviewKaart, sterAantal } from '../js/review-kaart.ts';
+import { escHtml } from '../shared/js/utils.ts';
 
 /**
  * Reviews zijn tekst van spelers die via innerHTML op de homepage komt. Een
@@ -33,8 +34,8 @@ const AANVALLEN = [
 ];
 
 describe('reviews op de homepage: geen HTML van spelers', () => {
-  it('escapeHtml zet alle gevaarlijke tekens om', () => {
-    expect(escapeHtml(`<a href="x" title='y'>&</a>`)).toBe(
+  it('escHtml zet alle gevaarlijke tekens om', () => {
+    expect(escHtml(`<a href="x" title='y'>&</a>`)).toBe(
       '&lt;a href=&quot;x&quot; title=&#39;y&#39;&gt;&amp;&lt;/a&gt;',
     );
   });

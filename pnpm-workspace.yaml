@@ -2,8 +2,15 @@ allowBuilds:
   '@firebase/util': true
   esbuild: true
   protobufjs: false
+minimumReleaseAgeExclude:
+  - '@vitest/coverage-v8@5.1.1'
+  - '@vitest/mocker@5.1.1'
+  - '@vitest/spy@5.1.1'
+  - vitest@5.1.1
 overrides:
   '@grpc/grpc-js': ^1.13.6
   protobufjs: ^7.6.5
   brace-expansion@>=4.0.0 <5.0.12: ^5.0.12
   esbuild@>=0.27.3 <0.28.1: ^0.28.1
+  # Kwetsbaarheid GHSA-gg6h-894w-4m9c, via firebase > @firebase/firestore (niet gebundeld).
+  re2js: ^2.8.7

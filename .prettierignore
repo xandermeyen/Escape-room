@@ -1,4 +1,6 @@
 dist
+dist-e2e
+coverage
 node_modules
 public
 pnpm-lock.yaml

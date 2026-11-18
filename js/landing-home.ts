@@ -90,7 +90,7 @@ async function laadReviews(): Promise<void> {
 
   injecteerRatingSchema(reviews);
 
-  // Veilig: reviewKaart/marqueeItem halen alle spelerteksten door escapeHtml.
+  // Veilig: reviewKaart/marqueeItem halen alle spelerteksten door escHtml.
   // eslint-disable-next-line no-unsanitized/property
   grid.innerHTML = reviews.slice(0, 6).map(reviewKaart).join('');
   sectie.style.display = '';

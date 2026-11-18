@@ -104,6 +104,9 @@ jobs:
       - name: E2E (Kamer 14, D.U.A., boeken)
         run: pnpm test:e2e
 
+      - name: Opmaak van de productiebuild
+        run: pnpm test:opmaak
+
       - name: Sporen bewaren bij een mislukte test
         if: failure()
         uses: actions/upload-artifact@v7
