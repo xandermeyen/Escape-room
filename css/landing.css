@@ -249,3 +249,21 @@ html {
   display: block;
   font-weight: bold;
 }
+
+/* ── Taalknop (zie scripts/vite-i18n.ts) ── */
+.nav-taal {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.nav-links .nav-taal a {
+  padding: 0.2rem 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+.nav-links .nav-taal a[aria-current] {
+  color: var(--gold);
+  border-bottom: 1px solid var(--gold);
+}

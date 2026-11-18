@@ -1,4 +1,5 @@
 /** Landingspagina D.U.A. (/dua/): dossier, aantal spelers en de easter egg. */
+import { teksten } from '../shared/js/i18n.ts';
 import { initLanding } from './landing.ts';
 
 initLanding({ drempel: 0.1 });
@@ -11,7 +12,7 @@ if (dossierKnop && dossier) {
     const open = dossier.classList.toggle('open');
     dossierKnop.classList.toggle('open', open);
     const label = dossierKnop.querySelector('.label-text');
-    if (label) label.textContent = open ? 'Verberg het dossier' : 'Lees het volledige dossier';
+    if (label) label.textContent = open ? teksten().dossierDicht : teksten().dossierOpen;
   });
 }
 
@@ -47,13 +48,9 @@ toast.className = 'goedertier-toast';
 toast.setAttribute('role', 'status');
 const bron = document.createElement('span');
 bron.className = 'goedertier-bron';
-bron.textContent = '- Arsène Goedertier, november 1934';
-toast.append(
-  '"Ik alleen weet waar de Rechtvaardige Rechters rusten.',
-  document.createElement('br'),
-  'Dit geheim zal met mij sterven."',
-  bron,
-);
+bron.textContent = teksten().goedertierBron;
+const [citaatBegin, citaatEinde] = teksten().goedertierCitaat;
+toast.append(citaatBegin, document.createElement('br'), citaatEinde, bron);
 document.body.appendChild(toast);
 
 document.addEventListener('keydown', e => {

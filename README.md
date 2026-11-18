@@ -17,11 +17,17 @@ Ik bouwde dit naast mijn opleiding Graduaat Programmeren. Het draait live op
 [bureau-x.be](https://bureau-x.be) en wordt gespeeld door echte groepen, die via een
 boekingsformulier een sessiecode krijgen.
 
-| Homepage                                      | Kamer 14, Speler A (met hint)                                             |
-| --------------------------------------------- | ------------------------------------------------------------------------- |
-| ![Homepage](docs/screenshots/home.jpg)        | ![Kamer 14, Speler A](docs/screenshots/kamer14-speler-a.jpg)              |
-| **D.U.A., het tijdperk 1934**                 | **Kamerinspectie op gsm (390 px)**                                        |
-| ![D.U.A. 1934](docs/screenshots/dua-1934.jpg) | ![Kamerinspectie op gsm](docs/screenshots/kamer14-kamerinspectie-gsm.jpg) |
+| Homepage                                                     | Homepage in het Engels (`/en/`)                                         |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| ![Homepage](docs/screenshots/home.jpg)                       | ![Engelse homepage](docs/screenshots/home-en.jpg)                       |
+| **Kamer 14, Speler A (met hint)**                            | **Kamer 14, Speler B op gsm (390 px)**                                  |
+| ![Kamer 14, Speler A](docs/screenshots/kamer14-speler-a.jpg) | ![Kamer 14, Speler B op gsm](docs/screenshots/kamer14-speler-b-gsm.jpg) |
+| **D.U.A., het tijdperk 1934**                                | **D.U.A., het tijdperk 2034**                                           |
+| ![D.U.A. 1934](docs/screenshots/dua-1934.jpg)                | ![D.U.A. 2034](docs/screenshots/dua-2034.jpg)                           |
+
+De screenshots en de promotiebeelden voor overzichtssites (`docs/promo/`) maak je opnieuw met
+`pnpm screenshots`. Dat speelt een verse sessie tegen de nep-Firebase, zonder echte data, en
+toont geen oplossingen (het enige antwoord dat in beeld komt, wordt vervaagd).
 
 ## De twee experiences
 
@@ -174,6 +180,14 @@ CI draait dit allemaal bij elke push. Op `main` deployt de site pas naar GitHub 
 als de volledige CI (kwaliteit, rules-tests en e2e) geslaagd is. Wijzigen de database-rules, dan test en deployt de workflow "Firebase rules
 deployen" ze automatisch. Elk uur controleert een rookproef of spelers op de live site
 nog kunnen inloggen.
+
+## Talen
+
+De site bestaat in het Nederlands (bron, op de root) en het Engels (`/en/`). De Engelse pagina's worden gegenereerd uit de Nederlandse HTML en `i18n/paginas/en.ts`; zie [ADR-001](docs/adr/001-meertaligheid.md).
+
+- Nieuwe of gewijzigde Nederlandse tekst: `pnpm i18n:sleutels` (nieuwe tekst krijgt een sleutel), daarna de vertaling aanvullen in `i18n/paginas/en.ts` en `pnpm i18n:bevestig <sleutel>` voor de sleutels die je bijwerkte. Een kopie van een element met `data-i18n` geeft een fout: verwijder het attribuut en draai `pnpm i18n:sleutels`.
+- `pnpm i18n:controle` faalt bij ontbrekende of verouderde vertalingen (draait ook in CI).
+- `pnpm dev`, `pnpm build` en `pnpm lint:html` genereren de Engelse pagina's eerst zelf.
 
 ## Meer documentatie
 

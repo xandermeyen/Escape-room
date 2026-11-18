@@ -38,6 +38,9 @@ jobs:
       - name: Opmaak controleren (Prettier)
         run: pnpm format:check
 
+      - name: Vertalingen controleren (ontbrekend of verouderd)
+        run: pnpm i18n:controle
+
       - name: HTML valideren
         run: pnpm lint:html
 

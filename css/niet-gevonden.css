@@ -1,0 +1,117 @@
+/*
+ * 404-pagina (404.html). Bouwt verder op landing.css (navigatie en knoppen).
+ */
+
+:root {
+  --bg: #0c0b09;
+  --bg-2: #131210;
+  --gold: #c8a96e;
+  --gold-dim: #7a6035;
+  --gold-bright: #d9bc84;
+  --red: #8b1a1a;
+  --text: #e8dcc8;
+  --text-dim: #9a8a76;
+  --border-gold: #2e2718;
+  --ff: 'Special Elite', serif;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.nf-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7rem 1.5rem 4rem;
+}
+
+.nf-dossier {
+  position: relative;
+  max-width: 620px;
+  width: 100%;
+  background: var(--bg-2);
+  border: 1px solid var(--border-gold);
+  padding: 3rem 2.5rem 2.5rem;
+}
+
+.nf-stempel {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+  transform: rotate(-6deg);
+  border: 2px solid var(--red);
+  color: #c0453a;
+  font-family: var(--ff);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+}
+
+.nf-label {
+  font-family: var(--ff);
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.nf-titel {
+  font-family: var(--ff);
+  font-weight: normal;
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.nf-tekst {
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+}
+
+.nf-knoppen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nf-knoppen .btn-outline {
+  background: transparent;
+  border: 1px solid rgba(232, 220, 200, 0.25);
+  color: var(--text);
+}
+
+.nf-knoppen .btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.nf-andere-taal {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-gold);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.nf-andere-taal a {
+  color: var(--gold);
+}
+
+@media (max-width: 560px) {
+  .nf-dossier {
+    padding: 4rem 1.5rem 2rem;
+  }
+}

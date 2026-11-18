@@ -1,16 +1,21 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { faqSchemaPlugin } from './scripts/vite-faq-schema.ts';
+import { gegenereerdeIngangen } from './scripts/i18n-ingangen.ts';
+import { i18nPlugin } from './scripts/vite-i18n.ts';
 
 export default defineConfig({
-  // FAQPage-schema wordt gegenereerd uit de zichtbare FAQ (zie scripts/vite-faq-schema.ts)
-  plugins: [faqSchemaPlugin()],
+  // FAQPage-schema wordt gegenereerd uit de zichtbare FAQ (zie scripts/vite-faq-schema.ts).
+  // Hreflang en de taalknop komen uit scripts/vite-i18n.ts (zie docs/adr/001-meertaligheid.md).
+  plugins: [faqSchemaPlugin(), i18nPlugin()],
   build: {
     rolldownOptions: {
       input: {
         // Hoofdpagina's
         main: resolve(import.meta.dirname, 'index.html'),
         privacy: resolve(import.meta.dirname, 'privacy.html'),
+        // Eén 404-pagina voor de hele site (GitHub Pages), in twee talen via js/niet-gevonden.ts
+        nietGevonden: resolve(import.meta.dirname, '404.html'),
 
         // Kamer 14 - infopagina
         kamer14: resolve(import.meta.dirname, 'kamer-14/index.html'),
@@ -33,6 +38,9 @@ export default defineConfig({
         duaEinde: resolve(import.meta.dirname, 'experiences/dua/einde.html'),
         duaTijdVoorbij: resolve(import.meta.dirname, 'experiences/dua/tijd-voorbij.html'),
         duaHostPanel: resolve(import.meta.dirname, 'experiences/dua/host-panel.html'),
+
+        // Andere talen: gegenereerd door scripts/i18n-paginas.ts (pnpm i18n)
+        ...gegenereerdeIngangen(import.meta.dirname),
       },
       output: {
         codeSplitting: {

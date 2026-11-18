@@ -3,10 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kamer 14: gratis online escape room voor 2 personen</title>
+    <title data-i18n="kamer14.head.title">
+      Kamer 14: gratis online escape room voor 2 personen
+    </title>
     <meta
       name="description"
       content="Gratis online escape room voor 2 personen, gebaseerd op de Geelse gezinsverpleging (Unesco-erkend). Elk op je eigen scherm, ±45 minuten, vanuit huis."
+      data-i18n-content="kamer14.head.description@content"
     />
     <link rel="canonical" href="https://bureau-x.be/kamer-14/" />
 
@@ -14,10 +17,12 @@
     <meta
       property="og:title"
       content="Kamer 14 - Escape room over de Geelse gezinsverpleging | Bureau X"
+      data-i18n-content="kamer14.head.og-title@content"
     />
     <meta
       property="og:description"
       content="Gebaseerd op de Geelse gezinsverpleging (sinds 2023 Unesco-erkend): speel Kamer 14, een gratis online escape room voor twee."
+      data-i18n-content="kamer14.head.og-description@content"
     />
     <meta property="og:url" content="https://bureau-x.be/kamer-14/" />
     <meta property="og:image" content="https://bureau-x.be/assets/img/kamer-14-preview.jpg" />
@@ -29,7 +34,7 @@
 
     <link rel="stylesheet" href="/assets/fonts/fonts.css" />
 
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-i18n-json="kamer14.jsonld.product-game">
       {
         "@context": "https://schema.org",
         "@type": ["Product", "Game"],
@@ -56,7 +61,7 @@
       }
     </script>
 
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-i18n-json="kamer14.jsonld.breadcrumblist">
       {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -92,13 +97,16 @@
             this.nextElementSibling.style.display = 'block';
           "
         />
-        <span style="display: none">Bureau X</span>
+        <span style="display: none" translate="no">Bureau X</span>
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/#experiences">Experiences</a></li>
-        <li><a href="#verhaal">De zaak</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#boek" class="btn-nav">Boek Kamer 14</a></li>
+        <li><a href="/#experiences" data-i18n="kamer14.navLinks.a">Experiences</a></li>
+        <li><a href="#verhaal" data-i18n="kamer14.navLinks.a-2">De zaak</a></li>
+        <li><a href="#faq" translate="no">FAQ</a></li>
+        <li class="nav-taal" data-taalkeuze></li>
+        <li>
+          <a href="#boek" class="btn-nav" data-i18n="kamer14.navLinks.btn-nav">Boek Kamer 14</a>
+        </li>
       </ul>
       <button
         class="nav-toggle"
@@ -106,6 +114,7 @@
         aria-label="Menu"
         aria-expanded="false"
         aria-controls="navLinks"
+        data-i18n-aria-label="kamer14.navbar.nav-toggle@aria-label"
       >
         <span></span><span></span><span></span>
       </button>
@@ -116,10 +125,12 @@
       <div class="hero-content">
         <div class="hero-left">
           <h1 class="hero-h1">
-            <span class="hero-eyebrow">Gratis online escape room voor 2 &middot; OPZ Geel</span>
-            <span class="hero-title">Kamer 14</span>
+            <span class="hero-eyebrow" data-i18n="kamer14.hero.hero-eyebrow"
+              >Gratis online escape room voor 2 &middot; OPZ Geel</span
+            >
+            <span class="hero-title" translate="no">Kamer 14</span>
           </h1>
-          <p class="hero-sub">
+          <p class="hero-sub" data-i18n="kamer14.hero.hero-sub">
             Op dinsdagochtend 6 mei zit Lena Bogaert nog gewoon aan het ontbijt bij het gastgezin
             Martens-Peeters in Geel. Een klein uur later is haar kamer leeg. Geen briefje, geen
             uitleg.<br /><br />
@@ -131,18 +142,28 @@
             in de wereld, en nog steeds actief vandaag.
           </p>
           <div class="hero-ctas">
-            <a href="#boek" class="btn btn-gold">Boek een sessie &rarr;</a>
-            <a href="#verhaal" class="btn btn-outline">Meer over de zaak</a>
+            <a href="#boek" class="btn btn-gold" data-i18n="kamer14.hero.btn"
+              >Boek een sessie &rarr;</a
+            >
+            <a href="#verhaal" class="btn btn-outline" data-i18n="kamer14.hero.btn-2"
+              >Meer over de zaak</a
+            >
           </div>
           <div>
-            <span class="hero-stamp">&#9632;&nbsp; Status: onopgelost</span>
+            <span class="hero-stamp" data-i18n="kamer14.hero.hero-stamp"
+              >&#9632;&nbsp; Status: onopgelost</span
+            >
           </div>
         </div>
         <div>
           <div class="hero-filebox">
             <span class="hero-filebox-num">14</span>
-            <span class="hero-filebox-label">OPZ Geel &nbsp;·&nbsp; Dossier kostganger</span>
-            <span class="hero-filebox-stamp">Onopgelost</span>
+            <span class="hero-filebox-label" data-i18n="kamer14.hero.hero-filebox-label"
+              >OPZ Geel &nbsp;·&nbsp; Dossier kostganger</span
+            >
+            <span class="hero-filebox-stamp" data-i18n="kamer14.hero.hero-filebox-stamp"
+              >Onopgelost</span
+            >
           </div>
         </div>
       </div>
@@ -151,25 +172,25 @@
     <!-- ── FEITEN BALK ── -->
     <div class="feiten-balk">
       <div class="feit">
-        <div class="feit-waarde">±45 min</div>
-        <div class="feit-label">Speelduur</div>
+        <div class="feit-waarde" data-i18n="kamer14.body.feit-waarde">±45 min</div>
+        <div class="feit-label" data-i18n="kamer14.body.feit-label">Speelduur</div>
       </div>
       <div class="feit">
-        <div class="feit-waarde">2 spelers</div>
-        <div class="feit-label">Duo</div>
+        <div class="feit-waarde" data-i18n="kamer14.body.feit-waarde-2">2 spelers</div>
+        <div class="feit-label" data-i18n="kamer14.body.feit-label-2">Duo</div>
       </div>
       <div class="feit">
         <div class="feit-waarde">100%</div>
-        <div class="feit-label">Online</div>
+        <div class="feit-label" data-i18n="kamer14.body.feit-label-3">Online</div>
       </div>
       <div class="feit">
-        <div class="feit-waarde">Gratis</div>
-        <div class="feit-label">Altijd</div>
+        <div class="feit-waarde" data-i18n="kamer14.body.feit-waarde-3">Gratis</div>
+        <div class="feit-label" data-i18n="kamer14.body.feit-label-4">Altijd</div>
       </div>
     </div>
     <div class="geluid-balk">
       <span class="geluid-ico">&#9835;</span>
-      <span
+      <span data-i18n="kamer14.body.span"
         ><strong>Met geluid speel je het beste.</strong> Kamer 14 heeft ingesproken stemmen en
         geluid. Niet verplicht, alles staat ook uitgeschreven.</span
       >
@@ -178,9 +199,11 @@
     <!-- ── DE ZAAK ── -->
     <section class="section" id="verhaal" style="background: var(--bg)">
       <div class="container">
-        <p class="label reveal">De zaak</p>
-        <h2 class="heading reveal">Twee plekken, één verdwijning</h2>
-        <p class="sub reveal">
+        <p class="label reveal" data-i18n="kamer14.verhaal.label">De zaak</p>
+        <h2 class="heading reveal" data-i18n="kamer14.verhaal.heading">
+          Twee plekken, één verdwijning
+        </h2>
+        <p class="sub reveal" data-i18n="kamer14.verhaal.sub">
           Lena Bogaert woont al twee jaar als kostganger bij het gastgezin Martens-Peeters in Geel.
           Haar begeleidster bij het OPZ en het gastgezin weten elk een deel, en niet iedereen
           vertelt alles. De vraag is simpel, het antwoord niet:
@@ -189,28 +212,33 @@
         <div class="rule reveal"></div>
         <div class="dossier-grid">
           <div class="dossier-blok reveal">
-            <p class="dossier-rol">Speler A</p>
-            <h3 class="dossier-kop">Het bureau van An</h3>
-            <p class="dossier-txt">
+            <p class="dossier-rol" data-i18n="kamer14.verhaal.dossier-rol">Speler A</p>
+            <h3 class="dossier-kop" data-i18n="kamer14.verhaal.dossier-kop">Het bureau van An</h3>
+            <p class="dossier-txt" data-i18n="kamer14.verhaal.dossier-txt">
               Jij zit aan het bureau van An Vermeersch, de begeleidster van Lena bij het OPZ Geel.
               Haar computer, haar notitieblok, het dossier van Lena en een telefoon die nog zal
               rinkelen.
             </p>
-            <span class="dossier-tag">Officieel &middot; vertrouwelijk</span>
+            <span class="dossier-tag" data-i18n="kamer14.verhaal.dossier-tag"
+              >Officieel &middot; vertrouwelijk</span
+            >
           </div>
           <div class="dossier-blok reveal">
-            <p class="dossier-rol">Speler B</p>
-            <h3 class="dossier-kop">De kamer van Lena</h3>
-            <p class="dossier-txt">
+            <p class="dossier-rol" data-i18n="kamer14.verhaal.dossier-rol-2">Speler B</p>
+            <h3 class="dossier-kop" data-i18n="kamer14.verhaal.dossier-kop-2">De kamer van Lena</h3>
+            <p class="dossier-txt" data-i18n="kamer14.verhaal.dossier-txt-2">
               Jij staat in haar kamer bij het gastgezin. Een kleerkast, een prikbord, een oude gsm
               op slot en een spaardoos die niet open wil. Wat ze achterliet, en wat ze verstopte.
             </p>
-            <span class="dossier-tag">Persoonlijk &middot; op slot</span>
+            <span class="dossier-tag" data-i18n="kamer14.verhaal.dossier-tag-2"
+              >Persoonlijk &middot; op slot</span
+            >
           </div>
         </div>
         <p
           class="sub reveal"
           style="text-align: center; margin-top: 2rem; font-style: italic; color: var(--text-faint)"
+          data-i18n="kamer14.verhaal.sub-2"
         >
           De oplossing zit in allebei. Alleen samen kom je eruit.
         </p>
@@ -223,34 +251,37 @@
       style="background: var(--bg-2); border-top: 1px solid var(--border-gold)"
     >
       <div class="container">
-        <p class="label reveal" style="text-align: center">Zo werkt het</p>
+        <p class="label reveal" style="text-align: center" data-i18n="kamer14.section.label">
+          Zo werkt het
+        </p>
         <h2
           class="heading reveal"
           style="text-align: center; max-width: 480px; margin: 0 auto 0.5rem"
+          data-i18n="kamer14.section.heading"
         >
           Van boeking tot oplossing
         </h2>
         <div class="steps-grid">
           <div class="step reveal">
             <div class="step-num">1</div>
-            <h3 class="step-title">Boek een sessie</h3>
-            <p class="step-desc">
+            <h3 class="step-title" data-i18n="kamer14.section.step-title">Boek een sessie</h3>
+            <p class="step-desc" data-i18n="kamer14.section.step-desc">
               Vul het formulier in. Gratis. Jullie krijgen meteen een persoonlijke spellink per
               mail.
             </p>
           </div>
           <div class="step reveal">
             <div class="step-num">2</div>
-            <h3 class="step-title">Verdeel de rollen</h3>
-            <p class="step-desc">
+            <h3 class="step-title" data-i18n="kamer14.section.step-title-2">Verdeel de rollen</h3>
+            <p class="step-desc" data-i18n="kamer14.section.step-desc-2">
               Stuur de link naar je medespeler. Ieder kiest een rol en speelt in zijn eigen browser.
               Geen download.
             </p>
           </div>
           <div class="step reveal">
             <div class="step-num">3</div>
-            <h3 class="step-title">Los het samen op</h3>
-            <p class="step-desc">
+            <h3 class="step-title" data-i18n="kamer14.section.step-title-3">Los het samen op</h3>
+            <p class="step-desc" data-i18n="kamer14.section.step-desc-3">
               Bel of videobel met elkaar en vertel wat je ziet. Wat jij nodig hebt om een slot te
               openen, ligt vaak bij de ander.
             </p>
@@ -262,20 +293,20 @@
     <!-- ── ACHTERGROND ── -->
     <section class="section" id="echt" style="background: var(--bg)">
       <div class="container container--narrow">
-        <p class="label reveal">Gebaseerd op echte geschiedenis</p>
-        <h2 class="heading reveal">Gezinsverpleging in Geel</h2>
+        <p class="label reveal" data-i18n="kamer14.echt.label">Gebaseerd op echte geschiedenis</p>
+        <h2 class="heading reveal" data-i18n="kamer14.echt.heading">Gezinsverpleging in Geel</h2>
         <div class="achtergrond-blok reveal">
-          <p>
+          <p data-i18n="kamer14.echt.p">
             <strong>Geel, België.</strong> Al meer dan zeven eeuwen wonen mensen die extra zorg
             nodig hebben bij gewone Geelse gezinnen, als volwaardig lid van het huishouden. Deze
             traditie van gezinsverpleging, ontstaan bij het pelgrimsoord van de heilige Dymphna, is
             uniek in de wereld.
           </p>
-          <p>
+          <p data-i18n="kamer14.echt.p-2">
             Vandaag coördineert het OPZ Geel deze zorg nog steeds voor ongeveer tweehonderd mensen.
             Ze worden als volwaardig lid van het huishouden behandeld.
           </p>
-          <p>
+          <p data-i18n="kamer14.echt.p-3">
             Kamer 14 is fictief, maar de wereld eromheen is echt. Het OPZ Geel bestaat, de traditie
             bestaat, de straten bestaan. Lena niet, maar ze had er kunnen zijn.
           </p>
@@ -290,38 +321,38 @@
       style="background: var(--bg-2); border-top: 1px solid var(--border-gold)"
     >
       <div class="container container--narrow">
-        <p class="label reveal">Vragen</p>
-        <h2 class="heading reveal">Veelgestelde vragen</h2>
+        <p class="label reveal" data-i18n="kamer14.faq.label">Vragen</p>
+        <h2 class="heading reveal" data-i18n="kamer14.faq.heading">Veelgestelde vragen</h2>
         <div class="rule reveal"></div>
         <div class="faq-list reveal">
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="kamer14.faq.faq-q">
               Is Kamer 14 gratis? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="kamer14.faq.p">
                 Volledig gratis. Geen account, geen abonnement, geen in-app aankopen. Jullie boeken,
                 jullie spelen.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="kamer14.faq.faq-q-2">
               Hoe spelen we samen online? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="kamer14.faq.p-2">
                 Ieder opent zijn eigen spellink in de browser, elk op een eigen plek. Bel of
                 videobel met je medespeler terwijl je speelt. Geen download of gedeeld scherm nodig.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="kamer14.faq.faq-q-3">
               Kan ik ook met meer dan 2 spelers spelen? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="kamer14.faq.p-3">
                 Kamer 14 is ontworpen voor precies 2 spelers, elk op een eigen plek. Meer spelers
                 kan, maar dan kijken sommigen mee op hetzelfde scherm. Met 3 of 4 spelers is D.U.A.
                 een betere keuze.
@@ -329,33 +360,33 @@
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="kamer14.faq.faq-q-4">
               Heb ik geluid nodig? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="kamer14.faq.p-4">
                 Kamer 14 heeft ingesproken stemmen en geluid. Met koptelefoon beleef je het
                 intenser, maar het is niet verplicht: alles staat ook uitgeschreven.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="kamer14.faq.faq-q-5">
               Hoe lang duurt het? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="kamer14.faq.p-5">
                 Gemiddeld 45 minuten, maximaal 60. In het verhaal is het vier uur en beslist An om
                 vijf uur of ze Lena als vermist meldt.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="kamer14.faq.faq-q-6">
               Is het verhaal gebaseerd op echte feiten? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="kamer14.faq.p-6">
                 De achtergrond wel: de Geelse traditie van gezinsverpleging en het OPZ Geel zijn
                 echt. Lena Bogaert en de verdwijning zijn fictief, maar passen in die wereld.
               </p>
@@ -372,11 +403,13 @@
       style="background: var(--bg-2); border-top: 1px solid var(--border-gold)"
     >
       <div class="container container--narrow">
-        <p class="label reveal" style="text-align: center">
+        <p class="label reveal" style="text-align: center" data-i18n="kamer14.boek.label">
           Gratis &middot; voor twee &middot; vanuit huis
         </p>
-        <h2 class="heading reveal" style="text-align: center">Start het onderzoek</h2>
-        <p class="sub reveal" style="text-align: center">
+        <h2 class="heading reveal" style="text-align: center" data-i18n="kamer14.boek.heading">
+          Start het onderzoek
+        </h2>
+        <p class="sub reveal" style="text-align: center" data-i18n="kamer14.boek.sub">
           Vul jullie twee e-mailadressen in. Jullie ontvangen elk een eigen link naar jullie eigen
           dossier. Geen account, geen download. Kamer 14 heeft geen vast tijdslot, jullie spelen
           wanneer het uitkomt.
@@ -399,7 +432,7 @@
 
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label" for="boek-naam"
+              <label class="form-label" for="boek-naam" data-i18n="kamer14.boekForm.form-label"
                 >Naam contactpersoon <span class="form-req">*</span></label
               >
               <input
@@ -409,10 +442,11 @@
                 name="naam"
                 placeholder="Jan Janssen"
                 required
+                data-i18n-placeholder="kamer14.boekForm.form-input@placeholder"
               />
             </div>
             <div class="form-field">
-              <label class="form-label" for="boek-datum"
+              <label class="form-label" for="boek-datum" data-i18n="kamer14.boekForm.form-label-2"
                 >Wanneer spelen jullie? <span class="form-opt">(optioneel)</span></label
               >
               <input id="boek-datum" class="form-input" type="date" name="datum" />
@@ -420,7 +454,10 @@
           </div>
 
           <div class="form-field" style="margin-bottom: 0.75rem">
-            <label class="form-label" for="boek-email_speler_1"
+            <label
+              class="form-label"
+              for="boek-email_speler_1"
+              data-i18n="kamer14.boekForm.form-label-3"
               >E-mail speler 1 <span class="form-req">*</span></label
             >
             <input
@@ -430,10 +467,14 @@
               name="email_speler_1"
               placeholder="speler1@email.be"
               required
+              data-i18n-placeholder="kamer14.boekForm.form-input@placeholder-2"
             />
           </div>
           <div class="form-field" style="margin-bottom: 0.75rem">
-            <label class="form-label" for="boek-email_speler_2"
+            <label
+              class="form-label"
+              for="boek-email_speler_2"
+              data-i18n="kamer14.boekForm.form-label-4"
               >E-mail speler 2 <span class="form-req">*</span></label
             >
             <input
@@ -443,22 +484,42 @@
               name="email_speler_2"
               placeholder="speler2@email.be"
               required
+              data-i18n-placeholder="kamer14.boekForm.form-input@placeholder-3"
             />
           </div>
 
-          <button class="boek-btn" type="submit">Start de sessie</button>
-          <p class="form-note">
+          <button class="boek-btn" type="submit" data-i18n="kamer14.boekForm.boek-btn">
+            Start de sessie
+          </button>
+          <p class="form-note" data-i18n="kamer14.boekForm.form-note">
             Jullie link verschijnt meteen hier en komt ook per mail bij beide spelers.
           </p>
         </form>
         <div class="boek-ok" id="boek-ok" role="status">
-          <p class="boek-ok-titel">&#10003; Jullie sessie staat klaar</p>
-          <p class="boek-ok-code">Sessiecode: <strong data-boek="code"></strong></p>
+          <p class="boek-ok-titel" data-i18n="kamer14.boek-ok.boek-ok-titel">
+            &#10003; Jullie sessie staat klaar
+          </p>
+          <p class="boek-ok-code" data-i18n="kamer14.boek-ok.boek-ok-code">
+            Sessiecode: <strong data-boek="code"></strong>
+          </p>
           <div class="boek-ok-acties">
-            <a class="boek-btn boek-ok-open" data-boek="link" href="#">Open het dossier</a>
-            <button type="button" class="boek-ok-kopieer" data-boek="kopieer">Kopieer link</button>
+            <a
+              class="boek-btn boek-ok-open"
+              data-boek="link"
+              href="#"
+              data-i18n="kamer14.boek-ok.boek-btn"
+              >Open het dossier</a
+            >
+            <button
+              type="button"
+              class="boek-ok-kopieer"
+              data-boek="kopieer"
+              data-i18n="kamer14.boek-ok.boek-ok-kopieer"
+            >
+              Kopieer link
+            </button>
           </div>
-          <p class="form-note">
+          <p class="form-note" data-i18n="kamer14.boek-ok.form-note">
             Stuur de link door naar je medespeler. Hij staat ook in jullie mailbox.
           </p>
         </div>
@@ -470,32 +531,40 @@
     <footer class="footer">
       <div class="footer-inner">
         <div>
-          <div class="footer-brand">Bureau X</div>
-          <p class="footer-tag">
+          <div class="footer-brand" translate="no">Bureau X</div>
+          <p class="footer-tag" data-i18n="kamer14.footer.footer-tag">
             Online escape rooms gebaseerd op echte Belgische verhalen en onopgeloste mysteries.
           </p>
         </div>
         <div>
-          <p class="footer-head">Experiences</p>
+          <p class="footer-head" data-i18n="kamer14.footer.footer-head">Experiences</p>
           <ul class="footer-links">
-            <li><a href="/">Terug naar Bureau X</a></li>
-            <li><a href="/dua/">D.U.A.</a></li>
+            <li><a href="/" data-i18n="kamer14.footer.a">Terug naar Bureau X</a></li>
+            <li><a href="/dua/" translate="no">D.U.A.</a></li>
           </ul>
         </div>
         <div>
-          <p class="footer-head">Info</p>
+          <p class="footer-head" data-i18n="kamer14.footer.footer-head-2">Info</p>
           <ul class="footer-links">
-            <li><a href="/#faq">FAQ</a></li>
-            <li><a href="mailto:info@bureau-x.be">Contact</a></li>
-            <li><a href="/privacy.html">Privacybeleid</a></li>
-            <li><a href="#" data-cookie-instellingen>Cookie-instellingen</a></li>
-            <li><a href="https://www.opzgeel.be" target="_blank" rel="noopener">OPZ Geel</a></li>
+            <li><a href="/#faq" translate="no">FAQ</a></li>
+            <li><a href="mailto:info@bureau-x.be" data-i18n="kamer14.footer.a-2">Contact</a></li>
+            <li><a href="/privacy.html" data-i18n="kamer14.footer.a-3">Privacybeleid</a></li>
+            <li>
+              <a href="#" data-cookie-instellingen data-i18n="kamer14.footer.a-4"
+                >Cookie-instellingen</a
+              >
+            </li>
+            <li>
+              <a href="https://www.opzgeel.be" target="_blank" rel="noopener" translate="no"
+                >OPZ Geel</a
+              >
+            </li>
           </ul>
         </div>
       </div>
       <div class="footer-copy">
-        <span>&copy; 2026 Bureau X</span>
-        <a href="mailto:info@bureau-x.be">info@bureau-x.be</a>
+        <span data-i18n="kamer14.footer.span">&copy; 2026 Bureau X</span>
+        <a href="mailto:info@bureau-x.be" translate="no">info@bureau-x.be</a>
       </div>
     </footer>
 

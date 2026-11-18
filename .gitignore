@@ -60,3 +60,7 @@ coverage/
 
 # Bestanden die Claude op deze computer klaarzet
 Claude outputs/
+
+# Gegenereerde pagina's in andere talen (pnpm i18n, zie docs/adr/001-meertaligheid.md)
+/en/
+/fr/

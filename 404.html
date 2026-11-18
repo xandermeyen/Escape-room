@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dossier niet gevonden | Bureau X</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192x192.png" />
+    <link rel="stylesheet" href="/assets/fonts/fonts.css" />
+    <link rel="stylesheet" href="/css/landing.css" />
+    <link rel="stylesheet" href="/css/niet-gevonden.css" />
+  </head>
+  <body>
+    <!--
+      Eén 404-pagina voor de hele site: GitHub Pages kent er maar één.
+      js/niet-gevonden.ts toont de Engelse tekst als het pad met /en/ begint.
+      Zonder JavaScript staat onderaan een korte Engelse regel.
+    -->
+    <nav class="nav scrolled" id="navbar">
+      <a href="/" class="nav-logo" data-nf-link="home">
+        <img src="/assets/img/bureau_x_logo_dark.svg" alt="Bureau X" />
+      </a>
+    </nav>
+
+    <main class="nf-main">
+      <article class="nf-dossier" aria-labelledby="nf-titel">
+        <span class="nf-stempel" data-nf="stempel">Niet gevonden</span>
+        <p class="nf-label" data-nf="label">Fout 404 &middot; Archief Bureau X</p>
+        <h1 class="nf-titel" id="nf-titel" data-nf="titel">Dit dossier bestaat niet.</h1>
+        <p class="nf-tekst" data-nf="tekst">
+          Of het is nooit aangemaakt, of iemand heeft het laten verdwijnen. Het adres dat je zocht,
+          leidt nergens heen. De echte zaken liggen gelukkig nog klaar.
+        </p>
+        <div class="nf-knoppen">
+          <a href="/" class="btn btn-gold" data-nf-link="home" data-nf="home">Naar Bureau X</a>
+          <a href="/kamer-14/" class="btn btn-outline" data-nf-link="kamer14" translate="no"
+            >Kamer 14</a
+          >
+          <a href="/dua/" class="btn btn-outline" data-nf-link="dua" translate="no">D.U.A.</a>
+        </div>
+        <p class="nf-andere-taal" lang="en" data-nf="andereTaal">
+          Page not found. <a href="/en/">Go to the English homepage</a>.
+        </p>
+      </article>
+    </main>
+
+    <script type="module" src="/js/niet-gevonden.ts"></script>
+    <script type="module" src="/shared/js/cookie-banner.ts"></script>
+  </body>
+</html>

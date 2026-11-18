@@ -3,3 +3,5 @@ node_modules
 public
 pnpm-lock.yaml
 assets
+en
+fr

@@ -7,6 +7,7 @@ import {
   reviewKaart,
   samenvattingHtml,
 } from './review-kaart.ts';
+import { lokaalPad, teksten } from '../shared/js/i18n.ts';
 import { initLanding } from './landing.ts';
 
 // ── Navigatie, menu, reveal en FAQ (zie landing.ts) ────────────
@@ -28,8 +29,8 @@ if (heroCanvas instanceof HTMLCanvasElement) {
 // berekend uit de echte goedgekeurde reviews. Google rendert JavaScript,
 // dus client-side JSON-LD telt mee voor rich results.
 const EXPERIENCE_URLS: Record<string, string> = {
-  'kamer-14': 'https://bureau-x.be/kamer-14/',
-  dua: 'https://bureau-x.be/dua/',
+  'kamer-14': `https://bureau-x.be${lokaalPad('/kamer-14/')}`,
+  dua: `https://bureau-x.be${lokaalPad('/dua/')}`,
 };
 
 function injecteerRatingSchema(reviews: Review[]): void {
@@ -118,9 +119,31 @@ laadReviews();
 console.log(
   '%cBUREAU X · INTERN ARCHIEF',
   'font-family: monospace; font-size: 14px; letter-spacing: 2px; color: #c8a96e;',
-  '\n\nJe zoekt op plekken waar anderen niet kijken. Goede reflex, speurder.' +
-    '\nHet archief reageert op haar naam. Typ die maar eens.',
+  teksten().archiefConsole,
 );
+
+/** Het archiefstuk van de easter egg, opgebouwd met tekstnodes (geen innerHTML). */
+function maakArchiefstuk(): HTMLElement {
+  const t = teksten();
+  const p = (tekst: string, klasse?: string): HTMLParagraphElement => {
+    const el = document.createElement('p');
+    if (klasse) el.className = klasse;
+    el.textContent = tekst;
+    return el;
+  };
+  const kaart = document.createElement('div');
+  kaart.className = 'easter-kaart';
+  const titel = document.createElement('h2');
+  titel.textContent = t.lenaTitel;
+  kaart.append(
+    p(t.lenaStempel, 'easter-stempel'),
+    p(t.lenaLabel, 'easter-label'),
+    titel,
+    ...t.lenaRegels.map(regel => p(regel)),
+    p(t.lenaSluiten, 'easter-sluiten'),
+  );
+  return kaart;
+}
 
 let buf = '';
 const SECRET = 'lena';
@@ -138,16 +161,7 @@ document.addEventListener('keydown', (e: KeyboardEvent) => {
 
     const el = document.createElement('div');
     el.className = 'easter-overlay';
-    el.innerHTML = `
-      <div class="easter-kaart">
-        <p class="easter-stempel">Vermist</p>
-        <p class="easter-label">Archiefstuk B-X/14 · niet voor publicatie</p>
-        <h2>Gezocht: Lena Bogaert</h2>
-        <p>Laatst gezien op een dinsdagochtend in mei, Geel.</p>
-        <p>Bed opgemaakt. Jas weg. Geen briefje.</p>
-        <p>Wie iets weet, opent dossier 14. Wie niets weet ook.</p>
-        <p class="easter-sluiten">Klik om dit archiefstuk terug te leggen.</p>
-      </div>`;
+    el.append(maakArchiefstuk());
 
     const sluit = () => {
       el.remove();

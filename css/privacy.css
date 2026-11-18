@@ -235,3 +235,26 @@ body .link-accent {
     font-size: 1.5rem;
   }
 }
+
+/* ── Taalknop (zie scripts/vite-i18n.ts) ── */
+.nav-taal {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.navbar .nav-taal a {
+  padding: 0.5rem 0.35rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+
+.navbar .nav-taal a:hover {
+  color: #fff;
+}
+
+.navbar .nav-taal a[aria-current] {
+  color: #c9a84c;
+}

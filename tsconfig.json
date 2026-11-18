@@ -22,6 +22,7 @@
   },
   "include": [
     "src",
+    "i18n",
     "shared/js",
     "experiences/kamer-14/js",
     "experiences/dua/js",

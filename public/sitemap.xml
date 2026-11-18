@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Homepage -->
+<!-- Gegenereerd door scripts/i18n-paginas.ts. Niet met de hand aanpassen. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bureau-x.be/</loc>
-    <lastmod>2026-10-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bureau-x.be/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bureau-x.be/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bureau-x.be/en/"/>
   </url>
-
-  <!-- Kamer 14 - infopagina -->
+  <url>
+    <loc>https://bureau-x.be/en/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bureau-x.be/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bureau-x.be/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bureau-x.be/en/"/>
+  </url>
   <url>
     <loc>https://bureau-x.be/kamer-14/</loc>
-    <lastmod>2026-10-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bureau-x.be/kamer-14/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bureau-x.be/en/kamer-14/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bureau-x.be/en/kamer-14/"/>
   </url>
-
-  <!-- D.U.A. - infopagina -->
+  <url>
+    <loc>https://bureau-x.be/en/kamer-14/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bureau-x.be/kamer-14/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bureau-x.be/en/kamer-14/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bureau-x.be/en/kamer-14/"/>
+  </url>
   <url>
     <loc>https://bureau-x.be/dua/</loc>
-    <lastmod>2026-10-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bureau-x.be/dua/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bureau-x.be/en/dua/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bureau-x.be/en/dua/"/>
   </url>
-
+  <url>
+    <loc>https://bureau-x.be/en/dua/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bureau-x.be/dua/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bureau-x.be/en/dua/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bureau-x.be/en/dua/"/>
+  </url>
 </urlset>

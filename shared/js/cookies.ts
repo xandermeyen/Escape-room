@@ -14,6 +14,7 @@
  * Alleen in productie-builds wordt GA effectief geladen (zelfde aanpak als
  * Sentry), zodat lokaal testen geen data vervuilt. De banner werkt overal.
  */
+import { lokaalPad, teksten } from './i18n.ts';
 
 export const GA_METINGS_ID = 'G-RRJSFZZB05';
 
@@ -181,18 +182,16 @@ export function toonBanner(): void {
   banner.setAttribute('role', 'dialog');
   banner.setAttribute('aria-labelledby', 'cookie-banner-titel');
 
+  const t = teksten();
   const titel = document.createElement('h2');
   titel.id = 'cookie-banner-titel';
-  titel.textContent = 'Mogen we meten hoe je de site gebruikt?';
+  titel.textContent = t.cookieTitel;
 
   const tekst = document.createElement('p');
-  tekst.append(
-    'We willen met Google Analytics zien welke pagina’s bezocht worden en hoe mensen bij ons terechtkomen. ' +
-      'Dat helpt ons de escape rooms en de site beter te maken. Zonder jouw toestemming plaatsen we geen analytische cookies. Meer info in ons ',
-  );
+  tekst.append(t.cookieTekst);
   const link = document.createElement('a');
-  link.href = '/privacy.html#cookies';
-  link.textContent = 'privacybeleid';
+  link.href = lokaalPad('/privacy.html#cookies');
+  link.textContent = t.cookieLink;
   tekst.append(link, '.');
 
   const knoppen = document.createElement('div');
@@ -200,12 +199,12 @@ export function toonBanner(): void {
   const weiger = document.createElement('button');
   weiger.type = 'button';
   weiger.id = 'cookie-weigeren';
-  weiger.textContent = 'Weigeren';
+  weiger.textContent = t.cookieWeigeren;
   weiger.addEventListener('click', () => maakKeuze(false));
   const accepteer = document.createElement('button');
   accepteer.type = 'button';
   accepteer.id = 'cookie-accepteren';
-  accepteer.textContent = 'Accepteren';
+  accepteer.textContent = t.cookieAccepteren;
   accepteer.addEventListener('click', () => maakKeuze(true));
   knoppen.append(weiger, accepteer);
 

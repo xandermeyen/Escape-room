@@ -3,6 +3,7 @@
  * D.U.A.): navigatiebalk, gsm-menu, scroll-reveal, FAQ en het
  * boekingsformulier. Stond vroeger drie keer als los <script> in de HTML.
  */
+import { teksten } from '../shared/js/i18n.ts';
 import { experienceUitPad, meetEvent } from '../shared/js/meet.ts';
 
 /** Navigatiebalk krijgt een achtergrond zodra je scrollt. */
@@ -81,8 +82,8 @@ export function vandaagIso(nu = new Date()): string {
   return nu.toISOString().split('T')[0] ?? '';
 }
 
-export const BOEK_FOUT_TEKST =
-  'Versturen lukte niet. Probeer het opnieuw of mail naar info@bureau-x.be.';
+/** Nederlandse foutmelding (de pagina toont die in haar eigen taal, zie i18n/teksten). */
+export const BOEK_FOUT_TEKST = teksten('nl').boekFout;
 
 /** Antwoord van de Make-webhook na een geslaagde boeking. */
 export interface BoekAntwoord {
@@ -104,7 +105,11 @@ export function leesBoekAntwoord(data: unknown): BoekAntwoord {
   return { sessieCode: d.sessieCode, link: d.link };
 }
 
-/** yyyy-mm-dd als leesbare datum ("vrijdag 20 november"), of leeg. */
+/**
+ * yyyy-mm-dd als leesbare datum ("vrijdag 20 november"), of leeg.
+ * Altijd in het Nederlands: deze tekst gaat naar Make en komt in de
+ * Nederlandse mail. Pas aan zodra Make een mail per taal stuurt (ADR-001, fase 3).
+ */
 export function datumAlsTekst(iso: string): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
   if (!m) return '';
@@ -123,7 +128,7 @@ function toonBevestiging(ok: HTMLElement, antwoord: BoekAntwoord): void {
     void navigator.clipboard
       ?.writeText(antwoord.link)
       .then(() => {
-        kopieer.textContent = 'Gekopieerd';
+        kopieer.textContent = teksten().linkGekopieerd;
       })
       .catch(() => {
         kopieer.textContent = antwoord.link;
@@ -151,14 +156,14 @@ export function koppelBoekformulier(fetcher: typeof fetch = (...a) => fetch(...a
   const ok = document.getElementById('boek-ok');
   const fout = document.getElementById('boek-fout');
   const knop = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-  const knopTekst = knop?.textContent ?? 'Start de sessie';
+  const knopTekst = knop?.textContent ?? teksten().boekStart;
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (fout) fout.hidden = true;
     if (knop) {
       knop.disabled = true;
-      knop.textContent = 'Bezig…';
+      knop.textContent = teksten().boekBezig;
     }
     try {
       const velden = new URLSearchParams();
@@ -181,7 +186,7 @@ export function koppelBoekformulier(fetcher: typeof fetch = (...a) => fetch(...a
         knop.textContent = knopTekst;
       }
       if (fout) {
-        fout.textContent = BOEK_FOUT_TEKST;
+        fout.textContent = teksten().boekFout;
         fout.hidden = false;
       }
     }

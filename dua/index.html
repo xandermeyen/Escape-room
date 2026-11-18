@@ -3,25 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>D.U.A.: online escape room over De Rechtvaardige Rechters</title>
+    <title data-i18n="dua.head.title">
+      D.U.A.: online escape room over De Rechtvaardige Rechters
+    </title>
     <meta
       name="description"
       content="In de nacht van 10 op 11 april 1934 verdwijnt De Rechtvaardige Rechters uit de Sint-Baafskathedraal. Een team speelt in 1934, een ander in 2034. Samen lossen jullie het op, door de tijd heen."
+      data-i18n-content="dua.head.description@content"
     />
     <link rel="canonical" href="https://bureau-x.be/dua/" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="D.U.A. - Online escape room, Gent 1934/2034 | Bureau X" />
+    <meta
+      property="og:title"
+      content="D.U.A. - Online escape room, Gent 1934/2034 | Bureau X"
+      data-i18n-content="dua.head.og-title@content"
+    />
     <meta
       property="og:description"
       content="Een tijdgespleten escape room rond de onopgeloste diefstal van De Rechtvaardige Rechters (Gent, 1934). Nu beschikbaar."
+      data-i18n-content="dua.head.og-description@content"
     />
     <meta property="og:url" content="https://bureau-x.be/dua/" />
     <meta property="og:image" content="https://bureau-x.be/assets/img/dua-preview.jpg" />
     <meta property="og:locale" content="nl_BE" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-i18n-json="dua.jsonld.product-game">
       {
         "@context": "https://schema.org",
         "@type": ["Product", "Game"],
@@ -48,7 +56,7 @@
       }
     </script>
 
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-i18n-json="dua.jsonld.breadcrumblist">
       {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -89,14 +97,17 @@
             this.nextElementSibling.style.display = 'block';
           "
         />
-        <span style="display: none">Bureau X</span>
+        <span style="display: none" translate="no">Bureau X</span>
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/#experiences">Experiences</a></li>
-        <li><a href="#verhaal">De zaak</a></li>
-        <li><a href="#spelen">Hoe het werkt</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="/" class="btn-nav">Terug naar Bureau X</a></li>
+        <li><a href="/#experiences" data-i18n="dua.navLinks.a">Experiences</a></li>
+        <li><a href="#verhaal" data-i18n="dua.navLinks.a-2">De zaak</a></li>
+        <li><a href="#spelen" data-i18n="dua.navLinks.a-3">Hoe het werkt</a></li>
+        <li><a href="#faq" translate="no">FAQ</a></li>
+        <li class="nav-taal" data-taalkeuze></li>
+        <li>
+          <a href="/" class="btn-nav" data-i18n="dua.navLinks.btn-nav">Terug naar Bureau X</a>
+        </li>
       </ul>
       <button
         class="nav-toggle"
@@ -104,6 +115,7 @@
         aria-label="Menu"
         aria-expanded="false"
         aria-controls="navLinks"
+        data-i18n-aria-label="dua.navbar.nav-toggle@aria-label"
       >
         <span></span><span></span><span></span>
       </button>
@@ -115,31 +127,39 @@
         <img
           src="/assets/img/rechtvaardige-rechters.jpg"
           alt="De Rechtvaardige Rechters, Jan van Eyck (kopie door Jef Van der Veken, 1939)"
+          data-i18n-alt="dua.hero.img@alt"
         />
-        <p class="hero-art-cred">
+        <p class="hero-art-cred" data-i18n="dua.hero.hero-art-cred">
           De Rechtvaardige Rechters &middot; kopie door Jef Van der Veken, 1939 &middot; publiek
           domein
         </p>
       </div>
       <div class="hero-content">
-        <span class="case-stamp"
+        <span class="case-stamp" data-i18n="dua.hero.case-stamp"
           >Dossier 1934/RR<small>Gent, België &middot; Onopgelost</small></span
         >
         <h1 class="hero-h1">
-          <span class="dua-over">Gratis online escape room voor 2 tot 4 spelers</span>
+          <span class="dua-over" data-i18n="dua.hero.dua-over"
+            >Gratis online escape room voor 2 tot 4 spelers</span
+          >
           <span class="dua-title"
-            ><span class="dua-split-word a">D.</span><span class="dua-split-word b">U.</span
-            ><span style="color: var(--text)">A.</span></span
+            ><span class="dua-split-word a" translate="no">D.</span
+            ><span class="dua-split-word b" translate="no">U.</span
+            ><span style="color: var(--text)" translate="no">A.</span></span
           >
         </h1>
-        <p class="dua-subtitle">Gestolen in 1934 &middot; nog altijd zoek</p>
-        <p class="dua-kop">
+        <p class="dua-subtitle" data-i18n="dua.hero.dua-subtitle">
+          Gestolen in 1934 &middot; nog altijd zoek
+        </p>
+        <p class="dua-kop" data-i18n="dua.hero.dua-kop">
           Twee ploegen. Twee tijden. Eén verdwenen meesterwerk. Los het op, van 1934 tot 2034.
         </p>
-        <div class="coming-badge"><span class="coming-dot"></span>Nu beschikbaar</div>
+        <div class="coming-badge" data-i18n="dua.hero.coming-badge">
+          <span class="coming-dot"></span>Nu beschikbaar
+        </div>
         <div class="hero-ctas">
-          <a href="#verhaal" class="btn btn-outline">De echte zaak</a>
-          <a href="#boek" class="btn btn-gold">Boek een sessie</a>
+          <a href="#verhaal" class="btn btn-outline" data-i18n="dua.hero.btn">De echte zaak</a>
+          <a href="#boek" class="btn btn-gold" data-i18n="dua.hero.btn-2">Boek een sessie</a>
         </div>
       </div>
     </section>
@@ -148,19 +168,19 @@
     <div class="feiten-balk">
       <div class="feit">
         <div class="feit-waarde">1934</div>
-        <div class="feit-label">Tijdperk A</div>
+        <div class="feit-label" data-i18n="dua.body.feit-label">Tijdperk A</div>
       </div>
       <div class="feit">
         <div class="feit-waarde">2034</div>
-        <div class="feit-label">Tijdperk B</div>
+        <div class="feit-label" data-i18n="dua.body.feit-label-2">Tijdperk B</div>
       </div>
       <div class="feit">
-        <div class="feit-waarde">2 tot 4</div>
-        <div class="feit-label">Spelers</div>
+        <div class="feit-waarde" data-i18n="dua.body.feit-waarde">2 tot 4</div>
+        <div class="feit-label" data-i18n="dua.body.feit-label-3">Spelers</div>
       </div>
       <div class="feit">
-        <div class="feit-waarde">&plusmn;60 min</div>
-        <div class="feit-label">Speelduur</div>
+        <div class="feit-waarde" data-i18n="dua.body.feit-waarde-2">&plusmn;60 min</div>
+        <div class="feit-label" data-i18n="dua.body.feit-label-4">Speelduur</div>
       </div>
     </div>
 
@@ -176,40 +196,51 @@
     <!-- ── HOE HET WERKT ── -->
     <section class="section" id="spelen" style="background: var(--bg-2)">
       <div class="container">
-        <p class="label reveal" style="text-align: center">Hoe D.U.A. werkt</p>
-        <h2 class="heading reveal" style="text-align: center; max-width: 580px; margin: 0 auto">
+        <p class="label reveal" style="text-align: center" data-i18n="dua.spelen.label">
+          Hoe D.U.A. werkt
+        </p>
+        <h2
+          class="heading reveal"
+          style="text-align: center; max-width: 580px; margin: 0 auto"
+          data-i18n="dua.spelen.heading"
+        >
           Twee tijdperken. Één zaak.
         </h2>
         <div class="mech-grid reveal">
           <div class="mech-col a">
             <div class="mech-year">1934</div>
-            <p class="mech-city">Gent &middot; ten tijde van de diefstal</p>
-            <h3 class="mech-head">De daders zitten naast je</h3>
-            <p class="mech-txt">
+            <p class="mech-city" data-i18n="dua.spelen.mech-city">
+              Gent &middot; ten tijde van de diefstal
+            </p>
+            <h3 class="mech-head" data-i18n="dua.spelen.mech-head">De daders zitten naast je</h3>
+            <p class="mech-txt" data-i18n="dua.spelen.mech-txt">
               Verzamel bewijzen, laat sporen achter, identificeer de afperser - zonder ontdekt te
               worden. Wat jij verstopt, vindt 2034 honderd jaar later.
             </p>
             <div class="mech-roles">
-              <span class="mech-role">De Schrijver</span><span class="mech-role">De Loper</span>
+              <span class="mech-role" data-i18n="dua.spelen.mech-role">De Schrijver</span
+              ><span class="mech-role" data-i18n="dua.spelen.mech-role-2">De Loper</span>
             </div>
           </div>
           <div class="mech-col b">
             <div class="mech-year">2034</div>
-            <p class="mech-city">Gent &middot; honderd jaar later</p>
-            <h3 class="mech-head">Alles wat rest zijn sporen</h3>
-            <p class="mech-txt">
+            <p class="mech-city" data-i18n="dua.spelen.mech-city-2">
+              Gent &middot; honderd jaar later
+            </p>
+            <h3 class="mech-head" data-i18n="dua.spelen.mech-head-2">Alles wat rest zijn sporen</h3>
+            <p class="mech-txt" data-i18n="dua.spelen.mech-txt-2">
               Reconstrueer wie het deed en waar het paneel is. De toekomst kent de afloop niet. Jij
               wel - als 1934 goed werk levert.
             </p>
             <div class="mech-roles">
-              <span class="mech-role">De Archivaris</span
-              ><span class="mech-role">De Restaurateur</span>
+              <span class="mech-role" data-i18n="dua.spelen.mech-role-3">De Archivaris</span
+              ><span class="mech-role" data-i18n="dua.spelen.mech-role-4">De Restaurateur</span>
             </div>
           </div>
         </div>
         <div class="split-verbinding reveal">
           <span class="verbinding-ico">&#8596;</span>
-          <span
+          <span data-i18n="dua.spelen.span"
             >Informatie gaat maar één kant op: van 1934 naar 2034. De eindtwist: jullie
             <em>zijn</em> samen D.U.A.</span
           >
@@ -229,34 +260,34 @@
     <!-- ── DE AFPERSBRIEVEN ── -->
     <section class="section" id="brieven" style="background: var(--bg)">
       <div class="container">
-        <p class="label reveal">Dertien brieven</p>
-        <h2 class="heading reveal">De afpersbrieven</h2>
-        <p class="sub reveal">
+        <p class="label reveal" data-i18n="dua.brieven.label">Dertien brieven</p>
+        <h2 class="heading reveal" data-i18n="dua.brieven.heading">De afpersbrieven</h2>
+        <p class="sub reveal" data-i18n="dua.brieven.sub">
           Tussen april en november 1934 stuurde de dader dertien brieven naar de kathedraal en de
           Belgische staat. Ze zijn allemaal bewaard. Geen van hen gaf zijn identiteit prijs.
         </p>
         <div class="brieven-grid reveal">
           <div class="brief-kaart">
             <div class="brief-pin"></div>
-            <p class="brief-num">Brief 1</p>
-            <p class="brief-datum">April 1934</p>
-            <p class="brief-txt">
+            <p class="brief-num" data-i18n="dua.brieven.brief-num">Brief 1</p>
+            <p class="brief-datum" data-i18n="dua.brieven.brief-datum">April 1934</p>
+            <p class="brief-txt" data-i18n="dua.brieven.brief-txt">
               "Ik wil u laten weten dat ik de panelen bewaar op een veilige plek..."
             </p>
           </div>
           <div class="brief-kaart">
             <div class="brief-pin"></div>
-            <p class="brief-num">Brief 6</p>
-            <p class="brief-datum">Zomer 1934</p>
-            <p class="brief-txt">
+            <p class="brief-num" data-i18n="dua.brieven.brief-num-2">Brief 6</p>
+            <p class="brief-datum" data-i18n="dua.brieven.brief-datum-2">Zomer 1934</p>
+            <p class="brief-txt" data-i18n="dua.brieven.brief-txt-2">
               "De panelen zijn in goede staat. Ik zal ze teruggeven wanneer..."
             </p>
           </div>
           <div class="brief-kaart">
             <div class="brief-pin"></div>
-            <p class="brief-num">Brief 11</p>
-            <p class="brief-datum">Oktober 1934</p>
-            <p class="brief-txt">
+            <p class="brief-num" data-i18n="dua.brieven.brief-num-3">Brief 11</p>
+            <p class="brief-datum" data-i18n="dua.brieven.brief-datum-3">Oktober 1934</p>
+            <p class="brief-txt" data-i18n="dua.brieven.brief-txt-3">
               "Ik heb lang gewacht. De tijd begint te dringen voor u, niet voor mij..."
             </p>
           </div>
@@ -272,11 +303,14 @@
             color: var(--text-faint);
             font-size: 0.85rem;
           "
+          data-i18n="dua.brieven.sub-2"
         >
           De overige brieven wachten op jullie in het spel.
         </p>
         <div style="text-align: center; margin-top: 2.5rem">
-          <a href="#boek" class="btn btn-gold">Boek een sessie &rarr;</a>
+          <a href="#boek" class="btn btn-gold" data-i18n="dua.brieven.btn"
+            >Boek een sessie &rarr;</a
+          >
         </div>
       </div>
     </section>
@@ -294,18 +328,22 @@
     <section class="section" id="verhaal" style="background: var(--bg-2)">
       <div class="container">
         <div class="dossier-head reveal">
-          <p class="label">Gebaseerd op echte feiten</p>
-          <h2 class="heading">De diefstal van De Rechtvaardige Rechters</h2>
-          <p class="sub">
+          <p class="label" data-i18n="dua.verhaal.label">Gebaseerd op echte feiten</p>
+          <h2 class="heading" data-i18n="dua.verhaal.heading">
+            De diefstal van De Rechtvaardige Rechters
+          </h2>
+          <p class="sub" data-i18n="dua.verhaal.sub">
             Gent, 10 april 1934. Het is een van de grootste onopgeloste kunstmysteries in de
             geschiedenis.
           </p>
-          <span class="dossier-stamp">Onopgelost</span>
+          <span class="dossier-stamp" data-i18n="dua.verhaal.dossier-stamp">Onopgelost</span>
         </div>
         <div class="rule reveal"></div>
 
         <button class="btn btn-outline dossier-toggle reveal" id="dossierToggle" type="button">
-          <span class="label-text">Lees het volledige dossier</span>
+          <span class="label-text" data-i18n="dua.dossierToggle.label-text"
+            >Lees het volledige dossier</span
+          >
           <span class="arrow">&darr;</span>
         </button>
 
@@ -316,9 +354,9 @@
             <div class="tijdlijn">
               <div class="tl-item">
                 <div class="tl-dot"></div>
-                <p class="tl-jaar">April 1432</p>
-                <h3 class="tl-kop">Het Lam Gods voltooid</h3>
-                <p class="tl-txt">
+                <p class="tl-jaar" data-i18n="dua.dossierBody.tl-jaar">April 1432</p>
+                <h3 class="tl-kop" data-i18n="dua.dossierBody.tl-kop">Het Lam Gods voltooid</h3>
+                <p class="tl-txt" data-i18n="dua.dossierBody.tl-txt">
                   De gebroeders Hubert en Jan van Eyck voltooien het veelluik
                   <em>Aanbidding van het Lam Gods</em> voor de Sint-Baafskathedraal in Gent. Het
                   onderste linker paneel toont De Rechtvaardige Rechters op ware grootte.
@@ -326,19 +364,21 @@
               </div>
               <div class="tl-item">
                 <div class="tl-dot"></div>
-                <p class="tl-jaar">10 en 11 april 1934 &nbsp;&middot;&nbsp; Nacht</p>
-                <h3 class="tl-kop">Het paneel verdwijnt</h3>
-                <p class="tl-txt">
-                  Tijdens de nacht van Passiezondag op Stille Maandag wordt het linker onderpaneel,
+                <p class="tl-jaar" data-i18n="dua.dossierBody.tl-jaar-2">
+                  10 en 11 april 1934 &nbsp;&middot;&nbsp; Nacht
+                </p>
+                <h3 class="tl-kop" data-i18n="dua.dossierBody.tl-kop-2">Het paneel verdwijnt</h3>
+                <p class="tl-txt" data-i18n="dua.dossierBody.tl-txt-2">
+                  In de nacht van 10 op 11 april wordt het linker onderpaneel,
                   <em>De Rechtvaardige Rechters</em>, gestolen uit de kathedraal. Hoe de dief
                   binnenkwam, is nooit bewezen.
                 </p>
               </div>
               <div class="tl-item">
                 <div class="tl-dot"></div>
-                <p class="tl-jaar">April tot november 1934</p>
-                <h3 class="tl-kop">Dertien afpersbrieven</h3>
-                <p class="tl-txt">
+                <p class="tl-jaar" data-i18n="dua.dossierBody.tl-jaar-3">April tot november 1934</p>
+                <h3 class="tl-kop" data-i18n="dua.dossierBody.tl-kop-3">Dertien afpersbrieven</h3>
+                <p class="tl-txt" data-i18n="dua.dossierBody.tl-txt-3">
                   De kathedraal en de Belgische staat ontvangen dertien anonieme afpersbrieven. De
                   auteur eist losgeld. Het paneel wordt nooit geleverd. De brieven zijn echt. Ze
                   zijn bewaard.
@@ -346,9 +386,9 @@
               </div>
               <div class="tl-item">
                 <div class="tl-dot"></div>
-                <p class="tl-jaar">November 1934</p>
-                <h3 class="tl-kop">Sterfbedbekentenis</h3>
-                <p class="tl-txt">
+                <p class="tl-jaar" data-i18n="dua.dossierBody.tl-jaar-4">November 1934</p>
+                <h3 class="tl-kop" data-i18n="dua.dossierBody.tl-kop-4">Sterfbedbekentenis</h3>
+                <p class="tl-txt" data-i18n="dua.dossierBody.tl-txt-4">
                   Een Gentse stockhandelaar, Arsène Goedertier, sterft aan een hartaanval. Op zijn
                   sterfbed bekent hij als enige te weten waar het paneel ligt. Hij sterft voor hij
                   het kan zeggen.
@@ -356,9 +396,9 @@
               </div>
               <div class="tl-item">
                 <div class="tl-dot"></div>
-                <p class="tl-jaar">1945 tot heden</p>
-                <h3 class="tl-kop">Kopie op zijn plek</h3>
-                <p class="tl-txt">
+                <p class="tl-jaar" data-i18n="dua.dossierBody.tl-jaar-5">1945 tot heden</p>
+                <h3 class="tl-kop" data-i18n="dua.dossierBody.tl-kop-5">Kopie op zijn plek</h3>
+                <p class="tl-txt" data-i18n="dua.dossierBody.tl-txt-5">
                   Kunstschilder Jef Van der Veken maakt een kopie op basis van oude foto's -
                   dezelfde afbeelding bovenaan deze pagina. Die hangt vandaag in het veelluik. Het
                   origineel is nooit teruggevonden.
@@ -386,6 +426,7 @@
                     color: var(--ink-dim);
                     margin-bottom: 1.25rem;
                   "
+                  data-i18n="dua.dossierBody.p"
                 >
                   Document &middot; Afpersbrief nr. 1
                 </p>
@@ -406,6 +447,7 @@
                     margin-bottom: 1.25rem;
                     font-style: italic;
                   "
+                  data-i18n="dua.dossierBody.p-2"
                 >
                   "Ik wil u, die alle beschikbare middelen voor uw behoud aanwendt, laten weten dat
                   ik de panelen bewaar..."
@@ -419,7 +461,10 @@
                     margin-bottom: 1.25rem;
                   "
                 ></div>
-                <p style="font-size: 0.68rem; color: var(--ink-dim); letter-spacing: 0.1em">
+                <p
+                  style="font-size: 0.68rem; color: var(--ink-dim); letter-spacing: 0.1em"
+                  data-i18n="dua.dossierBody.p-3"
+                >
                   Gent, 1934 &nbsp;&middot;&nbsp; Anoniem
                 </p>
                 <p
@@ -429,18 +474,19 @@
                     margin-top: 0.35rem;
                     opacity: 0.6;
                   "
+                  data-i18n="dua.dossierBody.p-4"
                 >
                   Origineel bewaard in het bisschoppelijk archief
                 </p>
               </div>
 
               <div class="historisch" style="margin-top: 1.5rem">
-                <p>
+                <p data-i18n="dua.dossierBody.p-5">
                   Het paneel behoort toe aan de Sint-Baafskathedraal. Het bisdom Gent en de
                   Belgische staat ondernamen nooit een succesvolle onderzoeksactie. De zaak is
                   officieel onopgelost.
                 </p>
-                <p>
+                <p data-i18n="dua.dossierBody.p-6">
                   Meer weten:
                   <a href="https://sintbaafskathedraal.be" target="_blank" rel="noopener"
                     >Sint-Baafskathedraal</a
@@ -462,54 +508,56 @@
       style="background: var(--bg-2); border-top: 1px solid var(--border-gold)"
     >
       <div class="container container--narrow">
-        <p class="label reveal">Vragen</p>
-        <h2 class="heading reveal">Veelgestelde vragen</h2>
+        <p class="label reveal" data-i18n="dua.faq.label">Vragen</p>
+        <h2 class="heading reveal" data-i18n="dua.faq.heading">Veelgestelde vragen</h2>
         <div class="faq-list reveal">
           <div class="faq-item">
-            <button class="faq-q">Is D.U.A. gratis? <span class="faq-arrow">&#9662;</span></button>
+            <button class="faq-q" data-i18n="dua.faq.faq-q">
+              Is D.U.A. gratis? <span class="faq-arrow">&#9662;</span>
+            </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="dua.faq.p">
                 Volledig gratis. Geen account, geen abonnement, geen in-app aankopen. Jullie boeken,
                 jullie spelen.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="dua.faq.faq-q-2">
               Met hoeveel spelers speel je D.U.A.? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="dua.faq.p-2">
                 Met 2 tot 4 spelers. Er staat altijd minstens één speler in 1934 en één in 2034. Met
                 vier deelt elk tijdperk twee spelers.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="dua.faq.faq-q-3">
               Hoe spelen we samen online? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="dua.faq.p-3">
                 Ieder opent zijn eigen spellink in de browser en kiest een rol. Bel of videobel met
                 elkaar terwijl je speelt. Geen download of installatie nodig.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="dua.faq.faq-q-4">
               Hoe lang duurt het? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>Jullie hebben 60 minuten om de zaak op te lossen.</p>
+              <p data-i18n="dua.faq.p-4">Jullie hebben 60 minuten om de zaak op te lossen.</p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">
+            <button class="faq-q" data-i18n="dua.faq.faq-q-5">
               Is het verhaal echt gebeurd? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p>
+              <p data-i18n="dua.faq.p-5">
                 Ja. In de nacht van 10 op 11 april 1934 werd het paneel De Rechtvaardige Rechters
                 uit het Lam Gods in de Sint-Baafskathedraal in Gent gestolen. Het is tot vandaag
                 niet teruggevonden. De 2034-kant van het spel is fictie.
@@ -527,11 +575,13 @@
       style="background: var(--bg); border-top: 1px solid var(--border-gold)"
     >
       <div class="container container--narrow">
-        <p class="label reveal" style="text-align: center">
+        <p class="label reveal" style="text-align: center" data-i18n="dua.boek.label">
           Gratis &middot; 2 tot 4 spelers &middot; vanuit huis
         </p>
-        <h2 class="heading reveal" style="text-align: center">Neem de zaak aan</h2>
-        <p class="sub reveal" style="text-align: center">
+        <h2 class="heading reveal" style="text-align: center" data-i18n="dua.boek.heading">
+          Neem de zaak aan
+        </h2>
+        <p class="sub reveal" style="text-align: center" data-i18n="dua.boek.sub">
           Arsène Goedertier stierf op 25 november 1934 als enige die wist waar het paneel ligt. Het
           ligt er waarschijnlijk nog. Vul de e-mailadressen in van iedereen die meespeelt. Ieder
           krijgt zijn eigen spellink en kiest zijn rol zodra jullie inloggen. D.U.A. is gratis.
@@ -554,7 +604,7 @@
 
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label" for="boek-naam"
+              <label class="form-label" for="boek-naam" data-i18n="dua.boekForm.form-label"
                 >Naam contactpersoon <span class="form-req">*</span></label
               >
               <input
@@ -564,10 +614,11 @@
                 name="naam"
                 placeholder="Jan Janssen"
                 required
+                data-i18n-placeholder="dua.boekForm.form-input@placeholder"
               />
             </div>
             <div class="form-field">
-              <label class="form-label" for="boek-datum"
+              <label class="form-label" for="boek-datum" data-i18n="dua.boekForm.form-label-2"
                 >Wanneer spelen jullie? <span class="form-opt">(optioneel)</span></label
               >
               <input id="boek-datum" class="form-input" type="date" name="datum" />
@@ -575,7 +626,10 @@
           </div>
 
           <div class="form-field" style="margin-bottom: 1rem">
-            <label class="form-label" for="boek-email_speler_1"
+            <label
+              class="form-label"
+              for="boek-email_speler_1"
+              data-i18n="dua.boekForm.form-label-3"
               >Aantal spelers <span class="form-req">*</span></label
             >
             <div class="speler-keuze" id="spelerKeuze">
@@ -588,7 +642,9 @@
 
           <div id="emailVelden">
             <div class="form-field" style="margin-bottom: 0.75rem">
-              <label class="form-label">E-mail speler 1 <span class="form-req">*</span></label>
+              <label class="form-label" data-i18n="dua.emailVelden.form-label"
+                >E-mail speler 1 <span class="form-req">*</span></label
+              >
               <input
                 id="boek-email_speler_1"
                 class="form-input"
@@ -596,10 +652,14 @@
                 name="email_speler_1"
                 placeholder="speler1@email.be"
                 required
+                data-i18n-placeholder="dua.emailVelden.form-input@placeholder"
               />
             </div>
             <div class="form-field" style="margin-bottom: 0.75rem">
-              <label class="form-label" for="boek-email_speler_2"
+              <label
+                class="form-label"
+                for="boek-email_speler_2"
+                data-i18n="dua.emailVelden.form-label-2"
                 >E-mail speler 2 <span class="form-req">*</span></label
               >
               <input
@@ -609,10 +669,14 @@
                 name="email_speler_2"
                 placeholder="speler2@email.be"
                 required
+                data-i18n-placeholder="dua.emailVelden.form-input@placeholder-2"
               />
             </div>
             <div class="form-field email-extra" style="margin-bottom: 0.75rem; display: none">
-              <label class="form-label" for="boek-email_speler_3"
+              <label
+                class="form-label"
+                for="boek-email_speler_3"
+                data-i18n="dua.emailVelden.form-label-3"
                 >E-mail speler 3 <span class="form-req">*</span></label
               >
               <input
@@ -621,13 +685,17 @@
                 type="email"
                 name="email_speler_3"
                 placeholder="speler3@email.be"
+                data-i18n-placeholder="dua.emailVelden.form-input@placeholder-3"
               />
             </div>
             <div
               class="form-field email-extra email-extra-4"
               style="margin-bottom: 0.75rem; display: none"
             >
-              <label class="form-label" for="boek-email_speler_4"
+              <label
+                class="form-label"
+                for="boek-email_speler_4"
+                data-i18n="dua.emailVelden.form-label-4"
                 >E-mail speler 4 <span class="form-req">*</span></label
               >
               <input
@@ -636,23 +704,43 @@
                 type="email"
                 name="email_speler_4"
                 placeholder="speler4@email.be"
+                data-i18n-placeholder="dua.emailVelden.form-input@placeholder-4"
               />
             </div>
           </div>
 
-          <button class="boek-btn" type="submit">Start de sessie</button>
-          <p class="form-note">
+          <button class="boek-btn" type="submit" data-i18n="dua.boekForm.boek-btn">
+            Start de sessie
+          </button>
+          <p class="form-note" data-i18n="dua.boekForm.form-note">
             Jullie link verschijnt meteen hier en komt ook per mail bij alle spelers.
           </p>
         </form>
         <div class="boek-ok" id="boek-ok" role="status">
-          <p class="boek-ok-titel">&#10003; Jullie sessie staat klaar</p>
-          <p class="boek-ok-code">Sessiecode: <strong data-boek="code"></strong></p>
+          <p class="boek-ok-titel" data-i18n="dua.boek-ok.boek-ok-titel">
+            &#10003; Jullie sessie staat klaar
+          </p>
+          <p class="boek-ok-code" data-i18n="dua.boek-ok.boek-ok-code">
+            Sessiecode: <strong data-boek="code"></strong>
+          </p>
           <div class="boek-ok-acties">
-            <a class="boek-btn boek-ok-open" data-boek="link" href="#">Open het dossier</a>
-            <button type="button" class="boek-ok-kopieer" data-boek="kopieer">Kopieer link</button>
+            <a
+              class="boek-btn boek-ok-open"
+              data-boek="link"
+              href="#"
+              data-i18n="dua.boek-ok.boek-btn"
+              >Open het dossier</a
+            >
+            <button
+              type="button"
+              class="boek-ok-kopieer"
+              data-boek="kopieer"
+              data-i18n="dua.boek-ok.boek-ok-kopieer"
+            >
+              Kopieer link
+            </button>
           </div>
-          <p class="form-note">
+          <p class="form-note" data-i18n="dua.boek-ok.form-note">
             Stuur de link door naar je medespelers. Hij staat ook in jullie mailbox.
           </p>
         </div>
@@ -664,39 +752,53 @@
     <footer class="footer">
       <div class="footer-inner">
         <div>
-          <div class="footer-brand">Bureau X</div>
-          <p class="footer-tag">
+          <div class="footer-brand" translate="no">Bureau X</div>
+          <p class="footer-tag" data-i18n="dua.footer.footer-tag">
             Online escape rooms gebaseerd op echte Belgische verhalen en onopgeloste mysteries.
           </p>
         </div>
         <div>
-          <p class="footer-head">Experiences</p>
+          <p class="footer-head" data-i18n="dua.footer.footer-head">Experiences</p>
           <ul class="footer-links">
-            <li><a href="/kamer-14/">Kamer 14</a></li>
-            <li><a href="/dua/">D.U.A.</a></li>
-            <li><a href="/">Terug naar Bureau X</a></li>
+            <li><a href="/kamer-14/" translate="no">Kamer 14</a></li>
+            <li><a href="/dua/" translate="no">D.U.A.</a></li>
+            <li><a href="/" data-i18n="dua.footer.a">Terug naar Bureau X</a></li>
           </ul>
         </div>
         <div>
-          <p class="footer-head">De zaak</p>
+          <p class="footer-head" data-i18n="dua.footer.footer-head-2">De zaak</p>
           <ul class="footer-links">
             <li>
-              <a href="https://sintbaafskathedraal.be" target="_blank" rel="noopener"
+              <a
+                href="https://sintbaafskathedraal.be"
+                target="_blank"
+                rel="noopener"
+                data-i18n="dua.footer.a-2"
                 >Sint-Baafskathedraal</a
               >
             </li>
             <li>
-              <a href="https://www.museagent.be" target="_blank" rel="noopener">Musea Gent</a>
+              <a
+                href="https://www.museagent.be"
+                target="_blank"
+                rel="noopener"
+                data-i18n="dua.footer.a-3"
+                >Musea Gent</a
+              >
             </li>
-            <li><a href="/privacy.html">Privacybeleid</a></li>
-            <li><a href="#" data-cookie-instellingen>Cookie-instellingen</a></li>
-            <li><a href="mailto:info@bureau-x.be">Contact</a></li>
+            <li><a href="/privacy.html" data-i18n="dua.footer.a-4">Privacybeleid</a></li>
+            <li>
+              <a href="#" data-cookie-instellingen data-i18n="dua.footer.a-5"
+                >Cookie-instellingen</a
+              >
+            </li>
+            <li><a href="mailto:info@bureau-x.be" data-i18n="dua.footer.a-6">Contact</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-copy">
-        <span>&copy; 2026 Bureau X</span>
-        <a href="mailto:info@bureau-x.be">info@bureau-x.be</a>
+        <span data-i18n="dua.footer.span">&copy; 2026 Bureau X</span>
+        <a href="mailto:info@bureau-x.be" translate="no">info@bureau-x.be</a>
       </div>
     </footer>
 

@@ -23,7 +23,7 @@ export default defineConfig({
     launchOptions: process.env['PW_CHROMIUM'] ? { executablePath: process.env['PW_CHROMIUM'] } : {},
   },
   webServer: {
-    command: 'pnpm exec vite --config vite.e2e.config.ts',
+    command: 'pnpm i18n && pnpm exec vite --config vite.e2e.config.ts',
     url: 'http://localhost:5180/experiences/kamer-14/',
     reuseExistingServer: !process.env['CI'],
     timeout: 60_000,

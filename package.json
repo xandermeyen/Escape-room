@@ -3,9 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.6"
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "pnpm i18n && vite",
+    "build": "pnpm i18n && tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -15,13 +18,19 @@
     "test:watch": "vitest",
     "test:rules": "pnpm dlx firebase-tools@15.33.0 emulators:exec --only database --project demo-bureau-x \"vitest run tests/database-rules.test.ts\"",
     "test:e2e": "playwright test",
+    "screenshots": "playwright test --config playwright.screenshots.config.ts",
+    "i18n": "node --experimental-strip-types scripts/i18n.ts",
+    "i18n:controle": "node --experimental-strip-types scripts/i18n.ts --controle",
+    "i18n:bevestig": "node --experimental-strip-types scripts/i18n.ts --bevestig",
+    "i18n:sleutels": "node --experimental-strip-types scripts/i18n-sleutels.ts",
     "rookproef": "node --experimental-strip-types scripts/rookproef.ts",
-    "lint:html": "html-validate \"*.html\" \"kamer-14/*.html\" \"dua/*.html\" \"experiences/**/*.html\""
+    "lint:html": "pnpm i18n && html-validate \"*.html\" \"kamer-14/*.html\" \"dua/*.html\" \"experiences/**/*.html\" \"en/**/*.html\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@firebase/rules-unit-testing": "^6.0.0",
     "@playwright/test": "~1.64.0",
+    "@types/jsdom": "^30.0.0",
     "@types/node": "^24.19.2",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",

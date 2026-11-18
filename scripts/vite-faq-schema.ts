@@ -42,7 +42,7 @@ export function naarPlatteTekst(html: string): string {
 export function leesFaq(html: string): FaqItem[] {
   const items: FaqItem[] = [];
   const patroon =
-    /<button class="faq-q">([\s\S]*?)<span class="faq-arrow">[\s\S]*?<div class="faq-a">([\s\S]*?)<\/div>/g;
+    /<button class="faq-q"[^>]*>([\s\S]*?)<span class="faq-arrow"[^>]*>[\s\S]*?<div class="faq-a"[^>]*>([\s\S]*?)<\/div>/g;
   for (const m of html.matchAll(patroon)) {
     const vraag = naarPlatteTekst(m[1] ?? '');
     const antwoord = naarPlatteTekst(m[2] ?? '');
