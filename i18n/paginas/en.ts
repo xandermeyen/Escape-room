@@ -475,10 +475,9 @@ const en: PaginaWoordenboek = {
   'privacy.head.title': 'Privacy policy - Bureau X',
   'privacy.head.description@content':
     'Privacy policy of Bureau X. Read how we handle your personal data.',
-  'privacy.navbar.navbar-toggler@aria-label': 'Open or close the navigation menu',
-  'privacy.navMenu.nav-link': 'Experiences',
-  'privacy.navMenu.nav-link-2': 'About us',
-  'privacy.navMenu.nav-link-3': 'Book a session',
+  'privacy.navLinks.a': 'Experiences',
+  'privacy.navLinks.btn-nav': 'Book a session',
+  'privacy.navbar.nav-toggle@aria-label': 'Menu',
   'privacy.sectie-donker.dossier-stamp': 'Confidential - GDPR',
   'privacy.sectie-donker.dossier-ref': 'Bureau X - Internal document - REF-PRV-01',
   'privacy.sectie-donker.dossier-title': 'Privacy policy',
@@ -638,10 +637,14 @@ const en: PaginaWoordenboek = {
     'We may change this privacy policy. The most recent version is always on this page, with the date of the last change in the bar at the top.',
   'privacy.sectie-donker.dossier-footer-note':
     'Bureau X - REF-PRV-01 - Valid under Belgian and European law',
-  'privacy.py-4.mb-1': 'Kamer 14 is based on the real tradition of family foster care in Geel.',
-  'privacy.py-4.footer-link': 'Saint Dymphna',
-  'privacy.py-4.footer-link-2': 'Privacy policy',
-  'privacy.py-4.footer-link-3': 'Cookie settings',
+  'privacy.footer.footer-tag':
+    'Online escape rooms based on real Belgian stories and unsolved mysteries.',
+  'privacy.footer.footer-head': 'Experiences',
+  'privacy.footer.footer-head-2': 'Info',
+  'privacy.footer.a': 'Contact',
+  'privacy.footer.a-2': 'Privacy policy',
+  'privacy.footer.a-3': 'Cookie settings',
+  'privacy.footer.span': '© 2026 Bureau X',
 };
 
 export default en;

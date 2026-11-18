@@ -4,19 +4,6 @@
 
 @import './landing.css';
 
-:root {
-  --bg: #0c0b09;
-  --bg-2: #131210;
-  --gold: #c8a96e;
-  --gold-dim: #7a6035;
-  --gold-bright: #d9bc84;
-  --red: #8b1a1a;
-  --text: #e8dcc8;
-  --text-dim: #9a8a76;
-  --border-gold: #2e2718;
-  --ff: 'Special Elite', serif;
-}
-
 body {
   font-family:
     system-ui,

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import { resolve } from 'path';
 import { faqSchemaPlugin } from './scripts/vite-faq-schema.ts';
 import { gegenereerdeIngangen } from './scripts/i18n-ingangen.ts';
@@ -41,14 +41,6 @@ export default defineConfig({
 
         // Andere talen: gegenereerd door scripts/i18n-paginas.ts (pnpm i18n)
         ...gegenereerdeIngangen(import.meta.dirname),
-      },
-      output: {
-        codeSplitting: {
-          // Bootstrap-JS (CommonJS) in een eigen chunk. Anders zet Rolldown zijn
-          // hulpcode in het privacy-chunk, en dan laadt de homepage via reviews
-          // ook de Bootstrap-CSS van de privacypagina, die .btn overschrijft.
-          groups: [{ name: 'bootstrap-js', test: /node_modules\/bootstrap\/dist\/js\// }],
-        },
       },
     },
   },

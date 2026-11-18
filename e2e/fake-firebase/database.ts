@@ -1,6 +1,6 @@
 /**
  * Nep-Firebase Realtime Database voor de end-to-end-tests (alleen in
- * vite.e2e.config.ts). Bewaart de hele boom in localStorage, zodat twee
+ * e2e/config/vite.e2e.config.ts). Bewaart de hele boom in localStorage, zodat twee
  * tabbladen in dezelfde browser (Speler A en B) dezelfde data zien en live
  * meekrijgen wat de ander schrijft, via het `storage`-event.
  *

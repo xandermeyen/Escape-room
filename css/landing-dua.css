@@ -11,17 +11,11 @@
 @import './landing.css';
 
 :root {
-  --bg: #0c0b09;
-  --bg-2: #131210;
-  --bg-3: #1c1916;
-  --gold: #c8a96e;
+  /* Basiskleuren staan in landing.css. D.U.A. wijkt af met een fellere
+     --gold-dim, gouden lijnen en een sienna-accent. */
   --gold-dim: #a8844a;
-  --gold-bright: #d9bc84;
-  --text: #e8dcc8;
-  --text-dim: #9a8a76;
-  --text-faint: #9a8b7c; /* contrast ≥ 4.5:1 op de donkere achtergronden */
-  --border-gold: #2e2718;
-  --ff: 'Special Elite', serif;
+  --border: var(--border-gold);
+  --accent: var(--sienna);
 
   --paper: #f2e8d0;
   --paper-dark: #d4c49c;
@@ -36,16 +30,46 @@
   --cobalt-bright: #5b7fb5;
 }
 
-body {
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.65;
-  overflow-x: hidden;
+/* Afwijkingen op de gedeelde basis uit landing.css */
+body,
+.section {
   position: relative;
+}
+
+.btn-nav {
+  border-color: var(--border-gold);
+  color: var(--text-dim);
+}
+
+.btn-nav:hover {
+  background: transparent;
+  border-color: var(--gold-dim);
+  color: var(--text);
+}
+
+.btn-outline {
+  color: var(--text-dim);
+}
+
+.btn-outline:hover {
+  border-color: var(--gold-dim);
+  color: var(--text);
+}
+
+@media (max-width: 700px) {
+  .nav-links .btn-nav {
+    border-color: var(--border-gold);
+  }
+  .nav-links .btn-nav:hover {
+    border-color: var(--gold-dim);
+  }
+}
+
+/* "(optioneel)" zonder de typemachineletter en hoofdletters van het label */
+.form-opt {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: system-ui;
 }
 
 /* subtle film grain, whole page */
@@ -62,24 +86,6 @@ body::after {
 }
 
 /* ── NAV ── */
-
-.btn-nav {
-  padding: 0.45rem 1.2rem;
-  border: 1px solid var(--border-gold);
-  background: transparent;
-  color: var(--text-dim);
-  font-family: var(--ff);
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.btn-nav:hover {
-  border-color: var(--gold-dim);
-  color: var(--text);
-}
 
 /* ── HERO: real image, split-screen ── */
 
@@ -251,17 +257,6 @@ body::after {
   flex-wrap: wrap;
 }
 
-.btn-outline {
-  background: transparent;
-  border: 1px solid rgba(232, 220, 200, 0.25);
-  color: var(--text-dim);
-}
-
-.btn-outline:hover {
-  border-color: var(--gold-dim);
-  color: var(--text);
-}
-
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
@@ -340,11 +335,6 @@ body::after {
 }
 
 /* ── SECTIONS ── */
-
-.section {
-  padding: 6rem 1.5rem;
-  position: relative;
-}
 
 .container--narrow {
   max-width: 760px;
@@ -710,22 +700,6 @@ body::after {
 
 /* ── BOOKING FORM ── */
 
-.boek-form {
-  margin-top: 2.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-}
-
 .form-label {
   font-family: var(--ff);
   font-size: 0.72rem;
@@ -733,31 +707,6 @@ body::after {
   text-transform: uppercase;
   color: var(--text-faint);
   margin-bottom: 0.4rem;
-}
-
-.form-req {
-  color: var(--sienna);
-}
-
-.form-opt {
-  font-size: 0.65rem;
-  letter-spacing: 0;
-  text-transform: none;
-  font-family: system-ui;
-}
-
-.form-input {
-  padding: 0.75rem 1rem;
-  background: var(--bg-3);
-  border: 1px solid var(--border-gold);
-  color: var(--text);
-  font-size: 0.9rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.form-input:focus {
-  border-color: var(--cobalt-bright);
 }
 
 .form-input::placeholder {
@@ -793,72 +742,7 @@ body::after {
   color: var(--text);
 }
 
-.boek-btn {
-  margin-top: 1.5rem;
-  width: 100%;
-  padding: 1rem;
-  background: var(--gold);
-  border: none;
-  color: var(--bg);
-  font-family: var(--ff);
-  font-size: 0.9rem;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.boek-btn:hover {
-  background: var(--gold-bright);
-}
-
-.boek-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.form-note {
-  font-size: 0.78rem;
-  color: var(--text-faint);
-  text-align: center;
-  margin-top: 0.75rem;
-}
-
-.boek-ok {
-  font-family: var(--ff);
-  font-size: 0.95rem;
-  color: var(--sienna);
-  text-align: center;
-  margin-top: 2rem;
-  display: none;
-}
-
-@media (max-width: 600px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ── FOOTER ── */
-
-.footer {
-  background: var(--bg);
-  border-top: 1px solid var(--border-gold);
-  padding: 3rem 1.5rem 2rem;
-}
-
-.footer-copy {
-  max-width: 1100px;
-  margin: 2.5rem auto 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-gold);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.75rem;
-  color: var(--text-faint);
-}
 
 /* ── REVEAL ── */
 
@@ -879,53 +763,9 @@ body::after {
 }
 
 @media (max-width: 700px) {
-  .nav-toggle {
-    display: flex;
-  }
-  .nav-links {
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    background: rgba(12, 11, 9, 0.98);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-gold);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease;
-  }
-  .nav-links.open {
-    max-height: 320px;
-  }
-  .nav-links li {
-    width: 100%;
-  }
-  .nav-links a {
-    display: block;
-    padding: 1.1rem 2rem;
-  }
-  .nav-links .btn-nav {
-    display: block;
-    width: calc(100% - 4rem);
-    margin: 0.5rem 2rem 1.1rem;
-    text-align: center;
-  }
-  .footer-inner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
   .brief-kaart {
     transform: none !important;
   }
-}
-
-.boek-fout {
-  color: #e08a7a;
-  font-size: 0.9rem;
-  margin-top: 0.75rem;
 }
 
 .goedertier-toast {
@@ -963,104 +803,3 @@ body::after {
 }
 
 /* ── FAQ ── */
-
-.faq-list {
-  margin-top: 3rem;
-  border-top: 1px solid var(--border-gold);
-}
-
-.faq-item {
-  border-bottom: 1px solid var(--border-gold);
-}
-
-.faq-q {
-  width: 100%;
-  text-align: left;
-  padding: 1.2rem 0;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-family: var(--ff);
-  font-size: 0.97rem;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
-
-.faq-arrow {
-  color: var(--gold-dim);
-  font-size: 0.8rem;
-  transition: transform 0.3s;
-  flex-shrink: 0;
-}
-
-.faq-item.open .faq-arrow {
-  transform: rotate(180deg);
-}
-
-.faq-a {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s ease;
-}
-
-.faq-item.open .faq-a {
-  max-height: 400px;
-}
-
-.faq-a p {
-  color: var(--text-dim);
-  font-size: 0.92rem;
-  padding-bottom: 1.25rem;
-  line-height: 1.75;
-}
-
-.form-opt {
-  color: var(--text-faint);
-  font-size: 0.85em;
-}
-
-.boek-ok-titel {
-  font-size: 1.05rem;
-  margin-bottom: 0.5rem;
-}
-
-.boek-ok-code {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
-}
-
-.boek-ok-acties {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  margin-top: 1.25rem;
-}
-
-.boek-ok-open {
-  display: inline-block;
-  width: auto;
-  margin-top: 0;
-  padding: 0.9rem 1.75rem;
-  text-decoration: none;
-}
-
-.boek-ok-kopieer {
-  background: none;
-  border: 1px solid currentColor;
-  color: var(--text-dim);
-  font-family: var(--ff);
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  padding: 0.9rem 1.5rem;
-  cursor: pointer;
-}
-
-.boek-ok-kopieer:hover {
-  color: var(--text);
-}

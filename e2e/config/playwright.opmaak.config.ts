@@ -1,4 +1,7 @@
+import { resolve } from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
+
+const ROOT = resolve(import.meta.dirname, '../..');
 
 /**
  * Opmaaktests tegen de productiebuild (pnpm test:opmaak).
@@ -6,10 +9,11 @@ import { defineConfig, devices } from '@playwright/test';
  * De gewone e2e-tests draaien tegen de Vite-devserver. Sommige fouten bestaan
  * alleen na `vite build`, bijvoorbeeld wanneer CSS-bestanden in een andere
  * volgorde gebundeld worden. Daarom bouwt deze config de site eerst (met de
- * nep-Firebase uit vite.e2e.config.ts) en test hij tegen `vite preview`.
+ * nep-Firebase uit e2e/config/vite.e2e.config.ts) en test hij tegen `vite preview`.
  */
 export default defineConfig({
-  testDir: 'e2e',
+  testDir: '..',
+  outputDir: resolve(ROOT, 'test-results'),
   testMatch: 'opmaak.spec.ts',
   timeout: 60_000,
   fullyParallel: true,
@@ -23,7 +27,8 @@ export default defineConfig({
   },
   webServer: {
     command:
-      'pnpm i18n && pnpm exec vite build --config vite.e2e.config.ts --outDir dist-e2e --emptyOutDir --logLevel warn && pnpm exec vite preview --config vite.e2e.config.ts --outDir dist-e2e --port 5181 --strictPort',
+      'pnpm i18n && pnpm exec vite build --config e2e/config/vite.e2e.config.ts --outDir dist-e2e --emptyOutDir --logLevel warn && pnpm exec vite preview --config e2e/config/vite.e2e.config.ts --outDir dist-e2e --port 5181 --strictPort',
+    cwd: ROOT,
     url: 'http://localhost:5181/',
     reuseExistingServer: false,
     timeout: 180_000,

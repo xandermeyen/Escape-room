@@ -67,7 +67,7 @@ Make.com  ◄── boekingsformulier (webhook, directe link) ── speler
 
 | Onderdeel   | Keuze                                                                   |
 | ----------- | ----------------------------------------------------------------------- |
-| Frontend    | HTML, CSS, TypeScript (strict), Vite, Bootstrap 5                       |
+| Frontend    | HTML, CSS, TypeScript (strict), Vite, Bootstrap 5 (enkel spelpagina's)  |
 | Backend     | Firebase Realtime Database, Firebase Auth (anoniem + e-mail/wachtwoord) |
 | Beveiliging | Database-rules per veld, beheerders-lijst                               |
 | Hosting     | GitHub Pages met eigen domein, deploy via GitHub Actions                |
@@ -82,6 +82,17 @@ rol, een eindscherm met rapport en review, een tijd-voorbij-scherm en een host-p
 gedeelde logica staat in `shared/js/` (sessies, timer, antwoordcontrole, speldata, hulp,
 demomodus, host-onderdelen), de verhaalspecifieke teksten en configuratie in
 `experiences/<naam>/js/`.
+
+| Map                                               | Inhoud                                                                    |
+| ------------------------------------------------- | ------------------------------------------------------------------------- |
+| `index.html`, `kamer-14/`, `dua/`, `privacy.html` | Sitepagina's; de map bepaalt de URL. `404.html` voor GitHub Pages         |
+| `css/`, `js/`                                     | Stijl en code van de sitepagina's; gedeelde basis in `css/landing.css`    |
+| `experiences/<naam>/`                             | De spelpagina's, met eigen `css/` en `js/`                                |
+| `shared/`                                         | Code en stijl die site en spellen delen                                   |
+| `i18n/`, `scripts/`                               | Vertalingen en de buildscripts die `en/` genereren                        |
+| `tests/`, `e2e/`                                  | Unittests (Vitest) en browsertests (Playwright, configs in `e2e/config/`) |
+| `public/`, `assets/`                              | Bestanden die ongewijzigd meegaan, en afbeeldingen die Vite verwerkt      |
+| `firebase/`, `docs/`                              | Database-rules en documentatie                                            |
 
 ## Ontwerpkeuzes
 

@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test';
-import basis from './playwright.config.ts';
+import basis from '../../playwright.config.ts';
 
 /**
  * Screenshots voor de README en promotiebeelden: pnpm screenshots.
@@ -7,6 +7,9 @@ import basis from './playwright.config.ts';
  */
 export default defineConfig({
   ...basis,
+  // Paden in een config zijn relatief aan het configbestand zelf.
+  testDir: '..',
+  outputDir: '../../test-results',
   testMatch: 'screenshots.ts',
   retries: 0,
   reporter: 'list',

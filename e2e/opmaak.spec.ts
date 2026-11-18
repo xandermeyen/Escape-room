@@ -1,17 +1,27 @@
 import { test, expect, type Page } from '@playwright/test';
 
 /**
- * Opmaak van de productiebuild (zie playwright.opmaak.config.ts).
+ * Opmaak van de productiebuild (zie e2e/config/playwright.opmaak.config.ts).
  *
  * Geen pixelvergelijking, maar een paar berekende stijlen die eerder stuk
  * gingen zonder dat een andere test het merkte:
- * - .btn-outline verloor zijn rand toen Vite de CSS anders ging bundelen;
+ * - .btn-outline en .btn-nav verloren hun rand toen Vite de CSS anders ging bundelen;
  * - het hero-canvas bleef 300 x 150 px in plaats van de hele hero te vullen;
  * - de taalknoppen moeten op elke sitepagina zichtbaar zijn, ook in het Nederlands
  *   (behalve op de 404-pagina, die haar taal zelf kiest).
  */
 
-const SITEPAGINAS = ['/', '/en/', '/kamer-14/', '/en/kamer-14/', '/dua/', '/en/dua/', '/404.html'];
+const SITEPAGINAS = [
+  '/',
+  '/en/',
+  '/kamer-14/',
+  '/en/kamer-14/',
+  '/dua/',
+  '/en/dua/',
+  '/privacy.html',
+  '/en/privacy.html',
+  '/404.html',
+];
 
 async function open(page: Page, pad: string): Promise<void> {
   await page.addInitScript(() => {
@@ -33,9 +43,9 @@ for (const pad of SITEPAGINAS) {
     await open(page, pad);
 
     const randen = await page
-      .locator('.btn-outline:visible')
+      .locator('.btn-outline:visible, .btn-nav:visible')
       .evaluateAll(els => els.map(e => getComputedStyle(e).borderTopWidth));
-    expect(randen.length, 'minstens één .btn-outline op de pagina').toBeGreaterThan(0);
+    expect(randen.length, 'minstens één omlijnde knop op de pagina').toBeGreaterThan(0);
     for (const rand of randen) expect(rand).not.toBe('0px');
 
     // De 404-pagina heeft geen taalknop: ze kiest haar taal zelf uit het adres.
@@ -58,7 +68,7 @@ for (const pad of ['/', '/en/']) {
     const canvas = page.locator('#hero-canvas');
     await expect(canvas).toBeAttached();
     const hero = await canvas.evaluate(c => {
-      const h = c.parentElement!.getBoundingClientRect();
+      const h = (c.parentElement ?? c).getBoundingClientRect();
       const r = c.getBoundingClientRect();
       return { heroB: h.width, heroH: h.height, b: r.width, h: r.height };
     });
@@ -76,3 +86,28 @@ test('gsm-breedte: geen horizontale scroll op de homepage', async ({ page }) => 
   }));
   expect(breedte.scroll).toBeLessThanOrEqual(breedte.venster);
 });
+
+for (const pad of ['/', '/kamer-14/', '/dua/', '/en/dua/', '/privacy.html']) {
+  test(`${pad}: gsm-menu toont alle links, zonder iets af te knippen`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await open(page, pad);
+    await page.locator('#navToggle').click();
+    const menu = page.locator('#navLinks');
+    await expect(menu).toHaveClass(/open/);
+    // Wachten tot de uitklapanimatie klaar is.
+    await expect
+      .poll(() => menu.evaluate(m => m.scrollHeight - m.clientHeight))
+      .toBeLessThanOrEqual(1);
+    // Taalknoppen op dezelfde lijn als de andere links.
+    const tekstBegin = (selector: string) =>
+      menu
+        .locator(selector)
+        .first()
+        .evaluate(
+          a => a.getBoundingClientRect().left + parseFloat(getComputedStyle(a).paddingLeft),
+        );
+    expect(Math.round(await tekstBegin('.nav-taal a'))).toBe(
+      Math.round(await tekstBegin(':scope > li > a:not(.btn-nav)')),
+    );
+  });
+}

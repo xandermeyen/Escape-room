@@ -13,666 +13,608 @@
 
     <link rel="stylesheet" href="/assets/fonts/fonts.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Bootstrap (CSS + JS voor het navbar-menu) en css/style.css via src/base.ts -->
-    <script type="module" src="/src/base.ts"></script>
-
     <link rel="stylesheet" href="/css/privacy.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-archief sticky-top">
-      <div class="container">
-        <a class="navbar-brand" href="/">
-          <img src="assets/img/bureau_x_logo_dark.svg" alt="Bureau X" height="38" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navMenu"
-          aria-controls="navMenu"
-          aria-expanded="false"
-          aria-label="Navigatiemenu openen of sluiten"
-          data-i18n-aria-label="privacy.navbar.navbar-toggler@aria-label"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navMenu">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/#experiences" data-i18n="privacy.navMenu.nav-link"
-                >Experiences</a
+    <nav class="nav scrolled" id="navbar">
+      <a href="/" class="nav-logo">
+        <img src="/assets/img/bureau_x_logo_dark.svg" alt="Bureau X" />
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/#experiences" data-i18n="privacy.navLinks.a">Experiences</a></li>
+        <li><a href="/#faq" translate="no">FAQ</a></li>
+        <li class="nav-taal" data-taalkeuze></li>
+        <li>
+          <a href="/#experiences" class="btn-nav" data-i18n="privacy.navLinks.btn-nav"
+            >Boek een sessie</a
+          >
+        </li>
+      </ul>
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="navLinks"
+        data-i18n-aria-label="privacy.navbar.nav-toggle@aria-label"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <main class="sectie-donker">
+      <div class="dossier-wrapper">
+        <div class="dossier-header">
+          <div class="dossier-stamp" data-i18n="privacy.sectie-donker.dossier-stamp">
+            Vertrouwelijk - GDPR
+          </div>
+          <div class="dossier-ref" data-i18n="privacy.sectie-donker.dossier-ref">
+            Bureau X - Intern document - REF-PRV-01
+          </div>
+          <h1 class="dossier-title" data-i18n="privacy.sectie-donker.dossier-title">
+            Privacybeleid
+          </h1>
+        </div>
+
+        <div class="dossier-meta-bar">
+          <div class="meta-field">
+            <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label"
+              >Verantwoordelijke</span
+            >
+            <span class="meta-value" data-i18n="privacy.sectie-donker.meta-value"
+              >Xander Meyen - Bureau X</span
+            >
+          </div>
+          <div class="meta-field">
+            <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label-2">Contact</span>
+            <span class="meta-value" translate="no">info@bureau-x.be</span>
+          </div>
+          <div class="meta-field">
+            <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label-3"
+              >Laatst bijgewerkt</span
+            >
+            <span class="meta-value" data-i18n="privacy.sectie-donker.meta-value-2"
+              >18 november 2026</span
+            >
+          </div>
+          <div class="meta-field">
+            <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label-4"
+              >Rechtsgrond</span
+            >
+            <span class="meta-value" data-i18n="privacy.sectie-donker.meta-value-3"
+              >AVG / GDPR - art. 6.1.a, 6.1.b en 6.1.f</span
+            >
+          </div>
+        </div>
+
+        <div class="dossier-body">
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer">
+              Inleiding
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel">
+              Over dit document
+            </div>
+            <p data-i18n="privacy.sectie-donker.p">
+              Bureau X hecht belang aan de bescherming van jouw persoonsgegevens. Dit privacybeleid
+              legt uit welke gegevens wij verwerken wanneer je de site bezoekt, een sessie boekt of
+              een spel speelt, waarom we dat doen, hoe lang we ze bewaren en welke rechten je hebt.
+              Bureau X valt onder de Europese Algemene Verordening Gegevensbescherming (AVG / GDPR).
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-2">
+              Artikel 1
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-2">
+              Verwerkingsverantwoordelijke
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-2">
+              Bureau X is een gratis, niet-commercieel project. De verwerkingsverantwoordelijke voor
+              jouw persoonsgegevens is:
+            </p>
+            <div class="gba-blok mt-2">
+              <p data-i18n="privacy.sectie-donker.p-3">
+                <strong>Xander Meyen - Bureau X</strong><br />
+                België<br />
+                <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-3">
+              Artikel 2
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-3">
+              Welke gegevens verwerken wij?
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-4">
+              Bij het boeken van een sessie vul je zelf deze gegevens in:
+            </p>
+            <table class="dossier-table mt-2">
+              <thead>
+                <tr>
+                  <th data-i18n="privacy.sectie-donker.th">Gegeven</th>
+                  <th data-i18n="privacy.sectie-donker.th-2">Reden</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td">Naam</td>
+                  <td data-i18n="privacy.sectie-donker.td-2">
+                    Persoonlijke bevestiging van de boeking
+                  </td>
+                </tr>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-3">E-mailadres</td>
+                  <td data-i18n="privacy.sectie-donker.td-4">
+                    Versturen van de bevestiging en spellinks
+                  </td>
+                </tr>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-5">Gewenste speeldatum</td>
+                  <td data-i18n="privacy.sectie-donker.td-6">Inplannen van de sessie</td>
+                </tr>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-7">Aantal spelers</td>
+                  <td data-i18n="privacy.sectie-donker.td-8">
+                    Technische voorbereiding van de sessie
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mt-3" data-i18n="privacy.sectie-donker.mt-3">
+              Tijdens het spelen en op de site verwerken we daarnaast:
+            </p>
+            <ul>
+              <li data-i18n="privacy.sectie-donker.li">
+                <strong>Speldata:</strong> de voortgang van je sessie, de tijd per puzzel, het
+                aantal pogingen en de gebruikte hints. Die zijn gekoppeld aan een sessiecode en een
+                willekeurige, anonieme gebruikers-ID, niet aan je naam of e-mailadres.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-2">
+                <strong>Reviews:</strong> je score, je tekst en, als je die zelf invult, een naam of
+                bijnaam.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-3">
+                <strong>Technische gegevens:</strong> bij een fout in de site gegevens zoals je
+                browser, besturingssysteem en de pagina waarop de fout gebeurde.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-4">
+                <strong>Bezoekstatistieken:</strong> enkel als je analytische cookies accepteert,
+                zie artikel 9.
+              </li>
+            </ul>
+            <p data-i18n="privacy.sectie-donker.p-5">
+              Wij verzamelen geen betaalgegevens, geen wachtwoorden en geen locatiegegevens.
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-4">
+              Artikel 3
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-4">
+              Doeleinden van de verwerking
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-6">Wij gebruiken jouw gegevens enkel om:</p>
+            <ul>
+              <li data-i18n="privacy.sectie-donker.li-5">Jouw boeking per e-mail te bevestigen</li>
+              <li data-i18n="privacy.sectie-donker.li-6">
+                De persoonlijke spellinks naar jou en je medespelers te sturen
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-7">
+                Vragen over jouw sessie te beantwoorden
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-8">
+                Het spel te laten werken en je voortgang tussen spelers te synchroniseren
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-9">
+                Te zien welke puzzels te moeilijk of te makkelijk zijn, en het spel te verbeteren
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-10">
+                Reviews te tonen op de site, nadat we ze nagelezen hebben
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-11">
+                Technische fouten op te sporen en op te lossen
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-12">
+                Misbruik van de spel-database te voorkomen
+              </li>
+            </ul>
+            <p data-i18n="privacy.sectie-donker.p-7">
+              Wij gebruiken jouw gegevens <strong>niet</strong> voor marketing, advertenties of
+              profilering, en we verkopen ze niet door.
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-5">
+              Artikel 4
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-5">
+              Rechtsgrond
+            </div>
+            <ul>
+              <li data-i18n="privacy.sectie-donker.li-13">
+                <strong>Boeking en het spel zelf:</strong> uitvoering van een overeenkomst (art.
+                6.1.b AVG). Je vraagt een sessie aan en wij hebben die gegevens nodig om ze te
+                organiseren en te laten werken.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-14">
+                <strong>Speldata voor verbetering, foutmeldingen en misbruikpreventie:</strong>
+                ons gerechtvaardigd belang (art. 6.1.f AVG) om een werkend, veilig en goed spel aan
+                te bieden. De gegevens zijn beperkt en niet gekoppeld aan je naam of e-mailadres.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-15">
+                <strong>Reviews en Google Analytics:</strong> jouw toestemming (art. 6.1.a AVG). Die
+                kan je op elk moment intrekken, zie artikels 8 en 9.
+              </li>
+            </ul>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-6">
+              Artikel 5
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-6">
+              Bewaartermijn
+            </div>
+            <table class="dossier-table mt-2">
+              <thead>
+                <tr>
+                  <th data-i18n="privacy.sectie-donker.th-3">Gegevens</th>
+                  <th data-i18n="privacy.sectie-donker.th-4">Bewaartermijn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-9">Boekingsgegevens</td>
+                  <td data-i18n="privacy.sectie-donker.td-10">
+                    Maximaal 3 maanden na de geboekte speeldatum
+                  </td>
+                </tr>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-11">Speldata en sessievoortgang</td>
+                  <td data-i18n="privacy.sectie-donker.td-12">Maximaal 12 maanden na de sessie</td>
+                </tr>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-13">Reviews</td>
+                  <td data-i18n="privacy.sectie-donker.td-14">
+                    Zolang ze op de site staan, of tot je vraagt om ze te verwijderen
+                  </td>
+                </tr>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-15">Technische foutmeldingen (Sentry)</td>
+                  <td data-i18n="privacy.sectie-donker.td-16">Maximaal 90 dagen</td>
+                </tr>
+                <tr>
+                  <td data-i18n="privacy.sectie-donker.td-17">Google Analytics</td>
+                  <td data-i18n="privacy.sectie-donker.td-18">
+                    Cookies maximaal 2 jaar, statistieken maximaal 14 maanden
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mt-3" data-i18n="privacy.sectie-donker.mt-3-2">
+              Daarna worden de gegevens verwijderd. Je kan ook altijd zelf vragen om jouw gegevens
+              eerder te laten verwijderen, zie artikel 8.
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-7">
+              Artikel 6
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-7">
+              Verwerkers
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-8">
+              Wij delen jouw gegevens niet met andere partijen. Voor de technische werking doen we
+              wel een beroep op deze externe diensten, die de gegevens enkel in onze opdracht
+              verwerken:
+            </p>
+            <ul>
+              <li data-i18n="privacy.sectie-donker.li-16">
+                <strong>Make</strong> (Make s.r.o., Celonis-groep, Tsjechië): verwerkt de gegevens
+                van het boekingsformulier en maakt de spelsessie aan, in de EU-zone van Make.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-17">
+                <strong>Combell</strong> (Combell nv, België): verstuurt de bevestigingsmails met de
+                spellinks vanaf info@bureau-x.be.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-18">
+                <strong>Google Firebase</strong> (Google): bewaart de speldata, de sessievoortgang
+                en reviews. De database staat in de regio europe-west1 (België). Voor het spel krijg
+                je een anonieme gebruikers-ID via Firebase Authentication.
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-19">
+                <strong>Sentry</strong> (Functional Software Inc.): technische foutmeldingen,
+                opgeslagen op servers in de EU (Duitsland).
+              </li>
+              <li data-i18n="privacy.sectie-donker.li-20">
+                <strong>Google Analytics 4</strong> (Google Ireland Ltd.): enkel met jouw
+                toestemming, zie artikel 9.
+              </li>
+            </ul>
+            <p class="recaptcha-melding" hidden data-i18n="privacy.sectie-donker.recaptcha-melding">
+              Om misbruik van de spel-database te voorkomen, controleert
+              <strong>Google reCAPTCHA</strong> (via Firebase App Check) of een verzoek van een
+              echte bezoeker van deze site komt. Google verwerkt daarvoor technische gegevens over
+              je browser en toestel; het
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-accent"
+                >privacybeleid</a
+              >
+              en de
+              <a
+                href="https://policies.google.com/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-accent"
+                >servicevoorwaarden</a
+              >
+              van Google zijn van toepassing.
+            </p>
+            <p data-i18n="privacy.sectie-donker.p-9">
+              De lettertypes van deze site worden lokaal geladen, niet via Google Fonts. Daardoor
+              gaat je IP-adres bij het laden van een pagina niet naar Google.
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-8">
+              Artikel 7
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-8">
+              Doorgifte buiten de Europese Unie
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-10">
+              Sentry en Google zijn (deels) Amerikaanse bedrijven. Daardoor kunnen gegevens in de
+              Verenigde Staten terechtkomen. Dat gebeurt enkel met passende waarborgen: op basis van
+              het EU-VS Data Privacy Framework of de standaardcontractbepalingen van de Europese
+              Commissie.
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-9">
+              Artikel 8
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-9">
+              Jouw rechten als betrokkene
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-11">
+              Onder de AVG beschik je over de volgende rechten. Je kan ze uitoefenen via
+              <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a>. Wij
+              reageren binnen 30 dagen.
+            </p>
+            <div class="mt-3">
+              <div class="recht-item">
+                <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam">
+                  <i class="bi bi-eye me-2" style="opacity: 0.5"></i>Recht op inzage
+                </div>
+                <p class="recht-omschrijving" data-i18n="privacy.sectie-donker.recht-omschrijving">
+                  Je kan opvragen welke persoonsgegevens wij over jou bewaren.
+                </p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-2">
+                  <i class="bi bi-pencil me-2" style="opacity: 0.5"></i>Recht op correctie
+                </div>
+                <p
+                  class="recht-omschrijving"
+                  data-i18n="privacy.sectie-donker.recht-omschrijving-2"
+                >
+                  Je kan onjuiste of onvolledige gegevens laten aanpassen.
+                </p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-3">
+                  <i class="bi bi-trash me-2" style="opacity: 0.5"></i>Recht op verwijdering
+                </div>
+                <p
+                  class="recht-omschrijving"
+                  data-i18n="privacy.sectie-donker.recht-omschrijving-3"
+                >
+                  Je kan vragen om jouw gegevens volledig te laten wissen.
+                </p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-4">
+                  <i class="bi bi-pause-circle me-2" style="opacity: 0.5"></i>Recht op beperking
+                </div>
+                <p
+                  class="recht-omschrijving"
+                  data-i18n="privacy.sectie-donker.recht-omschrijving-4"
+                >
+                  Je kan vragen om de verwerking van jouw gegevens tijdelijk stop te zetten,
+                  bijvoorbeeld terwijl we een vraag tot correctie nakijken.
+                </p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-5">
+                  <i class="bi bi-slash-circle me-2" style="opacity: 0.5"></i>Recht op bezwaar
+                </div>
+                <p
+                  class="recht-omschrijving"
+                  data-i18n="privacy.sectie-donker.recht-omschrijving-5"
+                >
+                  Je kan bezwaar maken tegen een verwerking die op ons gerechtvaardigd belang
+                  steunt.
+                </p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-6">
+                  <i class="bi bi-box-arrow-right me-2" style="opacity: 0.5"></i>Recht op
+                  overdraagbaarheid
+                </div>
+                <p
+                  class="recht-omschrijving"
+                  data-i18n="privacy.sectie-donker.recht-omschrijving-6"
+                >
+                  Je kan jouw gegevens opvragen in een leesbaar, overdraagbaar formaat.
+                </p>
+              </div>
+              <div class="recht-item">
+                <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-7">
+                  <i class="bi bi-arrow-counterclockwise me-2" style="opacity: 0.5"></i>Recht om
+                  toestemming in te trekken
+                </div>
+                <p
+                  class="recht-omschrijving"
+                  data-i18n="privacy.sectie-donker.recht-omschrijving-7"
+                >
+                  Gaf je toestemming, dan kan je die altijd intrekken. Dat verandert niets aan
+                  verwerkingen die al gebeurd zijn.
+                </p>
+              </div>
+            </div>
+            <p class="mt-3" data-i18n="privacy.sectie-donker.mt-3-3">
+              Wij nemen geen beslissingen over jou op basis van enkel geautomatiseerde verwerking.
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-10">
+              Artikel 9
+            </div>
+            <div
+              class="artikel-titel"
+              id="cookies"
+              data-i18n="privacy.sectie-donker.artikel-titel-10"
+            >
+              Cookies en analytics
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-12">
+              <strong>Noodzakelijk.</strong> Voor de werking van de site en het spel bewaren we
+              enkele gegevens in je browser, zoals je sessiecode, de rol die je koos, je anonieme
+              login voor het spel, je cookiekeuze en je taalkeuze. Die zijn nodig om de site te
+              laten werken en vragen geen toestemming.
+            </p>
+            <p data-i18n="privacy.sectie-donker.p-13">
+              <strong>Analytisch (alleen met toestemming).</strong> Als je op "Accepteren" klikt,
+              gebruiken we Google Analytics 4 om te zien welke pagina's bezocht worden, hoe
+              bezoekers bij ons terechtkomen en of de site goed werkt. Google Analytics plaatst
+              daarvoor de cookies <code>_ga</code> en <code>_ga_*</code>, die maximaal 2 jaar
+              bewaard worden. We gebruiken Google Analytics niet voor advertenties, Google-signalen
+              staan uit en we koppelen de gegevens niet aan je naam of e-mailadres. Klik je op
+              "Weigeren", dan laden we Google Analytics helemaal niet.
+            </p>
+            <p data-i18n="privacy.sectie-donker.p-14">
+              We onthouden je keuze 6 maanden. Daarna vragen we het opnieuw. Je kan je keuze altijd
+              wijzigen of je toestemming intrekken via
+              <a href="#" data-cookie-instellingen class="link-accent">Cookie-instellingen</a>
+              (ook onderaan elke pagina).
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-11">
+              Artikel 10
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-11">
+              Minderjarigen
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-15">
+              Ben je jonger dan 13 jaar, vraag dan een ouder of voogd om de sessie voor jou te
+              boeken en om toestemming te geven voor cookies of een review. Merken we dat we zonder
+              die toestemming gegevens van een kind onder 13 jaar hebben, dan verwijderen we die.
+            </p>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-12">
+              Artikel 11
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-12">
+              Klachten
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-16">
+              Heb je een klacht over hoe wij omgaan met jouw gegevens? Neem gerust eerst contact met
+              ons op. Je kan ook altijd terecht bij de Belgische toezichthoudende autoriteit:
+            </p>
+            <div class="gba-blok mt-2">
+              <p data-i18n="privacy.sectie-donker.p-17">
+                <strong>Gegevensbeschermingsautoriteit (GBA)</strong><br />
+                Drukpersstraat 35, 1000 Brussel<br />
+                <a
+                  href="https://www.gegevensbeschermingsautoriteit.be"
+                  target="_blank"
+                  rel="noopener"
+                  class="link-accent"
+                  >gegevensbeschermingsautoriteit.be</a
+                >
+              </p>
+            </div>
+          </div>
+
+          <div class="artikel">
+            <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-13">
+              Artikel 12
+            </div>
+            <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-13">
+              Wijzigingen aan dit beleid
+            </div>
+            <p data-i18n="privacy.sectie-donker.p-18">
+              Wij kunnen dit privacybeleid aanpassen. De meest recente versie staat altijd op deze
+              pagina, met de datum van de laatste aanpassing in de metabalk bovenaan.
+            </p>
+          </div>
+
+          <div class="dossier-footer-note" data-i18n="privacy.sectie-donker.dossier-footer-note">
+            Bureau X - REF-PRV-01 - Geldig onder Belgisch en Europees recht
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand" translate="no">Bureau X</div>
+          <p class="footer-tag" data-i18n="privacy.footer.footer-tag">
+            Online escape rooms gebaseerd op echte Belgische verhalen en onopgeloste mysteries.
+          </p>
+        </div>
+        <div>
+          <p class="footer-head" data-i18n="privacy.footer.footer-head">Experiences</p>
+          <ul class="footer-links">
+            <li><a href="/kamer-14/" translate="no">Kamer 14</a></li>
+            <li><a href="/dua/" translate="no">D.U.A.</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-head" data-i18n="privacy.footer.footer-head-2">Info</p>
+          <ul class="footer-links">
+            <li><a href="/#faq" translate="no">FAQ</a></li>
+            <li><a href="mailto:info@bureau-x.be" data-i18n="privacy.footer.a">Contact</a></li>
+            <li><a href="/privacy.html" data-i18n="privacy.footer.a-2">Privacybeleid</a></li>
+            <li>
+              <a href="#" data-cookie-instellingen data-i18n="privacy.footer.a-3"
+                >Cookie-instellingen</a
               >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/#over-bureau-x" data-i18n="privacy.navMenu.nav-link-2"
-                >Over ons</a
-              >
-            </li>
-            <li class="nav-item nav-taal" data-taalkeuze></li>
-            <li class="nav-item">
-              <a class="nav-link btn-reserveer ms-2" href="/" data-i18n="privacy.navMenu.nav-link-3"
-                >Boek een sessie</a
+            <li>
+              <a href="https://www.opzgeel.be" target="_blank" rel="noopener" translate="no"
+                >OPZ Geel</a
               >
             </li>
           </ul>
         </div>
       </div>
-    </nav>
-
-    <section class="sectie-donker py-5 min-vh-100">
-      <div class="container">
-        <div class="dossier-wrapper">
-          <div class="dossier-header">
-            <div class="dossier-stamp" data-i18n="privacy.sectie-donker.dossier-stamp">
-              Vertrouwelijk - GDPR
-            </div>
-            <div class="dossier-ref" data-i18n="privacy.sectie-donker.dossier-ref">
-              Bureau X - Intern document - REF-PRV-01
-            </div>
-            <h1 class="dossier-title" data-i18n="privacy.sectie-donker.dossier-title">
-              Privacybeleid
-            </h1>
-          </div>
-
-          <div class="dossier-meta-bar">
-            <div class="meta-field">
-              <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label"
-                >Verantwoordelijke</span
-              >
-              <span class="meta-value" data-i18n="privacy.sectie-donker.meta-value"
-                >Xander Meyen - Bureau X</span
-              >
-            </div>
-            <div class="meta-field">
-              <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label-2">Contact</span>
-              <span class="meta-value" translate="no">info@bureau-x.be</span>
-            </div>
-            <div class="meta-field">
-              <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label-3"
-                >Laatst bijgewerkt</span
-              >
-              <span class="meta-value" data-i18n="privacy.sectie-donker.meta-value-2"
-                >18 november 2026</span
-              >
-            </div>
-            <div class="meta-field">
-              <span class="meta-label" data-i18n="privacy.sectie-donker.meta-label-4"
-                >Rechtsgrond</span
-              >
-              <span class="meta-value" data-i18n="privacy.sectie-donker.meta-value-3"
-                >AVG / GDPR - art. 6.1.a, 6.1.b en 6.1.f</span
-              >
-            </div>
-          </div>
-
-          <div class="dossier-body">
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer">
-                Inleiding
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel">
-                Over dit document
-              </div>
-              <p data-i18n="privacy.sectie-donker.p">
-                Bureau X hecht belang aan de bescherming van jouw persoonsgegevens. Dit
-                privacybeleid legt uit welke gegevens wij verwerken wanneer je de site bezoekt, een
-                sessie boekt of een spel speelt, waarom we dat doen, hoe lang we ze bewaren en welke
-                rechten je hebt. Bureau X valt onder de Europese Algemene Verordening
-                Gegevensbescherming (AVG / GDPR).
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-2">
-                Artikel 1
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-2">
-                Verwerkingsverantwoordelijke
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-2">
-                Bureau X is een gratis, niet-commercieel project. De verwerkingsverantwoordelijke
-                voor jouw persoonsgegevens is:
-              </p>
-              <div class="gba-blok mt-2">
-                <p data-i18n="privacy.sectie-donker.p-3">
-                  <strong>Xander Meyen - Bureau X</strong><br />
-                  België<br />
-                  <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a>
-                </p>
-              </div>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-3">
-                Artikel 2
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-3">
-                Welke gegevens verwerken wij?
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-4">
-                Bij het boeken van een sessie vul je zelf deze gegevens in:
-              </p>
-              <table class="dossier-table mt-2">
-                <thead>
-                  <tr>
-                    <th data-i18n="privacy.sectie-donker.th">Gegeven</th>
-                    <th data-i18n="privacy.sectie-donker.th-2">Reden</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td">Naam</td>
-                    <td data-i18n="privacy.sectie-donker.td-2">
-                      Persoonlijke bevestiging van de boeking
-                    </td>
-                  </tr>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-3">E-mailadres</td>
-                    <td data-i18n="privacy.sectie-donker.td-4">
-                      Versturen van de bevestiging en spellinks
-                    </td>
-                  </tr>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-5">Gewenste speeldatum</td>
-                    <td data-i18n="privacy.sectie-donker.td-6">Inplannen van de sessie</td>
-                  </tr>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-7">Aantal spelers</td>
-                    <td data-i18n="privacy.sectie-donker.td-8">
-                      Technische voorbereiding van de sessie
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <p class="mt-3" data-i18n="privacy.sectie-donker.mt-3">
-                Tijdens het spelen en op de site verwerken we daarnaast:
-              </p>
-              <ul>
-                <li data-i18n="privacy.sectie-donker.li">
-                  <strong>Speldata:</strong> de voortgang van je sessie, de tijd per puzzel, het
-                  aantal pogingen en de gebruikte hints. Die zijn gekoppeld aan een sessiecode en
-                  een willekeurige, anonieme gebruikers-ID, niet aan je naam of e-mailadres.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-2">
-                  <strong>Reviews:</strong> je score, je tekst en, als je die zelf invult, een naam
-                  of bijnaam.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-3">
-                  <strong>Technische gegevens:</strong> bij een fout in de site gegevens zoals je
-                  browser, besturingssysteem en de pagina waarop de fout gebeurde.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-4">
-                  <strong>Bezoekstatistieken:</strong> enkel als je analytische cookies accepteert,
-                  zie artikel 9.
-                </li>
-              </ul>
-              <p data-i18n="privacy.sectie-donker.p-5">
-                Wij verzamelen geen betaalgegevens, geen wachtwoorden en geen locatiegegevens.
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-4">
-                Artikel 3
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-4">
-                Doeleinden van de verwerking
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-6">Wij gebruiken jouw gegevens enkel om:</p>
-              <ul>
-                <li data-i18n="privacy.sectie-donker.li-5">
-                  Jouw boeking per e-mail te bevestigen
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-6">
-                  De persoonlijke spellinks naar jou en je medespelers te sturen
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-7">
-                  Vragen over jouw sessie te beantwoorden
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-8">
-                  Het spel te laten werken en je voortgang tussen spelers te synchroniseren
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-9">
-                  Te zien welke puzzels te moeilijk of te makkelijk zijn, en het spel te verbeteren
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-10">
-                  Reviews te tonen op de site, nadat we ze nagelezen hebben
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-11">
-                  Technische fouten op te sporen en op te lossen
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-12">
-                  Misbruik van de spel-database te voorkomen
-                </li>
-              </ul>
-              <p data-i18n="privacy.sectie-donker.p-7">
-                Wij gebruiken jouw gegevens <strong>niet</strong> voor marketing, advertenties of
-                profilering, en we verkopen ze niet door.
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-5">
-                Artikel 4
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-5">
-                Rechtsgrond
-              </div>
-              <ul>
-                <li data-i18n="privacy.sectie-donker.li-13">
-                  <strong>Boeking en het spel zelf:</strong> uitvoering van een overeenkomst (art.
-                  6.1.b AVG). Je vraagt een sessie aan en wij hebben die gegevens nodig om ze te
-                  organiseren en te laten werken.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-14">
-                  <strong>Speldata voor verbetering, foutmeldingen en misbruikpreventie:</strong>
-                  ons gerechtvaardigd belang (art. 6.1.f AVG) om een werkend, veilig en goed spel
-                  aan te bieden. De gegevens zijn beperkt en niet gekoppeld aan je naam of
-                  e-mailadres.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-15">
-                  <strong>Reviews en Google Analytics:</strong> jouw toestemming (art. 6.1.a AVG).
-                  Die kan je op elk moment intrekken, zie artikels 8 en 9.
-                </li>
-              </ul>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-6">
-                Artikel 5
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-6">
-                Bewaartermijn
-              </div>
-              <table class="dossier-table mt-2">
-                <thead>
-                  <tr>
-                    <th data-i18n="privacy.sectie-donker.th-3">Gegevens</th>
-                    <th data-i18n="privacy.sectie-donker.th-4">Bewaartermijn</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-9">Boekingsgegevens</td>
-                    <td data-i18n="privacy.sectie-donker.td-10">
-                      Maximaal 3 maanden na de geboekte speeldatum
-                    </td>
-                  </tr>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-11">Speldata en sessievoortgang</td>
-                    <td data-i18n="privacy.sectie-donker.td-12">
-                      Maximaal 12 maanden na de sessie
-                    </td>
-                  </tr>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-13">Reviews</td>
-                    <td data-i18n="privacy.sectie-donker.td-14">
-                      Zolang ze op de site staan, of tot je vraagt om ze te verwijderen
-                    </td>
-                  </tr>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-15">
-                      Technische foutmeldingen (Sentry)
-                    </td>
-                    <td data-i18n="privacy.sectie-donker.td-16">Maximaal 90 dagen</td>
-                  </tr>
-                  <tr>
-                    <td data-i18n="privacy.sectie-donker.td-17">Google Analytics</td>
-                    <td data-i18n="privacy.sectie-donker.td-18">
-                      Cookies maximaal 2 jaar, statistieken maximaal 14 maanden
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <p class="mt-3" data-i18n="privacy.sectie-donker.mt-3-2">
-                Daarna worden de gegevens verwijderd. Je kan ook altijd zelf vragen om jouw gegevens
-                eerder te laten verwijderen, zie artikel 8.
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-7">
-                Artikel 6
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-7">
-                Verwerkers
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-8">
-                Wij delen jouw gegevens niet met andere partijen. Voor de technische werking doen we
-                wel een beroep op deze externe diensten, die de gegevens enkel in onze opdracht
-                verwerken:
-              </p>
-              <ul>
-                <li data-i18n="privacy.sectie-donker.li-16">
-                  <strong>Make</strong> (Make s.r.o., Celonis-groep, Tsjechië): verwerkt de gegevens
-                  van het boekingsformulier en maakt de spelsessie aan, in de EU-zone van Make.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-17">
-                  <strong>Combell</strong> (Combell nv, België): verstuurt de bevestigingsmails met
-                  de spellinks vanaf info@bureau-x.be.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-18">
-                  <strong>Google Firebase</strong> (Google): bewaart de speldata, de sessievoortgang
-                  en reviews. De database staat in de regio europe-west1 (België). Voor het spel
-                  krijg je een anonieme gebruikers-ID via Firebase Authentication.
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-19">
-                  <strong>Sentry</strong> (Functional Software Inc.): technische foutmeldingen,
-                  opgeslagen op servers in de EU (Duitsland).
-                </li>
-                <li data-i18n="privacy.sectie-donker.li-20">
-                  <strong>Google Analytics 4</strong> (Google Ireland Ltd.): enkel met jouw
-                  toestemming, zie artikel 9.
-                </li>
-              </ul>
-              <p
-                class="recaptcha-melding"
-                hidden
-                data-i18n="privacy.sectie-donker.recaptcha-melding"
-              >
-                Om misbruik van de spel-database te voorkomen, controleert
-                <strong>Google reCAPTCHA</strong> (via Firebase App Check) of een verzoek van een
-                echte bezoeker van deze site komt. Google verwerkt daarvoor technische gegevens over
-                je browser en toestel; het
-                <a
-                  href="https://policies.google.com/privacy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="link-accent"
-                  >privacybeleid</a
-                >
-                en de
-                <a
-                  href="https://policies.google.com/terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="link-accent"
-                  >servicevoorwaarden</a
-                >
-                van Google zijn van toepassing.
-              </p>
-              <p data-i18n="privacy.sectie-donker.p-9">
-                De lettertypes van deze site worden lokaal geladen, niet via Google Fonts. Daardoor
-                gaat je IP-adres bij het laden van een pagina niet naar Google.
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-8">
-                Artikel 7
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-8">
-                Doorgifte buiten de Europese Unie
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-10">
-                Sentry en Google zijn (deels) Amerikaanse bedrijven. Daardoor kunnen gegevens in de
-                Verenigde Staten terechtkomen. Dat gebeurt enkel met passende waarborgen: op basis
-                van het EU-VS Data Privacy Framework of de standaardcontractbepalingen van de
-                Europese Commissie.
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-9">
-                Artikel 8
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-9">
-                Jouw rechten als betrokkene
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-11">
-                Onder de AVG beschik je over de volgende rechten. Je kan ze uitoefenen via
-                <a href="mailto:info@bureau-x.be" class="link-accent">info@bureau-x.be</a>. Wij
-                reageren binnen 30 dagen.
-              </p>
-              <div class="mt-3">
-                <div class="recht-item">
-                  <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam">
-                    <i class="bi bi-eye me-2" style="opacity: 0.5"></i>Recht op inzage
-                  </div>
-                  <p
-                    class="recht-omschrijving"
-                    data-i18n="privacy.sectie-donker.recht-omschrijving"
-                  >
-                    Je kan opvragen welke persoonsgegevens wij over jou bewaren.
-                  </p>
-                </div>
-                <div class="recht-item">
-                  <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-2">
-                    <i class="bi bi-pencil me-2" style="opacity: 0.5"></i>Recht op correctie
-                  </div>
-                  <p
-                    class="recht-omschrijving"
-                    data-i18n="privacy.sectie-donker.recht-omschrijving-2"
-                  >
-                    Je kan onjuiste of onvolledige gegevens laten aanpassen.
-                  </p>
-                </div>
-                <div class="recht-item">
-                  <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-3">
-                    <i class="bi bi-trash me-2" style="opacity: 0.5"></i>Recht op verwijdering
-                  </div>
-                  <p
-                    class="recht-omschrijving"
-                    data-i18n="privacy.sectie-donker.recht-omschrijving-3"
-                  >
-                    Je kan vragen om jouw gegevens volledig te laten wissen.
-                  </p>
-                </div>
-                <div class="recht-item">
-                  <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-4">
-                    <i class="bi bi-pause-circle me-2" style="opacity: 0.5"></i>Recht op beperking
-                  </div>
-                  <p
-                    class="recht-omschrijving"
-                    data-i18n="privacy.sectie-donker.recht-omschrijving-4"
-                  >
-                    Je kan vragen om de verwerking van jouw gegevens tijdelijk stop te zetten,
-                    bijvoorbeeld terwijl we een vraag tot correctie nakijken.
-                  </p>
-                </div>
-                <div class="recht-item">
-                  <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-5">
-                    <i class="bi bi-slash-circle me-2" style="opacity: 0.5"></i>Recht op bezwaar
-                  </div>
-                  <p
-                    class="recht-omschrijving"
-                    data-i18n="privacy.sectie-donker.recht-omschrijving-5"
-                  >
-                    Je kan bezwaar maken tegen een verwerking die op ons gerechtvaardigd belang
-                    steunt.
-                  </p>
-                </div>
-                <div class="recht-item">
-                  <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-6">
-                    <i class="bi bi-box-arrow-right me-2" style="opacity: 0.5"></i>Recht op
-                    overdraagbaarheid
-                  </div>
-                  <p
-                    class="recht-omschrijving"
-                    data-i18n="privacy.sectie-donker.recht-omschrijving-6"
-                  >
-                    Je kan jouw gegevens opvragen in een leesbaar, overdraagbaar formaat.
-                  </p>
-                </div>
-                <div class="recht-item">
-                  <div class="recht-naam" data-i18n="privacy.sectie-donker.recht-naam-7">
-                    <i class="bi bi-arrow-counterclockwise me-2" style="opacity: 0.5"></i>Recht om
-                    toestemming in te trekken
-                  </div>
-                  <p
-                    class="recht-omschrijving"
-                    data-i18n="privacy.sectie-donker.recht-omschrijving-7"
-                  >
-                    Gaf je toestemming, dan kan je die altijd intrekken. Dat verandert niets aan
-                    verwerkingen die al gebeurd zijn.
-                  </p>
-                </div>
-              </div>
-              <p class="mt-3" data-i18n="privacy.sectie-donker.mt-3-3">
-                Wij nemen geen beslissingen over jou op basis van enkel geautomatiseerde verwerking.
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-10">
-                Artikel 9
-              </div>
-              <div
-                class="artikel-titel"
-                id="cookies"
-                data-i18n="privacy.sectie-donker.artikel-titel-10"
-              >
-                Cookies en analytics
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-12">
-                <strong>Noodzakelijk.</strong> Voor de werking van de site en het spel bewaren we
-                enkele gegevens in je browser, zoals je sessiecode, de rol die je koos, je anonieme
-                login voor het spel, je cookiekeuze en je taalkeuze. Die zijn nodig om de site te
-                laten werken en vragen geen toestemming.
-              </p>
-              <p data-i18n="privacy.sectie-donker.p-13">
-                <strong>Analytisch (alleen met toestemming).</strong> Als je op "Accepteren" klikt,
-                gebruiken we Google Analytics 4 om te zien welke pagina's bezocht worden, hoe
-                bezoekers bij ons terechtkomen en of de site goed werkt. Google Analytics plaatst
-                daarvoor de cookies <code>_ga</code> en <code>_ga_*</code>, die maximaal 2 jaar
-                bewaard worden. We gebruiken Google Analytics niet voor advertenties,
-                Google-signalen staan uit en we koppelen de gegevens niet aan je naam of
-                e-mailadres. Klik je op "Weigeren", dan laden we Google Analytics helemaal niet.
-              </p>
-              <p data-i18n="privacy.sectie-donker.p-14">
-                We onthouden je keuze 6 maanden. Daarna vragen we het opnieuw. Je kan je keuze
-                altijd wijzigen of je toestemming intrekken via
-                <a href="#" data-cookie-instellingen class="link-accent">Cookie-instellingen</a>
-                (ook onderaan elke pagina).
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-11">
-                Artikel 10
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-11">
-                Minderjarigen
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-15">
-                Ben je jonger dan 13 jaar, vraag dan een ouder of voogd om de sessie voor jou te
-                boeken en om toestemming te geven voor cookies of een review. Merken we dat we
-                zonder die toestemming gegevens van een kind onder 13 jaar hebben, dan verwijderen
-                we die.
-              </p>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-12">
-                Artikel 11
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-12">
-                Klachten
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-16">
-                Heb je een klacht over hoe wij omgaan met jouw gegevens? Neem gerust eerst contact
-                met ons op. Je kan ook altijd terecht bij de Belgische toezichthoudende autoriteit:
-              </p>
-              <div class="gba-blok mt-2">
-                <p data-i18n="privacy.sectie-donker.p-17">
-                  <strong>Gegevensbeschermingsautoriteit (GBA)</strong><br />
-                  Drukpersstraat 35, 1000 Brussel<br />
-                  <a
-                    href="https://www.gegevensbeschermingsautoriteit.be"
-                    target="_blank"
-                    rel="noopener"
-                    class="link-accent"
-                    >gegevensbeschermingsautoriteit.be</a
-                  >
-                </p>
-              </div>
-            </div>
-
-            <div class="artikel">
-              <div class="artikel-nummer" data-i18n="privacy.sectie-donker.artikel-nummer-13">
-                Artikel 12
-              </div>
-              <div class="artikel-titel" data-i18n="privacy.sectie-donker.artikel-titel-13">
-                Wijzigingen aan dit beleid
-              </div>
-              <p data-i18n="privacy.sectie-donker.p-18">
-                Wij kunnen dit privacybeleid aanpassen. De meest recente versie staat altijd op deze
-                pagina, met de datum van de laatste aanpassing in de metabalk bovenaan.
-              </p>
-            </div>
-
-            <div class="dossier-footer-note" data-i18n="privacy.sectie-donker.dossier-footer-note">
-              Bureau X - REF-PRV-01 - Geldig onder Belgisch en Europees recht
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="py-4 footer-archief">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
-            <img
-              src="assets/img/bureau_x_logo_dark.svg"
-              alt="Bureau X"
-              height="32"
-              loading="lazy"
-            />
-          </div>
-          <div class="col-md-4 text-center mb-3 mb-md-0">
-            <p class="mb-1 small tekst-grijs" data-i18n="privacy.py-4.mb-1">
-              Kamer 14 is gebaseerd op de echte traditie van gezinsverpleging in Geel.
-            </p>
-            <p class="mb-0 small tekst-grijs">
-              <a
-                href="https://www.opzgeel.be"
-                target="_blank"
-                rel="noopener"
-                class="footer-link"
-                translate="no"
-                >OPZ Geel</a
-              >
-              &middot;
-              <a
-                href="https://www.sint-dymphna.be"
-                target="_blank"
-                rel="noopener"
-                class="footer-link"
-                data-i18n="privacy.py-4.footer-link"
-                >Sint-Dymphna</a
-              >
-            </p>
-          </div>
-          <div class="col-md-4 text-center text-md-end">
-            <p class="mb-1 small">
-              <a href="mailto:info@bureau-x.be" class="footer-link" translate="no"
-                >info@bureau-x.be</a
-              >
-            </p>
-            <p class="mb-0 small">
-              <a
-                href="/privacy.html"
-                class="footer-link"
-                style="opacity: 0.9"
-                data-i18n="privacy.py-4.footer-link-2"
-                >Privacybeleid</a
-              >
-              &middot;
-              <a
-                href="#"
-                data-cookie-instellingen
-                class="footer-link"
-                style="opacity: 0.9"
-                data-i18n="privacy.py-4.footer-link-3"
-                >Cookie-instellingen</a
-              >
-            </p>
-          </div>
-        </div>
+      <div class="footer-copy">
+        <span data-i18n="privacy.footer.span">&copy; 2026 Bureau X</span>
+        <a href="mailto:info@bureau-x.be" translate="no">info@bureau-x.be</a>
       </div>
     </footer>
 
+    <script type="module" src="/js/privacy.ts"></script>
     <script type="module" src="/shared/js/cookie-banner.ts"></script>
   </body>
 </html>

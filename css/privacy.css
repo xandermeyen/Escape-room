@@ -1,7 +1,74 @@
 /*
- * Privacybeleid
+ * Privacybeleid. Menu, footer en kleuren komen uit landing.css, net als op de
+ * andere sitepagina's. Het document zelf houdt zijn eigen dossierstijl.
  */
+@import './landing.css';
 
+/* ── Pagina ── */
+.sectie-donker {
+  background-color: #2e2b26;
+  color: #f5f0e8;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    'Noto Sans',
+    'Liberation Sans',
+    Arial,
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+  line-height: 1.5;
+  min-height: 100vh;
+  /* 64px: de vaste navigatiebalk */
+  padding: calc(64px + 3rem) 0.75rem 3rem;
+}
+
+/*
+ * Basisafstanden voor lopende tekst. landing.css zet alle marges op 0; dit zijn
+ * de waarden waarop de dossierstijl gebouwd is. :where() houdt de specificiteit
+ * laag, zodat de regels hieronder altijd winnen.
+ */
+:where(.sectie-donker) p,
+:where(.sectie-donker) ul {
+  margin-bottom: 1rem;
+}
+
+:where(.sectie-donker) ul {
+  padding-left: 2rem;
+}
+
+:where(.sectie-donker) h1 {
+  font-weight: 500;
+}
+
+:where(.sectie-donker) strong {
+  font-weight: bolder;
+}
+
+:where(.sectie-donker) th {
+  text-align: left;
+}
+
+:where(.sectie-donker) code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.875em;
+  color: #f3c6d8;
+}
+
+.sectie-donker .mt-2 {
+  margin-top: 0.5rem;
+}
+
+.sectie-donker .mt-3 {
+  margin-top: 1rem;
+}
+
+/* ── Dossier ── */
 .dossier-wrapper {
   max-width: 780px;
   margin: 0 auto;
@@ -209,16 +276,52 @@
   text-align: center;
 }
 
-body code {
-  color: #f3c6d8; /* Bootstrap-roze is onleesbaar op donker */
-}
-body .footer-link {
-  color: #d9b56a;
-}
-body .link-accent {
-  color: #ffe0a0; /* leesbaar op de donkere achtergrond, wint van style.css */
+.link-accent {
+  color: #ffe0a0;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* ── Iconen bij de rechten (Bootstrap Icons, MIT, als losse SVG) ── */
+.bi {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  background-color: currentColor;
+  mask: center / contain no-repeat;
+}
+
+.me-2 {
+  margin-right: 0.5rem;
+}
+
+.bi-eye {
+  mask-image: url('../assets/img/iconen/eye.svg');
+}
+
+.bi-pencil {
+  mask-image: url('../assets/img/iconen/pencil.svg');
+}
+
+.bi-trash {
+  mask-image: url('../assets/img/iconen/trash.svg');
+}
+
+.bi-pause-circle {
+  mask-image: url('../assets/img/iconen/pause-circle.svg');
+}
+
+.bi-slash-circle {
+  mask-image: url('../assets/img/iconen/slash-circle.svg');
+}
+
+.bi-box-arrow-right {
+  mask-image: url('../assets/img/iconen/box-arrow-right.svg');
+}
+
+.bi-arrow-counterclockwise {
+  mask-image: url('../assets/img/iconen/arrow-counterclockwise.svg');
 }
 
 @media (max-width: 576px) {
@@ -234,27 +337,4 @@ body .link-accent {
   .dossier-title {
     font-size: 1.5rem;
   }
-}
-
-/* ── Taalknop (zie scripts/vite-i18n.ts) ── */
-.nav-taal {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem;
-}
-
-.navbar .nav-taal a {
-  padding: 0.5rem 0.35rem;
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  text-decoration: none;
-}
-
-.navbar .nav-taal a:hover {
-  color: #fff;
-}
-
-.navbar .nav-taal a[aria-current] {
-  color: #c9a84c;
 }

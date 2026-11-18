@@ -10,7 +10,7 @@ import { test, expect, type BrowserContext, type Page } from '@playwright/test';
  *   pnpm screenshots
  *
  * Geen gewone test: de bestandsnaam eindigt niet op .spec.ts, dus pnpm test:e2e
- * slaat dit over (zie playwright.screenshots.config.ts).
+ * slaat dit over (zie e2e/config/playwright.screenshots.config.ts).
  * Toon bewust geen close-ups of opgeloste puzzels: niets mag de oplossing verklappen.
  */
 

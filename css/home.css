@@ -10,52 +10,7 @@
  */
 @import './landing.css';
 
-:root {
-  --bg: #0c0b09;
-  --bg-2: #131210;
-  --bg-3: #1c1916;
-  --gold: #c8a96e;
-  --gold-dim: #7a6035;
-  --gold-bright: #d9bc84;
-  --red: #8b1a1a;
-  --text: #e8dcc8;
-  --text-dim: #9a8a76;
-  --text-faint: #9a8b7c; /* contrast ≥ 4.5:1 op de donkere achtergronden */
-  --border: #252015;
-  --border-gold: #2e2718;
-  --ff: 'Special Elite', serif;
-}
-
-body {
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.65;
-  overflow-x: hidden;
-}
-
 /* NAV */
-
-.btn-nav {
-  padding: 0.45rem 1.2rem;
-  border: 1px solid var(--gold-dim);
-  background: transparent;
-  color: var(--gold);
-  font-family: var(--ff);
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.btn-nav:hover {
-  background: var(--gold);
-  color: var(--bg);
-}
 
 /* HERO */
 
@@ -197,15 +152,9 @@ body {
 
 /* BUTTONS */
 
-.btn-outline {
-  background: transparent;
-  border: 1px solid rgba(232, 220, 200, 0.25);
-  color: var(--text);
-}
-
-.btn-outline:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+/* Afwijking op de gedeelde footer uit landing.css */
+.footer {
+  padding: 3.5rem 1.5rem 2rem;
 }
 
 .btn-sm {
@@ -255,10 +204,6 @@ body {
 }
 
 /* SECTIONS */
-
-.section {
-  padding: 6rem 1.5rem;
-}
 
 .container--narrow {
   max-width: 740px;
@@ -643,28 +588,8 @@ body {
   border-top: 1px solid var(--border-gold);
 }
 
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 3rem;
-  margin-top: 3.5rem;
-}
-
 .step {
   text-align: center;
-}
-
-.step-num {
-  width: 50px;
-  height: 50px;
-  margin: 0 auto 1.25rem;
-  border: 1px solid var(--gold-dim);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--ff);
-  font-size: 1.2rem;
-  color: var(--gold);
 }
 
 .step-title {
@@ -680,60 +605,6 @@ body {
 }
 
 /* FAQ */
-
-.faq-list {
-  margin-top: 3rem;
-  border-top: 1px solid var(--border);
-}
-
-.faq-item {
-  border-bottom: 1px solid var(--border);
-}
-
-.faq-q {
-  width: 100%;
-  text-align: left;
-  padding: 1.2rem 0;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-family: var(--ff);
-  font-size: 0.97rem;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
-
-.faq-arrow {
-  color: var(--gold-dim);
-  font-size: 0.8rem;
-  transition: transform 0.3s;
-  flex-shrink: 0;
-}
-
-.faq-item.open .faq-arrow {
-  transform: rotate(180deg);
-}
-
-.faq-a {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s ease;
-}
-
-.faq-item.open .faq-a {
-  max-height: 400px;
-}
-
-.faq-a p {
-  color: var(--text-dim);
-  font-size: 0.92rem;
-  padding-bottom: 1.25rem;
-  line-height: 1.75;
-}
 
 /* CTA */
 
@@ -767,26 +638,6 @@ body {
 }
 
 /* FOOTER */
-
-.footer {
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  padding: 3.5rem 1.5rem 2rem;
-}
-
-.footer-copy {
-  max-width: 1100px;
-  margin: 2.5rem auto 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.75rem;
-  color: var(--text-faint);
-}
 
 /* EASTER EGG */
 
@@ -860,50 +711,11 @@ body {
 }
 
 @media (max-width: 700px) {
-  .nav-toggle {
-    display: flex;
-  }
-  .nav-links {
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    background: rgba(12, 11, 9, 0.98);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-gold);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease;
-  }
-  .nav-links.open {
-    max-height: 320px;
-  }
-  .nav-links li {
-    width: 100%;
-  }
-  .nav-links a {
-    display: block;
-    padding: 1.1rem 2rem;
-  }
-  .nav-links .btn-nav {
-    display: block;
-    width: calc(100% - 4rem);
-    margin: 0.5rem 2rem 1.1rem;
-    text-align: center;
-    border-color: var(--gold-dim);
-  }
   .exp-card {
     grid-template-columns: 1fr;
   }
   .exp-num-col {
     display: none;
-  }
-  .footer-inner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
   }
 }
 
