@@ -70,7 +70,9 @@ export function sessieDuurHtml(data: Record<string, unknown>): string {
   const rapport = data.rapport as { tijdstip?: unknown } | undefined;
   const geopend = data.geopendOp;
   const metLobby =
-    typeof geopend === 'number' && typeof rapport?.tijdstip === 'number' && rapport.tijdstip > geopend
+    typeof geopend === 'number' &&
+    typeof rapport?.tijdstip === 'number' &&
+    rapport.tijdstip > geopend
       ? ` · lobby tot einde: <strong>${formateerDuur(rapport.tijdstip - geopend)}</strong>`
       : '';
   return `<p class="stats-duur">Speeltijd: <strong>${formateerDuur(speeltijd)}</strong>${metLobby}</p>`;
@@ -111,7 +113,12 @@ export function speeltijdOverzichtHtml(sessies: Record<string, unknown>[]): stri
     .sort(([a], [b]) => a - b)
     .map(([n, duren]) => speeltijdRegel(`Met ${n} ${n === 1 ? 'speler' : 'spelers'}`, duren))
     .join('');
-  return speeltijdRegel('Gem. speeltijd', metDuur.map(x => x.duur)) + groepen;
+  return (
+    speeltijdRegel(
+      'Gem. speeltijd',
+      metDuur.map(x => x.duur),
+    ) + groepen
+  );
 }
 
 /**

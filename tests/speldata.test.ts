@@ -302,7 +302,9 @@ describe('speeltijd in het host-paneel', () => {
       klaar(16 * 60_000, 4),
       { timerGestart: 0 }, // niet afgerond: telt niet mee
     ]);
-    expect(html).toMatch(/Gem\. speeltijd: <strong>22:00<\/strong>[\s\S]*snelste 16:00[\s\S]*traagste 30:00[\s\S]*\(3 afgerond\)/);
+    expect(html).toMatch(
+      /Gem\. speeltijd: <strong>22:00<\/strong>[\s\S]*snelste 16:00[\s\S]*traagste 30:00[\s\S]*\(3 afgerond\)/,
+    );
     expect(html).toMatch(/Met 2 spelers: <strong>25:00<\/strong>[\s\S]*\(2 afgerond\)/);
     expect(html).toMatch(/Met 4 spelers: <strong>16:00<\/strong>[\s\S]*\(1 afgerond\)/);
     expect(html.indexOf('Met 2')).toBeLessThan(html.indexOf('Met 4'));
