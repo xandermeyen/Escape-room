@@ -202,12 +202,19 @@
           <div class="status-bericht" id="status-demo"></div>
         </div>
 
-        <!-- Speldata: gemiddelden per puzzel -->
+        <!-- Speldata: versiekeuze, samenvatting en per puzzel (shared/js/host-speldata.ts) -->
         <div class="kaart">
-          <div class="kaart-titel">
-            <i class="bi bi-bar-chart me-2"></i>Puzzelstatistieken (alle sessies)
+          <div class="stats-kop">
+            <div class="kaart-titel"><i class="bi bi-bar-chart me-2"></i>Speldata</div>
+            <label class="stats-keuze"
+              >Versie
+              <select id="versie-keuze"></select>
+            </label>
           </div>
-          <div id="stats-overzicht" class="tabel-scroll"><div class="laden">Laden…</div></div>
+          <p id="versie-uitleg" class="stats-sub stats-uitleg"></p>
+          <div id="stats-samenvatting"><div class="laden">Laden…</div></div>
+          <div class="stats-tussenkop">Per puzzel</div>
+          <div id="stats-overzicht" class="tabel-scroll"></div>
         </div>
 
         <!-- Sessie-overzicht -->

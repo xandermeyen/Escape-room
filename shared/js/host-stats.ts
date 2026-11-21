@@ -61,11 +61,12 @@ function foutTekst(stat: PuzzelStat | undefined): string {
  * Totale duur van één sessie: speeltijd (timer tot rapport) en, als de
  * lobby-tijd gekend is, de duur vanaf het openen van de lobby.
  */
-export function sessieDuurHtml(data: Record<string, unknown>): string {
+export function sessieDuurHtml(data: Record<string, unknown>, versie?: string): string {
+  const v = versie ? ` <span class="stats-versie">${escHtml(versie)}</span>` : '';
   const speeltijd = onderzoekstijd(data);
   if (speeltijd === null) {
     const label = typeof data.timerGestart === 'number' ? 'niet afgerond' : 'niet gestart';
-    return `<p class="stats-duur">Speeltijd: <strong>-</strong> <span class="stats-sub">(${label})</span></p>`;
+    return `<p class="stats-duur">Speeltijd: <strong>-</strong> <span class="stats-sub">(${label})</span>${v}</p>`;
   }
   const rapport = data.rapport as { tijdstip?: unknown } | undefined;
   const geopend = data.geopendOp;
@@ -75,7 +76,7 @@ export function sessieDuurHtml(data: Record<string, unknown>): string {
     rapport.tijdstip > geopend
       ? ` · lobby tot einde: <strong>${formateerDuur(rapport.tijdstip - geopend)}</strong>`
       : '';
-  return `<p class="stats-duur">Speeltijd: <strong>${formateerDuur(speeltijd)}</strong>${metLobby}</p>`;
+  return `<p class="stats-duur">Speeltijd: <strong>${formateerDuur(speeltijd)}</strong>${metLobby}${v}</p>`;
 }
 
 /** Aantal spelers in een sessie: wie een rol claimde, anders het geboekte aantal. */
@@ -85,40 +86,96 @@ export function aantalSpelers(data: Record<string, unknown>): number | null {
   return typeof data.aantalSpelers === 'number' ? data.aantalSpelers : null;
 }
 
-function speeltijdRegel(label: string, duren: number[]): string {
-  const gem = duren.reduce((a, b) => a + b, 0) / duren.length;
-  return `<p class="stats-duur">${label}: <strong>${formateerDuur(gem)}</strong>
-    · snelste ${formateerDuur(Math.min(...duren))}
-    · traagste ${formateerDuur(Math.max(...duren))}
-    <span class="stats-sub">(${duren.length} afgerond)</span></p>`;
+/** Onder dit aantal sessies tonen we cijfers gedimd, met "weinig data". */
+export const WEINIG_DATA = 5;
+
+/** Streefduur: een sessie hoort minstens zo lang te duren. */
+export const DOEL_SPEELTIJD_MS = 30 * 60 * 1000;
+
+/** Mediaan van een niet-lege lijst. */
+export function mediaan(waarden: number[]): number {
+  const s = [...waarden].sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? (s[mid] ?? 0) : ((s[mid - 1] ?? 0) + (s[mid] ?? 0)) / 2;
+}
+
+function tegel(label: string, waarde: string, sub: string): string {
+  return `<div class="stats-tegel">
+    <div class="stats-tegel-label">${label}</div>
+    <div class="stats-tegel-waarde">${waarde}</div>
+    <div class="stats-sub">${sub}</div>
+  </div>`;
 }
 
 /**
- * Speeltijd over alle afgeronde sessies (gemiddelde, snelste, traagste),
- * totaal en per aantal spelers.
+ * Samenvatting bovenaan de speldata: vier tegels (afgerond, mediaan,
+ * bereik, streefduur gehaald) en een kleine tabel per aantal spelers.
+ * Mediaan in plaats van gemiddelde: één uitschieter (iemand die de
+ * oplossingen kende) trekt het gemiddelde bij zo weinig sessies scheef.
  */
 export function speeltijdOverzichtHtml(sessies: Record<string, unknown>[]): string {
+  const gestart = sessies.filter(d => typeof d.timerGestart === 'number').length;
   const metDuur = sessies
     .map(d => ({ duur: onderzoekstijd(d), spelers: aantalSpelers(d) }))
     .filter((x): x is { duur: number; spelers: number | null } => x.duur !== null);
   if (metDuur.length === 0) {
-    return '<p class="stats-duur">Gem. speeltijd: <strong>-</strong> <span class="stats-sub">(nog geen afgeronde sessies)</span></p>';
+    return `<p class="stats-leeg">Nog geen afgeronde sessies in deze selectie${
+      gestart ? ` (${gestart} gestart)` : ''
+    }.</p>`;
   }
+  const duren = metDuur.map(x => x.duur);
+  const n = duren.length;
+  const gehaald = duren.filter(d => d >= DOEL_SPEELTIJD_MS).length;
+  const weinig = n < WEINIG_DATA;
+  const tegels = [
+    tegel('Afgerond', String(n), `van ${gestart} gestart`),
+    tegel(
+      'Mediaan speeltijd',
+      formateerDuur(mediaan(duren)),
+      `gem. ${formateerDuur(duren.reduce((a, b) => a + b, 0) / n)}`,
+    ),
+    tegel(
+      'Snelste – traagste',
+      `${formateerDuur(Math.min(...duren))} – ${formateerDuur(Math.max(...duren))}`,
+      'speeltijd',
+    ),
+    tegel(
+      `Minstens ${DOEL_SPEELTIJD_MS / 60_000} min`,
+      `${gehaald} / ${n}`,
+      `${Math.round((gehaald / n) * 100)}% van de groepen`,
+    ),
+  ].join('');
+
   const perAantal = new Map<number, number[]>();
   for (const { duur, spelers } of metDuur) {
     if (spelers === null) continue;
     perAantal.set(spelers, [...(perAantal.get(spelers) ?? []), duur]);
   }
-  const groepen = [...perAantal.entries()]
+  const rijen = [...perAantal.entries()]
     .sort(([a], [b]) => a - b)
-    .map(([n, duren]) => speeltijdRegel(`Met ${n} ${n === 1 ? 'speler' : 'spelers'}`, duren))
+    .map(([aantal, d]) => {
+      const klein = d.length < WEINIG_DATA;
+      return `<tr${klein ? ' class="stats-weinig"' : ''}>
+        <td>${aantal}${klein ? ' <span class="stats-sub">weinig data</span>' : ''}</td>
+        <td>${d.length}</td>
+        <td>${formateerDuur(mediaan(d))}</td>
+        <td>${formateerDuur(Math.min(...d))}</td>
+        <td>${formateerDuur(Math.max(...d))}</td>
+      </tr>`;
+    })
     .join('');
-  return (
-    speeltijdRegel(
-      'Gem. speeltijd',
-      metDuur.map(x => x.duur),
-    ) + groepen
-  );
+  const tabel = rijen
+    ? `<table class="stats-tabel stats-spelers">
+        <thead><tr><th>Spelers</th><th>Sessies</th><th>Mediaan</th><th>Snelste</th><th>Traagste</th></tr></thead>
+        <tbody>${rijen}</tbody>
+      </table>`
+    : '';
+  const melding = weinig
+    ? `<p class="stats-sub stats-melding">Nog maar ${n} afgeronde ${
+        n === 1 ? 'sessie' : 'sessies'
+      }: zie dit als een eerste indruk, niet als conclusie.</p>`
+    : '';
+  return `<div class="stats-tegels${weinig ? ' stats-weinig' : ''}">${tegels}</div>${melding}${tabel}`;
 }
 
 /**

@@ -31,18 +31,16 @@ import {
 } from '../../../shared/js/host-reviews.ts';
 import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
-import { KAMER14_PUZZELS } from './kamer14-config.ts';
+import { KAMER14_PUZZELS, KAMER14_VERSIES } from './kamer14-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 import { koppelActies } from '../../../shared/js/acties.ts';
-import {
-  statsDetailHtml,
-  gemiddeldenHtml,
-  sessieDuurHtml,
-  speeltijdOverzichtHtml,
-} from '../../../shared/js/host-stats.ts';
+import { statsDetailHtml, sessieDuurHtml } from '../../../shared/js/host-stats.ts';
+import { koppelSpeldata } from '../../../shared/js/host-speldata.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
 
 const ROLLEN = { a: 'A', b: 'B' };
+
+const speldata = koppelSpeldata(KAMER14_VERSIES, KAMER14_PUZZELS);
 
 koppelHostAuth(() => {
   void laadLijst();
@@ -116,22 +114,14 @@ async function laadLijst(): Promise<void> {
     laden.style.display = 'none';
     verlopen.bijLijst(rijen);
 
-    // Gemiddelden per puzzel over alle sessies met speldata.
-    // Demo-sessies tellen niet mee in de statistieken.
+    // Speldata (versiekeuze, samenvatting, per puzzel). Demo-sessies tellen
+    // niet mee. "Sneller dan X%" op het eindscherm vergelijkt enkel met de
+    // huidige versie: oudere versies zijn een ander spel.
     const echteRijen = rijen.filter(r => !isDemoCode(r.code));
-    const alleStats = echteRijen
-      .map(({ data }) => data.stats as SessieStats | undefined)
-      .filter((st): st is SessieStats => !!st);
-    // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
-    // eslint-disable-next-line no-unsanitized/property
-    requireEl('stats-overzicht').innerHTML =
-      speeltijdOverzichtHtml(echteRijen.map(r => r.data)) + gemiddeldenHtml(alleStats, PUZZELS);
-
-    // Tijden van afgeronde sessies klaarzetten voor "sneller dan X%" op het
-    // eindscherm (spelers kunnen de sessielijst zelf niet lezen).
+    speldata.toon(echteRijen);
     void werkVerdelingBij(
       'kamer-14',
-      echteRijen.map(r => r.data),
+      speldata.vanHuidigeVersie(echteRijen).map(r => r.data),
     );
 
     if (rijen.length === 0) {
@@ -195,7 +185,7 @@ async function laadLijst(): Promise<void> {
           </td>
         </tr>
         <tr class="detail-rij" id="detail-${veiligeCode}" hidden>
-          <td colspan="8">${sessieDuurHtml(data)}${statsDetailHtml(data.stats as SessieStats | undefined, PUZZELS, ROLLEN)}</td>
+          <td colspan="8">${sessieDuurHtml(data, speldata.label(data))}${statsDetailHtml(data.stats as SessieStats | undefined, PUZZELS, ROLLEN)}</td>
         </tr>`;
       })
       .join('');

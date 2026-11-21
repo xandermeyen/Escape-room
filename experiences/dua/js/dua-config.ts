@@ -9,6 +9,7 @@ import {
   normaliseerInvoer,
   type AntwoordRegel,
 } from '../../../shared/js/utils.ts';
+import type { Versie } from '../../../shared/js/versies.ts';
 
 export const DUA_HASHES: Record<string, string[]> = {
   // P1: het woord in de doorslag
@@ -78,3 +79,21 @@ export function archiefNummer(invoer: string): number | null {
   const m = /^(?:RR[\s-]*)?0*(\d{1,2})$/i.exec(invoer.trim());
   return m ? Number(m[1]) : null;
 }
+
+/**
+ * Versies voor de speldata in het host-paneel (zie shared/js/versies.ts).
+ * Voeg een regel toe bij een wijziging die speeltijd of puzzels verandert.
+ */
+export const DUA_VERSIES: Versie[] = [
+  { id: 'v1', vanaf: Date.UTC(2026, 0, 1), wat: 'Eerste versie' },
+  {
+    id: 'v2',
+    vanaf: Date.parse('2026-10-23T13:24:00+02:00'),
+    wat: 'Fixes uit de speltest met 2, 3 en 4 spelers',
+  },
+  {
+    id: 'v3',
+    vanaf: Date.parse('2026-11-10T23:00:00+01:00'),
+    wat: 'P1: typemachine en woord alleen samen oplosbaar',
+  },
+];
