@@ -5,6 +5,7 @@
  */
 import type { TimerWaarschuwing } from '../../../shared/js/timer.ts';
 import { eenTypfoutVarianten, type AntwoordRegel } from '../../../shared/js/utils.ts';
+import type { Versie } from '../../../shared/js/versies.ts';
 
 // ── Puzzel-antwoorden (SHA-256 gehasht) ───────────────────
 // Plain-text antwoorden staan niet in de broncode.
@@ -291,5 +292,23 @@ export const KAMER14_TIMER_WAARSCHUWINGEN: TimerWaarschuwing[] = [
     titel: '⚠ Dringend: nog 10 minuten',
     tekst: 'Nog tien minuten. Zonder rapport meldt An een vermissing.',
     urgent: true,
+  },
+];
+
+/**
+ * Versies voor de speldata in het host-paneel (zie shared/js/versies.ts).
+ * Voeg een regel toe bij een wijziging die speeltijd of puzzels verandert.
+ */
+export const KAMER14_VERSIES: Versie[] = [
+  { id: 'v1', vanaf: Date.UTC(2026, 0, 1), wat: 'Eerste versie' },
+  {
+    id: 'v2',
+    vanaf: Date.parse('2026-10-08T13:00:00+02:00'),
+    wat: 'P6 toegevoegd, P1 en P5 meer eigen speurwerk',
+  },
+  {
+    id: 'v3',
+    vanaf: Date.parse('2026-10-21T14:20:00+02:00'),
+    wat: 'Herbouw met twee kamers, maximaal 60 minuten',
   },
 ];

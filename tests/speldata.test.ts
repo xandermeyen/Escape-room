@@ -33,6 +33,8 @@ import {
   sessieDuurHtml,
   speeltijdOverzichtHtml,
   aantalSpelers,
+  mediaan,
+  WEINIG_DATA,
 } from '../shared/js/host-stats.ts';
 
 const getMock = get as unknown as ReturnType<typeof vi.fn>;
@@ -295,22 +297,47 @@ describe('speeltijd in het host-paneel', () => {
     expect(aantalSpelers({})).toBeNull();
   });
 
-  it('geeft gemiddelde, snelste en traagste, ook per aantal spelers', () => {
+  it('toont tegels met mediaan, bereik en streefduur, en een tabel per aantal spelers', () => {
     const html = speeltijdOverzichtHtml([
       klaar(20 * 60_000, 2),
       klaar(30 * 60_000, 2),
       klaar(16 * 60_000, 4),
-      { timerGestart: 0 }, // niet afgerond: telt niet mee
+      { timerGestart: 0 }, // gestart, niet afgerond
     ]);
+    expect(html).toMatch(/Afgerond<\/div>\s*<div class="stats-tegel-waarde">3<\/div>/);
+    expect(html).toContain('van 4 gestart');
+    expect(html).toMatch(/Mediaan speeltijd<\/div>\s*<div class="stats-tegel-waarde">20:00/);
+    expect(html).toContain('gem. 22:00');
+    expect(html).toContain('16:00 – 30:00');
+    expect(html).toMatch(/stats-tegel-waarde">1 \/ 3</);
     expect(html).toMatch(
-      /Gem\. speeltijd: <strong>22:00<\/strong>[\s\S]*snelste 16:00[\s\S]*traagste 30:00[\s\S]*\(3 afgerond\)/,
+      /<td>2 <span class="stats-sub">weinig data<\/span><\/td>\s*<td>2<\/td>\s*<td>25:00<\/td>/,
     );
-    expect(html).toMatch(/Met 2 spelers: <strong>25:00<\/strong>[\s\S]*\(2 afgerond\)/);
-    expect(html).toMatch(/Met 4 spelers: <strong>16:00<\/strong>[\s\S]*\(1 afgerond\)/);
-    expect(html.indexOf('Met 2')).toBeLessThan(html.indexOf('Met 4'));
+    expect(html.indexOf('<td>2 ')).toBeLessThan(html.indexOf('<td>4 '));
+  });
+
+  it('dimt alles en zegt het eerlijk bij weinig sessies', () => {
+    expect(speeltijdOverzichtHtml([klaar(20 * 60_000, 2)])).toContain('stats-tegels stats-weinig');
+    const veel = Array.from({ length: WEINIG_DATA }, () => klaar(25 * 60_000, 2));
+    const html = speeltijdOverzichtHtml(veel);
+    expect(html).not.toContain('stats-weinig');
+    expect(html).not.toContain('eerste indruk');
+  });
+
+  it('mediaan is bestand tegen één uitschieter', () => {
+    expect(mediaan([8, 22, 23, 24])).toBe(22.5);
+    expect(mediaan([8, 22, 23])).toBe(22);
   });
 
   it('meldt het als er nog geen afgeronde sessies zijn', () => {
-    expect(speeltijdOverzichtHtml([{ timerGestart: 0 }])).toContain('nog geen afgeronde sessies');
+    expect(speeltijdOverzichtHtml([{ timerGestart: 0 }])).toContain(
+      'Nog geen afgeronde sessies in deze selectie (1 gestart)',
+    );
+  });
+
+  it('toont de versie bij een sessie', () => {
+    expect(sessieDuurHtml(klaar(60_000, 2), 'v3')).toContain(
+      '<span class="stats-versie">v3</span>',
+    );
   });
 });

@@ -28,16 +28,12 @@ import {
   reviewKaartHtml,
   reviewSamenvattingHtml,
 } from '../../../shared/js/host-reviews.ts';
-import {
-  statsDetailHtml,
-  gemiddeldenHtml,
-  sessieDuurHtml,
-  speeltijdOverzichtHtml,
-} from '../../../shared/js/host-stats.ts';
+import { statsDetailHtml, sessieDuurHtml } from '../../../shared/js/host-stats.ts';
+import { koppelSpeldata } from '../../../shared/js/host-speldata.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
 import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
-import { DUA_PUZZELS } from './dua-config.ts';
+import { DUA_PUZZELS, DUA_VERSIES } from './dua-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 import { koppelActies } from '../../../shared/js/acties.ts';
 
@@ -45,6 +41,8 @@ import { koppelActies } from '../../../shared/js/acties.ts';
 const verlopen = maakVerlopenKnop(() => void laadLijst());
 
 const ROLLEN = { '1934': '1934', '2034': '2034' };
+
+const speldata = koppelSpeldata(DUA_VERSIES, DUA_PUZZELS);
 
 koppelHostAuth(() => {
   verversCode();
@@ -123,19 +121,14 @@ async function laadLijst(): Promise<void> {
     laden.style.display = 'none';
     verlopen.bijLijst(rijen);
 
-    // Gemiddelden per puzzel over alle sessies met speldata.
-    // Demo-sessies tellen niet mee in de statistieken.
+    // Speldata (versiekeuze, samenvatting, per puzzel). Demo-sessies tellen
+    // niet mee. "Sneller dan X%" op het eindscherm vergelijkt enkel met de
+    // huidige versie: oudere versies zijn een ander spel.
     const echteRijen = rijen.filter(r => !isDemoCode(r.code));
-    const alleStats = echteRijen
-      .map(({ data }) => data.stats as SessieStats | undefined)
-      .filter((st): st is SessieStats => !!st);
-    // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
-    // eslint-disable-next-line no-unsanitized/property
-    requireEl('stats-overzicht').innerHTML =
-      speeltijdOverzichtHtml(echteRijen.map(r => r.data)) + gemiddeldenHtml(alleStats, DUA_PUZZELS);
+    speldata.toon(echteRijen);
     void werkVerdelingBij(
       'dua',
-      echteRijen.map(r => r.data),
+      speldata.vanHuidigeVersie(echteRijen).map(r => r.data),
     );
 
     if (rijen.length === 0) {
@@ -191,7 +184,7 @@ async function laadLijst(): Promise<void> {
           </td>
         </tr>
         <tr class="detail-rij" id="detail-${veiligeCode}" hidden>
-          <td colspan="7">${sessieDuurHtml(data)}${statsDetailHtml(data.stats as SessieStats | undefined, DUA_PUZZELS, ROLLEN)}</td>
+          <td colspan="7">${sessieDuurHtml(data, speldata.label(data))}${statsDetailHtml(data.stats as SessieStats | undefined, DUA_PUZZELS, ROLLEN)}</td>
         </tr>`;
       })
       .join('');
