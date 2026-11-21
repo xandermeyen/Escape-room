@@ -12,6 +12,7 @@ import {
   type SessieStats,
   type PuzzelStat,
 } from './speldata.ts';
+import { onderzoekstijd } from './verdeling.ts';
 
 /** 754000 → "12:34", null → "-". */
 export function formateerDuur(ms: number | null): string {
@@ -54,6 +55,70 @@ function foutTekst(stat: PuzzelStat | undefined): string {
     .map(i => `${escHtml(i.w)}${i.o === 'bijna' ? ' (bijna)' : ''}`);
   const lijst = pogingen.length ? `<br><span class="stats-sub">${pogingen.join(', ')}</span>` : '';
   return `${stat?.fout ?? 0}${lijst}`;
+}
+
+/**
+ * Totale duur van één sessie: speeltijd (timer tot rapport) en, als de
+ * lobby-tijd gekend is, de duur vanaf het openen van de lobby.
+ */
+export function sessieDuurHtml(data: Record<string, unknown>): string {
+  const speeltijd = onderzoekstijd(data);
+  if (speeltijd === null) {
+    const label = typeof data.timerGestart === 'number' ? 'niet afgerond' : 'niet gestart';
+    return `<p class="stats-duur">Speeltijd: <strong>-</strong> <span class="stats-sub">(${label})</span></p>`;
+  }
+  const rapport = data.rapport as { tijdstip?: unknown } | undefined;
+  const geopend = data.geopendOp;
+  const metLobby =
+    typeof geopend === 'number' &&
+    typeof rapport?.tijdstip === 'number' &&
+    rapport.tijdstip > geopend
+      ? ` · lobby tot einde: <strong>${formateerDuur(rapport.tijdstip - geopend)}</strong>`
+      : '';
+  return `<p class="stats-duur">Speeltijd: <strong>${formateerDuur(speeltijd)}</strong>${metLobby}</p>`;
+}
+
+/** Aantal spelers in een sessie: wie een rol claimde, anders het geboekte aantal. */
+export function aantalSpelers(data: Record<string, unknown>): number | null {
+  const bezet = Object.keys((data.spelers as Record<string, unknown>) ?? {}).length;
+  if (bezet > 0) return bezet;
+  return typeof data.aantalSpelers === 'number' ? data.aantalSpelers : null;
+}
+
+function speeltijdRegel(label: string, duren: number[]): string {
+  const gem = duren.reduce((a, b) => a + b, 0) / duren.length;
+  return `<p class="stats-duur">${label}: <strong>${formateerDuur(gem)}</strong>
+    · snelste ${formateerDuur(Math.min(...duren))}
+    · traagste ${formateerDuur(Math.max(...duren))}
+    <span class="stats-sub">(${duren.length} afgerond)</span></p>`;
+}
+
+/**
+ * Speeltijd over alle afgeronde sessies (gemiddelde, snelste, traagste),
+ * totaal en per aantal spelers.
+ */
+export function speeltijdOverzichtHtml(sessies: Record<string, unknown>[]): string {
+  const metDuur = sessies
+    .map(d => ({ duur: onderzoekstijd(d), spelers: aantalSpelers(d) }))
+    .filter((x): x is { duur: number; spelers: number | null } => x.duur !== null);
+  if (metDuur.length === 0) {
+    return '<p class="stats-duur">Gem. speeltijd: <strong>-</strong> <span class="stats-sub">(nog geen afgeronde sessies)</span></p>';
+  }
+  const perAantal = new Map<number, number[]>();
+  for (const { duur, spelers } of metDuur) {
+    if (spelers === null) continue;
+    perAantal.set(spelers, [...(perAantal.get(spelers) ?? []), duur]);
+  }
+  const groepen = [...perAantal.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([n, duren]) => speeltijdRegel(`Met ${n} ${n === 1 ? 'speler' : 'spelers'}`, duren))
+    .join('');
+  return (
+    speeltijdRegel(
+      'Gem. speeltijd',
+      metDuur.map(x => x.duur),
+    ) + groepen
+  );
 }
 
 /**

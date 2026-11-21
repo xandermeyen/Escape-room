@@ -28,7 +28,12 @@ import {
   reviewKaartHtml,
   reviewSamenvattingHtml,
 } from '../../../shared/js/host-reviews.ts';
-import { statsDetailHtml, gemiddeldenHtml } from '../../../shared/js/host-stats.ts';
+import {
+  statsDetailHtml,
+  gemiddeldenHtml,
+  sessieDuurHtml,
+  speeltijdOverzichtHtml,
+} from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
 import { werkVerdelingBij } from '../../../shared/js/verdeling.ts';
 import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
@@ -126,7 +131,8 @@ async function laadLijst(): Promise<void> {
       .filter((st): st is SessieStats => !!st);
     // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
     // eslint-disable-next-line no-unsanitized/property
-    requireEl('stats-overzicht').innerHTML = gemiddeldenHtml(alleStats, DUA_PUZZELS);
+    requireEl('stats-overzicht').innerHTML =
+      speeltijdOverzichtHtml(echteRijen.map(r => r.data)) + gemiddeldenHtml(alleStats, DUA_PUZZELS);
     void werkVerdelingBij(
       'dua',
       echteRijen.map(r => r.data),
@@ -185,7 +191,7 @@ async function laadLijst(): Promise<void> {
           </td>
         </tr>
         <tr class="detail-rij" id="detail-${veiligeCode}" hidden>
-          <td colspan="7">${statsDetailHtml(data.stats as SessieStats | undefined, DUA_PUZZELS, ROLLEN)}</td>
+          <td colspan="7">${sessieDuurHtml(data)}${statsDetailHtml(data.stats as SessieStats | undefined, DUA_PUZZELS, ROLLEN)}</td>
         </tr>`;
       })
       .join('');

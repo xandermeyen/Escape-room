@@ -26,7 +26,14 @@ import {
   moeilijkstePuzzel,
   type SessieStats,
 } from '../shared/js/speldata.ts';
-import { formateerDuur, statsDetailHtml, gemiddeldenHtml } from '../shared/js/host-stats.ts';
+import {
+  formateerDuur,
+  statsDetailHtml,
+  gemiddeldenHtml,
+  sessieDuurHtml,
+  speeltijdOverzichtHtml,
+  aantalSpelers,
+} from '../shared/js/host-stats.ts';
 
 const getMock = get as unknown as ReturnType<typeof vi.fn>;
 const setMock = set as unknown as ReturnType<typeof vi.fn>;
@@ -260,5 +267,50 @@ describe('host-stats', () => {
       ['p1', 'p2'],
     );
     expect(html).toMatch(/P2 <span class="stats-zwaarste">moeilijkst/);
+  });
+});
+
+describe('speeltijd in het host-paneel', () => {
+  const klaar = (duurMs: number, spelers: number, extra: Record<string, unknown> = {}) => ({
+    timerGestart: 1_000_000,
+    rapport: { ingediend: true, tijdstip: 1_000_000 + duurMs },
+    spelers: Object.fromEntries(Array.from({ length: spelers }, (_, i) => [`r${i}`, true])),
+    ...extra,
+  });
+
+  it('toont speeltijd en lobby tot einde van één sessie', () => {
+    const html = sessieDuurHtml(klaar(18 * 60_000, 2, { geopendOp: 1_000_000 - 3 * 60_000 }));
+    expect(html).toContain('Speeltijd: <strong>18:00</strong>');
+    expect(html).toContain('lobby tot einde: <strong>21:00</strong>');
+  });
+
+  it('zegt "niet afgerond" zonder rapport en "niet gestart" zonder timer', () => {
+    expect(sessieDuurHtml({ timerGestart: 5 })).toContain('niet afgerond');
+    expect(sessieDuurHtml({})).toContain('niet gestart');
+  });
+
+  it('telt spelers via geclaimde rollen, anders het geboekte aantal', () => {
+    expect(aantalSpelers({ spelers: { a: 1, b: 1, c: 1 } })).toBe(3);
+    expect(aantalSpelers({ aantalSpelers: 4 })).toBe(4);
+    expect(aantalSpelers({})).toBeNull();
+  });
+
+  it('geeft gemiddelde, snelste en traagste, ook per aantal spelers', () => {
+    const html = speeltijdOverzichtHtml([
+      klaar(20 * 60_000, 2),
+      klaar(30 * 60_000, 2),
+      klaar(16 * 60_000, 4),
+      { timerGestart: 0 }, // niet afgerond: telt niet mee
+    ]);
+    expect(html).toMatch(
+      /Gem\. speeltijd: <strong>22:00<\/strong>[\s\S]*snelste 16:00[\s\S]*traagste 30:00[\s\S]*\(3 afgerond\)/,
+    );
+    expect(html).toMatch(/Met 2 spelers: <strong>25:00<\/strong>[\s\S]*\(2 afgerond\)/);
+    expect(html).toMatch(/Met 4 spelers: <strong>16:00<\/strong>[\s\S]*\(1 afgerond\)/);
+    expect(html.indexOf('Met 2')).toBeLessThan(html.indexOf('Met 4'));
+  });
+
+  it('meldt het als er nog geen afgeronde sessies zijn', () => {
+    expect(speeltijdOverzichtHtml([{ timerGestart: 0 }])).toContain('nog geen afgeronde sessies');
   });
 });

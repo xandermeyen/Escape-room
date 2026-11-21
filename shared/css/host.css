@@ -273,6 +273,14 @@ body {
   font-size: 0.85rem;
   margin: 0.5rem 0;
 }
+.stats-duur {
+  color: #aaa;
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.75rem;
+}
+.stats-duur strong {
+  color: #e8dcc4;
+}
 .detail-rij td {
   background: #1f1f1f;
 }
