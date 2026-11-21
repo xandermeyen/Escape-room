@@ -34,7 +34,12 @@ import { DEMO_CODES, isDemoCode } from '../../../shared/js/demo.ts';
 import { KAMER14_PUZZELS } from './kamer14-config.ts';
 import { requireEl } from '../../../shared/js/utils.ts';
 import { koppelActies } from '../../../shared/js/acties.ts';
-import { statsDetailHtml, gemiddeldenHtml } from '../../../shared/js/host-stats.ts';
+import {
+  statsDetailHtml,
+  gemiddeldenHtml,
+  sessieDuurHtml,
+  speeltijdOverzichtHtml,
+} from '../../../shared/js/host-stats.ts';
 import type { SessieStats } from '../../../shared/js/speldata.ts';
 
 const ROLLEN = { a: 'A', b: 'B' };
@@ -119,7 +124,8 @@ async function laadLijst(): Promise<void> {
       .filter((st): st is SessieStats => !!st);
     // Veilig: gemiddeldenHtml bevat enkel getallen en vaste markup.
     // eslint-disable-next-line no-unsanitized/property
-    requireEl('stats-overzicht').innerHTML = gemiddeldenHtml(alleStats, PUZZELS);
+    requireEl('stats-overzicht').innerHTML =
+      speeltijdOverzichtHtml(echteRijen.map(r => r.data)) + gemiddeldenHtml(alleStats, PUZZELS);
 
     // Tijden van afgeronde sessies klaarzetten voor "sneller dan X%" op het
     // eindscherm (spelers kunnen de sessielijst zelf niet lezen).
@@ -189,7 +195,7 @@ async function laadLijst(): Promise<void> {
           </td>
         </tr>
         <tr class="detail-rij" id="detail-${veiligeCode}" hidden>
-          <td colspan="8">${statsDetailHtml(data.stats as SessieStats | undefined, PUZZELS, ROLLEN)}</td>
+          <td colspan="8">${sessieDuurHtml(data)}${statsDetailHtml(data.stats as SessieStats | undefined, PUZZELS, ROLLEN)}</td>
         </tr>`;
       })
       .join('');
