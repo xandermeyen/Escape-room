@@ -64,7 +64,8 @@ import {
   maakSvgToegankelijk,
   type PuzzelStatus,
 } from './dua-ui.ts';
-import { fx, koppelTypgeluid } from './dua-audio.ts';
+import { startSfeer, fx, koppelTypgeluid } from './dua-audio.ts';
+import { speelStem } from './dua-stemmen.ts';
 
 const sessie = leesSessie();
 meetSpel('game_start', sessie, { rol: '2034' });
@@ -95,7 +96,11 @@ const hulp = initHulp({
     )[puzzel] ?? null,
   vrijgave: DUA_VRIJGAVE,
   inactiefMeldingen: DUA_INACTIEF['2034'],
-  vrijgaveMelding: (oud, nieuw) => duaVrijgaveMelding('2034', oud, nieuw),
+  vrijgaveMelding: (oud, nieuw) => {
+    const m = duaVrijgaveMelding('2034', oud, nieuw);
+    if (m) fx.radio();
+    return m;
+  },
   hulpHtml: DUA_HULP_HTML,
 });
 
@@ -156,9 +161,15 @@ function briefWoord(): string {
     .join('');
 }
 
+// null = nog niet gekend (eerste keer tekenen: geen scanner bij een herlaad)
+let doorslagGezien: boolean | null = null;
+
 function tekenDoorslag(): void {
   const inhoud = requireEl('doorslag-inhoud');
   const vraag = requireEl('doorslag-vraag');
+  const verstuurd = !!dua.brief?.verstuurd;
+  if (doorslagGezien === false && verstuurd) fx.scanner();
+  doorslagGezien = verstuurd;
   if (!dua.brief?.verstuurd) {
     inhoud.innerHTML =
       '<p class="hintje">Er ligt hier nog niets. In 1934 is de brief nog niet getypt…</p>';
@@ -496,6 +507,8 @@ herstelHints(sessie);
 controleerSessie(sessie);
 koppelMuteKnop();
 koppelTypgeluid();
+startSfeer('2034');
+speelStem('intro-2034', { eenmalig: `${sessie}:intro-2034` });
 koppelEasterEggs(sessie);
 koppelMeta(sessie);
 startDuaTimer(sessie);

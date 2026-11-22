@@ -1,5 +1,8 @@
 /**
- * dua-audio.ts — alle geluiden via Web Audio API, geen bestanden nodig.
+ * dua-audio.ts — geluid in D.U.A.
+ * Korte klikjes en tonen via de Web Audio API (geen bestanden). Sfeerlagen
+ * en een paar effecten zijn opnames (ElevenLabs) in public/audio/dua/sfeer;
+ * ontbreekt een bestand, dan valt een effect terug op de synthese.
  * Elke speler kan dempen via de ♪-knop (voorkeur in localStorage).
  */
 
@@ -71,8 +74,10 @@ export const fx = {
     toon(90, 0.05, 'sine', 0.1);
   },
   fluitje(): void {
-    toon(2200, 0.5, 'sine', 0.12);
-    toon(2400, 0.4, 'sine', 0.1, 0.15);
+    speelSample('fluitje', 0.5, () => {
+      toon(2200, 0.5, 'sine', 0.12);
+      toon(2400, 0.4, 'sine', 0.1, 0.15);
+    });
   },
   blaat(): void {
     [0, 0.18, 0.36].forEach((w, i) => toon(740 - i * 40, 0.14, 'sawtooth', 0.06, w));
@@ -91,7 +96,13 @@ export const fx = {
     });
   },
   stoom(): void {
-    ruis(0.8, 0.07);
+    speelSample('trein', 0.5, () => ruis(0.8, 0.07));
+  },
+  scanner(): void {
+    speelSample('scanner', 0.5, () => ruis(0.6, 0.05));
+  },
+  radio(): void {
+    speelSample('radio', 0.35, () => ruis(0.4, 0.06));
   },
   // dof = 2034: dezelfde klok, maar verder weg
   kerkklok(slagen: number, dof = false): void {
@@ -109,8 +120,85 @@ export function isGedempt(): boolean {
 export function wisselGeluid(): boolean {
   gedempt = !gedempt;
   localStorage.setItem('dua-mute', gedempt ? '1' : '0');
-  if (!gedempt) fx.klik();
+  if (gedempt) {
+    sfeer?.pause();
+    document.dispatchEvent(new CustomEvent('dua-gedempt'));
+  } else {
+    fx.klik();
+    speel(sfeer);
+  }
   return gedempt;
+}
+
+// ── Opnames (ElevenLabs) ────────────────────────────────────
+export const AUDIO_PAD = '/audio/dua';
+export type Sample = 'trein' | 'fluitje' | 'scanner' | 'radio';
+
+/** Afspelen zonder fout bij autoplay-blokkering of in jsdom. */
+export function speel(a: HTMLAudioElement | null): Promise<boolean> {
+  if (!a) return Promise.resolve(false);
+  try {
+    const p = a.play() as Promise<void> | undefined;
+    if (!p || typeof p.then !== 'function') return Promise.resolve(false);
+    return p.then(
+      () => true,
+      () => false,
+    );
+  } catch {
+    return Promise.resolve(false);
+  }
+}
+
+/** Eén effect; `terugval` speelt als het bestand niet laadt. */
+function speelSample(naam: Sample, vol: number, terugval: () => void): void {
+  if (gedempt) return;
+  let a: HTMLAudioElement;
+  try {
+    a = new Audio(`${AUDIO_PAD}/sfeer/${naam}.mp3`);
+  } catch {
+    terugval();
+    return;
+  }
+  a.volume = vol;
+  a.addEventListener('error', terugval, { once: true });
+  void speel(a);
+}
+
+// ── Sfeerlaag: zachte loop onder het spel ───────────────────
+const SFEER_VOLUME = 0.18;
+const SFEER_GEDUCKT = 0.05;
+let sfeer: HTMLAudioElement | null = null;
+
+/**
+ * Start de sfeerlaag van een tijdperk. Browsers laten geluid pas toe na een
+ * klik of toets, dus we proberen meteen en anders bij de eerste interactie.
+ */
+export function startSfeer(era: '1934' | '2034'): void {
+  if (sfeer) return;
+  try {
+    sfeer = new Audio(`${AUDIO_PAD}/sfeer/${era === '1934' ? '1934-nacht' : '2034-archief'}.mp3`);
+  } catch {
+    return;
+  }
+  sfeer.loop = true;
+  sfeer.volume = SFEER_VOLUME;
+  const probeer = (): void => {
+    if (gedempt || !sfeer) return;
+    void speel(sfeer).then(ok => {
+      if (ok) {
+        document.removeEventListener('pointerdown', probeer);
+        document.removeEventListener('keydown', probeer);
+      }
+    });
+  };
+  document.addEventListener('pointerdown', probeer);
+  document.addEventListener('keydown', probeer);
+  probeer();
+}
+
+/** Sfeerlaag zachter zetten zolang er een stem spreekt. */
+export function duckSfeer(aan: boolean): void {
+  if (sfeer) sfeer.volume = aan ? SFEER_GEDUCKT : SFEER_VOLUME;
 }
 
 // Typmachinegeluid op alle tekstvelden

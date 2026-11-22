@@ -12,6 +12,7 @@ import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { haalEinde } from './dua-session.ts';
 import { fx } from './dua-audio.ts';
+import { speelStem } from './dua-stemmen.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
 import { meetSpel } from '../../../shared/js/meet.ts';
 
@@ -91,6 +92,8 @@ async function vernieuw(): Promise<void> {
   if (!klokGeluid) {
     klokGeluid = true;
     fx.kerkklok(5, true);
+    // Na de klokslagen: Bureau X legt de twee brieven naast elkaar.
+    setTimeout(() => speelStem('finale-2034', { eenmalig: `${sessie}:finale-2034` }), 7500);
   }
   if (statsGetoond) return;
   statsGetoond = true;

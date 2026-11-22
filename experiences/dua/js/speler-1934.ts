@@ -57,7 +57,8 @@ import {
   maakSvgToegankelijk,
   type PuzzelStatus,
 } from './dua-ui.ts';
-import { fx, koppelTypgeluid } from './dua-audio.ts';
+import { startSfeer, fx, koppelTypgeluid } from './dua-audio.ts';
+import { speelStem } from './dua-stemmen.ts';
 
 const sessie = leesSessie();
 meetSpel('game_start', sessie, { rol: '1934' });
@@ -404,6 +405,7 @@ document.getElementById('btn-deponeer')?.addEventListener('click', async () => {
   if (!wachterVeilig()) {
     await verhoogVerdenking(sessie, 15);
     fx.fluitje();
+    speelStem('wachter');
     melding('⚠ De perronwachter zag je bij de kluizen rommelen. Verdenking +15%');
     requireEl('kluis-status').textContent =
       'Betrapt. Wacht tot hij écht buiten zicht is (rechts op de baan).';
@@ -627,6 +629,7 @@ luisterNaarStatus(sessie, p => {
   // P5 net opgelost → kerkklok + brief 14 tonen
   if (!hadP5 && p['p5']) {
     fx.kerkklok(5);
+    speelStem('finale-1934', { eenmalig: `${sessie}:finale-1934` });
     document.getElementById('s-brief14')?.classList.remove('verborgen');
     melding('2034 heeft de plek gevonden. Schrijf de veertiende brief.');
   }
@@ -640,6 +643,8 @@ herstelHints(sessie);
 controleerSessie(sessie);
 koppelMuteKnop();
 koppelTypgeluid();
+startSfeer('1934');
+speelStem('intro-1934', { eenmalig: `${sessie}:intro-1934` });
 koppelEasterEggs(sessie);
 koppelMeta(sessie, meta => {
   toezichtVerscherpt = (meta.verdenking || 0) >= 50;
