@@ -6,6 +6,8 @@
  *   niets, dan verschijnt bovenaan een klein balkje met een link naar die
  *   versie. Wegklikken onthoudt de huidige taal.
  * - Er wordt nooit automatisch doorgestuurd (zie docs/adr/001-meertaligheid.md).
+ * - Het balkje komt pas na 3 seconden, onderaan, en nooit tegelijk met de
+ *   cookiebanner: de bovenkant van de pagina (de hero) blijft vrij.
  * - z-index onder de navigatie (200): een open gsm-menu ligt erover.
  */
 import { huidigeTaal, isTaal, teksten, type Taal } from './i18n.ts';
@@ -53,13 +55,17 @@ export function suggestieDoel(
   return { taal: voorkeur, href: url.pathname + url.search };
 }
 
+/** Zoveel ms na het laden verschijnt de suggestie. */
+export const SUGGESTIE_WACHTTIJD = 3000;
+
 const STIJL = `
-.taal-suggestie{position:fixed;top:72px;right:1rem;z-index:190;max-width:340px;display:flex;gap:.75rem;
+.taal-suggestie{position:fixed;bottom:1rem;right:1rem;left:auto;z-index:190;max-width:340px;display:flex;gap:.75rem;
   align-items:center;background:#14120e;color:#e8dfcc;border:1px solid #5a4a24;box-shadow:0 8px 24px rgba(0,0,0,.5);
   padding:.7rem .9rem;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:.85rem;line-height:1.4}
 .taal-suggestie a{color:#c9a84c;font-weight:600}
 .taal-suggestie button{background:none;border:0;color:#e8dfcc;font-size:1.1rem;cursor:pointer;padding:0 .2rem;line-height:1}
 .taal-suggestie button:hover,.taal-suggestie button:focus-visible{color:#c9a84c}
+@media (max-width:600px){.taal-suggestie{left:1rem;max-width:none}}
 `;
 
 function toonSuggestie(doel: { taal: Taal; href: string }, huidig: Taal): void {
@@ -104,5 +110,21 @@ export function initTaal(): void {
     });
   });
   const doel = suggestieDoel(document, navigator.languages ?? [], leesKeuze());
-  if (doel) toonSuggestie(doel, huidigeTaal());
+  if (doel) wachtOpRust(() => toonSuggestie(doel, huidigeTaal()));
+}
+
+/** Voert `toon` uit na de wachttijd, en pas als de cookiebanner weg is. */
+export function wachtOpRust(toon: () => void, wachttijd = SUGGESTIE_WACHTTIJD): void {
+  window.setTimeout(() => {
+    if (!document.getElementById('cookie-banner')) {
+      toon();
+      return;
+    }
+    const kijker = new MutationObserver(() => {
+      if (document.getElementById('cookie-banner')) return;
+      kijker.disconnect();
+      toon();
+    });
+    kijker.observe(document.body, { childList: true, subtree: true });
+  }, wachttijd);
 }

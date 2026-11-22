@@ -56,6 +56,8 @@ export const nl = {
   taalSuggestie: 'Deze pagina bestaat ook in het Nederlands.',
   taalSuggestieLink: 'Naar de Nederlandse versie',
   taalSuggestieSluiten: 'Sluiten',
+  /** Teller op de homepage: [vetgedrukt deel, rest]. */
+  tellerGroepen: (n: number): [string, string] => [`${n} groepen`, ' losten al een dossier op'],
 };
 
 export type Teksten = typeof nl;
