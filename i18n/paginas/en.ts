@@ -37,100 +37,109 @@ const en: PaginaWoordenboek = {
     inLanguage: 'en',
     publisher: { '@id': 'https://bureau-x.be/#organisatie' },
   },
-  'home.navLinks.a': 'Experiences',
+  'home.nav.dossiers': 'Case files',
+  'home.nav.hoe': 'How it works',
+  'home.nav.wie': 'Who makes this?',
+  'home.nav.speel': 'Play for free',
   'home.navReviews.a': 'Reviews',
-  'home.navLinks.btn-nav': 'Book now',
   'home.navbar.nav-toggle@aria-label': 'Menu',
   'home.hero.hero-eyebrow': 'Free online escape rooms',
   'home.hero.hero-title': 'Real mysteries.<br><em>You solve them.</em>',
-  'home.hero.hero-sub':
-    'Online escape rooms based on real Belgian places and unsolved stories. Play together from home, each on your own screen. Always free.',
-  'home.hero.btn': 'See the experiences',
-  'home.hero.btn-2': 'About Bureau X',
-  'home.hero.hero-tag':
-    '■&nbsp; Free &nbsp;·&nbsp; 2 experiences &nbsp;·&nbsp; Games in Dutch, D.U.A. in English soon',
-  'home.hero.scroll-label': 'Scroll',
-  'home.experiences.label': 'Our experiences',
-  'home.experiences.heading': 'Two stories. You choose.',
-  'home.experiences.sub':
-    'Every Bureau X experience is built around a real place or an unsolved Belgian mystery.',
-  'home.experiences.exp-badge': 'Unsolved',
-  'home.experiences.exp-tab': 'Case 14 · Geel',
-  'home.experiences.exp-meta':
-    'Online escape room &nbsp;·&nbsp; Geel, Belgium &nbsp;·&nbsp; Duo &nbsp;·&nbsp; In Dutch',
-  'home.experiences.exp-desc':
-    'On the morning of Tuesday 6 May, right after breakfast, Lena Bogaert vanishes from her room at the Martens-Peeters host family in Geel. No note, no explanation. One of you sits at her care worker’s desk, the other stands in her room. Together you find out where she went.',
-  'home.experiences.spec': '<span class="spec-dot"></span>45 minutes',
-  'home.experiences.spec-2': '<span class="spec-dot"></span>for 2 players',
-  'home.experiences.spec-3': '<span class="spec-dot"></span>100% online',
-  'home.experiences.btn': 'Book a session →',
-  'home.experiences.btn-2': 'More info',
-  'home.experiences.exp-free': 'Free',
-  'home.experiences.exp-badge-2': 'Available',
-  'home.experiences.exp-tab-2': 'Case 1934/RR · Ghent',
-  'home.experiences.exp-meta-2':
-    'Online escape room &nbsp;·&nbsp; Ghent, Belgium &nbsp;·&nbsp; 2 to 4 players &nbsp;·&nbsp; In Dutch, English coming soon',
-  'home.experiences.exp-desc-2':
-    'On the night of 10 to 11 April 1934, Jan van Eyck’s panel <em>The Just Judges</em> disappears from St Bavo’s Cathedral in Ghent. One group plays in the middle of 1934, while the others work for Bureau X a century later and reconstruct the case from what 1934 leaves behind.',
-  'home.experiences.spec-4': '<span class="spec-dot"></span>60 minutes',
-  'home.experiences.spec-5': '<span class="spec-dot"></span>for 2 to 4 players',
-  'home.experiences.spec-6': '<span class="spec-dot"></span>100% online',
-  'home.experiences.btn-3': 'Book a session →',
-  'home.experiences.btn-4': 'More info',
-  'home.experiences.exp-free-2': 'Free',
-  'home.over.label': 'Why Bureau X',
-  'home.over.heading': 'Not your usual escape room',
-  'home.over.usp-title': 'Based on real stories',
-  'home.over.usp-desc':
-    'No random puzzles. Every experience is built around a real place, tradition or unsolved mystery.',
-  'home.over.usp-title-2': 'Always free',
-  'home.over.usp-desc-2':
-    'No subscription, no hidden costs. Bureau X experiences are free to play. Always.',
-  'home.over.usp-title-3': 'From home',
-  'home.over.usp-desc-3':
-    'Every player opens their own case file in the browser. No download, no travel.',
-  'home.over.usp-title-4': 'Made in Belgium, played in Dutch',
-  'home.over.usp-desc-4':
-    'For now, all stories, puzzles and case files are in Dutch. An English version of D.U.A. is on its way.',
+  'home.hero.sub':
+    'Online escape rooms built around real Belgian places and stories. Everyone plays on their own screen, together on a call. Free, no account needed. The games are in Dutch for now.',
+  'home.hero.speel': 'Play for free',
+  'home.hero.wie': 'Who makes this?',
+  'home.hero.foto-dua@alt': 'D.U.A.: the screen of the 1934 team, with the sabotaged typewriter',
+  'home.hero.foto-dua': 'D.U.A. · Ghent, 1934',
+  'home.hero.foto-k14@alt': 'Kamer 14: the desk of care worker An at the OPZ in Geel',
+  'home.hero.foto-k14': 'Kamer 14 · Geel',
+  'home.hero.stempel': 'Free',
+  'home.dossiers.label': 'The filing cabinet',
+  'home.dossiers.heading': 'Two case files are open.',
+  'home.dossiers.sub':
+    'Each case is built around a real place. Each of you plays a different side of the story.',
+  'home.dossiers.k14-tab': 'Case 14 · Geel',
+  'home.dossiers.k14-beeld@alt':
+    'Kamer 14, player A: An’s desk at the OPZ in Geel, with a computer, a pinboard and a phone',
+  'home.dossiers.k14-gsm@alt': 'Kamer 14, player B on a phone: Lena’s room',
+  'home.dossiers.k14-stempel': 'Unsolved',
+  'home.dossiers.k14-desc':
+    'On the morning of Tuesday 6 May, Lena Bogaert vanishes from her room at her host family in Geel. No note, no explanation. One of you sits at her care worker’s desk, the other stands in her room. Together you find out where she went. <strong>The game is in Dutch.</strong>',
+  'home.dossiers.k14-spelers': '2 players',
+  'home.dossiers.k14-duur': '25 to 45 minutes',
+  'home.dossiers.k14-niveau': 'Difficulty: medium',
+  'home.dossiers.k14-leeftijd': 'Ages 14 and up',
+  'home.dossiers.start': 'Open this case',
+  'home.dossiers.k14-meer': 'More about Kamer 14',
+  'home.dossiers.dua-tab': 'Case 1934/RR · Ghent',
+  'home.dossiers.dua-1934@alt':
+    'D.U.A., team 1934: the tasks of The Writer, with the sabotaged typewriter',
+  'home.dossiers.dua-2034@alt':
+    'D.U.A., team 2034: the Bureau X archive with the restoration report',
+  'home.dossiers.dua-stempel': 'Unsolved since 1934',
+  'home.dossiers.dua-desc':
+    'On the night of 10 to 11 April 1934, the panel <em>The Just Judges</em> by Jan van Eyck disappears from St Bavo’s Cathedral in Ghent. Part of your team plays in 1934, the rest a century later in the Bureau X archive. What one group knows, the other is missing. <strong>The game is in Dutch.</strong>',
+  'home.dossiers.dua-spelers': '2 to 4 players',
+  'home.dossiers.dua-duur': '30 to 60 minutes',
+  'home.dossiers.dua-niveau': 'Difficulty: beginner',
+  'home.dossiers.dua-leeftijd': 'Ages 12 and up',
+  'home.dossiers.start-2': 'Open this case',
+  'home.dossiers.dua-meer': 'More about D.U.A.',
+  'home.hoe.label': 'How it works',
+  'home.hoe.heading': 'Get started in three steps',
+  'home.hoe.stap1-titel': 'Choose a case',
+  'home.hoe.stap1':
+    'Enter the email addresses of your fellow players. That way every player gets their own link, because each of you sees a different part of the case.',
+  'home.hoe.stap2-titel': 'Open your link',
+  'home.hoe.stap2':
+    'Agree on a time. Everyone opens their link on their own screen, wherever they are. No download, no account.',
+  'home.hoe.stap3-titel': 'Call and solve it',
+  'home.hoe.stap3':
+    'Call or video call and tell each other what you see. Stuck? The hints help you step by step.',
+  'home.wie.foto@alt': 'Xander, the maker of Bureau X',
+  'home.wie.label': 'Who makes this?',
+  'home.wie.heading': 'I’m Xander.',
+  'home.wie.tekst':
+    'I study programming and make Bureau X in my free time. I love stories that really happened and puzzles you can only solve together. It’s a hobby project, not a business. That’s why it’s free, and it will stay that way.',
+  'home.wie.mail':
+    'Questions or ideas? Email <a href="mailto:info@bureau-x.be">info@bureau-x.be</a>.',
   'home.reviews.label': 'What players say',
   'home.reviews.heading': 'Played. Rated.',
   'home.reviews.reviews-note':
     'Played it yourself? You can leave a review on the final screen of your session. Every review is checked for spam and offensive language, not for its score. Reviews are shown in the language they were written in.',
-  'home.section.label': 'How it works',
-  'home.section.heading': 'Get started in three steps',
-  'home.section.step-title': 'Book a session',
-  'home.section.step-desc':
-    'Choose an experience and enter the email addresses of all players. Free, no account needed. Your game link appears right away and is also sent by email.',
-  'home.section.step-title-2': 'Open your case file',
-  'home.section.step-desc-2':
-    'Agree on a time. Everyone opens their own game link in the browser, each from their own home. No download, no installation.',
-  'home.section.step-title-3': 'Solve it together',
-  'home.section.step-desc-3':
-    'Call or video call each other. Your case files fit together. Together you find out what really happened.',
   'home.faq.label': 'Questions',
-  'home.faq.heading': 'Frequently asked questions',
-  'home.faq.faq-q': 'Is Bureau X really free? <span class="faq-arrow">▾</span>',
-  'home.faq.p':
-    'Yes, completely free. No subscription, no account, no in-app purchases. You book a session, every player gets a game link by email and you play.',
-  'home.faq.faq-q-2': 'What do I need to play? <span class="faq-arrow">▾</span>',
-  'home.faq.p-2':
-    'A browser on your phone, tablet or computer, and a way to call or video call your fellow players. Turn your sound on: Kamer 14 has recorded voices and D.U.A. has sound effects. No downloads, no special software.',
-  'home.faq.faq-q-3': 'Do we need to be in the same place? <span class="faq-arrow">▾</span>',
-  'home.faq.p-3':
-    'No. Everyone plays from home on their own screen. So you can easily play together with friends or family who live further away.',
-  'home.faq.faq-q-4': 'How many players do I need? <span class="faq-arrow">▾</span>',
-  'home.faq.p-4':
+  'home.faq.heading': 'What you want to know',
+  'home.faq.gratis-v': 'Is Bureau X really free? <span class="faq-arrow">▾</span>',
+  'home.faq.gratis-a':
+    'Yes. No subscription, no account, no in-game purchases. Bureau X is a hobby project, not a business, so there is no business model behind it.',
+  'home.faq.duur-v': 'How long does a session take? <span class="faq-arrow">▾</span>',
+  'home.faq.duur-a':
+    'Most groups finish Kamer 14 in 25 to 45 minutes and D.U.A. in 30 to 60 minutes. In both games you have one hour at most.',
+  'home.faq.spelers-v': 'How many players do I need? <span class="faq-arrow">▾</span>',
+  'home.faq.spelers-a':
     'Kamer 14 is made for exactly 2 players. D.U.A. is played with 2 to 4: part of the team plays in 1934, the rest in 2034.',
-  'home.faq.faq-q-5': 'How long does a session take? <span class="faq-arrow">▾</span>',
-  'home.faq.p-5':
-    'Kamer 14 takes 45 minutes on average, with a maximum of 60. For D.U.A. you have 60 minutes.',
-  'home.faq.faq-q-6': 'Are the stories real? <span class="faq-arrow">▾</span>',
-  'home.faq.p-6':
+  'home.faq.vast-v': 'What if we get stuck? <span class="faq-arrow">▾</span>',
+  'home.faq.vast-a':
+    'You can ask for hints at every puzzle. They go one step further each time, from a nudge in the right direction to almost the answer. That way every group reaches the end.',
+  'home.faq.niveau-v': 'How hard is it, and from what age? <span class="faq-arrow">▾</span>',
+  'home.faq.niveau-a':
+    'D.U.A. is a good first escape room: it starts with a practice round and suits ages 12 and up. Kamer 14 is a bit harder. You compare documents and work with times and amounts. Because of the theme, a missing woman in psychiatric family foster care, we recommend it from age 14.',
+  'home.faq.nodig-v':
+    'What do I need, and does it work on a phone? <span class="faq-arrow">▾</span>',
+  'home.faq.nodig-a':
+    'A browser on your phone, tablet or computer, and a way to call your fellow players. The documents are easier to read on a bigger screen. Turn your sound on: Kamer 14 has recorded voices and D.U.A. has sound effects. The games are in Dutch.',
+  'home.faq.plek-v': 'Do we need to be in the same place? <span class="faq-arrow">▾</span>',
+  'home.faq.plek-a':
+    'No. Everyone plays on their own screen, wherever they are. So you can easily play together with friends or family who live further away.',
+  'home.faq.mail-v':
+    'Why do you ask for every player’s email address? <span class="faq-arrow">▾</span>',
+  'home.faq.mail-a':
+    'Every player gets their own link, because each of you sees a different part of the case. We send that link to that address. You can read more in our <a href="/privacy.html">privacy policy</a>.',
+  'home.faq.echt-v': 'Are the stories real? <span class="faq-arrow">▾</span>',
+  'home.faq.echt-a':
     'The settings are. Kamer 14 takes place within Geel’s real family foster care system, run by the psychiatric centre OPZ Geel, but Lena Bogaert and her disappearance are fictional. D.U.A. revolves around the real 1934 theft of The Just Judges from St Bavo’s Cathedral, still unsolved today. The 2034 side is made up.',
-  'home.cta-section.label': 'Ready to investigate?',
-  'home.cta-section.cta-title': 'Open your first case file',
-  'home.cta-section.cta-sub': 'Two case files are waiting. Which one will you take?',
-  'home.cta-section.btn': 'Choose your case →',
+  'home.cta.titel': 'Which case will you open first?',
+  'home.cta.btn': 'Play for free',
   'home.cta-section.cta-footnote':
     'Completely free &nbsp;·&nbsp; No account needed &nbsp;·&nbsp; From home',
   'home.footer.footer-tag':
@@ -145,7 +154,7 @@ const en: PaginaWoordenboek = {
   // ── Kamer 14 ────────────────────────────────────────────
   'kamer14.head.title': 'Kamer 14: free online escape room for 2 players (in Dutch)',
   'kamer14.head.description@content':
-    'Free online escape room for 2 players, based on Geel’s family foster care tradition (UNESCO-recognised). Each on your own screen, about 45 minutes, from home. The game is in Dutch.',
+    'Free online escape room for 2 players, based on Geel’s family foster care tradition (UNESCO-recognised). Each on your own screen, 25 to 45 minutes, from home. The game is in Dutch.',
   'kamer14.head.og-title@content':
     'Kamer 14 - Escape room about Geel’s family foster care tradition | Bureau X',
   'kamer14.head.og-description@content':
@@ -157,7 +166,7 @@ const en: PaginaWoordenboek = {
     name: 'Kamer 14',
     brand: { '@type': 'Brand', name: 'Bureau X' },
     description:
-      'Online escape room for two players about the disappearance of Lena Bogaert, based on the Geel tradition of family foster care. About 45 minutes, 100% online, free. The game is in Dutch.',
+      'Online escape room for two players about the disappearance of Lena Bogaert, based on the Geel tradition of family foster care. Usually 25 to 45 minutes, 100% online, free. The game is in Dutch.',
     url: 'https://bureau-x.be/en/kamer-14/',
     sameAs: ['https://escapetalk.nl/games/bureau-x/kamer-14/'],
     image: 'https://bureau-x.be/assets/img/kamer-14-preview.jpg',
@@ -200,7 +209,7 @@ const en: PaginaWoordenboek = {
   'kamer14.hero.hero-stamp': '■&nbsp; Status: unsolved',
   'kamer14.hero.hero-filebox-label': 'OPZ Geel &nbsp;·&nbsp; Boarder case file',
   'kamer14.hero.hero-filebox-stamp': 'Unsolved',
-  'kamer14.body.feit-waarde': '±45 min',
+  'kamer14.body.feit-waarde': '25 to 45 min',
   'kamer14.body.feit-label': 'Playing time',
   'kamer14.body.feit-waarde-2': '2 players',
   'kamer14.body.feit-label-2': 'Duo',
@@ -259,7 +268,7 @@ const en: PaginaWoordenboek = {
     'Kamer 14 has recorded voices (in Dutch) and sound. It’s more intense with headphones, but not required: everything is also written out.',
   'kamer14.faq.faq-q-5': 'How long does it take? <span class="faq-arrow">▾</span>',
   'kamer14.faq.p-5':
-    'About 45 minutes on average, 60 at most. In the story it is four o’clock, and at five An decides whether to report Lena missing.',
+    'Usually 25 to 45 minutes, 60 at most. In the story it is four o’clock, and at five An decides whether to report Lena missing.',
   'kamer14.faq.faq-q-6': 'Is the story based on real events? <span class="faq-arrow">▾</span>',
   'kamer14.faq.p-6':
     'The setting is real: the Geel tradition of family foster care and OPZ Geel exist. Lena Bogaert and her disappearance are fictional, but fit into that world.',
@@ -350,7 +359,7 @@ const en: PaginaWoordenboek = {
   'dua.body.feit-label-2': 'Era B',
   'dua.body.feit-waarde': '2 to 4',
   'dua.body.feit-label-3': 'Players',
-  'dua.body.feit-waarde-2': '±60 min',
+  'dua.body.feit-waarde-2': '30 to 60 min',
   'dua.body.feit-label-4': 'Playing time',
   'dua.spelen.label': 'How D.U.A. works',
   'dua.spelen.heading': 'Two eras. One case.',
@@ -432,7 +441,7 @@ const en: PaginaWoordenboek = {
   'dua.faq.p-3':
     'Each of you opens your own game link in the browser and picks a role. Call or video call each other while you play. No download or installation needed.',
   'dua.faq.faq-q-4': 'How long does it take? <span class="faq-arrow">▾</span>',
-  'dua.faq.p-4': 'You have 60 minutes to solve the case.',
+  'dua.faq.p-4': 'Most groups solve the case in 30 to 60 minutes. You have one hour at most.',
   'dua.faq.faq-q-5': 'Did this really happen? <span class="faq-arrow">▾</span>',
   'dua.faq.p-5':
     'Yes. On the night of 10 to 11 April 1934, The Just Judges panel of the Ghent Altarpiece was stolen from St Bavo’s Cathedral in Ghent. It has never been found. The 2034 side of the game is fiction.',

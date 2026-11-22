@@ -3,15 +3,15 @@ import type { Review } from '../shared/js/reviews.ts';
 import {
   ERVARING_LABELS,
   MIN_VOOR_SAMENVATTING,
-  marqueeItem,
   reviewKaart,
   samenvattingHtml,
 } from './review-kaart.ts';
 import { lokaalPad, teksten } from '../shared/js/i18n.ts';
 import { initLanding } from './landing.ts';
+import { reviewsTonen, tellerTonen } from './home-drempels.ts';
 
 // ── Navigatie, menu, reveal en FAQ (zie landing.ts) ────────────
-initLanding({ getrapt: '.usp-grid, .steps-grid, .reviews-grid, .exp-grid' });
+initLanding({ getrapt: '.reviews-grid' });
 
 // ── Deeltjes achter de hero: pas na het laden, niet blokkerend ──
 const heroCanvas = document.getElementById('hero-canvas');
@@ -23,6 +23,31 @@ if (heroCanvas instanceof HTMLCanvasElement) {
   if (document.readyState === 'complete') start();
   else window.addEventListener('load', start, { once: true });
 }
+
+// ── TELLER: hoeveel groepen een dossier uitspeelden ────────────
+// Het host-paneel zet de speeltijden van afgeronde sessies (zonder demo's)
+// klaar in verdeling/<experience>/duren. Het aantal tijden is het aantal
+// groepen. Geen data of een fout: de teller blijft verborgen.
+async function laadTeller(): Promise<void> {
+  const teller = document.getElementById('teller');
+  const tekst = document.getElementById('teller-tekst');
+  if (!teller || !tekst) return;
+  try {
+    const { haalDuren } = await import('../shared/js/verdeling.ts');
+    const lijsten = await Promise.all([haalDuren('kamer-14'), haalDuren('dua')]);
+    const aantal = lijsten.reduce((som, l) => som + l.length, 0);
+    if (!tellerTonen(aantal)) return;
+    const [vet, rest] = teksten().tellerGroepen(aantal);
+    const b = document.createElement('b');
+    b.textContent = vet;
+    tekst.replaceChildren(b, rest);
+    teller.hidden = false;
+  } catch (err) {
+    console.error('Teller laden mislukt:', err);
+  }
+}
+
+void laadTeller();
 
 // ── RICH RESULTS: review-sterren voor Google ───────────────────
 // Injecteert per experience een Product-schema met AggregateRating,
@@ -62,35 +87,30 @@ function injecteerRatingSchema(reviews: Review[]): void {
 }
 
 // ── ECHTE REVIEWS LADEN ────────────────────────────────────────
-// Reviews komen uit Firebase en worden enkel getoond als ze
-// goedgekeurd zijn. Zolang er geen zijn, blijven de sectie en de
-// marquee verborgen (geen verzonnen reviews).
+// Reviews komen uit Firebase en worden enkel getoond als ze goedgekeurd
+// zijn. De sectie blijft verborgen tot er genoeg zijn (zie home-drempels.ts):
+// twee reviews van 3 sterren schrikken meer af dan geen reviews.
 async function laadReviews(): Promise<void> {
   const sectie = document.getElementById('reviews');
   const grid = document.getElementById('reviews-grid');
   if (!sectie || !grid) return;
 
-  const marqueeWrap = document.getElementById('marquee-wrap');
-  const marqueeTrack = document.getElementById('marquee-track');
-
   let reviews: Review[];
   try {
-    // Ruim ophalen: de eerste 6 worden getoond, maar het gemiddelde voor
-    // de rich results telt over alle goedgekeurde reviews.
     // Dynamisch geladen: valt Firebase uit, dan blijven menu, reveal en
-    // deeltjes gewoon werken (vroeger brak een Firebase-fout de hele pagina).
+    // deeltjes gewoon werken.
     const { leesGoedgekeurdeReviews } = await import('../shared/js/reviews.ts');
     reviews = await leesGoedgekeurdeReviews(100);
   } catch (err) {
     console.error('Reviews laden mislukt:', err);
-    return; // sectie en marquee blijven verborgen
+    return; // sectie blijft verborgen
   }
 
-  if (reviews.length === 0) return;
+  if (!reviewsTonen(reviews)) return;
 
   injecteerRatingSchema(reviews);
 
-  // Veilig: reviewKaart/marqueeItem halen alle spelerteksten door escHtml.
+  // Veilig: reviewKaart haalt alle spelerteksten door escHtml.
   // eslint-disable-next-line no-unsanitized/property
   grid.innerHTML = reviews.slice(0, 6).map(reviewKaart).join('');
   sectie.style.display = '';
@@ -103,17 +123,9 @@ async function laadReviews(): Promise<void> {
     samenvatting.innerHTML = samenvattingHtml(reviews);
     samenvatting.hidden = false;
   }
-
-  if (marqueeWrap && marqueeTrack) {
-    // Twee keer dezelfde set voor een naadloze lus.
-    const items = reviews.slice(0, 12).map(marqueeItem).join('');
-    // eslint-disable-next-line no-unsanitized/property
-    marqueeTrack.innerHTML = items + items;
-    marqueeWrap.style.display = '';
-  }
 }
 
-laadReviews();
+void laadReviews();
 
 // ── EASTER EGG ─────────────────────────────────────────────────
 console.log(

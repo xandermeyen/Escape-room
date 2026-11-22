@@ -72,14 +72,16 @@
         <span style="display: none" translate="no">Bureau X</span>
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#experiences" data-i18n="home.navLinks.a">Experiences</a></li>
+        <li><a href="#experiences" data-i18n="home.nav.dossiers">Dossiers</a></li>
+        <li><a href="#hoe" data-i18n="home.nav.hoe">Hoe het werkt</a></li>
+        <li><a href="#wie" data-i18n="home.nav.wie">Wie maakt dit?</a></li>
         <li id="navReviews" style="display: none">
           <a href="#reviews" data-i18n="home.navReviews.a">Reviews</a>
         </li>
         <li><a href="#faq" translate="no">FAQ</a></li>
         <li class="nav-taal" data-taalkeuze></li>
         <li>
-          <a href="#experiences" class="btn-nav" data-i18n="home.navLinks.btn-nav">Boek nu</a>
+          <a href="#experiences" class="btn-nav" data-i18n="home.nav.speel">Speel gratis</a>
         </li>
       </ul>
       <button
@@ -97,200 +99,257 @@
     <section class="hero">
       <canvas id="hero-canvas"></canvas>
       <div class="hero-vignette"></div>
-      <div class="hero-content">
-        <h1 class="hero-h1">
-          <span class="hero-eyebrow" data-i18n="home.hero.hero-eyebrow"
-            >Gratis online escape rooms</span
-          >
-          <span class="hero-title" data-i18n="home.hero.hero-title"
-            >Echte mysteries.<br /><em>Jij lost ze op.</em></span
-          >
-        </h1>
-        <p class="hero-sub" data-i18n="home.hero.hero-sub">
-          Online escape rooms gebaseerd op echte Belgische plaatsen en onopgeloste verhalen. Samen
-          thuis spelen, op je eigen scherm. Altijd gratis.
-        </p>
-        <div class="hero-ctas">
-          <a href="#experiences" class="btn btn-gold" data-i18n="home.hero.btn"
-            >Bekijk experiences</a
-          >
-          <a href="#over" class="btn btn-outline" data-i18n="home.hero.btn-2">Over Bureau X</a>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <h1 class="hero-h1">
+            <span class="hero-eyebrow" data-i18n="home.hero.hero-eyebrow"
+              >Gratis online escape rooms</span
+            >
+            <span class="hero-title" data-i18n="home.hero.hero-title"
+              >Echte mysteries.<br /><em>Jij lost ze op.</em></span
+            >
+          </h1>
+          <p class="hero-sub" data-i18n="home.hero.sub">
+            Online escape rooms rond echte Belgische plaatsen en verhalen. Ieder speelt op zijn
+            eigen scherm, samen aan de telefoon. Gratis en zonder account.
+          </p>
+          <div class="hero-ctas">
+            <a href="#experiences" class="btn btn-gold" data-i18n="home.hero.speel">Speel gratis</a>
+            <a href="#wie" class="btn btn-outline" data-i18n="home.hero.wie">Wie maakt dit?</a>
+          </div>
+          <p class="hero-teller" id="teller" hidden>
+            <span class="teller-dot" aria-hidden="true"></span><span id="teller-tekst"></span>
+          </p>
         </div>
-        <div>
-          <span class="hero-tag" data-i18n="home.hero.hero-tag"
-            >&#9632;&nbsp; Gratis &nbsp;&middot;&nbsp; 2 experiences &nbsp;&middot;&nbsp;
-            Nederlandstalig</span
-          >
+        <div class="hero-beeld">
+          <figure class="foto foto--achter">
+            <img
+              src="/assets/img/dua-1934-720.webp"
+              srcset="/assets/img/dua-1934-720.webp 720w, /assets/img/dua-1934-1200.webp 1200w"
+              sizes="(max-width: 900px) 70vw, 460px"
+              width="1200"
+              height="647"
+              fetchpriority="high"
+              alt="D.U.A.: het scherm van het team in 1934, met de gesaboteerde typemachine"
+              data-i18n-alt="home.hero.foto-dua@alt"
+            />
+            <figcaption data-i18n="home.hero.foto-dua">D.U.A. · Gent, 1934</figcaption>
+          </figure>
+          <figure class="foto foto--voor">
+            <img
+              src="/assets/img/kamer-14-bureau-720.webp"
+              srcset="
+                /assets/img/kamer-14-bureau-720.webp 720w,
+                /assets/img/kamer-14-bureau-915.webp 915w
+              "
+              sizes="(max-width: 900px) 65vw, 420px"
+              width="915"
+              height="610"
+              fetchpriority="high"
+              alt="Kamer 14: het bureau van begeleidster An in het OPZ Geel"
+              data-i18n-alt="home.hero.foto-k14@alt"
+            />
+            <figcaption data-i18n="home.hero.foto-k14">Kamer 14 · Geel</figcaption>
+          </figure>
+          <span class="stempel hero-stempel" data-i18n="home.hero.stempel">Gratis</span>
         </div>
-      </div>
-      <div class="hero-scroll">
-        <div class="scroll-label" data-i18n="home.hero.scroll-label">Scroll</div>
-        <div class="scroll-line"></div>
       </div>
     </section>
 
-    <div class="marquee-wrap" id="marquee-wrap" style="display: none">
-      <div class="marquee-track" id="marquee-track"></div>
-    </div>
-
-    <section class="section" id="experiences" style="background: var(--bg)">
+    <section class="section" id="experiences">
       <div class="container">
-        <p class="label reveal" data-i18n="home.experiences.label">Onze experiences</p>
-        <h2 class="heading reveal" data-i18n="home.experiences.heading">
-          Twee verhalen. Jij kiest welk.
-        </h2>
-        <p class="sub reveal" data-i18n="home.experiences.sub">
-          Elke Bureau X experience is gebouwd rond een echte plek of een onopgelost Belgisch
-          mysterie.
-        </p>
-        <div class="rule reveal"></div>
-        <div class="exp-grid">
-          <div class="exp-card reveal">
-            <span class="exp-badge badge-red" data-i18n="home.experiences.exp-badge"
-              >Onopgelost</span
-            >
-            <div class="exp-num-col"><span class="exp-num">14</span></div>
-            <div class="exp-body">
-              <span class="exp-tab" data-i18n="home.experiences.exp-tab"
-                >Dossier 14 &middot; Geel</span
+        <div class="sectie-kop">
+          <div>
+            <p class="label" data-i18n="home.dossiers.label">De dossierkast</p>
+            <h2 class="heading" data-i18n="home.dossiers.heading">Twee dossiers liggen open.</h2>
+          </div>
+          <p class="sub" data-i18n="home.dossiers.sub">
+            Elk dossier draait rond een echte plek. Jullie spelen elk een andere kant van het
+            verhaal.
+          </p>
+        </div>
+
+        <article class="dossier reveal">
+          <p class="dossier-tab" data-i18n="home.dossiers.k14-tab">Dossier 14 &middot; Geel</p>
+          <div class="dossier-media">
+            <img
+              class="dossier-hoofdbeeld"
+              src="/assets/img/kamer-14-bureau-720.webp"
+              srcset="
+                /assets/img/kamer-14-bureau-720.webp 720w,
+                /assets/img/kamer-14-bureau-915.webp 915w
+              "
+              sizes="(max-width: 900px) 90vw, 520px"
+              width="915"
+              height="610"
+              loading="lazy"
+              alt="Kamer 14, speler A: het bureau van An in het OPZ Geel, met computer, prikbord en telefoon"
+              data-i18n-alt="home.dossiers.k14-beeld@alt"
+            />
+            <img
+              class="dossier-gsm"
+              src="/assets/img/kamer-14-kamer-gsm-320.webp"
+              width="320"
+              height="443"
+              loading="lazy"
+              alt="Kamer 14, speler B op een gsm: de kamer van Lena"
+              data-i18n-alt="home.dossiers.k14-gsm@alt"
+            />
+          </div>
+          <div class="dossier-body">
+            <div class="dossier-kop">
+              <h3 class="dossier-titel" translate="no">Kamer 14</h3>
+              <span class="stempel" data-i18n="home.dossiers.k14-stempel">Onopgelost</span>
+            </div>
+            <p class="dossier-desc" data-i18n="home.dossiers.k14-desc">
+              Op dinsdagochtend 6 mei is Lena Bogaert verdwenen uit haar kamer bij het gastgezin in
+              Geel. Geen briefje, geen uitleg. Eén van jullie zit aan het bureau van haar
+              begeleidster, de ander staat in haar kamer. Samen zoeken jullie uit waar ze naartoe
+              is.
+            </p>
+            <ul class="dossier-feiten">
+              <li data-i18n="home.dossiers.k14-spelers">2 spelers</li>
+              <li data-i18n="home.dossiers.k14-duur">25 à 45 minuten</li>
+              <li data-i18n="home.dossiers.k14-niveau">Moeilijkheid: gemiddeld</li>
+              <li data-i18n="home.dossiers.k14-leeftijd">Vanaf 14 jaar</li>
+            </ul>
+            <div class="dossier-acties">
+              <a href="/kamer-14/#boek" class="btn btn-gold" data-i18n="home.dossiers.start"
+                >Start dit dossier</a
               >
-              <h3 class="exp-title" translate="no">Kamer 14</h3>
-              <p class="exp-meta" data-i18n="home.experiences.exp-meta">
-                Online escape room &nbsp;&middot;&nbsp; Geel, België &nbsp;&middot;&nbsp; Duo
-              </p>
-              <p class="exp-desc" data-i18n="home.experiences.exp-desc">
-                Op dinsdagochtend 6 mei is Lena Bogaert na het ontbijt verdwenen uit haar kamer bij
-                het gastgezin Martens-Peeters in Geel. Geen briefje, geen uitleg. Eén van jullie zit
-                aan het bureau van haar begeleidster, de ander staat in haar kamer. Samen zoeken
-                jullie uit waar ze naartoe is.
-              </p>
-              <div class="exp-specs">
-                <div class="spec" data-i18n="home.experiences.spec">
-                  <span class="spec-dot"></span>45 minuten
-                </div>
-                <div class="spec" data-i18n="home.experiences.spec-2">
-                  <span class="spec-dot"></span>voor 2 spelers
-                </div>
-                <div class="spec" data-i18n="home.experiences.spec-3">
-                  <span class="spec-dot"></span>100% online
-                </div>
-              </div>
-              <div class="exp-actions">
-                <a
-                  href="/kamer-14/#boek"
-                  class="btn btn-gold btn-sm"
-                  data-i18n="home.experiences.btn"
-                  >Boek sessie &rarr;</a
-                >
-                <a
-                  href="/kamer-14/"
-                  class="btn btn-outline btn-sm"
-                  data-i18n="home.experiences.btn-2"
-                  >Meer info</a
-                >
-                <span class="exp-free" data-i18n="home.experiences.exp-free">Gratis</span>
-              </div>
+              <a href="/kamer-14/" class="dossier-meer" data-i18n="home.dossiers.k14-meer"
+                >Meer over Kamer 14</a
+              >
             </div>
           </div>
-          <div class="exp-card reveal">
-            <span class="exp-badge badge-green" data-i18n="home.experiences.exp-badge-2"
-              >Beschikbaar</span
-            >
-            <div class="exp-num-col"><span class="exp-num" translate="no">II</span></div>
-            <div class="exp-body">
-              <span class="exp-tab" data-i18n="home.experiences.exp-tab-2"
-                >Dossier 1934/RR &middot; Gent</span
+        </article>
+
+        <article class="dossier reveal">
+          <p class="dossier-tab" data-i18n="home.dossiers.dua-tab">Dossier 1934/RR &middot; Gent</p>
+          <div class="dossier-media dossier-media--duo">
+            <img
+              class="duo-1934"
+              src="/assets/img/dua-1934-720.webp"
+              srcset="/assets/img/dua-1934-720.webp 720w, /assets/img/dua-1934-1200.webp 1200w"
+              sizes="(max-width: 900px) 72vw, 420px"
+              width="1200"
+              height="647"
+              loading="lazy"
+              alt="D.U.A., team 1934: de opdrachten van De Schrijver met de gesaboteerde typemachine"
+              data-i18n-alt="home.dossiers.dua-1934@alt"
+            />
+            <img
+              class="duo-2034"
+              src="/assets/img/dua-2034-600.webp"
+              srcset="/assets/img/dua-2034-600.webp 600w, /assets/img/dua-2034-960.webp 960w"
+              sizes="(max-width: 900px) 60vw, 340px"
+              width="960"
+              height="518"
+              loading="lazy"
+              alt="D.U.A., team 2034: het archief van Bureau X met het restauratieverslag"
+              data-i18n-alt="home.dossiers.dua-2034@alt"
+            />
+            <span class="jaartal jaartal--1934" translate="no">1934</span>
+            <span class="jaartal jaartal--2034" translate="no">2034</span>
+          </div>
+          <div class="dossier-body">
+            <div class="dossier-kop">
+              <h3 class="dossier-titel" translate="no">D.U.A.</h3>
+              <span class="stempel" data-i18n="home.dossiers.dua-stempel"
+                >Onopgelost sinds 1934</span
               >
-              <h3 class="exp-title" translate="no">D.U.A.</h3>
-              <p class="exp-meta" data-i18n="home.experiences.exp-meta-2">
-                Online escape room &nbsp;&middot;&nbsp; Gent, België &nbsp;&middot;&nbsp; 2 tot 4
-                spelers
-              </p>
-              <p class="exp-desc" data-i18n="home.experiences.exp-desc-2">
-                In de nacht van 10 op 11 april 1934 verdwijnt het paneel
-                <em>De Rechtvaardige Rechters</em> van Jan van Eyck uit de Sint-Baafskathedraal in
-                Gent. Een groep speelt midden in 1934, terwijl de anderen een eeuw later voor Bureau
-                X werken en de zaak reconstrueren op basis van wat 1934 achterlaat.
-              </p>
-              <div class="exp-specs">
-                <div class="spec" data-i18n="home.experiences.spec-4">
-                  <span class="spec-dot"></span>60 minuten
-                </div>
-                <div class="spec" data-i18n="home.experiences.spec-5">
-                  <span class="spec-dot"></span>voor 2 tot 4 spelers
-                </div>
-                <div class="spec" data-i18n="home.experiences.spec-6">
-                  <span class="spec-dot"></span>100% online
-                </div>
-              </div>
-              <div class="exp-actions">
-                <a href="/dua/#boek" class="btn btn-gold btn-sm" data-i18n="home.experiences.btn-3"
-                  >Boek sessie &rarr;</a
-                >
-                <a href="/dua/" class="btn btn-outline btn-sm" data-i18n="home.experiences.btn-4"
-                  >Meer info</a
-                >
-                <span class="exp-free" data-i18n="home.experiences.exp-free-2">Gratis</span>
-              </div>
+            </div>
+            <p class="dossier-desc" data-i18n="home.dossiers.dua-desc">
+              In de nacht van 10 op 11 april 1934 verdwijnt het paneel
+              <em>De Rechtvaardige Rechters</em> van Jan van Eyck uit de Sint-Baafskathedraal in
+              Gent. Een deel van jullie speelt in 1934, de rest een eeuw later in het archief van
+              Bureau X. Wat de ene groep weet, mist de andere.
+            </p>
+            <ul class="dossier-feiten">
+              <li data-i18n="home.dossiers.dua-spelers">2 tot 4 spelers</li>
+              <li data-i18n="home.dossiers.dua-duur">30 à 60 minuten</li>
+              <li data-i18n="home.dossiers.dua-niveau">Moeilijkheid: instap</li>
+              <li data-i18n="home.dossiers.dua-leeftijd">Vanaf 12 jaar</li>
+            </ul>
+            <div class="dossier-acties">
+              <a href="/dua/#boek" class="btn btn-gold" data-i18n="home.dossiers.start-2"
+                >Start dit dossier</a
+              >
+              <a href="/dua/" class="dossier-meer" data-i18n="home.dossiers.dua-meer"
+                >Meer over D.U.A.</a
+              >
             </div>
           </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section how-section" id="hoe">
+      <div class="container">
+        <p class="label" data-i18n="home.hoe.label">Hoe het werkt</p>
+        <h2 class="heading" data-i18n="home.hoe.heading">In drie stappen aan de slag</h2>
+        <ol class="steps-grid">
+          <li class="step">
+            <span class="step-num" aria-hidden="true">01</span>
+            <h3 class="step-title" data-i18n="home.hoe.stap1-titel">Kies een dossier</h3>
+            <p class="step-desc" data-i18n="home.hoe.stap1">
+              Vul de e-mailadressen van je medespelers in. Elke speler krijgt zo een eigen link,
+              want ieder ziet een ander deel van het dossier.
+            </p>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">02</span>
+            <h3 class="step-title" data-i18n="home.hoe.stap2-titel">Open je link</h3>
+            <p class="step-desc" data-i18n="home.hoe.stap2">
+              Spreek een moment af. Ieder opent zijn link op zijn eigen scherm, waar hij ook is.
+              Geen download, geen account.
+            </p>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">03</span>
+            <h3 class="step-title" data-i18n="home.hoe.stap3-titel">Bel en los het op</h3>
+            <p class="step-desc" data-i18n="home.hoe.stap3">
+              Bel of videobel en vertel elkaar wat je ziet. Zitten jullie vast, dan helpen de hints
+              stap voor stap.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section wie-section" id="wie">
+      <div class="container wie-grid">
+        <figure class="wie-foto">
+          <img
+            src="/assets/img/xander-400.webp"
+            srcset="/assets/img/xander-400.webp 400w, /assets/img/xander-800.webp 800w"
+            sizes="(max-width: 600px) 170px, 240px"
+            width="400"
+            height="500"
+            loading="lazy"
+            alt="Xander, de maker van Bureau X"
+            data-i18n-alt="home.wie.foto@alt"
+          />
+        </figure>
+        <div class="wie-tekst">
+          <p class="label" data-i18n="home.wie.label">Wie maakt dit?</p>
+          <h2 class="heading" data-i18n="home.wie.heading">Ik ben Xander.</h2>
+          <p class="wie-p" data-i18n="home.wie.tekst">
+            Ik studeer programmeren en maak Bureau X in mijn vrije tijd. Ik hou van verhalen die
+            echt gebeurd zijn en van puzzels die je alleen samen oplost. Het is een hobbyproject,
+            geen bedrijf. Daarom is het gratis, en dat blijft zo.
+          </p>
+          <p class="wie-mail" data-i18n="home.wie.mail">
+            Vragen of ideeën? Mail naar <a href="mailto:info@bureau-x.be">info@bureau-x.be</a>.
+          </p>
         </div>
       </div>
     </section>
 
-    <section class="section usp-section" id="over">
+    <section class="section" id="reviews" style="display: none">
       <div class="container">
-        <p class="label reveal" style="text-align: center" data-i18n="home.over.label">
-          Waarom Bureau X
-        </p>
-        <h2
-          class="heading reveal"
-          style="text-align: center; max-width: 540px; margin: 0 auto 0.5rem"
-          data-i18n="home.over.heading"
-        >
-          Geen gewone escape room
-        </h2>
-        <div class="usp-grid">
-          <div class="usp-item reveal">
-            <div class="usp-icon">&#10006;</div>
-            <h3 class="usp-title" data-i18n="home.over.usp-title">Gebaseerd op echte verhalen</h3>
-            <p class="usp-desc" data-i18n="home.over.usp-desc">
-              Geen willekeurige puzzels. Elke experience is gebouwd rond een echte plek, traditie of
-              onopgelost mysterie.
-            </p>
-          </div>
-          <div class="usp-item reveal">
-            <div class="usp-icon">&#9675;</div>
-            <h3 class="usp-title" data-i18n="home.over.usp-title-2">Altijd gratis</h3>
-            <p class="usp-desc" data-i18n="home.over.usp-desc-2">
-              Geen abonnement, geen verborgen kosten. Bureau X experiences zijn gratis te spelen.
-              Altijd.
-            </p>
-          </div>
-          <div class="usp-item reveal">
-            <div class="usp-icon">&#8895;</div>
-            <h3 class="usp-title" data-i18n="home.over.usp-title-3">Vanuit huis</h3>
-            <p class="usp-desc" data-i18n="home.over.usp-desc-3">
-              Elke speler opent zijn eigen dossier in de browser. Geen download, geen verplaatsing.
-            </p>
-          </div>
-          <div class="usp-item reveal">
-            <div class="usp-icon">&#9670;</div>
-            <h3 class="usp-title" data-i18n="home.over.usp-title-4">Volledig Nederlandstalig</h3>
-            <p class="usp-desc" data-i18n="home.over.usp-desc-4">
-              Alle verhalen, puzzels en dossiers zijn in het Nederlands. Gemaakt voor
-              Nederlandstaligen.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="reviews" style="background: var(--bg); display: none">
-      <div class="container">
-        <p class="label reveal" data-i18n="home.reviews.label">Wat spelers zeggen</p>
-        <h2 class="heading reveal" data-i18n="home.reviews.heading">Gespeeld. Beoordeeld.</h2>
-        <div class="rule reveal"></div>
+        <p class="label" data-i18n="home.reviews.label">Wat spelers zeggen</p>
+        <h2 class="heading" data-i18n="home.reviews.heading">Gespeeld. Beoordeeld.</h2>
         <p class="reviews-summary" id="reviews-summary" hidden></p>
         <div class="reviews-grid" id="reviews-grid"></div>
         <p class="reviews-note" data-i18n="home.reviews.reviews-note">
@@ -300,115 +359,113 @@
       </div>
     </section>
 
-    <section class="section how-section">
-      <div class="container">
-        <p class="label reveal" style="text-align: center" data-i18n="home.section.label">
-          Hoe het werkt
-        </p>
-        <h2
-          class="heading reveal"
-          style="text-align: center; max-width: 480px; margin: 0 auto 0.5rem"
-          data-i18n="home.section.heading"
-        >
-          In drie stappen aan de slag
-        </h2>
-        <div class="steps-grid">
-          <div class="step reveal">
-            <div class="step-num">1</div>
-            <h3 class="step-title" data-i18n="home.section.step-title">Boek een sessie</h3>
-            <p class="step-desc" data-i18n="home.section.step-desc">
-              Kies een experience en vul de e-mailadressen van alle spelers in. Gratis, geen account
-              nodig. Jullie spellink verschijnt meteen en komt ook per mail.
-            </p>
-          </div>
-          <div class="step reveal">
-            <div class="step-num">2</div>
-            <h3 class="step-title" data-i18n="home.section.step-title-2">Open je dossier</h3>
-            <p class="step-desc" data-i18n="home.section.step-desc-2">
-              Spreek een moment af. Ieder opent zijn eigen spellink in de browser, elk vanuit zijn
-              eigen huis. Geen download, geen installatie.
-            </p>
-          </div>
-          <div class="step reveal">
-            <div class="step-num">3</div>
-            <h3 class="step-title" data-i18n="home.section.step-title-3">Los het samen op</h3>
-            <p class="step-desc" data-i18n="home.section.step-desc-3">
-              Bel of videobel met elkaar. Jullie dossiers vullen elkaar aan. Samen kom je erachter
-              wat er echt gebeurd is.
-            </p>
-          </div>
+    <section class="section" id="faq">
+      <div class="container faq-grid">
+        <div>
+          <p class="label" data-i18n="home.faq.label">Vragen</p>
+          <h2 class="heading" data-i18n="home.faq.heading">Wat je wil weten</h2>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="faq" style="background: var(--bg)">
-      <div class="container--narrow">
-        <p class="label reveal" data-i18n="home.faq.label">Vragen</p>
-        <h2 class="heading reveal" data-i18n="home.faq.heading">Veelgestelde vragen</h2>
-        <div class="rule reveal"></div>
-        <div class="faq-list reveal">
+        <div class="faq-list">
           <div class="faq-item">
-            <button class="faq-q" data-i18n="home.faq.faq-q">
+            <button class="faq-q" data-i18n="home.faq.gratis-v">
               Is Bureau X echt gratis? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p data-i18n="home.faq.p">
-                Ja, volledig gratis. Geen abonnement, geen account, geen in-app aankopen. Je boekt
-                een sessie, iedere speler krijgt een spellink per mail en jullie spelen.
+              <p data-i18n="home.faq.gratis-a">
+                Ja. Geen abonnement, geen account, geen aankopen in het spel. Bureau X is een
+                hobbyproject, geen bedrijf, dus er zit geen verdienmodel achter.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q" data-i18n="home.faq.faq-q-2">
-              Wat heb ik nodig om te spelen? <span class="faq-arrow">&#9662;</span>
+            <button class="faq-q" data-i18n="home.faq.duur-v">
+              Hoe lang duurt een sessie? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p data-i18n="home.faq.p-2">
-                Een browser op je telefoon, tablet of computer en een manier om met je medespelers
-                te bellen of videobellen. Zet je geluid aan: Kamer 14 heeft ingesproken stemmen,
-                D.U.A. geluidseffecten. Geen downloads, geen speciale software.
+              <p data-i18n="home.faq.duur-a">
+                De meeste groepen spelen Kamer 14 uit in 25 à 45 minuten en D.U.A. in 30 à 60
+                minuten. In beide spellen hebben jullie maximaal een uur.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q" data-i18n="home.faq.faq-q-3">
-              Moeten we op dezelfde plek zijn? <span class="faq-arrow">&#9662;</span>
-            </button>
-            <div class="faq-a">
-              <p data-i18n="home.faq.p-3">
-                Nee. Iedereen speelt vanuit huis op een eigen scherm. Je kunt dus perfect samen
-                spelen met vrienden of familie die verder weg wonen.
-              </p>
-            </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q" data-i18n="home.faq.faq-q-4">
+            <button class="faq-q" data-i18n="home.faq.spelers-v">
               Hoeveel spelers heb ik nodig? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p data-i18n="home.faq.p-4">
+              <p data-i18n="home.faq.spelers-a">
                 Kamer 14 is gemaakt voor precies 2 spelers. D.U.A. speel je met 2 tot 4: een deel
                 van het team speelt in 1934, de rest in 2034.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q" data-i18n="home.faq.faq-q-5">
-              Hoe lang duurt een sessie? <span class="faq-arrow">&#9662;</span>
+            <button class="faq-q" data-i18n="home.faq.vast-v">
+              Wat als we vastzitten? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p data-i18n="home.faq.p-5">
-                Kamer 14 duurt gemiddeld 45 minuten, met een maximum van 60. Voor D.U.A. hebben
-                jullie 60 minuten.
+              <p data-i18n="home.faq.vast-a">
+                Bij elke puzzel kunnen jullie hints vragen. Ze gaan stap voor stap verder, van een
+                duwtje in de goede richting tot bijna het antwoord. Zo raakt elke groep tot het
+                einde.
               </p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-q" data-i18n="home.faq.faq-q-6">
+            <button class="faq-q" data-i18n="home.faq.niveau-v">
+              Hoe moeilijk is het, en vanaf welke leeftijd? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p data-i18n="home.faq.niveau-a">
+                D.U.A. is een goede eerste escape room: het begint met een oefenronde en past vanaf
+                12 jaar. Kamer 14 is iets moeilijker. Jullie leggen documenten naast elkaar en
+                rekenen met tijden en bedragen. Door het thema, een vermiste vrouw in de
+                psychiatrische gezinszorg, raden we het aan vanaf 14 jaar.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" data-i18n="home.faq.nodig-v">
+              Wat heb ik nodig, en werkt het op gsm? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p data-i18n="home.faq.nodig-a">
+                Een browser op je gsm, tablet of computer, en een manier om met je medespelers te
+                bellen. Op een groter scherm lees je de documenten wel makkelijker. Zet je geluid
+                aan: Kamer 14 heeft ingesproken stemmen, D.U.A. geluidseffecten.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" data-i18n="home.faq.plek-v">
+              Moeten we op dezelfde plek zijn? <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p data-i18n="home.faq.plek-a">
+                Nee. Iedereen speelt op een eigen scherm, waar hij ook is. Je kunt dus perfect samen
+                spelen met vrienden of familie die verder weg wonen.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" data-i18n="home.faq.mail-v">
+              Waarom vragen jullie het e-mailadres van elke speler?
+              <span class="faq-arrow">&#9662;</span>
+            </button>
+            <div class="faq-a">
+              <p data-i18n="home.faq.mail-a">
+                Elke speler krijgt een eigen link, want ieder ziet een ander deel van het dossier.
+                Die link sturen we naar dat adres. Meer daarover lees je in ons
+                <a href="/privacy.html">privacybeleid</a>.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" data-i18n="home.faq.echt-v">
               Zijn de verhalen echt? <span class="faq-arrow">&#9662;</span>
             </button>
             <div class="faq-a">
-              <p data-i18n="home.faq.p-6">
+              <p data-i18n="home.faq.echt-a">
                 De achtergrond wel. Kamer 14 speelt zich af binnen de echte Geelse gezinsverpleging
                 van het OPZ Geel, maar Lena Bogaert en haar verdwijning zijn fictief. D.U.A. draait
                 rond de echte, tot vandaag onopgeloste diefstal van De Rechtvaardige Rechters uit de
@@ -421,20 +478,8 @@
     </section>
 
     <section class="cta-section">
-      <p class="label" style="text-align: center" data-i18n="home.cta-section.label">
-        Klaar voor het onderzoek?
-      </p>
-      <h2 class="cta-title" data-i18n="home.cta-section.cta-title">Start je eerste dossier</h2>
-      <p class="cta-sub" data-i18n="home.cta-section.cta-sub">
-        Twee dossiers liggen klaar. Welk neem jij?
-      </p>
-      <a
-        href="#experiences"
-        class="btn btn-gold"
-        style="font-size: 0.95rem; padding: 1rem 2.5rem"
-        data-i18n="home.cta-section.btn"
-        >Kies je dossier &rarr;</a
-      >
+      <h2 class="cta-title" data-i18n="home.cta.titel">Welk dossier open jij eerst?</h2>
+      <a href="#experiences" class="btn btn-gold" data-i18n="home.cta.btn">Speel gratis</a>
       <span class="cta-footnote" data-i18n="home.cta-section.cta-footnote"
         >Volledig gratis &nbsp;&middot;&nbsp; Geen account nodig &nbsp;&middot;&nbsp; Vanuit
         huis</span

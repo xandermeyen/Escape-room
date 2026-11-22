@@ -51,4 +51,5 @@ export const en: Teksten = {
   taalSuggestie: 'This page is also available in English.',
   taalSuggestieLink: 'Go to the English version',
   taalSuggestieSluiten: 'Close',
+  tellerGroepen: (n: number): [string, string] => [`${n} groups`, ' have already solved a case'],
 };

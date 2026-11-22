@@ -139,10 +139,10 @@ test('README: homepage in het Nederlands en het Engels', async ({ context }) => 
   await foto(page, 'home-en.jpg');
 });
 
-test('README: Kamer 14, Speler A met hint en Speler B op gsm', async ({ context }) => {
+// Zonder geopende hint: deze beelden staan ook op de homepage.
+test('README: Kamer 14, Speler A en Speler B op gsm', async ({ context }) => {
   await voorbereid(context);
   const { a, b } = await kamer14(context);
-  await a.getByRole('button', { name: 'Toon een hint' }).first().click();
   await foto(a, 'kamer14-speler-a.jpg');
   await b.setViewportSize({ width: 390, height: 844 });
   await foto(b, 'kamer14-speler-b-gsm.jpg');
@@ -261,7 +261,7 @@ test('Promo: Kamer 14 en D.U.A.', async ({ context }) => {
       boven: 'Online escape room · Geel',
       titel: 'Kamer 14',
       slogan: 'Lena is verdwenen. Jullie hebben één uur om te ontdekken waarom.',
-      feiten: ['2 spelers', '± 45 min', 'Elk op je eigen scherm', 'In je browser'],
+      feiten: ['2 spelers', '25 à 45 min', 'Elk op je eigen scherm', 'In je browser'],
       beeldVoor: k14b,
       beeldAchter: k14a,
       bijschriftVoor: 'Speler B · haar kamer',
@@ -275,7 +275,7 @@ test('Promo: Kamer 14 en D.U.A.', async ({ context }) => {
       boven: 'Online escape room · Gent',
       titel: 'D.U.A.',
       slogan: 'Gent, 1934. Het paneel is weg. Los het op, door de tijd heen.',
-      feiten: ['2 tot 4 spelers', '60 min', '1934 én 2034', 'In je browser'],
+      feiten: ['2 tot 4 spelers', '30 à 60 min', '1934 én 2034', 'In je browser'],
       beeldVoor: d1934,
       beeldAchter: d2034,
       bijschriftVoor: 'Team 1934',
@@ -290,7 +290,7 @@ test('Promo: Kamer 14 en D.U.A.', async ({ context }) => {
     boven: 'Online escape room · Belgium',
     titel: 'Kamer 14',
     slogan: 'Lena has disappeared. You have one hour to find out why.',
-    feiten: ['2 players', '± 45 min', 'Each on your own screen', 'Game in Dutch'],
+    feiten: ['2 players', '25 to 45 min', 'Each on your own screen', 'Game in Dutch'],
     beeldVoor: k14b,
     beeldAchter: k14a,
     bijschriftVoor: 'Player B · her room',
@@ -304,7 +304,7 @@ test('Promo: Kamer 14 en D.U.A.', async ({ context }) => {
     boven: 'Online escape room · Belgium',
     titel: 'D.U.A.',
     slogan: 'Ghent, 1934. The panel is gone. Solve it across time.',
-    feiten: ['2 to 4 players', '60 min', '1934 and 2034', 'Game in Dutch'],
+    feiten: ['2 to 4 players', '30 to 60 min', '1934 and 2034', 'Game in Dutch'],
     beeldVoor: d1934,
     beeldAchter: d2034,
     bijschriftVoor: 'Team 1934',

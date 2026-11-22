@@ -65,3 +65,6 @@ Claude outputs/
 # Gegenereerde pagina's in andere talen (pnpm i18n, zie docs/adr/001-meertaligheid.md)
 /en/
 /fr/
+
+# Originele profielfoto (groot, met EXIF). Online staat enkel public/assets/img/xander-*.webp.
+docs/screenshots/profile.jpg
