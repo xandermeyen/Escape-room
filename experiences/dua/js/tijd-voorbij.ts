@@ -1,6 +1,7 @@
 import { sluitSessieUitUrl } from '../../../shared/js/tijd-voorbij.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { duaOplossing } from './dua-oplossing.ts';
+import { speelStem } from './dua-stemmen.ts';
 
 // De oplossing, zodat ook groepen die niet klaar raakten het verhaal kennen.
 // Verborgen tot vaststaat dat de tijd echt om is: een code in de URL volstaat niet.
@@ -18,3 +19,5 @@ void sluitSessieUitUrl().then(mag => {
 });
 
 koppelReviewFormulier('dua', new URLSearchParams(window.location.search).get('sessie'));
+
+speelStem('tijd-voorbij');
