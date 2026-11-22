@@ -26,6 +26,11 @@ if (dsn && import.meta.env.PROD) {
       // IndexedDB-connectie al dicht heeft. Komt niet uit onze code en
       // breekt niets voor de speler — puur ruis in Sentry.
       /Failed to execute 'transaction' on 'IDBDatabase'/,
+      // Firebase Auth vernieuwt de aanmeldsleutel elk uur, ook in een tab
+      // die al uren openstaat. Valt het internet net weg (laptop in slaap,
+      // wifi kwijt), dan mislukt die ene fetch en probeert Firebase later
+      // opnieuw. Alleen deze exacte melding: andere fetch-fouten blijven zichtbaar.
+      /^Failed to fetch \(securetoken\.googleapis\.com\)$/,
     ],
   });
 }
