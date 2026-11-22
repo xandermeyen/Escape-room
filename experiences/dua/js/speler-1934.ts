@@ -4,6 +4,7 @@
  * en leeft onder politiedruk: wachter, werkkamer-klok en verdenking.
  */
 import '../../../shared/js/sentry.ts';
+import { bewaakHints } from './dua-hints.ts';
 import { luisterNaarStatus, bewaakSessieGesloten } from '../../../shared/js/session.ts';
 import {
   requireEl,
@@ -97,6 +98,7 @@ luisterNaarHints(sessie, blokId => {
 
 // ── Hints globaal voor onclick ──
 koppelHints(blokId => duaHint(sessie, blokId));
+bewaakHints();
 
 // ═══════════════════ P0: HET ZEGEL ═══════════════════
 document.getElementById('zegelknop')?.addEventListener('click', async () => {

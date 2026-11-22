@@ -4,6 +4,7 @@
  * Antwoorden staan als SHA-256 hash in de bundle (zelfde aanpak als kamer-14).
  */
 import '../../../shared/js/sentry.ts';
+import { bewaakHints } from './dua-hints.ts';
 import {
   luisterNaarStatus,
   puzzelVoltooid,
@@ -125,6 +126,7 @@ let dua: DuaState = {};
 let puzzels: PuzzelStatus = {};
 
 koppelHints(blokId => duaHint(sessie, blokId));
+bewaakHints();
 
 // ═══════════════════ P0: HET ZEGEL ═══════════════════
 function tekenZegel(): void {

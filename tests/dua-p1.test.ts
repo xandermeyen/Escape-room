@@ -12,6 +12,7 @@ vi.mock('../shared/js/auth.ts', () => ({ authReady: Promise.resolve() }));
 
 import { antwoordKlopt } from '../shared/js/utils.ts';
 import { DUA_HASHES, archiefNummer } from '../experiences/dua/js/dua-config.ts';
+import { DUA_HINTS } from '../experiences/dua/js/dua-hints.ts';
 import { BRIEFTEKST, HAMERS_GOED, HAMERS_START } from '../experiences/dua/js/dua-session.ts';
 
 const pagina = (bestand: string): Document =>
@@ -104,7 +105,7 @@ describe('D.U.A. P1: typemachine', () => {
   });
 
   it('de hint van 1934 noemt dezelfde volgorde als het verslag', () => {
-    const hint = p1934.querySelector('#hint-p1a')?.textContent ?? '';
+    const hint = (DUA_HINTS['hint-p1a'] ?? []).join(' ');
     expect(hint.replace(/\s+/g, ' ')).toContain(`vak 1 tot 6: ${[...HAMERS_GOED].join(', ')}`);
   });
 
