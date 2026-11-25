@@ -10,6 +10,7 @@
  *   rules), niet in de statistieken of de verdeling, en reviews worden niet
  *   bewaard.
  */
+import { teksten } from './i18n.ts';
 
 export const DEMO_CODES = {
   'kamer-14': 'DEMO-K14',
@@ -39,18 +40,18 @@ export function toonRolWissel(
   const balk = document.createElement('nav');
   balk.id = 'demo-balk';
   balk.className = 'demo-balk';
-  balk.setAttribute('aria-label', 'Demomodus: wissel van rol');
+  balk.setAttribute('aria-label', teksten().demoAria);
 
   const label = document.createElement('span');
   label.className = 'demo-label';
-  label.textContent = `Demomodus · ${huidig}`;
+  label.textContent = teksten().demoLabel(huidig);
   balk.appendChild(label);
 
   for (const rol of andere) {
     const a = document.createElement('a');
     a.className = 'demo-wissel';
     a.href = rol.href;
-    a.textContent = `Wissel naar ${rol.label}`;
+    a.textContent = teksten().demoWissel(rol.label);
     a.addEventListener('click', () => voorNavigatie?.());
     balk.appendChild(a);
   }

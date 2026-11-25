@@ -11,10 +11,14 @@
  */
 import type { Beoordeling } from './utils.ts';
 import type { Vrijgave } from './speldata.ts';
+import { teksten } from './i18n.ts';
 
 export const POGINGEN_VOOR_HINTTIP = 2;
 export const INACTIEF_NA_MS = 8 * 60 * 1000;
-export const HINTTIP_TEKST = 'Zit je vast? Hieronder liggen hints klaar, stap voor stap.';
+/** Tekst van de hint-tip, in de taal van de pagina. */
+export function hinttipTekst(): string {
+  return teksten().spelHintTip;
+}
 
 export interface Melding {
   titel: string;
@@ -103,7 +107,7 @@ export function toonHulpMelding(m: Melding): void {
   const sluit = document.createElement('button');
   sluit.type = 'button';
   sluit.className = 'hulp-melding-sluit';
-  sluit.setAttribute('aria-label', 'Melding sluiten');
+  sluit.setAttribute('aria-label', teksten().spelMeldingSluiten);
   sluit.textContent = '×';
   sluit.addEventListener('click', () => balk.remove());
 
@@ -119,7 +123,7 @@ export function toonHintTip(blokId: string): void {
   const tip = document.createElement('p');
   tip.className = 'hint-tip';
   tip.setAttribute('role', 'status');
-  tip.textContent = HINTTIP_TEKST;
+  tip.textContent = hinttipTekst();
   blok.insertBefore(tip, blok.firstChild);
 }
 
@@ -140,7 +144,7 @@ export function bouwHulpKnop(hulpHtml: string): HTMLDialogElement {
   knop.id = 'hulp-knop';
   knop.className = 'hulp-knop';
   knop.setAttribute('aria-haspopup', 'dialog');
-  knop.textContent = 'Hulp nodig?';
+  knop.textContent = teksten().spelHulpKnop;
 
   const dialoog = document.createElement('dialog');
   dialoog.id = 'hulp-dialoog';
@@ -152,7 +156,7 @@ export function bouwHulpKnop(hulpHtml: string): HTMLDialogElement {
   const sluit = document.createElement('button');
   sluit.type = 'button';
   sluit.className = 'hulp-sluit';
-  sluit.textContent = 'Sluiten';
+  sluit.textContent = teksten().spelSluiten;
   sluit.addEventListener('click', () => sluitDialoog(dialoog));
   dialoog.appendChild(sluit);
   // Klik op de achtergrond sluit ook (Escape doet <dialog> zelf).

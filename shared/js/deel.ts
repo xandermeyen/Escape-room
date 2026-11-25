@@ -3,6 +3,7 @@
  * Mobiel opent het native deelvenster; desktop kopieert de tekst naar het
  * klembord. Spelers die hun score delen zijn de goedkoopste marketing.
  */
+import { teksten } from './i18n.ts';
 export function koppelDeelKnop(knopId: string, maakTekst: () => string): void {
   const knop = document.getElementById(knopId) as HTMLButtonElement | null;
   if (!knop) return;
@@ -23,7 +24,7 @@ export function koppelDeelKnop(knopId: string, maakTekst: () => string): void {
 
     try {
       await navigator.clipboard.writeText(tekst);
-      knop.textContent = 'Gekopieerd. Plak het in je groepschat!';
+      knop.textContent = teksten().deelGekopieerd;
     } catch {
       return; // klembord geweigerd; knop ongemoeid laten
     }

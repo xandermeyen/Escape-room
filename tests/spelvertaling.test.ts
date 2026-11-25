@@ -10,6 +10,7 @@ import {
   startSpeltaal,
   vertaalDocument,
   veiligeInhoud,
+  verwijsNaarTaal,
   zoekSpeltaal,
 } from '../shared/js/spelvertaling.ts';
 import { SPELPAGINAS } from '../i18n/config.ts';
@@ -69,6 +70,17 @@ describe('vertaalDocument', () => {
     expect(document.querySelector('[data-i18n="weg"]')!.textContent).toBe('Blijft');
     expect(document.getElementById('knop')!.textContent).toBe('Klik');
     expect(ontbrekend).toEqual(['weg']);
+  });
+});
+
+describe('verwijsNaarTaal', () => {
+  it('stuurt links naar de site naar dezelfde pagina in de speltaal', () => {
+    document.body.innerHTML =
+      '<a id="a" href="/">x</a><a id="b" href="/dua/#boek">x</a><a id="c" href="https://x.be/">x</a>';
+    verwijsNaarTaal('en');
+    expect(document.getElementById('a')!.getAttribute('href')).toBe('/en/');
+    expect(document.getElementById('b')!.getAttribute('href')).toBe('/en/dua/#boek');
+    expect(document.getElementById('c')!.getAttribute('href')).toBe('https://x.be/');
   });
 });
 

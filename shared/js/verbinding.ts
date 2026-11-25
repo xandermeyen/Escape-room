@@ -7,6 +7,7 @@
  * van. Nu tonen we een vaste balk en sturen we de fout naar Sentry.
  */
 import * as Sentry from '@sentry/browser';
+import { teksten } from './i18n.ts';
 
 let bannerGetoond = false;
 
@@ -19,7 +20,7 @@ export function toonVerbindingsfout(): void {
   const balk = document.createElement('div');
   balk.id = 'verbinding-fout';
   balk.setAttribute('role', 'alert');
-  balk.textContent = 'Verbinding mislukt. Herlaad de pagina om verder te spelen.';
+  balk.textContent = teksten().spelVerbinding;
   balk.style.cssText = [
     'position:fixed',
     'top:0',

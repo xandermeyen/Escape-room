@@ -168,7 +168,7 @@ De publieke D.U.A.-pagina in het Engels gaat pas zonder waarschuwing live samen 
 6. [x] Engelse vertaling van de publieke pagina's, met de Nederlandstalig-melding bij beide spellen.
 7. [x] `shared/js/speltaal.ts` met getypeerde `t()` en tests, woordenboeken per taal apart geladen. Sessieveld `taal` met databaseregel en tests, `bepaalSpeltaal()` in `session.ts`.
 8. [x] Boekingsformulier met `taal` en `speltaal`. Make-scenario, mailtemplates, databaseregels, regeltests en contracttest aanpassen.
-9. [ ] D.U.A.: teksten naar `t()`, taal uit de sessie met URL-hint, P1 per taal, P5-labels.
+9. [x] D.U.A.: teksten naar `t()`, taal uit de sessie met URL-hint, P1 per taal, P5-labels.
 10. [ ] Engelse D.U.A. testen met twee volledige spellen, daarna de melding op `/en/dua/` weghalen.
 11. [ ] Franse vertaling van de publieke pagina's, nagelezen door een moedertaalspreker.
 12. [ ] e2e-test per taal: juiste `lang`, canonical, hreflang, en boeking stuurt de juiste velden.
@@ -189,4 +189,5 @@ De publieke D.U.A.-pagina in het Engels gaat pas zonder waarschuwing live samen 
 - Stap 2: `taal` en `speltaal` bij het boeken, Make zet de speltaal in de sessie en kiest de mail. Welke games in welke taal bestaan: `SPELTALEN_PER_EXPERIENCE` in `speltaal.ts`.
 - Stap 3a: de HTML van de D.U.A.-pagina's (`SPELPAGINAS` in `i18n/config.ts`) krijgt `data-i18n`-sleutels zoals de site, met het woordenboek in `i18n/spel/dua.en.ts` en dezelfde controle in CI. De browser vertaalt bij het laden (`shared/js/spelvertaling.ts`): speltaal uit de sessie (per sessie onthouden), alleen het nodige woordenboek laden, en vertalingen enkel met eenvoudige opmaak invullen. `html.i18n-wacht` verbergt de pagina tot dan, met een CSS-terugval na twee seconden.
 - Stap 3b (samen met stap 4): de teksten in de D.U.A.-TypeScript staan in `experiences/dua/js/teksten/nl.ts` en `en.ts` (zelfde vorm, door TypeScript bewaakt), te lezen via `tekst()` in `dua-tekst.ts`. `startDua()` (`dua-start.ts`) bovenaan elke startmodule zet de taal. P1 per taal in `DUA_P1` (`dua-config.ts`): brief, code op het briefje, aantal letters en hash. De codekaart is in elke taal dezelfde. Ook de SVG-labels en de oplossing op het tijd-voorbij-scherm zijn vertaald.
+- Stap 3c: de gedeelde onderdelen die D.U.A. met Kamer 14 deelt (hulp, lobby, review, delen, verbindingsbalk, demobalk, prestatietekst) lezen hun teksten uit `i18n/teksten/<taal>.ts` via `teksten()`. Op een gamepagina volgt die de speltaal, omdat `<html lang>` al gezet is; Kamer 14 blijft zo vanzelf Nederlands. Een Nederlandse lobby vertaalt mee zodra er een code van een Engelse sessie ingevoerd wordt, en links naar de site gaan naar de pagina in de speltaal.
 - Afwijking: dezelfde letterhamers in elke taal (geen eigen hamerset). Ze hangen niet samen met het woord van P1, dus de databaseregel voor `hamers` blijft ongewijzigd.

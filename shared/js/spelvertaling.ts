@@ -17,6 +17,7 @@
  * ingevoegd: veiligeInhoud() laat enkel eenvoudige opmaak en veilige links door.
  */
 import type { PaginaWoordenboek } from '../../scripts/i18n-paginas.ts';
+import { lokaalPad } from './i18n.ts';
 import { bepaalSpeltaal } from './session.ts';
 import {
   STANDAARD_SPELTAAL,
@@ -145,6 +146,27 @@ export async function zoekSpeltaal(
 }
 
 /**
+ * Zet <html lang> en vult de vertaling in. Van Nederlands naar een andere taal
+ * kan altijd; terug naar Nederlands vraagt een herlaad (de bron is de HTML zelf).
+ */
+export async function pasTaalToe(spel: Spel, taal: Speltaal): Promise<void> {
+  zetDocumentTaal(taal);
+  const lader = WOORDENBOEKEN[spel][taal];
+  if (!lader) return;
+  const ontbrekend = vertaalDocument(await lader());
+  if (ontbrekend.length) console.warn(`Vertaling ontbreekt (${taal}):`, ontbrekend);
+  verwijsNaarTaal(taal);
+}
+
+/** Links naar de publieke site ("/", "/dua/#boek") wijzen naar die pagina in de speltaal. */
+export function verwijsNaarTaal(taal: Speltaal, root: ParentNode = document): void {
+  root.querySelectorAll<HTMLAnchorElement>('a[href^="/"]').forEach(a => {
+    const href = a.getAttribute('href') ?? '';
+    if (!href.startsWith('//')) a.setAttribute('href', lokaalPad(href, taal));
+  });
+}
+
+/**
  * Bepaalt de speltaal, vertaalt de pagina indien nodig en toont ze.
  * Roep dit bovenaan de startmodule van een gamepagina aan, met await, vóór
  * er tekst getoond of gelezen wordt.
@@ -156,12 +178,7 @@ export async function startSpeltaal(
   let taal: Speltaal;
   try {
     taal = await zoekSpeltaal(sessie);
-    zetDocumentTaal(taal);
-    const lader = WOORDENBOEKEN[spel][taal];
-    if (lader) {
-      const ontbrekend = vertaalDocument(await lader());
-      if (ontbrekend.length) console.warn(`Vertaling ontbreekt (${taal}):`, ontbrekend);
-    }
+    await pasTaalToe(spel, taal);
   } catch (err) {
     console.error('Vertalen mislukt, de pagina blijft Nederlands:', err);
     taal = STANDAARD_SPELTAAL;
