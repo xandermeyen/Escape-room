@@ -58,6 +58,41 @@ export const nl = {
   taalSuggestieSluiten: 'Sluiten',
   /** Teller op de homepage: [vetgedrukt deel, rest]. */
   tellerGroepen: (n: number): [string, string] => [`${n} groepen`, ' losten al een dossier op'],
+
+  // ── Gedeelde game-onderdelen (hulp, lobby, review, delen). Op een gamepagina
+  // volgt de taal de speltaal (<html lang>, gezet door shared/js/spelvertaling.ts).
+  spelHintTip: 'Zit je vast? Hieronder liggen hints klaar, stap voor stap.',
+  spelMeldingSluiten: 'Melding sluiten',
+  spelHulpKnop: 'Hulp nodig?',
+  spelSluiten: 'Sluiten',
+  spelVerbinding: 'Verbinding mislukt. Herlaad de pagina om verder te spelen.',
+  demoAria: 'Demomodus: wissel van rol',
+  demoLabel: (rol: string): string => `Demomodus · ${rol}`,
+  demoWissel: (rol: string): string => `Wissel naar ${rol}`,
+  lobbyEerdereRol: (rol: string): string => `Je koos eerder de rol ${rol}.`,
+  lobbyVerder: 'Ga verder met deze rol →',
+  lobbyGeenCode: 'Voer een geldige sessiecode in.',
+  lobbyControleren: 'Controleren…',
+  lobbyOngeldig: 'Ongeldige of inactieve code. Controleer je e-mail.',
+  lobbyVerbinding: 'Verbindingsfout. Controleer je internetverbinding.',
+  lobbyRolBezet: 'Deze rol is al bezet. Kies een andere.',
+  lobbyRolVerbinding: 'Verbindingsfout. Probeer opnieuw.',
+  reviewEscapetalk: 'Een review op escapetalk.nl helpt andere spelers ons te vinden. ',
+  reviewEscapetalkLink: 'Review op escapetalk',
+  reviewOokEscapetalkKlembord:
+    'Wil je hem ook op escapetalk.nl zetten? Je tekst staat al op je klembord, plakken volstaat. ',
+  reviewOokEscapetalk:
+    'Wil je hem ook op escapetalk.nl zetten? Dat helpt andere spelers ons te vinden. ',
+  reviewBeterLabel: 'Wat kan beter? Optioneel, dit lezen enkel wij.',
+  reviewBeterPlaceholder: 'Bv. een puzzel die onduidelijk was, of iets dat niet werkte',
+  reviewDemo: 'Demomodus: reviews worden niet bewaard.',
+  reviewOnvolledig: 'Kies een aantal sterren en schrijf een korte review.',
+  reviewBezig: 'Versturen…',
+  reviewVersturen: 'Review versturen',
+  reviewMislukt: 'Versturen mislukt. Probeer opnieuw.',
+  deelGekopieerd: 'Gekopieerd. Plak het in je groepschat!',
+  prestatieSneller: (p: number): string => `Sneller dan ${p}% van de groepen.`,
+  prestatieBinnenUur: 'Jullie haalden het einde binnen het uur. Dat lukt niet elke groep.',
 };
 
 export type Teksten = typeof nl;

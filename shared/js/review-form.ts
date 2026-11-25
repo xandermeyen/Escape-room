@@ -15,6 +15,7 @@
  */
 import { schrijfReview } from './reviews.ts';
 import { isDemoCode } from './demo.ts';
+import { teksten } from './i18n.ts';
 
 /** Tot en met deze score vragen we wat er beter kan. */
 export const LAGE_SCORE = 3;
@@ -36,12 +37,12 @@ function bouwEscapetalk(ervaring: string): HTMLParagraphElement | null {
   blok.id = 'review-escapetalk';
   blok.className = 'review-escapetalk';
   const tekst = document.createElement('span');
-  tekst.textContent = 'Een review op escapetalk.nl helpt andere spelers ons te vinden. ';
+  tekst.textContent = teksten().reviewEscapetalk;
   const link = document.createElement('a');
   link.href = url;
   link.target = '_blank';
   link.rel = 'noopener';
-  link.textContent = 'Review op escapetalk';
+  link.textContent = teksten().reviewEscapetalkLink;
   blok.append(tekst, link);
   dank.insertAdjacentElement('afterend', blok);
   return blok;
@@ -62,8 +63,8 @@ async function nodigUitNaVersturen(
     gekopieerd = false;
   }
   zin.textContent = gekopieerd
-    ? 'Wil je hem ook op escapetalk.nl zetten? Je tekst staat al op je klembord, plakken volstaat. '
-    : 'Wil je hem ook op escapetalk.nl zetten? Dat helpt andere spelers ons te vinden. ';
+    ? teksten().reviewOokEscapetalkKlembord
+    : teksten().reviewOokEscapetalk;
 }
 
 /** Maakt het verbeterveld aan onder het reviewtekstveld (één keer). */
@@ -78,13 +79,13 @@ function bouwVerbeterVeld(): HTMLTextAreaElement | null {
   const label = document.createElement('label');
   label.htmlFor = 'review-verbeter';
   label.className = 'review-verbeter-label';
-  label.textContent = 'Wat kan beter? Optioneel, dit lezen enkel wij.';
+  label.textContent = teksten().reviewBeterLabel;
   const veld = document.createElement('textarea');
   veld.id = 'review-verbeter';
   veld.rows = 3;
   veld.maxLength = 500;
   veld.className = tekstVeld.className;
-  veld.placeholder = 'Bv. een puzzel die onduidelijk was, of iets dat niet werkte';
+  veld.placeholder = teksten().reviewBeterPlaceholder;
   blok.append(label, veld);
   tekstVeld.insertAdjacentElement('afterend', blok);
   return veld;
@@ -103,7 +104,7 @@ export function koppelReviewFormulier(ervaring: string, sessie?: string | null):
     reviewBtn.disabled = true;
     const melding = document.createElement('p');
     melding.className = 'review-demo';
-    melding.textContent = 'Demomodus: reviews worden niet bewaard.';
+    melding.textContent = teksten().reviewDemo;
     reviewBtn.insertAdjacentElement('beforebegin', melding);
     return;
   }
@@ -142,7 +143,7 @@ export function koppelReviewFormulier(ervaring: string, sessie?: string | null):
 
     if (reviewRating < 1 || tekst.length < 3) {
       if (fout) {
-        fout.textContent = 'Kies een aantal sterren en schrijf een korte review.';
+        fout.textContent = teksten().reviewOnvolledig;
         fout.style.display = 'block';
       }
       return;
@@ -150,7 +151,7 @@ export function koppelReviewFormulier(ervaring: string, sessie?: string | null):
     if (fout) fout.style.display = 'none';
 
     reviewBtn.disabled = true;
-    reviewBtn.textContent = 'Versturen…';
+    reviewBtn.textContent = teksten().reviewBezig;
 
     try {
       await schrijfReview({
@@ -173,9 +174,9 @@ export function koppelReviewFormulier(ervaring: string, sessie?: string | null):
     } catch (err) {
       console.error('Review versturen mislukt:', err);
       reviewBtn.disabled = false;
-      reviewBtn.textContent = 'Review versturen';
+      reviewBtn.textContent = teksten().reviewVersturen;
       if (fout) {
-        fout.textContent = 'Versturen mislukt. Probeer opnieuw.';
+        fout.textContent = teksten().reviewMislukt;
         fout.style.display = 'block';
       }
     }

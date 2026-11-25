@@ -9,6 +9,7 @@
  */
 import { db } from './firebase-config.ts';
 import { ref, get, set, serverTimestamp } from 'firebase/database';
+import { teksten } from './i18n.ts';
 
 /** Pas vanaf zoveel afgeronde sessies tonen we een percentage. */
 export const MIN_SESSIES_VOOR_PERCENTIEL = 10;
@@ -42,8 +43,8 @@ export function percentielSneller(
 /** Tekst voor het eindscherm. Positief, en eerlijk als het percentage laag is. */
 export function prestatieTekst(percentiel: number | null): string | null {
   if (percentiel === null) return null;
-  if (percentiel >= 50) return `Sneller dan ${percentiel}% van de groepen.`;
-  return 'Jullie haalden het einde binnen het uur. Dat lukt niet elke groep.';
+  if (percentiel >= 50) return teksten().prestatieSneller(percentiel);
+  return teksten().prestatieBinnenUur;
 }
 
 /** Leest de tijden die het host-paneel klaarzette (lege lijst bij een fout). */

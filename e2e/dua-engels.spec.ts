@@ -116,3 +116,24 @@ test('Engelse sessie: P1 met LOCKER, van typemachine tot doorslag', async ({ con
   await expect(archivaris.locator('#dua-melding')).toContainText('P1 solved');
   expect(fouten).toEqual([]);
 });
+
+test('Engelse sessie: ook de gedeelde onderdelen zijn Engels', async ({ context }) => {
+  await zaai(context, 'en');
+  const page = await context.newPage();
+  await page.goto('/experiences/dua/speler-2034.html?sessie=DUA-EN-1&rol=archivaris');
+  await expect(page.getByRole('button', { name: 'Need help?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Need help?' }).click();
+  await expect(page.getByRole('heading', { name: 'How D.U.A. works' })).toBeVisible();
+});
+
+test('een Engelse code in de Nederlandse lobby: de lobby wordt Engels', async ({ context }) => {
+  await zaai(context, 'en');
+  const page = await context.newPage();
+  await page.goto('/experiences/dua/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'nl');
+  await page.getByRole('button', { name: 'Open de lijn' }).click();
+  await page.locator('#sessieCodeInput').fill('DUA-EN-1');
+  await page.getByRole('button', { name: 'Verder' }).click();
+  await expect(page.getByText('Choose your side of time')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+});

@@ -16,7 +16,8 @@ import { speelStem } from './dua-stemmen.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
 import { meetSpel } from '../../../shared/js/meet.ts';
 import { startDua } from './dua-start.ts';
-import { tekst, vul } from './dua-tekst.ts';
+import { duaTaal, tekst, vul } from './dua-tekst.ts';
+import { lokaalPad } from '../../../shared/js/i18n.ts';
 
 // Eerst de taal van de sessie en de vertaalde pagina, dan pas de rest (ADR-001, G1).
 await startDua();
@@ -38,7 +39,7 @@ const T = tekst().einde;
 requireEl('sys-case').textContent = vul(tekst().kop.eindCase, { sessie });
 
 document.getElementById('btn-terug')?.addEventListener('click', () => {
-  window.location.href = '../../index.html';
+  window.location.href = lokaalPad('/', duaTaal());
 });
 
 // ── Review achterlaten (gedeeld formulier) ──

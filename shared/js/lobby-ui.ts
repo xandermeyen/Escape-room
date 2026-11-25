@@ -15,6 +15,7 @@ import {
   claimRol,
   luisterNaarRollen,
 } from './session.ts';
+import { teksten } from './i18n.ts';
 
 /** Wisselt het actieve .scherm naar `id` en scrollt naar boven. */
 export function activeerScherm(id: string): void {
@@ -151,12 +152,12 @@ export function initLobby(config: LobbyConfig): void {
 
       const tekst = document.createElement('span');
       tekst.className = 'rol-hervat-tekst';
-      tekst.textContent = `Je koos eerder de rol ${rolConfig.naam}.`;
+      tekst.textContent = teksten().lobbyEerdereRol(rolConfig.naam);
 
       const knop = document.createElement('button');
       knop.type = 'button';
       knop.className = 'rol-hervat-knop';
-      knop.textContent = 'Ga verder met deze rol →';
+      knop.textContent = teksten().lobbyVerder;
       knop.addEventListener('click', () => {
         naarSpelerPagina(eerderGekozen, code);
       });
@@ -192,19 +193,19 @@ export function initLobby(config: LobbyConfig): void {
     }
 
     if (code.length < 3) {
-      toonFout('Voer een geldige sessiecode in.');
+      toonFout(teksten().lobbyGeenCode);
       return;
     }
 
     if (knop) {
       knop.disabled = true;
-      knop.textContent = 'Controleren…';
+      knop.textContent = teksten().lobbyControleren;
     }
 
     try {
       const gevonden = await zoekSessieCode(code);
       if (!gevonden) {
-        toonFout('Ongeldige of inactieve code. Controleer je e-mail.');
+        toonFout(teksten().lobbyOngeldig);
         return;
       }
       input.value = gevonden;
@@ -216,7 +217,7 @@ export function initLobby(config: LobbyConfig): void {
       toonScherm('scherm-rol');
     } catch (err) {
       console.error('Firebase fout:', err);
-      toonFout('Verbindingsfout. Controleer je internetverbinding.');
+      toonFout(teksten().lobbyVerbinding);
     } finally {
       if (knop) {
         knop.disabled = false;
@@ -266,11 +267,11 @@ export function initLobby(config: LobbyConfig): void {
         localStorage.setItem(ROL_OPSLAG_PREFIX + code, rol);
         naarSpelerPagina(rol, code);
       } else {
-        toonRolFout('Deze rol is al bezet. Kies een andere.');
+        toonRolFout(teksten().lobbyRolBezet);
       }
     } catch (err) {
       console.error('Fout bij claimen van rol:', err);
-      toonRolFout('Verbindingsfout. Probeer opnieuw.');
+      toonRolFout(teksten().lobbyRolVerbinding);
     } finally {
       kaart?.classList.remove('rol-laden');
     }

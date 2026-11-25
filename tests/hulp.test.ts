@@ -6,7 +6,7 @@ import {
   toonHintTip,
   bouwHulpKnop,
   initHulp,
-  HINTTIP_TEKST,
+  hinttipTekst,
   INACTIEF_NA_MS,
 } from '../shared/js/hulp.ts';
 import {
@@ -59,7 +59,7 @@ describe('hint-tip na twee pogingen', () => {
     const blok = document.getElementById('hint-p1')!;
     expect(blok.classList.contains('hint-tip-actief')).toBe(true);
     expect(blok.querySelectorAll('.hint-tip')).toHaveLength(1);
-    expect(blok.textContent).toContain(HINTTIP_TEKST);
+    expect(blok.textContent).toContain(hinttipTekst());
     expect(blok.querySelector('.hint-stap')!.classList.contains('verborgen')).toBe(true);
   });
 });
