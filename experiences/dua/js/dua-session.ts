@@ -22,12 +22,10 @@ import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, get, set, update, onValue, runTransaction, serverTimestamp } from 'firebase/database';
 import { authReady } from '../../../shared/js/auth.ts';
 import { schrijf } from '../../../shared/js/verbinding.ts';
+import { DUA_P1 } from './dua-config.ts';
 
-// De brief die de Schrijver typt — beide tijdperken lezen dezelfde tekst.
-export const BRIEFTEKST =
-  'MONSEIGNEUR. KIJK NIET LANGER WEG. UW AARZELING KOST U MEER DAN GELD. ' +
-  'EEN LAATSTE TEKEN IS ONDERWEG: ZOEK WAAR REIZIGERS WACHTEN. ' +
-  'HET NUMMER IS EEN MEER DAN HET AANTAL BRIEVEN DAT U TELT. - D.U.A.';
+// De Nederlandse brief die de Schrijver typt. Per taal: DUA_P1 in dua-config.ts.
+export const BRIEFTEKST = DUA_P1.nl.brief;
 
 // Plekken die de politie in december 1934 doorzocht (huiszoekingsverslag).
 export const DOORZOCHT = ['bureau', 'kast', 'boekenrek'];
