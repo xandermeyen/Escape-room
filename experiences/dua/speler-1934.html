@@ -1,28 +1,30 @@
 <!doctype html>
-<html lang="nl">
+<html lang="nl" class="i18n-wacht">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>D.U.A. - Gent, 1934</title>
+    <title data-i18n="dua-1934.head.title">D.U.A. - Gent, 1934</title>
     <link rel="stylesheet" href="/assets/fonts/fonts.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="css/dua.css" />
   </head>
   <body class="era-1934">
-    <div id="dua-schaduw"><span>D.U.A.</span></div>
+    <div id="dua-schaduw"><span translate="no">D.U.A.</span></div>
     <div id="dua-melding" class="d-melding"></div>
 
     <!-- Systeembalk -->
     <div class="systeembalk">
       <div style="display: flex; align-items: center">
-        <span class="sys-logo">Bureau X</span>
+        <span class="sys-logo" translate="no">Bureau X</span>
         <span class="sys-sep">|</span>
-        <span class="sys-case" id="sys-case">D.U.A. · laden…</span>
+        <span class="sys-case" id="sys-case" data-i18n="dua-1934.body.sys-case"
+          >D.U.A. · laden…</span
+        >
       </div>
       <div class="sys-rechts">
         <div class="verdenking-wrap">
-          VERDENKING
+          <span data-i18n="dua-1934.body.verdenking-label">VERDENKING</span>
           <div class="verdenking-bar"><i id="verdenking-vul"></i></div>
           <span id="verdenking-pct">0%</span>
         </div>
@@ -33,86 +35,113 @@
     </div>
 
     <div class="voortgangbalk">
-      <div class="pz" id="pz1">P1</div>
-      <div class="pz" id="pz2">P2</div>
-      <div class="pz" id="pz3">P3</div>
-      <div class="pz" id="pz4">P4</div>
-      <div class="pz" id="pz5">P5</div>
+      <div class="pz" id="pz1" translate="no">P1</div>
+      <div class="pz" id="pz2" translate="no">P2</div>
+      <div class="pz" id="pz3" translate="no">P3</div>
+      <div class="pz" id="pz4" translate="no">P4</div>
+      <div class="pz" id="pz5" translate="no">P5</div>
     </div>
 
     <div class="papier">
-      <h2 class="era-kop se">Gent, april 1934. Jullie zijn D.U.A.</h2>
-      <p class="era-sub">
+      <h2 class="era-kop se" data-i18n="dua-1934.body.era-kop">
+        Gent, april 1934. Jullie zijn D.U.A.
+      </h2>
+      <p class="era-sub" data-i18n="dua-1934.body.era-sub">
         De Schrijver typt. De Loper beweegt. De politie kijkt mee. En 2034 weet dingen die jullie
         niet kunnen weten: vraag ernaar voor je iets onomkeerbaars doet.
       </p>
 
       <!-- ⓪ Handdruk -->
       <div class="stuk" id="s-zegel">
-        <h3>⓪ De handdruk door de tijd <span class="hintje">(oefenronde)</span></h3>
-        <p>
+        <h3 data-i18n="dua-1934.s-zegel.h3">
+          ⓪ De handdruk door de tijd <span class="hintje">(oefenronde)</span>
+        </h3>
+        <p data-i18n="dua-1934.s-zegel.p">
           Eerst leren jullie hoe dit werkt. Druk het waszegel van D.U.A. op een leeg vel. Niets
           meer. Vraag dan aan 2034 wat er bij hen gebeurt.
         </p>
-        <button class="d-knop klein" id="zegelknop">Druk het zegel</button>
+        <button class="d-knop klein" id="zegelknop" data-i18n="dua-1934.s-zegel.d-knop">
+          Druk het zegel
+        </button>
         <span id="zegel-toon" style="margin-left: 14px"></span>
       </div>
 
       <!-- ① Typemachine -->
       <div class="stuk" id="s-hamers">
-        <h3>① De typemachine is gesaboteerd</h3>
-        <p>
+        <h3 data-i18n="dua-1934.s-hamers.h3">① De typemachine is gesaboteerd</h3>
+        <p data-i18n="dua-1934.s-hamers.p">
           Iemand heeft de letterhamers verwisseld en de letters van de vakken gekrast. Elk vak
           draagt alleen nog een nummer. Klik twee hamers om ze te wisselen tot elke hamer in zijn
           vak hangt.
         </p>
-        <p class="hintje">
+        <p class="hintje" data-i18n="dua-1934.s-hamers.hintje">
           Welke hamer waar hoort, weet hier niemand meer. In 2034 staat deze machine gerestaureerd
           in een museum. Vraag hen hoe ze eruitziet.
         </p>
         <div class="hamerrij" id="hamerrij"></div>
-        <p class="hintje" id="hamer-status">
+        <p class="hintje" id="hamer-status" data-i18n="dua-1934.s-hamers.hintje-2">
           Pas als de machine hersteld is, kan brief XII getypt worden.
         </p>
       </div>
 
       <div class="stuk slot" id="s-brief">
-        <h3>① Brief XII aan bisschop Coppieters</h3>
+        <h3 data-i18n="dua-1934.s-brief.h3">① Brief XII aan bisschop Coppieters</h3>
         <div class="loperbriefje">
-          <p>
+          <p data-i18n="dua-1934.s-brief.p">
             Schrijver. Sla in brief XII de plek dieper aan waar ik het paneel achterlaat, zoals
             afgesproken. In onze code:
           </p>
           <p class="loper-code">34 · 11 · 45 · 33 · 22</p>
-          <p>De codekaart heb ik verbrand. Niemand mag dit lezen. - L.</p>
+          <p data-i18n="dua-1934.s-brief.p-2">
+            De codekaart heb ik verbrand. Niemand mag dit lezen. - L.
+          </p>
         </div>
-        <p>
+        <p data-i18n="dua-1934.s-brief.p-3">
           Sla precies <b>vijf letters dieper aan</b> (klik ze aan): de letters van het woord uit het
           briefje, in leesvolgorde. De doorslag is alles wat overblijft.
         </p>
-        <p class="hintje">
+        <p class="hintje" data-i18n="dua-1934.s-brief.hintje">
           Jullie kunnen de code niet lezen zonder de kaart. Maar de politie houdt alles bij, en 2034
           heeft hun archief, per brief geordend.
         </p>
         <p class="typvel" id="typvel"></p>
         <div style="display: flex; gap: 10px; margin-top: 10px">
-          <button class="d-knop klein" id="btn-verstuur">Sla door en verstuur</button>
-          <button class="d-knop klein" id="btn-gom">Nieuw vel</button>
+          <button class="d-knop klein" id="btn-verstuur" data-i18n="dua-1934.s-brief.d-knop">
+            Sla door en verstuur
+          </button>
+          <button class="d-knop klein" id="btn-gom" data-i18n="dua-1934.s-brief.d-knop-2">
+            Nieuw vel
+          </button>
         </div>
-        <p class="hintje" id="brief-status" style="margin-top: 8px">Nog 5 letters te kiezen.</p>
+        <p
+          class="hintje"
+          id="brief-status"
+          style="margin-top: 8px"
+          data-i18n="dua-1934.s-brief.hintje-2"
+        >
+          Nog 5 letters te kiezen.
+        </p>
         <div class="hint-blok" id="hint-p1a">
-          <button class="hint-knop" data-actie="hint">Hint vragen</button>
+          <button class="hint-knop" data-actie="hint" data-i18n="dua-1934.hint-p1a.hint-knop">
+            Hint vragen
+          </button>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
-          <button class="hint-verder verborgen" data-actie="hint">Nog een hint</button>
+          <button
+            class="hint-verder verborgen"
+            data-actie="hint"
+            data-i18n="dua-1934.hint-p1a.hint-verder"
+          >
+            Nog een hint
+          </button>
         </div>
       </div>
 
       <!-- ② Noordstation -->
       <div class="stuk" id="s-kluis">
-        <h3>② Noordstation Brussel: de teruggave</h3>
-        <p>
+        <h3 data-i18n="dua-1934.s-kluis.h3">② Noordstation Brussel: de teruggave</h3>
+        <p data-i18n="dua-1934.s-kluis.p">
           De Loper staat bij de bagagekluizen, <em>Johannes de Doper</em> onder de arm. De
           perronwachter loopt zijn ronde. Deponeer alleen wanneer hij <b>buiten zicht</b> is. Kies
           eerst het kluisnummer; denk aan wat de brief belooft:
@@ -121,8 +150,9 @@
         </p>
         <div class="wachterbaan"><div class="wachter" id="wachter"></div></div>
         <div class="baanlabels">
-          <span>◉ wachter dichtbij: gevaar</span><span>perron</span
-          ><span>buiten zicht: veilig</span>
+          <span data-i18n="dua-1934.s-kluis.span">◉ wachter dichtbij: gevaar</span
+          ><span data-i18n="dua-1934.s-kluis.span-2">perron</span
+          ><span data-i18n="dua-1934.s-kluis.span-3">buiten zicht: veilig</span>
         </div>
         <div style="display: flex; gap: 8px; margin-top: 10px; align-items: center">
           <input
@@ -134,23 +164,41 @@
             aria-label="Kluisnummer"
             style="max-width: 90px; font-size: 24px; letter-spacing: 8px; text-align: center"
             autocomplete="off"
+            data-i18n-aria-label="dua-1934.s-kluis.d-input@aria-label"
           />
-          <button class="d-knop klein" id="btn-deponeer">Deponeer nu</button>
+          <button class="d-knop klein" id="btn-deponeer" data-i18n="dua-1934.s-kluis.d-knop">
+            Deponeer nu
+          </button>
         </div>
-        <p class="hintje" id="kluis-status" style="margin-top: 8px">Luister naar de voetstappen.</p>
+        <p
+          class="hintje"
+          id="kluis-status"
+          style="margin-top: 8px"
+          data-i18n="dua-1934.s-kluis.hintje"
+        >
+          Luister naar de voetstappen.
+        </p>
         <div class="hint-blok" id="hint-p2a">
-          <button class="hint-knop" data-actie="hint">Hint vragen</button>
+          <button class="hint-knop" data-actie="hint" data-i18n="dua-1934.hint-p2a.hint-knop">
+            Hint vragen
+          </button>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
-          <button class="hint-verder verborgen" data-actie="hint">Nog een hint</button>
+          <button
+            class="hint-verder verborgen"
+            data-actie="hint"
+            data-i18n="dua-1934.hint-p2a.hint-verder"
+          >
+            Nog een hint
+          </button>
         </div>
       </div>
 
       <!-- ③ Route -->
       <div class="stuk" id="s-route">
-        <h3>③ Wat jullie die nacht zagen</h3>
-        <p>
+        <h3 data-i18n="dua-1934.s-route.h3">③ Wat jullie die nacht zagen</h3>
+        <p data-i18n="dua-1934.s-route.p">
           Jullie stonden op wacht bij de kathedraal. De route van de dragers, in volgorde:
           <b>sacristie → kooromgang → Vijdkapel → zijdeur</b>. De politieplattegrond met zonenummers
           heeft alleen 2034. Zeg wat je zag, niet wat je niet weet.
@@ -159,15 +207,17 @@
 
       <!-- ④ Werkkamer -->
       <div class="stuk" id="s-kamer">
-        <h3>④ Wetteren, 25 november 1934: de werkkamer</h3>
-        <p>
+        <h3 data-i18n="dua-1934.s-kamer.h3">④ Wetteren, 25 november 1934: de werkkamer</h3>
+        <p data-i18n="dua-1934.s-kamer.p">
           Goedertier is stervende. De politie is onderweg: <b>90 seconden</b> binnen. Eerst de
           sleutel vinden (<em>"waar het licht valt"</em>), dan de doorslagen en de laatste
           aanwijzing verstoppen. Maar kies de bergplaats niet zomaar: 2034 heeft het
           huiszoekingsverslag en weet waar de politie straks zal zoeken. Vraag het hen VOOR je naar
           binnen gaat.
         </p>
-        <button class="d-knop klein" id="btn-kamer">Ga naar binnen</button>
+        <button class="d-knop klein" id="btn-kamer" data-i18n="dua-1934.s-kamer.d-knop">
+          Ga naar binnen
+        </button>
         <span class="kamer-timer" id="kamer-timer" style="margin-left: 14px"></span>
         <div id="kamer" style="display: none">
           <svg viewBox="0 0 460 230" class="svg-kader" style="margin-top: 10px">
@@ -255,21 +305,31 @@
               VLOERPLANK
             </text>
           </svg>
-          <p class="hintje" id="kamer-status">Vind eerst de sleutel.</p>
+          <p class="hintje" id="kamer-status" data-i18n="dua-1934.kamer.hintje">
+            Vind eerst de sleutel.
+          </p>
         </div>
         <div class="hint-blok" id="hint-p4a">
-          <button class="hint-knop" data-actie="hint">Hint vragen</button>
+          <button class="hint-knop" data-actie="hint" data-i18n="dua-1934.hint-p4a.hint-knop">
+            Hint vragen
+          </button>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
-          <button class="hint-verder verborgen" data-actie="hint">Nog een hint</button>
+          <button
+            class="hint-verder verborgen"
+            data-actie="hint"
+            data-i18n="dua-1934.hint-p4a.hint-verder"
+          >
+            Nog een hint
+          </button>
         </div>
       </div>
 
       <!-- ⑤ Bergplaats -->
       <div class="stuk" id="s-pin">
-        <h3>⑤ De bergplaats</h3>
-        <p>
+        <h3 data-i18n="dua-1934.s-pin.h3">⑤ De bergplaats</h3>
+        <p data-i18n="dua-1934.s-pin.p">
           Het moment van de waarheid. Eén regel mag mee de geschiedenis in:
           <em
             >"op een plaats waar noch ik, noch iemand anders het kan weghalen zonder de aandacht van
@@ -330,18 +390,26 @@
         </svg>
         <p class="hintje" id="pin-status"></p>
         <div class="hint-blok" id="hint-p5a">
-          <button class="hint-knop" data-actie="hint">Hint vragen</button>
+          <button class="hint-knop" data-actie="hint" data-i18n="dua-1934.hint-p5a.hint-knop">
+            Hint vragen
+          </button>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
           <div class="hint-stap verborgen"></div>
-          <button class="hint-verder verborgen" data-actie="hint">Nog een hint</button>
+          <button
+            class="hint-verder verborgen"
+            data-actie="hint"
+            data-i18n="dua-1934.hint-p5a.hint-verder"
+          >
+            Nog een hint
+          </button>
         </div>
       </div>
 
       <!-- Finale: de veertiende brief -->
       <div class="stuk verborgen" id="s-brief14">
-        <h3>De veertiende brief</h3>
-        <p>
+        <h3 data-i18n="dua-1934.s-brief14.h3">De veertiende brief</h3>
+        <p data-i18n="dua-1934.s-brief14.p">
           2034 heeft de plek gevonden. Schrijf nu de brief waarmee voor hen alles begon. De cirkel
           sluit zich.
         </p>
@@ -350,9 +418,10 @@
           id="brief14"
           rows="5"
           placeholder="Aan wie dit vindt, honderd jaar na ons..."
+          data-i18n-placeholder="dua-1934.s-brief14.d-input@placeholder"
         ></textarea>
         <br /><br />
-        <button class="d-knop goud klein" id="btn-brief14">
+        <button class="d-knop goud klein" id="btn-brief14" data-i18n="dua-1934.s-brief14.d-knop">
           Verzegel de brief en open het eindrapport
         </button>
       </div>

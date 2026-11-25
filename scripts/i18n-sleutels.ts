@@ -1,5 +1,6 @@
 /**
- * i18n-sleutels.ts: geeft nieuwe Nederlandse tekst in de publieke pagina's een sleutel.
+ * i18n-sleutels.ts: geeft nieuwe Nederlandse tekst in de publieke pagina's en de
+ * gamepagina's (SPELPAGINAS) een sleutel.
  *
  *   pnpm i18n:sleutels           sleutels toevoegen en bestanden aanpassen
  *   pnpm i18n:sleutels --droog   enkel tonen wat er zou veranderen
@@ -13,7 +14,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
-import { PAGINAS } from '../i18n/config.ts';
+import { PAGINAS, SPELPAGINAS } from '../i18n/config.ts';
 import { attribuutElementen, isVast, jsonLdBlokken, tekstElementen } from './i18n-dom.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
@@ -41,7 +42,7 @@ function invoegPlek(bron: string, eindeStartTag: number): number {
 }
 
 let totaal = 0;
-for (const pagina of PAGINAS) {
+for (const pagina of [...PAGINAS, ...SPELPAGINAS]) {
   const pad = resolve(ROOT, pagina.bron);
   const bron = readFileSync(pad, 'utf8');
   const dom = new JSDOM(bron, { includeNodeLocations: true });

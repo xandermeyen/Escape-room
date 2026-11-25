@@ -182,3 +182,10 @@ De publieke D.U.A.-pagina in het Engels gaat pas zonder waarschuwing live samen 
 - `i18n/paginas/en.ts`: vertaling van de pagina's. `i18n/teksten/`: teksten die JavaScript toont, getypeerd.
 - `shared/js/i18n.ts` en `shared/js/taal-suggestie.ts`: taal van de pagina, lokale paden, taalknop onthouden en de suggestie.
 - Afwijking: de JavaScript-teksten van de site worden niet per taal apart geladen. Ze zijn klein; voor de games (fase 3) blijft apart laden de bedoeling.
+
+## Uitvoering fase 3 (D.U.A. in het Engels)
+
+- Stap 1: sessieveld `taal` (rules en tests), `bepaalSpeltaal()` in `session.ts`, getypeerde `t()` in `shared/js/speltaal.ts`.
+- Stap 2: `taal` en `speltaal` bij het boeken, Make zet de speltaal in de sessie en kiest de mail. Welke games in welke taal bestaan: `SPELTALEN_PER_EXPERIENCE` in `speltaal.ts`.
+- Stap 3a: de HTML van de D.U.A.-pagina's (`SPELPAGINAS` in `i18n/config.ts`) krijgt `data-i18n`-sleutels zoals de site, met het woordenboek in `i18n/spel/dua.en.ts` en dezelfde controle in CI. De browser vertaalt bij het laden (`shared/js/spelvertaling.ts`): speltaal uit de sessie (per sessie onthouden), alleen het nodige woordenboek laden, en vertalingen enkel met eenvoudige opmaak invullen. `html.i18n-wacht` verbergt de pagina tot dan, met een CSS-terugval na twee seconden.
+- Afwijking: dezelfde letterhamers in elke taal (geen eigen hamerset). Ze hangen niet samen met het woord van P1.

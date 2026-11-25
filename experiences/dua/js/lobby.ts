@@ -7,6 +7,10 @@ import '../../../shared/js/sentry.ts';
 import { haalAantalSpelers } from '../../../shared/js/session.ts';
 import { initLobby } from '../../../shared/js/lobby-ui.ts';
 import { initDua } from './dua-session.ts';
+import { startSpeltaal } from '../../../shared/js/spelvertaling.ts';
+
+// Eerst de taal van de sessie en de vertaalde pagina, dan pas de rest (ADR-001, G1).
+await startSpeltaal('dua');
 
 const ERA: Record<string, '1934' | '2034'> = {
   schrijver: '1934',

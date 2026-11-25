@@ -48,6 +48,27 @@ export const PAGINAS: readonly Pagina[] = [
   { id: 'privacy', bron: 'privacy.html', pad: '/privacy.html', sitemap: false },
 ];
 
+/**
+ * Gamepagina's die in de browser vertaald worden (ADR-001, optie G1). Ze krijgen
+ * net als de publieke pagina's data-i18n-sleutels, maar er wordt niets gegenereerd:
+ * shared/js/spelvertaling.ts vult de vertaling in zodra de speltaal bekend is.
+ * Het woordenboek staat in i18n/spel/<spel>.<taal>.ts. Het host-paneel blijft Nederlands.
+ */
+export interface Spelpagina {
+  id: string;
+  /** Spel, ook de naam van het woordenboek. */
+  spel: 'dua';
+  bron: string;
+}
+
+export const SPELPAGINAS: readonly Spelpagina[] = [
+  { id: 'dua-lobby', spel: 'dua', bron: 'experiences/dua/index.html' },
+  { id: 'dua-1934', spel: 'dua', bron: 'experiences/dua/speler-1934.html' },
+  { id: 'dua-2034', spel: 'dua', bron: 'experiences/dua/speler-2034.html' },
+  { id: 'dua-einde', spel: 'dua', bron: 'experiences/dua/einde.html' },
+  { id: 'dua-tijd', spel: 'dua', bron: 'experiences/dua/tijd-voorbij.html' },
+];
+
 /** Pad van een pagina in een taal: "/dua/" wordt "/en/dua/". */
 export function padInTaal(pad: string, taal: Taal): string {
   return taal === BRONTAAL ? pad : `/${taal}${pad}`;

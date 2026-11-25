@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="nl">
+<html lang="nl" class="i18n-wacht">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>D.U.A. - Bureau X</title>
+    <title data-i18n="dua-lobby.head.title">D.U.A. - Bureau X</title>
     <link rel="stylesheet" href="/assets/fonts/fonts.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="css/dua.css" />
@@ -13,32 +13,44 @@
     <!-- ── Scherm 1: intro ── -->
     <div id="scherm-intro" class="scherm actief">
       <div class="lobby-wrap">
-        <span class="d-stempel">Strikt vertrouwelijk</span>
-        <h1 class="lobby-titel">D.U.A.</h1>
-        <div class="lobby-sub">BUREAU X · DOSSIER 1934/RR · TIJDSPLIT-EXPERIENCE</div>
-        <p class="lobby-verhaal">
+        <span class="d-stempel" data-i18n="dua-lobby.scherm-intro.d-stempel"
+          >Strikt vertrouwelijk</span
+        >
+        <h1 class="lobby-titel" translate="no">D.U.A.</h1>
+        <div class="lobby-sub" data-i18n="dua-lobby.scherm-intro.lobby-sub">
+          BUREAU X · DOSSIER 1934/RR · TIJDSPLIT-EXPERIENCE
+        </div>
+        <p class="lobby-verhaal" data-i18n="dua-lobby.scherm-intro.lobby-verhaal">
           Gent, april 2034. Honderd jaar na de diefstal van
           <em>De Rechtvaardige Rechters</em> ontvangt Bureau X een anonieme doos: het vergeelde
           onderzoeksdossier uit 1934 en een veertiende brief, ondertekend <b>D.U.A.</b>
         </p>
-        <p class="lobby-verhaal">
+        <p class="lobby-verhaal" data-i18n="dua-lobby.scherm-intro.lobby-verhaal-2">
           Dit verhaal heeft twee kanten. Een deel van jullie speelt in <b>1934</b>, als de mensen
           achter D.U.A., met de politie in de nek en een spoor om achter te laten. De rest speelt in
           <b>2034</b> en kent de afloop van de eeuw. Wat 1934 verstopt, vindt 2034. Wat 1934
           verknoeit, is honderd jaar later nog steeds verknoeid.
         </p>
-        <p class="lobby-verhaal hintje">
+        <p class="lobby-verhaal hintje" data-i18n="dua-lobby.scherm-intro.lobby-verhaal-3">
           2 tot 4 spelers · 60 minuten · bel of videocall met je team en zet je geluid aan.
         </p>
-        <button class="d-knop goud" id="btn-begin">Open de lijn</button>
+        <button class="d-knop goud" id="btn-begin" data-i18n="dua-lobby.scherm-intro.d-knop">
+          Open de lijn
+        </button>
       </div>
     </div>
 
     <!-- ── Scherm 2: sessiecode ── -->
     <div id="scherm-code" class="scherm">
       <div class="lobby-wrap">
-        <h2 class="se" style="color: var(--d-groen)">Sessiecode</h2>
-        <p class="lobby-verhaal" style="text-align: center">
+        <h2 class="se" style="color: var(--d-groen)" data-i18n="dua-lobby.scherm-code.se">
+          Sessiecode
+        </h2>
+        <p
+          class="lobby-verhaal"
+          style="text-align: center"
+          data-i18n="dua-lobby.scherm-code.lobby-verhaal"
+        >
           Je vindt de code in je bevestigingsmail (formaat: DUA-2026-001).
         </p>
         <input
@@ -53,11 +65,23 @@
           "
           maxlength="16"
           autocomplete="off"
+          data-i18n-placeholder="dua-lobby.scherm-code.d-input@placeholder"
         />
         <div class="code-fout verborgen"></div>
         <br />
-        <button class="d-knop btn-game" data-actie="valideer-code">Verder</button>
-        <p class="recaptcha-melding hintje" style="font-size: 12px; margin-top: 18px" hidden>
+        <button
+          class="d-knop btn-game"
+          data-actie="valideer-code"
+          data-i18n="dua-lobby.scherm-code.d-knop"
+        >
+          Verder
+        </button>
+        <p
+          class="recaptcha-melding hintje"
+          style="font-size: 12px; margin-top: 18px"
+          hidden
+          data-i18n="dua-lobby.scherm-code.recaptcha-melding"
+        >
           Deze site is beschermd door reCAPTCHA. Het
           <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
             >privacybeleid</a
@@ -74,8 +98,14 @@
     <!-- ── Scherm 3: rolkeuze ── -->
     <div id="scherm-rol" class="scherm">
       <div class="lobby-wrap" style="max-width: 860px">
-        <h2 class="se" style="color: var(--d-groen)">Kies je kant van de tijd</h2>
-        <p class="lobby-verhaal" style="text-align: center">
+        <h2 class="se" style="color: var(--d-groen)" data-i18n="dua-lobby.scherm-rol.se">
+          Kies je kant van de tijd
+        </h2>
+        <p
+          class="lobby-verhaal"
+          style="text-align: center"
+          data-i18n="dua-lobby.scherm-rol.lobby-verhaal"
+        >
           Er moet minstens één onderzoeker in elk tijdperk staan.<br />
           Met z'n tweeën speelt elk één tijdperk. Met drie speelt één speler zijn tijdperk alleen en
           delen de andere twee het hunne. Met vier deelt elk tijdperk twee spelers.
@@ -83,45 +113,77 @@
 
         <div class="rol-grid">
           <div class="rol-kaart" id="rol-kaart-schrijver">
-            <div class="rol-era">1934 · GENT</div>
-            <div class="rol-naam">De Schrijver</div>
-            <div class="rol-info">
+            <div class="rol-era" data-i18n="dua-lobby.rol-kaart-schrijver.rol-era">1934 · GENT</div>
+            <div class="rol-naam" data-i18n="dua-lobby.rol-kaart-schrijver.rol-naam">
+              De Schrijver
+            </div>
+            <div class="rol-info" data-i18n="dua-lobby.rol-kaart-schrijver.rol-info">
               Typt de afpersbrieven aan het bisdom en bepaalt welke codes de eeuw oversteken. De
               typemachine is helaas… stuk.
             </div>
-            <div class="rol-bezet-label verborgen">- bezet -</div>
+            <div
+              class="rol-bezet-label verborgen"
+              data-i18n="dua-lobby.rol-kaart-schrijver.rol-bezet-label"
+            >
+              - bezet -
+            </div>
           </div>
           <div class="rol-kaart" id="rol-kaart-loper">
-            <div class="rol-era">1934 · BRUSSEL & WETTEREN</div>
-            <div class="rol-naam">De Loper</div>
-            <div class="rol-info">
+            <div class="rol-era" data-i18n="dua-lobby.rol-kaart-loper.rol-era">
+              1934 · BRUSSEL & WETTEREN
+            </div>
+            <div class="rol-naam" data-i18n="dua-lobby.rol-kaart-loper.rol-naam">De Loper</div>
+            <div class="rol-info" data-i18n="dua-lobby.rol-kaart-loper.rol-info">
               Beweegt door stations en werkkamers, ontwijkt wachters en verstopt wat honderd jaar
               bewaard moet blijven.
             </div>
-            <div class="rol-bezet-label verborgen">- bezet -</div>
+            <div
+              class="rol-bezet-label verborgen"
+              data-i18n="dua-lobby.rol-kaart-loper.rol-bezet-label"
+            >
+              - bezet -
+            </div>
           </div>
           <div class="rol-kaart" id="rol-kaart-archivaris">
-            <div class="rol-era">2034 · BUREAU X</div>
-            <div class="rol-naam">De Archivaris</div>
-            <div class="rol-info">
+            <div class="rol-era" data-i18n="dua-lobby.rol-kaart-archivaris.rol-era">
+              2034 · BUREAU X
+            </div>
+            <div class="rol-naam" data-i18n="dua-lobby.rol-kaart-archivaris.rol-naam">
+              De Archivaris
+            </div>
+            <div class="rol-info" data-i18n="dua-lobby.rol-kaart-archivaris.rol-info">
               Leest de doorslagen, het politiedossier en de kranten. Weet waar de politie in
               december 1934 zal zoeken.
             </div>
-            <div class="rol-bezet-label verborgen">- bezet -</div>
+            <div
+              class="rol-bezet-label verborgen"
+              data-i18n="dua-lobby.rol-kaart-archivaris.rol-bezet-label"
+            >
+              - bezet -
+            </div>
           </div>
           <div class="rol-kaart" id="rol-kaart-restaurateur">
-            <div class="rol-era">2034 · BUREAU X</div>
-            <div class="rol-naam">De Restaurateur</div>
-            <div class="rol-info">
+            <div class="rol-era" data-i18n="dua-lobby.rol-kaart-restaurateur.rol-era">
+              2034 · BUREAU X
+            </div>
+            <div class="rol-naam" data-i18n="dua-lobby.rol-kaart-restaurateur.rol-naam">
+              De Restaurateur
+            </div>
+            <div class="rol-info" data-i18n="dua-lobby.rol-kaart-restaurateur.rol-info">
               Onderzoekt de panelen, de museale reconstructie en het stadsarchief. Weet wat de eeuw
               overleeft.
             </div>
-            <div class="rol-bezet-label verborgen">- bezet -</div>
+            <div
+              class="rol-bezet-label verborgen"
+              data-i18n="dua-lobby.rol-kaart-restaurateur.rol-bezet-label"
+            >
+              - bezet -
+            </div>
           </div>
         </div>
 
         <div class="code-fout verborgen" id="rol-fout"></div>
-        <p class="rol-tip">
+        <p class="rol-tip" data-i18n="dua-lobby.scherm-rol.rol-tip">
           De rol is een label voor het verhaal. Beide rollen van een tijdperk zien hetzelfde dossier
           en lossen alles samen op, ook als je alleen in je tijdperk staat.
         </p>

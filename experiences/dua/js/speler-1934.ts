@@ -60,6 +60,10 @@ import {
 } from './dua-ui.ts';
 import { startSfeer, fx, koppelTypgeluid } from './dua-audio.ts';
 import { speelStem } from './dua-stemmen.ts';
+import { startSpeltaal } from '../../../shared/js/spelvertaling.ts';
+
+// Eerst de taal van de sessie en de vertaalde pagina, dan pas de rest (ADR-001, G1).
+await startSpeltaal('dua');
 
 const sessie = leesSessie();
 meetSpel('game_start', sessie, { rol: '1934' });
