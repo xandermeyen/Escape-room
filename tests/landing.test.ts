@@ -8,6 +8,7 @@ import {
   vandaagIso,
   BOEK_FOUT_TEKST,
   datumAlsTekst,
+  vulBoekingAan,
   leesBoekAntwoord,
 } from '../js/landing.ts';
 
@@ -88,6 +89,8 @@ describe('boekingsformulier', () => {
     expect(body.get('experience')).toBe('kamer-14');
     expect(body.get('email_speler_1')).toBe('a@b.be');
     expect(body.get('datumTekst')).toBe('');
+    expect(body.get('taal')).toBe('nl');
+    expect(body.get('speltaal')).toBe('nl');
   });
 
   it('antwoord zonder geldige code of met een vreemde link telt als mislukt', async () => {
@@ -123,6 +126,7 @@ describe('boekingshulpjes', () => {
 
   it('datumAlsTekst geeft een leesbare datum of leeg', () => {
     expect(datumAlsTekst('2026-11-20')).toMatch(/vrijdag 20 november/);
+    expect(datumAlsTekst('2026-11-20', 'en')).toMatch(/Friday,? 20 November/);
     expect(datumAlsTekst('')).toBe('');
     expect(datumAlsTekst('onzin')).toBe('');
   });
@@ -161,5 +165,31 @@ describe('menu en FAQ', () => {
     expect(open[0]!.contains(twee!)).toBe(true);
     twee!.click();
     expect(document.querySelectorAll('.faq-item.open')).toHaveLength(0);
+  });
+});
+
+describe('vulBoekingAan', () => {
+  const velden = (extra: Record<string, string>) => new URLSearchParams(extra);
+
+  it('een Engelse pagina krijgt een Engelse mail en datum', () => {
+    const v = velden({ experience: 'kamer-14', datum: '2026-11-20' });
+    vulBoekingAan(v, 'en');
+    expect(v.get('taal')).toBe('en');
+    expect(v.get('datumTekst')).toMatch(/November/);
+  });
+
+  it('het spel blijft Nederlands zolang het niet in het Engels bestaat', () => {
+    const k14 = velden({ experience: 'kamer-14' });
+    vulBoekingAan(k14, 'en');
+    expect(k14.get('speltaal')).toBe('nl');
+    const dua = velden({ experience: 'dua' });
+    vulBoekingAan(dua, 'en');
+    expect(dua.get('speltaal')).toBe('nl');
+  });
+
+  it('een Nederlandse pagina boekt alles in het Nederlands', () => {
+    const v = velden({ experience: 'dua', datum: '' });
+    vulBoekingAan(v, 'nl');
+    expect([v.get('taal'), v.get('speltaal'), v.get('datumTekst')]).toEqual(['nl', 'nl', '']);
   });
 });

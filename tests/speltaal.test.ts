@@ -4,6 +4,7 @@ import {
   kiesSpeltaal,
   laadVertaler,
   maakVertaler,
+  speltaalVoorBoeking,
   taalHintUitUrl,
   vulIn,
   zetDocumentTaal,
@@ -82,5 +83,17 @@ describe('vertaler', () => {
     });
     expect(geladen).toEqual(['nl']);
     expect(vertaler.t('groet', { naam: 'An' })).toBe('Hallo An');
+  });
+});
+
+describe('speltaalVoorBoeking', () => {
+  it('neemt de paginataal als de experience in die taal bestaat', () => {
+    expect(speltaalVoorBoeking('dua', 'nl')).toBe('nl');
+  });
+
+  it('valt terug op de standaard van de experience', () => {
+    expect(speltaalVoorBoeking('kamer-14', 'en')).toBe('nl');
+    expect(speltaalVoorBoeking('dua', 'fr')).toBe('nl');
+    expect(speltaalVoorBoeking('onbekend', 'en')).toBe('nl');
   });
 });

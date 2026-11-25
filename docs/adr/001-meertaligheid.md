@@ -167,7 +167,7 @@ De publieke D.U.A.-pagina in het Engels gaat pas zonder waarschuwing live samen 
 5. [x] Sitemap genereren, llms.txt en FAQ over taal bijwerken.
 6. [x] Engelse vertaling van de publieke pagina's, met de Nederlandstalig-melding bij beide spellen.
 7. [x] `shared/js/speltaal.ts` met getypeerde `t()` en tests, woordenboeken per taal apart geladen. Sessieveld `taal` met databaseregel en tests, `bepaalSpeltaal()` in `session.ts`.
-8. [ ] Boekingsformulier met `taal` en `speltaal`. Make-scenario, mailtemplates, databaseregels, regeltests en contracttest aanpassen.
+8. [x] Boekingsformulier met `taal` en `speltaal`. Make-scenario, mailtemplates, databaseregels, regeltests en contracttest aanpassen.
 9. [ ] D.U.A.: teksten naar `t()`, taal uit de sessie met URL-hint, P1 per taal, P5-labels.
 10. [ ] Engelse D.U.A. testen met twee volledige spellen, daarna de melding op `/en/dua/` weghalen.
 11. [ ] Franse vertaling van de publieke pagina's, nagelezen door een moedertaalspreker.
