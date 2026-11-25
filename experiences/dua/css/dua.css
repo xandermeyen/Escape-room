@@ -234,6 +234,9 @@ body.era-1934 .stuk {
   font-size: 11px;
   font-family: var(--font);
 }
+html[lang='en'] .stuk.klaar::after {
+  content: '✓ sealed in time';
+}
 .stuk.slot {
   /* vergrendeld: grijs en gestreept, maar de tekst blijft leesbaar */
   filter: grayscale(0.7);

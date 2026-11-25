@@ -10,6 +10,7 @@ import {
   type AntwoordRegel,
 } from '../../../shared/js/utils.ts';
 import type { Versie } from '../../../shared/js/versies.ts';
+import type { Speltaal } from '../../../shared/js/speltaal.ts';
 
 export const DUA_HASHES: Record<string, string[]> = {
   // P1: het woord in de doorslag
@@ -20,6 +21,44 @@ export const DUA_HASHES: Record<string, string[]> = {
   route: ['2eab8676deafcd2510a31613085a1242fb15f413789aa73787d541aae745818d'],
   // P5: de plek die de eeuw overleeft
   plek: ['a360c666cfc62f704fdf79dd29e11861f604a726877e077944e6fb24e829b04f'],
+};
+
+/**
+ * P1 per taal (zie docs/adr/001-meertaligheid.md): de brief die de Schrijver typt,
+ * de code op het briefje van de Loper (eerst de rij, dan de kolom op de codekaart
+ * RR-12, die in elke taal dezelfde is) en het woord als hash. De letterhamers
+ * zijn in elke taal dezelfde.
+ */
+export interface P1Taal {
+  brief: string;
+  code: string;
+  /** Aantal letters van het woord, en hetzelfde getal voluit voor in een zin. */
+  letters: number;
+  lettersVoluit: string;
+  woordHash: string[];
+}
+
+export const DUA_P1: Record<Speltaal, P1Taal> = {
+  nl: {
+    brief:
+      'MONSEIGNEUR. KIJK NIET LANGER WEG. UW AARZELING KOST U MEER DAN GELD. ' +
+      'EEN LAATSTE TEKEN IS ONDERWEG: ZOEK WAAR REIZIGERS WACHTEN. ' +
+      'HET NUMMER IS EEN MEER DAN HET AANTAL BRIEVEN DAT U TELT. - D.U.A.',
+    code: '34 · 11 · 45 · 33 · 22',
+    letters: 5,
+    lettersVoluit: 'Vijf',
+    woordHash: ['821713fad1075e18471e008705ef3f8a0a3e2bca4948efd750947808a012935c'],
+  },
+  en: {
+    brief:
+      'MONSEIGNEUR. LOOK AWAY NO LONGER. YOUR HESITATION WILL COST YOU MORE THAN MONEY. ' +
+      'ONE LAST SIGN IS ON ITS WAY: SEEK WHERE TRAVELLERS WAIT. ' +
+      'THE NUMBER IS ONE MORE THAN OUR LETTERS YOU HAVE RECEIVED. - D.U.A.',
+    code: '11 · 15 · 24 · 34 · 25 · 43',
+    letters: 6,
+    lettersVoluit: 'Six',
+    woordHash: ['8bca6dada231e0fd80bf5ff9ff16aa79de1fb8e7b11cd282c0ea251d78376e9d'],
+  },
 };
 
 /** Alleen de cijfers: "3-1-9-4", "3 1 9 4" en "3,1,9,4" worden "3194". */
@@ -43,11 +82,6 @@ export const DUA_REGELS: Record<string, AntwoordRegel> = {
     deelvormen: vorm => [[...vorm].sort().join('')],
   },
 };
-
-export const DUA_BIJNA_ROUTE =
-  'De juiste plekken, maar niet in de juiste volgorde. Vraag 1934 in welke volgorde ze het zagen.';
-export const DUA_BIJNA_KLUIS =
-  'Je zit er vlak naast. Hoeveel brieven kreeg het bisdom echt? Brief XIII komt nooit aan.';
 
 /**
  * P1 (2034): klopt wat de speler typte met het woord in de doorslag?

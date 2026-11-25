@@ -7,10 +7,11 @@ import '../../../shared/js/sentry.ts';
 import { haalAantalSpelers } from '../../../shared/js/session.ts';
 import { initLobby } from '../../../shared/js/lobby-ui.ts';
 import { initDua } from './dua-session.ts';
-import { startSpeltaal } from '../../../shared/js/spelvertaling.ts';
+import { startDua } from './dua-start.ts';
+import { tekst, vul } from './dua-tekst.ts';
 
 // Eerst de taal van de sessie en de vertaalde pagina, dan pas de rest (ADR-001, G1).
-await startSpeltaal('dua');
+await startDua();
 
 const ERA: Record<string, '1934' | '2034'> = {
   schrijver: '1934',
@@ -25,10 +26,10 @@ let aantalSpelers = 4;
 initLobby({
   metRolParam: true,
   rollen: {
-    schrijver: { pagina: 'speler-1934.html', naam: 'De Schrijver (1934)' },
-    loper: { pagina: 'speler-1934.html', naam: 'De Loper (1934)' },
-    archivaris: { pagina: 'speler-2034.html', naam: 'De Archivaris (2034)' },
-    restaurateur: { pagina: 'speler-2034.html', naam: 'De Restaurateur (2034)' },
+    schrijver: { pagina: 'speler-1934.html', naam: tekst().lobby.rol.schrijver },
+    loper: { pagina: 'speler-1934.html', naam: tekst().lobby.rol.loper },
+    archivaris: { pagina: 'speler-2034.html', naam: tekst().lobby.rol.archivaris },
+    restaurateur: { pagina: 'speler-2034.html', naam: tekst().lobby.rol.restaurateur },
   },
   naValidatie: async code => {
     await initDua(code); // dua-node klaarzetten (idempotent)
@@ -37,14 +38,14 @@ initLobby({
   magClaimen: (rol, spelers) => {
     const bezet = Object.keys(ERA).filter(r => spelers[r] === 'bezet');
     if (bezet.length >= aantalSpelers) {
-      return 'Alle plaatsen van deze sessie zijn al ingenomen.';
+      return tekst().lobby.vol;
     }
     // Er moet minstens één onderzoeker in elk tijdperk staan.
     const andereEra = ERA[rol] === '1934' ? '2034' : '1934';
     const andereEraBezet = bezet.some(r => ERA[r] === andereEra);
     const plaatsenOver = aantalSpelers - bezet.length - 1;
     if (!andereEraBezet && plaatsenOver < 1) {
-      return `Houd deze plek vrij: er moet minstens één speler in ${andereEra} staan.`;
+      return vul(tekst().lobby.houdVrij, { era: andereEra });
     }
     return null;
   },

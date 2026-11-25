@@ -154,7 +154,7 @@ describe('D.U.A.-pagina’s', () => {
   it('de startmodules vertalen vóór ze iets anders doen', () => {
     for (const f of ['lobby', 'speler-1934', 'speler-2034', 'einde', 'tijd-voorbij']) {
       const code = readFileSync(resolve(ROOT, `experiences/dua/js/${f}.ts`), 'utf8');
-      const start = code.indexOf("await startSpeltaal('dua');");
+      const start = code.indexOf('await startDua();');
       expect(start, f).toBeGreaterThan(0);
       const naImports = code.slice(0, start).replace(/import[\s\S]*?;\n/g, '');
       expect(

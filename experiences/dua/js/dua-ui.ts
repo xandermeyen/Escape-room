@@ -16,6 +16,7 @@ import { valideerSessie } from '../../../shared/js/session.ts';
 import { telHint, zetBadge, type DuaMeta } from './dua-session.ts';
 import { fx, isGedempt, wisselGeluid } from './dua-audio.ts';
 import { DUA_VRIJGAVE } from './dua-config.ts';
+import { tekst, vul } from './dua-tekst.ts';
 
 // ── Melding (toast) ─────────────────────────────────────────
 let meldingTimer: ReturnType<typeof setTimeout> | null = null;
@@ -29,6 +30,14 @@ export function melding(tekst: string): void {
   meldingTimer = setTimeout(() => {
     m.style.display = 'none';
   }, 4800);
+}
+
+type Insigne = keyof ReturnType<typeof tekst>['ui']['insignes'];
+
+/** "Insigne gevonden: ..." in de speltaal. */
+export function meldInsigne(naam: Insigne, extra = ''): void {
+  const t = tekst().ui;
+  melding(vul(t.insigne, { naam: t.insignes[naam] }) + extra);
 }
 
 // ── Timer met tijdstraf uit dua/meta/strafMs ────────────────
@@ -52,7 +61,7 @@ export async function startDuaTimer(code: string): Promise<void> {
       el?.classList.add('alarm');
       if (!w10) {
         w10 = true;
-        melding('Nog 10 minuten. De lijn tussen 1934 en 2034 wordt zwakker.');
+        melding(tekst().ui.tienMinuten);
       }
       const sec = Math.floor(rest / 1000);
       if (sec >= 0 && sec % (rest < 2 * 60 * 1000 ? 1 : 3) === 0) fx.hartslag();
@@ -79,7 +88,7 @@ export function koppelMeta(code: string, callback?: (meta: DuaMeta) => void): vo
 
     if (strafMs > vorigeStraf) {
       fx.fluitje();
-      melding('De politie greep bijna in. Jullie doken onder: 5 MINUTEN verloren.');
+      melding(tekst().ui.straf);
     }
     callback?.(meta);
   });
@@ -159,9 +168,10 @@ export function duaHint(code: string, blokId: string): void {
 export function koppelMuteKnop(): void {
   const knop = document.getElementById('muteknop');
   if (!knop) return;
-  knop.textContent = isGedempt() ? '♪ uit' : '♪ aan';
+  const { geluidAan, geluidUit } = tekst().ui;
+  knop.textContent = isGedempt() ? geluidUit : geluidAan;
   knop.addEventListener('click', () => {
-    knop.textContent = wisselGeluid() ? '♪ uit' : '♪ aan';
+    knop.textContent = wisselGeluid() ? geluidUit : geluidAan;
   });
 }
 
@@ -198,7 +208,7 @@ export function koppelEasterEggs(code: string): void {
         }, 900);
       }
       zetBadge(code, 'door-u-aangesteld');
-      melding('Insigne gevonden: Door U Aangesteld');
+      meldInsigne('door-u-aangesteld');
     }
 
     if (e.key.toUpperCase() === KONAMI[kPos]) {
@@ -208,7 +218,7 @@ export function koppelEasterEggs(code: string): void {
         document.body.classList.toggle('era-2034');
         fx.lade();
         zetBadge(code, 'anno-verwisseld');
-        melding('Insigne gevonden: Anno Verwisseld');
+        meldInsigne('anno-verwisseld');
         kPos = 0;
       }
     } else {
@@ -218,29 +228,17 @@ export function koppelEasterEggs(code: string): void {
     telBuffer = (telBuffer + e.key).slice(-4);
     if (telBuffer === '1180') {
       fx.telefoon();
-      setTimeout(
-        () =>
-          melding('Een krakende stem: "De Rechters reizen niet. Zij kijken al jaren op u neer."'),
-        1300,
-      );
+      setTimeout(() => melding(tekst().ui.telefoon), 1300);
       zetBadge(code, 'gent-1180');
     }
   });
 }
 
 // ── Klikbare SVG-plekken bedienbaar met het toetsenbord ─────
-const PLEK_NAMEN: Record<string, string> = {
-  kast: 'Kast',
-  bureau: 'Bureau',
-  vensterbank: 'Vensterbank',
-  schouw: 'Schouw',
-  boekenrek: 'Boekenrek',
-  vloerplank: 'Losse vloerplank',
-  sintbaafs: 'Sint-Baafskathedraal',
-  belfort: 'Belfort',
-  station: 'Sint-Pietersstation',
-  gravensteen: 'Gravensteen',
-};
+/** Leesbare naam van een plek (data-plek), in de speltaal. */
+export function plekNaam(plek: string): string {
+  return (tekst().plekken as Record<string, string>)[plek] ?? plek;
+}
 
 /** Tab-focus, een naam voor schermlezers en Enter/spatie als klik. */
 export function maakSvgToegankelijk(selector: string): void {
@@ -248,7 +246,7 @@ export function maakSvgToegankelijk(selector: string): void {
     const plek = el.getAttribute('data-plek') ?? '';
     el.setAttribute('tabindex', '0');
     el.setAttribute('role', 'button');
-    el.setAttribute('aria-label', PLEK_NAMEN[plek] ?? plek);
+    el.setAttribute('aria-label', plekNaam(plek));
     el.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       e.preventDefault();

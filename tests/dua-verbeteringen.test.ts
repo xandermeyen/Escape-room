@@ -27,7 +27,7 @@ import {
   alleenCijfers,
   beoordeelDoorslag,
 } from '../experiences/dua/js/dua-config.ts';
-import { duaVrijgaveMelding, DUA_INACTIEF } from '../experiences/dua/js/dua-hulp.ts';
+import { duaVrijgaveMelding, duaInactief } from '../experiences/dua/js/dua-hulp.ts';
 import { duaOplossing } from '../experiences/dua/js/dua-oplossing.ts';
 import { maakSvgToegankelijk, ontgrendeld } from '../experiences/dua/js/dua-ui.ts';
 
@@ -97,7 +97,7 @@ describe('D.U.A.: vrijgave', () => {
 
   it('heeft een inactiviteitsmelding per puzzel voor beide tijdperken', () => {
     for (const t of ['1934', '2034'] as const) {
-      expect(Object.keys(DUA_INACTIEF[t]).sort()).toEqual(['p0', 'p1', 'p2', 'p3', 'p4', 'p5']);
+      expect(Object.keys(duaInactief(t)).sort()).toEqual(['p0', 'p1', 'p2', 'p3', 'p4', 'p5']);
     }
   });
 });

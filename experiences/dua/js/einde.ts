@@ -7,7 +7,7 @@ import '../../../shared/js/sentry.ts';
 import { db } from '../../../shared/js/firebase-config.ts';
 import { ref, onValue } from 'firebase/database';
 import { formateerTijd, TIJDSLIMIET_MS } from '../../../shared/js/timer.ts';
-import { requireEl, sessieUitUrl } from '../../../shared/js/utils.ts';
+import { escHtml, requireEl, sessieUitUrl } from '../../../shared/js/utils.ts';
 import { koppelReviewFormulier } from '../../../shared/js/review-form.ts';
 import { koppelDeelKnop } from '../../../shared/js/deel.ts';
 import { haalEinde } from './dua-session.ts';
@@ -15,10 +15,11 @@ import { fx } from './dua-audio.ts';
 import { speelStem } from './dua-stemmen.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
 import { meetSpel } from '../../../shared/js/meet.ts';
-import { startSpeltaal } from '../../../shared/js/spelvertaling.ts';
+import { startDua } from './dua-start.ts';
+import { tekst, vul } from './dua-tekst.ts';
 
 // Eerst de taal van de sessie en de vertaalde pagina, dan pas de rest (ADR-001, G1).
-await startSpeltaal('dua');
+await startDua();
 
 /** Zo lang wachten we op de andere kant voor we de review toch tonen. */
 const MAX_WACHT_MS = 3 * 60 * 1000;
@@ -33,7 +34,8 @@ const AANTAL_EGGS = 6;
 const sessie = sessieUitUrl();
 meetSpel('game_complete', sessie);
 
-requireEl('sys-case').textContent = `D.U.A. · eindrapport · Sessie ${sessie}`;
+const T = tekst().einde;
+requireEl('sys-case').textContent = vul(tekst().kop.eindCase, { sessie });
 
 document.getElementById('btn-terug')?.addEventListener('click', () => {
   window.location.href = '../../index.html';
@@ -48,8 +50,13 @@ let deelBadges = 0;
 
 koppelDeelKnop('btn-deel-resultaat', () =>
   deelResttijd
-    ? `Wij kraakten D.U.A. met ${deelResttijd} resttijd en ${deelBadges}/${AANTAL_EGGS} insignes 🕰️ Gratis online escape room over De Rechtvaardige Rechters: https://bureau-x.be/dua/`
-    : 'Wij kraakten D.U.A. 🕰️ Gratis online escape room over De Rechtvaardige Rechters: https://bureau-x.be/dua/',
+    ? vul(T.deelMetTijd, {
+        tijd: deelResttijd,
+        badges: deelBadges,
+        totaal: AANTAL_EGGS,
+        url: T.url,
+      })
+    : vul(T.deel, { url: T.url }),
 );
 
 let klokGeluid = false;
@@ -75,21 +82,17 @@ async function vernieuw(): Promise<void> {
     if (wachtVerlopen) {
       // De andere kant haakte af of is nog bezig: niemand blijft eindeloos
       // wachten. De teksten verschijnen alsnog zodra ze binnenkomen.
-      wacht.textContent =
-        'De andere kant is nog bezig. Jullie kunnen alvast verder lezen en een review achterlaten.';
+      wacht.textContent = T.nogBezig;
       document.getElementById('einde-onthulling')?.classList.remove('verborgen');
       document.getElementById('einde-review')?.classList.remove('verborgen');
       return;
     }
-    wacht.textContent = !data.brief14Klaar
-      ? 'Wachten op 1934: de veertiende brief is nog niet verzegeld…'
-      : 'Wachten op 2034: het rapport is nog niet ingediend…';
+    wacht.textContent = !data.brief14Klaar ? T.wacht1934 : T.wacht2034;
     return;
   }
 
   // Beide klaar → onthulling + stats + reviewformulier
-  wacht.textContent =
-    'De brief uit 1934 en het rapport uit 2034 liggen naast elkaar. Jullie waren D.U.A. Allebei. Altijd al.';
+  wacht.textContent = T.samen;
   document.getElementById('einde-onthulling')?.classList.remove('verborgen');
   document.getElementById('einde-review')?.classList.remove('verborgen');
 
@@ -115,14 +118,14 @@ async function vernieuw(): Promise<void> {
       prestatie.hidden = false;
     }
   }
-  // Veilig: alle interpolaties zijn numerieke spelstatus of geformatteerde tijd,
-  // geen vrije spelertekst.
+  // Veilig: de interpolaties zijn numerieke spelstatus, geformatteerde tijd of
+  // ge-escapete labels uit ons woordenboek, geen vrije spelertekst.
   // eslint-disable-next-line no-unsanitized/property
   statsEl.innerHTML =
-    `<div class="d-stat"><b>${resttijd}</b><span>Resttijd</span></div>` +
-    `<div class="d-stat"><b>${data.meta.hints || 0}</b><span>Hints gebruikt</span></div>` +
-    `<div class="d-stat"><b>${data.meta.verdenking || 0}%</b><span>Eindverdenking</span></div>` +
-    `<div class="d-stat"><b>${data.badges}/${AANTAL_EGGS}</b><span>Insignes</span></div>`;
+    `<div class="d-stat"><b>${resttijd}</b><span>${escHtml(T.resttijd)}</span></div>` +
+    `<div class="d-stat"><b>${data.meta.hints || 0}</b><span>${escHtml(T.hints)}</span></div>` +
+    `<div class="d-stat"><b>${data.meta.verdenking || 0}%</b><span>${escHtml(T.verdenking)}</span></div>` +
+    `<div class="d-stat"><b>${data.badges}/${AANTAL_EGGS}</b><span>${escHtml(T.insignes)}</span></div>`;
   statsEl.style.display = 'flex';
 
   deelResttijd = resttijd;
