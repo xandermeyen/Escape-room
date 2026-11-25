@@ -11,6 +11,7 @@ import {
 } from 'firebase/database';
 import { authReady, authGelukt } from './auth.ts';
 import { schrijf, meldSchrijffout } from './verbinding.ts';
+import { kiesSpeltaal, taalHintUitUrl, type Speltaal } from './speltaal.ts';
 
 export interface RapportInhoud {
   bestemming: string;
@@ -49,11 +50,13 @@ export interface MaakSessieOpties {
   puzzelIds: string[];
   /** Demo-sessie (zie demo.ts): telt niet mee in speldata en statistieken. */
   demo?: boolean;
+  /** Speltaal (zie speltaal.ts). Zonder: Nederlands. */
+  taal?: Speltaal;
 }
 
 export async function maakSessie(sessieCode: string, opties: MaakSessieOpties): Promise<boolean> {
   await authReady;
-  const { ervaringsId = 'kamer-14', aantalSpelers, puzzelIds, demo } = opties;
+  const { ervaringsId = 'kamer-14', aantalSpelers, puzzelIds, demo, taal } = opties;
 
   const puzzels: Record<string, boolean> = {};
   for (const id of puzzelIds) puzzels[id] = false;
@@ -71,6 +74,7 @@ export async function maakSessie(sessieCode: string, opties: MaakSessieOpties): 
   };
   if (aantalSpelers) nieuw.aantalSpelers = aantalSpelers;
   if (demo) nieuw.demo = true;
+  if (taal) nieuw.taal = taal;
 
   const sessieRef = ref(db, `sessions/${sessieCode}`);
   const result = await schrijf(
@@ -257,6 +261,22 @@ export function bewaakSessieGesloten(sessieCode: string, opGesloten: () => void)
       })
       .catch(() => opGesloten());
   });
+}
+
+/**
+ * Speltaal van een sessie (zie speltaal.ts): het veld `taal`, of Nederlands
+ * als het ontbreekt. Lukt het lezen niet, dan telt ?taal= in de URL als hint.
+ */
+export async function bepaalSpeltaal(
+  sessieCode: string,
+  hint: string | null = taalHintUitUrl(),
+): Promise<Speltaal> {
+  try {
+    const snap = await get(ref(db, `sessions/${sessieCode}/taal`));
+    return kiesSpeltaal({ gelezen: true, sessieTaal: snap.val(), hint });
+  } catch {
+    return kiesSpeltaal({ gelezen: false, hint });
+  }
 }
 
 // Aantal spelers van een sessie (D.U.A.: 2–4). Null als het niet gezet is.

@@ -166,7 +166,7 @@ De publieke D.U.A.-pagina in het Engels gaat pas zonder waarschuwing live samen 
 4. [x] Taalknop, suggestiebalk, cookiebanner vertaald. De 404-pagina is één `404.html` voor de hele site, want GitHub Pages kent er maar één. `js/niet-gevonden.ts` zet ze in het Engels als het gezochte pad met `/en/` begint.
 5. [x] Sitemap genereren, llms.txt en FAQ over taal bijwerken.
 6. [x] Engelse vertaling van de publieke pagina's, met de Nederlandstalig-melding bij beide spellen.
-7. [ ] `shared/js/i18n.ts` met getypeerde `t()` en tests, woordenboeken per taal apart geladen.
+7. [x] `shared/js/speltaal.ts` met getypeerde `t()` en tests, woordenboeken per taal apart geladen. Sessieveld `taal` met databaseregel en tests, `bepaalSpeltaal()` in `session.ts`.
 8. [ ] Boekingsformulier met `taal` en `speltaal`. Make-scenario, mailtemplates, databaseregels, regeltests en contracttest aanpassen.
 9. [ ] D.U.A.: teksten naar `t()`, taal uit de sessie met URL-hint, P1 per taal, P5-labels.
 10. [ ] Engelse D.U.A. testen met twee volledige spellen, daarna de melding op `/en/dua/` weghalen.

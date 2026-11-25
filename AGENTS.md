@@ -53,8 +53,10 @@ Draai voor je klaar bent minstens: `lint`, `typecheck`, `test`, `format:check`,
 ## Harde regels
 
 1. **Nooit antwoorden in de code.** Puzzelantwoorden staan alleen als SHA-256-hash in
-   `experiences/<naam>/js/*-config.ts`. Zet geen platte antwoorden, oplossingen of
-   volledige hints in broncode, tests, commits, screenshots of docs.
+   `experiences/<naam>/js/*-config.ts`. Zet geen platte antwoorden of oplossingen in
+   HTML, gewone broncode, commits, screenshots of docs. Uitzondering: de laatste
+   hintstap mag het antwoord geven, maar alleen in het hintbestand
+   (`dua-hints.ts` en dergelijke), dat de tekst pas toont als de hint opengaat.
 2. **Geen ongesanitiseerde `innerHTML`.** ESLint blokkeert dit. Gebruik `textContent`
    of DOM-methodes. Leegmaken met `el.innerHTML = ''` mag.
 3. **Rules wijzigen = rules testen.** Pas je `firebase/database.rules.json` aan, voeg dan

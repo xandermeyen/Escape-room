@@ -208,6 +208,9 @@
         "demo": {
           ".validate": "newData.isBoolean()"
         },
+        "taal": {
+          ".validate": "newData.isString() && newData.val().matches(/^(nl|en|fr)$/)"
+        },
         "$other": {
           ".validate": false
         }
