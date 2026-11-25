@@ -3,7 +3,8 @@
  * D.U.A.): navigatiebalk, gsm-menu, scroll-reveal, FAQ en het
  * boekingsformulier. Stond vroeger drie keer als los <script> in de HTML.
  */
-import { teksten } from '../shared/js/i18n.ts';
+import { huidigeTaal, locale, teksten, type Taal } from '../shared/js/i18n.ts';
+import { speltaalVoorBoeking } from '../shared/js/speltaal.ts';
 import { experienceUitPad, meetEvent } from '../shared/js/meet.ts';
 
 /** Navigatiebalk krijgt een achtergrond zodra je scrollt. */
@@ -106,15 +107,30 @@ export function leesBoekAntwoord(data: unknown): BoekAntwoord {
 }
 
 /**
- * yyyy-mm-dd als leesbare datum ("vrijdag 20 november"), of leeg.
- * Altijd in het Nederlands: deze tekst gaat naar Make en komt in de
- * Nederlandse mail. Pas aan zodra Make een mail per taal stuurt (ADR-001, fase 3).
+ * yyyy-mm-dd als leesbare datum ("vrijdag 20 november", "Friday 20 November"),
+ * of leeg. In de taal van de mail: Make kiest de mail op het veld `taal`.
  */
-export function datumAlsTekst(iso: string): string {
+export function datumAlsTekst(iso: string, taal: Taal = 'nl'): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
   if (!m) return '';
   const datum = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-  return datum.toLocaleDateString('nl-BE', { weekday: 'long', day: 'numeric', month: 'long' });
+  return datum.toLocaleDateString(locale(taal), {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+}
+
+/**
+ * Velden die de browser zelf toevoegt aan een boeking (zie docs/make-scenario.md):
+ * - taal: taal van de pagina, dus van de mail;
+ * - speltaal: taal van het spel, die Make in de sessie zet;
+ * - datumTekst: de datum, opgemaakt in de taal van de mail.
+ */
+export function vulBoekingAan(velden: URLSearchParams, paginaTaal: Taal = huidigeTaal()): void {
+  velden.set('taal', paginaTaal);
+  velden.set('speltaal', speltaalVoorBoeking(velden.get('experience') ?? '', paginaTaal));
+  velden.set('datumTekst', datumAlsTekst(velden.get('datum') ?? '', paginaTaal));
 }
 
 /** Vult het bevestigingsblok met de code, de link en een kopieerknop. */
@@ -170,7 +186,7 @@ export function koppelBoekformulier(fetcher: typeof fetch = (...a) => fetch(...a
       new FormData(form).forEach((waarde, naam) => {
         if (typeof waarde === 'string') velden.append(naam, waarde.trim());
       });
-      velden.set('datumTekst', datumAlsTekst(velden.get('datum') ?? ''));
+      vulBoekingAan(velden);
 
       const res = await fetcher(form.action, { method: 'POST', body: velden });
       if (!res.ok) throw new Error(`Boekingsdienst antwoordde ${res.status}`);

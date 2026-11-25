@@ -170,7 +170,15 @@
                   },
                   {
                     "name": "datumTekst",
-                    "value": "{{ifempty(1.datumTekst; \"zodra jullie klaar zijn\")}}"
+                    "value": "{{ifempty(1.datumTekst; if(1.taal = \"en\"; \"whenever you are ready\"; \"zodra jullie klaar zijn\"))}}"
+                  },
+                  {
+                    "name": "taal",
+                    "value": "{{if(1.taal = \"en\"; \"en\"; \"nl\")}}"
+                  },
+                  {
+                    "name": "speltaal",
+                    "value": "{{if(1.speltaal = \"en\"; \"en\"; \"nl\")}}"
                   }
                 ]
               },
@@ -299,34 +307,113 @@
                       }
                     },
                     {
-                      "id": 7,
-                      "module": "email:ActionSendEmail",
-                      "version": 7,
-                      "parameters": {
-                        "account": 8064756,
-                        "saveAfterSent": false
-                      },
-                      "mapper": {
-                        "cc": [],
-                        "to": ["{{1.email_speler_1}}", "{{1.email_speler_2}}"],
-                        "bcc": [],
-                        "from": "",
-                        "sender": "",
-                        "headers": [],
-                        "replyTo": "",
-                        "subject": "Jouw spellink voor Kamer 14",
-                        "priority": "normal",
-                        "inReplyTo": "",
-                        "references": [],
-                        "attachments": [],
-                        "contentType": "html",
-                        "html": "<!DOCTYPE html>\n<html lang=\"nl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Jouw spellink voor Kamer 14</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:#1c1a17;font-family:Arial,Helvetica,sans-serif;\">\n  <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:#1c1a17;\">\n    <tr>\n      <td align=\"center\" style=\"padding:40px 16px;\">\n        <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:600px;width:100%;\">\n          <tr>\n            <td align=\"center\" style=\"padding-bottom:32px;\">\n              <table cellpadding=\"0\" cellspacing=\"0\">\n                <tr>\n                  <td style=\"padding-right:14px;vertical-align:middle;\">\n                    <table cellpadding=\"0\" cellspacing=\"0\" style=\"border:1.5px solid #f5f0e8;width:44px;height:44px;\">\n                      <tr><td align=\"center\" valign=\"middle\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;color:#f5f0e8;line-height:1;\">X</td></tr>\n                    </table>\n                  </td>\n                  <td style=\"vertical-align:middle;\">\n                    <div style=\"font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:500;letter-spacing:6px;color:#f5f0e8;\">BUREAU X</div>\n                    <div style=\"border-top:0.75px solid #f5f0e8;margin-top:4px;padding-top:4px;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:3px;color:#f5f0e8;\">ESCAPE ROOMS</div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;border-bottom:1px solid #c49a2a;padding:12px 0;text-align:center;\">\n              <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#f5f0e8;\">Intern dossier · OPZ Geel · Bevestiging reservering</span>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"background-color:#2e2b26;padding:40px 36px;border-left:1px solid #c49a2a;border-right:1px solid #c49a2a;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#f5f0e8;margin:0 0 16px 0;\">Geachte deelnemers</p>\n              <p style=\"color:#f5f0e8;font-size:15px;line-height:1.7;margin:0 0 16px 0;\">\n                Uw dossier voor <strong>Kamer 14</strong> staat klaar. Gepland: <strong style=\"color:#c49a2a;\">{{2.datumTekst}}</strong>.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 16px 0;font-style:italic;\">\n                Lena Bogaert, kostgangster bij het OPZ Geel, is vanochtend vertrokken zonder iets te zeggen. Om vijf uur beslist haar begeleidster of ze haar als vermist meldt. Eén speler zit aan het bureau van het OPZ, de ander staat in de kamer van Lena. U heeft 60 minuten.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 32px 0;\">\n                Speel met twee, elk op een eigen toestel. Bel of videobel met elkaar tijdens het spel en zet het geluid aan: er zijn stemmen en geluiden.\n              </p>\n              <table cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 auto 32px auto;\">\n                <tr>\n                  <td style=\"background-color:#c49a2a;padding:14px 36px;text-align:center;\">\n                    <a href=\"https://bureau-x.be/experiences/kamer-14/?sessie={{2.sessieCode}}\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#1c1a17;text-decoration:none;font-weight:700;\">Open dossier</a>\n                  </td>\n                </tr>\n              </table>\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-top:1px solid #c49a2a;\">\n                <tr>\n                  <td style=\"padding-top:24px;\">\n                    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n                      <tr>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Sessiecode</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">{{2.sessieCode}}</span>\n                        </td>\n                        <td width=\"20\"></td>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Tijdslimiet</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">60 MIN</span>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:20px 8px 4px;text-align:center;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#f5f0e8;margin:0;\">Na afloop: een review op <a href=\"https://escapetalk.nl/games/bureau-x/kamer-14/\" style=\"color:#c49a2a;\">escapetalk.nl</a> helpt andere spelers Kamer 14 te vinden.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;padding:20px 0;text-align:center;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;margin:0;text-transform:uppercase;\">Bureau X · Escape Rooms · bureau-x.be</p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>"
-                      },
+                      "id": 13,
+                      "mapper": null,
+                      "module": "builtin:BasicRouter",
+                      "routes": [
+                        {
+                          "flow": [
+                            {
+                              "id": 7,
+                              "module": "email:ActionSendEmail",
+                              "version": 7,
+                              "parameters": {
+                                "account": 8064756,
+                                "saveAfterSent": false
+                              },
+                              "mapper": {
+                                "cc": [],
+                                "to": ["{{1.email_speler_1}}", "{{1.email_speler_2}}"],
+                                "bcc": [],
+                                "from": "",
+                                "sender": "",
+                                "headers": [],
+                                "replyTo": "",
+                                "subject": "Jouw spellink voor Kamer 14",
+                                "priority": "normal",
+                                "inReplyTo": "",
+                                "references": [],
+                                "attachments": [],
+                                "contentType": "html",
+                                "html": "<!DOCTYPE html>\n<html lang=\"nl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Jouw spellink voor Kamer 14</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:#1c1a17;font-family:Arial,Helvetica,sans-serif;\">\n  <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:#1c1a17;\">\n    <tr>\n      <td align=\"center\" style=\"padding:40px 16px;\">\n        <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:600px;width:100%;\">\n          <tr>\n            <td align=\"center\" style=\"padding-bottom:32px;\">\n              <table cellpadding=\"0\" cellspacing=\"0\">\n                <tr>\n                  <td style=\"padding-right:14px;vertical-align:middle;\">\n                    <table cellpadding=\"0\" cellspacing=\"0\" style=\"border:1.5px solid #f5f0e8;width:44px;height:44px;\">\n                      <tr><td align=\"center\" valign=\"middle\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;color:#f5f0e8;line-height:1;\">X</td></tr>\n                    </table>\n                  </td>\n                  <td style=\"vertical-align:middle;\">\n                    <div style=\"font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:500;letter-spacing:6px;color:#f5f0e8;\">BUREAU X</div>\n                    <div style=\"border-top:0.75px solid #f5f0e8;margin-top:4px;padding-top:4px;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:3px;color:#f5f0e8;\">ESCAPE ROOMS</div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;border-bottom:1px solid #c49a2a;padding:12px 0;text-align:center;\">\n              <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#f5f0e8;\">Intern dossier · OPZ Geel · Bevestiging reservering</span>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"background-color:#2e2b26;padding:40px 36px;border-left:1px solid #c49a2a;border-right:1px solid #c49a2a;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#f5f0e8;margin:0 0 16px 0;\">Geachte deelnemers</p>\n              <p style=\"color:#f5f0e8;font-size:15px;line-height:1.7;margin:0 0 16px 0;\">\n                Uw dossier voor <strong>Kamer 14</strong> staat klaar. Gepland: <strong style=\"color:#c49a2a;\">{{2.datumTekst}}</strong>.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 16px 0;font-style:italic;\">\n                Lena Bogaert, kostgangster bij het OPZ Geel, is vanochtend vertrokken zonder iets te zeggen. Om vijf uur beslist haar begeleidster of ze haar als vermist meldt. Eén speler zit aan het bureau van het OPZ, de ander staat in de kamer van Lena. U heeft 60 minuten.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 32px 0;\">\n                Speel met twee, elk op een eigen toestel. Bel of videobel met elkaar tijdens het spel en zet het geluid aan: er zijn stemmen en geluiden.\n              </p>\n              <table cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 auto 32px auto;\">\n                <tr>\n                  <td style=\"background-color:#c49a2a;padding:14px 36px;text-align:center;\">\n                    <a href=\"https://bureau-x.be/experiences/kamer-14/?sessie={{2.sessieCode}}\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#1c1a17;text-decoration:none;font-weight:700;\">Open dossier</a>\n                  </td>\n                </tr>\n              </table>\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-top:1px solid #c49a2a;\">\n                <tr>\n                  <td style=\"padding-top:24px;\">\n                    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n                      <tr>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Sessiecode</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">{{2.sessieCode}}</span>\n                        </td>\n                        <td width=\"20\"></td>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Tijdslimiet</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">60 MIN</span>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:20px 8px 4px;text-align:center;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#f5f0e8;margin:0;\">Na afloop: een review op <a href=\"https://escapetalk.nl/games/bureau-x/kamer-14/\" style=\"color:#c49a2a;\">escapetalk.nl</a> helpt andere spelers Kamer 14 te vinden.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;padding:20px 0;text-align:center;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;margin:0;text-transform:uppercase;\">Bureau X · Escape Rooms · bureau-x.be</p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 2400,
+                                  "y": -250,
+                                  "name": "Mail Kamer 14"
+                                }
+                              },
+                              "filter": {
+                                "name": "Nederlands",
+                                "conditions": [
+                                  [
+                                    {
+                                      "a": "{{2.taal}}",
+                                      "b": "en",
+                                      "o": "text:notequal"
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "flow": [
+                            {
+                              "id": 14,
+                              "module": "email:ActionSendEmail",
+                              "version": 7,
+                              "parameters": {
+                                "account": 8064756,
+                                "saveAfterSent": false
+                              },
+                              "mapper": {
+                                "cc": [],
+                                "to": ["{{1.email_speler_1}}", "{{1.email_speler_2}}"],
+                                "bcc": [],
+                                "from": "",
+                                "sender": "",
+                                "headers": [],
+                                "replyTo": "",
+                                "subject": "Your game link for Kamer 14",
+                                "priority": "normal",
+                                "inReplyTo": "",
+                                "references": [],
+                                "attachments": [],
+                                "contentType": "html",
+                                "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Your game link for Kamer 14</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:#1c1a17;font-family:Arial,Helvetica,sans-serif;\">\n  <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:#1c1a17;\">\n    <tr>\n      <td align=\"center\" style=\"padding:40px 16px;\">\n        <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:600px;width:100%;\">\n          <tr>\n            <td align=\"center\" style=\"padding-bottom:32px;\">\n              <table cellpadding=\"0\" cellspacing=\"0\">\n                <tr>\n                  <td style=\"padding-right:14px;vertical-align:middle;\">\n                    <table cellpadding=\"0\" cellspacing=\"0\" style=\"border:1.5px solid #f5f0e8;width:44px;height:44px;\">\n                      <tr><td align=\"center\" valign=\"middle\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;color:#f5f0e8;line-height:1;\">X</td></tr>\n                    </table>\n                  </td>\n                  <td style=\"vertical-align:middle;\">\n                    <div style=\"font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:500;letter-spacing:6px;color:#f5f0e8;\">BUREAU X</div>\n                    <div style=\"border-top:0.75px solid #f5f0e8;margin-top:4px;padding-top:4px;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:3px;color:#f5f0e8;\">ESCAPE ROOMS</div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;border-bottom:1px solid #c49a2a;padding:12px 0;text-align:center;\">\n              <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#f5f0e8;\">Internal file · OPZ Geel · Booking confirmation</span>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"background-color:#2e2b26;padding:40px 36px;border-left:1px solid #c49a2a;border-right:1px solid #c49a2a;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#f5f0e8;margin:0 0 16px 0;\">Dear participants</p>\n              <p style=\"color:#f5f0e8;font-size:15px;line-height:1.7;margin:0 0 16px 0;\">\n                Your file for <strong>Kamer 14</strong> is ready. Planned: <strong style=\"color:#c49a2a;\">{{2.datumTekst}}</strong>.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 16px 0;font-weight:700;\">\n                Please note: Kamer 14 is played in Dutch. Every document, clue and voice in the game is in Dutch.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 16px 0;font-style:italic;\">\n                Lena Bogaert, a boarder with the OPZ Geel, left this morning without a word. At five o'clock her social worker decides whether to report her missing. One player sits at the desk of the OPZ, the other stands in Lena's room. You have 60 minutes.\n              </p>\n              <p style=\"color:#f5f0e8;font-size:13px;line-height:1.6;margin:0 0 32px 0;\">\n                Play with two, each on your own device. Call or video call each other during the game and turn the sound on: there are voices and sounds.\n              </p>\n              <table cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 auto 32px auto;\">\n                <tr>\n                  <td style=\"background-color:#c49a2a;padding:14px 36px;text-align:center;\">\n                    <a href=\"https://bureau-x.be/experiences/kamer-14/?sessie={{2.sessieCode}}\" style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#1c1a17;text-decoration:none;font-weight:700;\">Open file</a>\n                  </td>\n                </tr>\n              </table>\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-top:1px solid #c49a2a;\">\n                <tr>\n                  <td style=\"padding-top:24px;\">\n                    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n                      <tr>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Session code</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">{{2.sessieCode}}</span>\n                        </td>\n                        <td width=\"20\"></td>\n                        <td style=\"padding:8px 16px;background-color:#1c1a17;border-left:2px solid #c49a2a;\">\n                          <span style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;text-transform:uppercase;\">Time limit</span><br/>\n                          <span style=\"font-family:'Courier New',monospace;font-size:16px;color:#c49a2a;letter-spacing:3px;\">60 MIN</span>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:20px 8px 4px;text-align:center;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#f5f0e8;margin:0;\">Afterwards: a review on <a href=\"https://escapetalk.nl/games/bureau-x/kamer-14/\" style=\"color:#c49a2a;\">escapetalk.nl</a> helps other players find Kamer 14.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"border-top:2px solid #c49a2a;padding:20px 0;text-align:center;\">\n              <p style=\"font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#f5f0e8;margin:0;text-transform:uppercase;\">Bureau X · Escape Rooms · bureau-x.be</p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 2400,
+                                  "y": -50,
+                                  "name": "Mail Kamer 14 (Engels)"
+                                }
+                              },
+                              "filter": {
+                                "name": "Engels",
+                                "conditions": [
+                                  [
+                                    {
+                                      "a": "{{2.taal}}",
+                                      "b": "en",
+                                      "o": "text:equal"
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "version": 1,
                       "metadata": {
                         "designer": {
                           "x": 2100,
                           "y": -150,
-                          "name": "Mail Kamer 14"
+                          "name": "Taal van de mail"
                         }
                       }
                     }
@@ -369,7 +456,7 @@
                         "parseResponse": true,
                         "allowRedirects": true,
                         "stopOnHttpError": true,
-                        "jsonStringBodyContent": "{\n  \"aangemaakt\": { \".sv\": \"timestamp\" },\n  \"actief\": true,\n  \"ervaringsId\": \"dua\",\n  \"aantalSpelers\": {{length(remove(split(2.ontvangersTekst; \",\"); emptystring))}},\n  \"puzzels\": { \"p0\": false, \"p1\": false, \"p2\": false, \"p3\": false, \"p4\": false, \"p5\": false },\n  \"rapport\": { \"ingediend\": false, \"inhoud\": {} },\n  \"timerGestart\": null\n}",
+                        "jsonStringBodyContent": "{\n  \"aangemaakt\": { \".sv\": \"timestamp\" },\n  \"actief\": true,\n  \"ervaringsId\": \"dua\",\n  \"taal\": \"{{2.speltaal}}\",\n  \"aantalSpelers\": {{length(remove(split(2.ontvangersTekst; \",\"); emptystring))}},\n  \"puzzels\": { \"p0\": false, \"p1\": false, \"p2\": false, \"p3\": false, \"p4\": false, \"p5\": false },\n  \"rapport\": { \"ingediend\": false, \"inhoud\": {} },\n  \"timerGestart\": null\n}",
                         "requestCompressedContent": true
                       },
                       "metadata": {
@@ -387,7 +474,7 @@
                       "parameters": {},
                       "mapper": {
                         "status": "200",
-                        "body": "{\"sessieCode\":\"{{2.sessieCode}}\",\"link\":\"https://bureau-x.be/experiences/dua/?sessie={{2.sessieCode}}\"}",
+                        "body": "{\"sessieCode\":\"{{2.sessieCode}}\",\"link\":\"https://bureau-x.be/experiences/dua/?sessie={{2.sessieCode}}{{if(2.speltaal = \"en\"; \"&taal=en\"; emptystring)}}\"}",
                         "headers": [
                           {
                             "key": "Content-Type",
@@ -408,34 +495,113 @@
                       }
                     },
                     {
-                      "id": 10,
-                      "module": "email:ActionSendEmail",
-                      "version": 7,
-                      "parameters": {
-                        "account": 8064756,
-                        "saveAfterSent": false
-                      },
-                      "mapper": {
-                        "cc": [],
-                        "to": "{{remove(split(2.ontvangersTekst; \",\"); emptystring)}}",
-                        "bcc": [],
-                        "from": "",
-                        "sender": "",
-                        "headers": [],
-                        "replyTo": "",
-                        "subject": "Jouw opdracht van Bureau X: D.U.A.",
-                        "priority": "normal",
-                        "inReplyTo": "",
-                        "references": [],
-                        "attachments": [],
-                        "contentType": "html",
-                        "html": "<div style=\"background:#1d3a2f;padding:40px 20px;font-family:'Courier New',Courier,monospace;\">\n  <div style=\"max-width:560px;margin:0 auto;background:#f5f0e8;padding:40px 36px;\">\n    <p style=\"margin:0 0 24px;font-size:11px;letter-spacing:0.18em;color:#8a7a5a;text-transform:uppercase;\">\n      Bureau X · Dossier 1934/RR · Strikt vertrouwelijk\n    </p>\n    <h1 style=\"margin:0 0 4px;font-size:28px;letter-spacing:0.12em;color:#1d3a2f;font-family:Georgia,serif;\">D.U.A.</h1>\n    <p style=\"margin:0 0 28px;font-size:12px;letter-spacing:0.1em;color:#8a7a5a;text-transform:uppercase;\">De Ultieme Archiefmissie</p>\n    <p style=\"margin:0 0 16px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      Jullie sessie is aangemaakt. Gepland: <strong>{{2.datumTekst}}</strong>.\n    </p>\n    <p style=\"margin:0 0 24px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      {{switch(length(remove(split(2.ontvangersTekst; \",\"); emptystring)); 2; \"Jullie spelen met <strong>2 personen</strong>. Elk tijdperk heeft één onderzoeker. Spreek voor de start af wie <strong>1934</strong> op zich neemt (de Schrijver &amp; de Loper) en wie <strong>2034</strong> (de Archivaris &amp; de Restaurateur). Je ziet in de lobby beide rollen van je tijdperk.\"; 3; \"Jullie spelen met <strong>3 personen</strong>. Eén tijdperk krijgt twee onderzoekers, het andere één. Spreek voor de start af hoe jullie de tijdperken verdelen: <strong>1934</strong> (Schrijver + Loper) en <strong>2034</strong> (Archivaris + Restaurateur). Wie alleen staat, ziet beide rollen van zijn tijdperk.\"; \"Jullie spelen met <strong>4 personen</strong>. Elk van jullie kiest een eigen rol in de lobby: <strong>De Schrijver</strong> of <strong>De Loper</strong> in 1934, <strong>De Archivaris</strong> of <strong>De Restaurateur</strong> in 2034. Er moet minstens één iemand in elk tijdperk staan.\")}}\n    </p>\n    <div style=\"background:#1d3a2f;padding:16px 20px;margin:0 0 28px;\">\n      <p style=\"margin:0 0 4px;font-size:10px;letter-spacing:0.2em;color:#b9974e;text-transform:uppercase;\">Sessiecode</p>\n      <p style=\"margin:0;font-size:22px;letter-spacing:0.22em;color:#f5f0e8;font-family:Georgia,serif;\">{{2.sessieCode}}</p>\n    </div>\n    <a href=\"https://bureau-x.be/experiences/dua/?sessie={{2.sessieCode}}\" style=\"display:inline-block;background:#b9974e;color:#1d3a2f;text-decoration:none;padding:13px 28px;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;font-family:'Courier New',Courier,monospace;\">Open de lijn →</a>\n    <p style=\"margin:28px 0 0;font-size:12px;line-height:1.7;color:#8a7a5a;\">\n      Iedereen krijgt dezelfde link. Open die elk op je eigen toestel.<br>\n      De sessie start zodra de eerste speler een rol claimt in de lobby.\n    </p>\n    <p style=\"margin:20px 0 0;font-size:12px;line-height:1.7;color:#8a7a5a;\">\n      Na afloop: een review op <a href=\"https://escapetalk.nl/games/bureau-x/dua/\" style=\"color:#1d3a2f;\">escapetalk.nl</a> helpt andere spelers D.U.A. te vinden.\n    </p>\n    <hr style=\"margin:28px 0;border:none;border-top:1px solid #d4c9a8;\">\n    <p style=\"margin:0;font-size:11px;color:#b0a080;line-height:1.6;\">\n      Bureau X · <a href=\"https://bureau-x.be\" style=\"color:#b0a080;\">bureau-x.be</a><br>\n      Vragen? Stuur een mail naar info@bureau-x.be\n    </p>\n  </div>\n</div>"
-                      },
+                      "id": 15,
+                      "mapper": null,
+                      "module": "builtin:BasicRouter",
+                      "routes": [
+                        {
+                          "flow": [
+                            {
+                              "id": 10,
+                              "module": "email:ActionSendEmail",
+                              "version": 7,
+                              "parameters": {
+                                "account": 8064756,
+                                "saveAfterSent": false
+                              },
+                              "mapper": {
+                                "cc": [],
+                                "to": "{{remove(split(2.ontvangersTekst; \",\"); emptystring)}}",
+                                "bcc": [],
+                                "from": "",
+                                "sender": "",
+                                "headers": [],
+                                "replyTo": "",
+                                "subject": "Jouw opdracht van Bureau X: D.U.A.",
+                                "priority": "normal",
+                                "inReplyTo": "",
+                                "references": [],
+                                "attachments": [],
+                                "contentType": "html",
+                                "html": "<div style=\"background:#1d3a2f;padding:40px 20px;font-family:'Courier New',Courier,monospace;\">\n  <div style=\"max-width:560px;margin:0 auto;background:#f5f0e8;padding:40px 36px;\">\n    <p style=\"margin:0 0 24px;font-size:11px;letter-spacing:0.18em;color:#8a7a5a;text-transform:uppercase;\">\n      Bureau X · Dossier 1934/RR · Strikt vertrouwelijk\n    </p>\n    <h1 style=\"margin:0 0 4px;font-size:28px;letter-spacing:0.12em;color:#1d3a2f;font-family:Georgia,serif;\">D.U.A.</h1>\n    <p style=\"margin:0 0 28px;font-size:12px;letter-spacing:0.1em;color:#8a7a5a;text-transform:uppercase;\">De Ultieme Archiefmissie</p>\n    <p style=\"margin:0 0 16px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      Jullie sessie is aangemaakt. Gepland: <strong>{{2.datumTekst}}</strong>.\n    </p>\n    <p style=\"margin:0 0 24px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      {{switch(length(remove(split(2.ontvangersTekst; \",\"); emptystring)); 2; \"Jullie spelen met <strong>2 personen</strong>. Elk tijdperk heeft één onderzoeker. Spreek voor de start af wie <strong>1934</strong> op zich neemt (de Schrijver &amp; de Loper) en wie <strong>2034</strong> (de Archivaris &amp; de Restaurateur). Je ziet in de lobby beide rollen van je tijdperk.\"; 3; \"Jullie spelen met <strong>3 personen</strong>. Eén tijdperk krijgt twee onderzoekers, het andere één. Spreek voor de start af hoe jullie de tijdperken verdelen: <strong>1934</strong> (Schrijver + Loper) en <strong>2034</strong> (Archivaris + Restaurateur). Wie alleen staat, ziet beide rollen van zijn tijdperk.\"; \"Jullie spelen met <strong>4 personen</strong>. Elk van jullie kiest een eigen rol in de lobby: <strong>De Schrijver</strong> of <strong>De Loper</strong> in 1934, <strong>De Archivaris</strong> of <strong>De Restaurateur</strong> in 2034. Er moet minstens één iemand in elk tijdperk staan.\")}}\n    </p>\n    <div style=\"background:#1d3a2f;padding:16px 20px;margin:0 0 28px;\">\n      <p style=\"margin:0 0 4px;font-size:10px;letter-spacing:0.2em;color:#b9974e;text-transform:uppercase;\">Sessiecode</p>\n      <p style=\"margin:0;font-size:22px;letter-spacing:0.22em;color:#f5f0e8;font-family:Georgia,serif;\">{{2.sessieCode}}</p>\n    </div>\n    <a href=\"https://bureau-x.be/experiences/dua/?sessie={{2.sessieCode}}{{if(2.speltaal = \"en\"; \"&taal=en\"; emptystring)}}\" style=\"display:inline-block;background:#b9974e;color:#1d3a2f;text-decoration:none;padding:13px 28px;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;font-family:'Courier New',Courier,monospace;\">Open de lijn →</a>\n    <p style=\"margin:28px 0 0;font-size:12px;line-height:1.7;color:#8a7a5a;\">\n      Iedereen krijgt dezelfde link. Open die elk op je eigen toestel.<br>\n      De sessie start zodra de eerste speler een rol claimt in de lobby.\n    </p>\n    <p style=\"margin:20px 0 0;font-size:12px;line-height:1.7;color:#8a7a5a;\">\n      Na afloop: een review op <a href=\"https://escapetalk.nl/games/bureau-x/dua/\" style=\"color:#1d3a2f;\">escapetalk.nl</a> helpt andere spelers D.U.A. te vinden.\n    </p>\n    <hr style=\"margin:28px 0;border:none;border-top:1px solid #d4c9a8;\">\n    <p style=\"margin:0;font-size:11px;color:#b0a080;line-height:1.6;\">\n      Bureau X · <a href=\"https://bureau-x.be\" style=\"color:#b0a080;\">bureau-x.be</a><br>\n      Vragen? Stuur een mail naar info@bureau-x.be\n    </p>\n  </div>\n</div>"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 2400,
+                                  "y": 50,
+                                  "name": "Mail D.U.A."
+                                }
+                              },
+                              "filter": {
+                                "name": "Nederlands",
+                                "conditions": [
+                                  [
+                                    {
+                                      "a": "{{2.taal}}",
+                                      "b": "en",
+                                      "o": "text:notequal"
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "flow": [
+                            {
+                              "id": 16,
+                              "module": "email:ActionSendEmail",
+                              "version": 7,
+                              "parameters": {
+                                "account": 8064756,
+                                "saveAfterSent": false
+                              },
+                              "mapper": {
+                                "cc": [],
+                                "to": "{{remove(split(2.ontvangersTekst; \",\"); emptystring)}}",
+                                "bcc": [],
+                                "from": "",
+                                "sender": "",
+                                "headers": [],
+                                "replyTo": "",
+                                "subject": "Your assignment from Bureau X: D.U.A.",
+                                "priority": "normal",
+                                "inReplyTo": "",
+                                "references": [],
+                                "attachments": [],
+                                "contentType": "html",
+                                "html": "<div style=\"background:#1d3a2f;padding:40px 20px;font-family:'Courier New',Courier,monospace;\">\n  <div style=\"max-width:560px;margin:0 auto;background:#f5f0e8;padding:40px 36px;\">\n    <p style=\"margin:0 0 24px;font-size:11px;letter-spacing:0.18em;color:#8a7a5a;text-transform:uppercase;\">\n      Bureau X · File 1934/RR · Strictly confidential\n    </p>\n    <h1 style=\"margin:0 0 4px;font-size:28px;letter-spacing:0.12em;color:#1d3a2f;font-family:Georgia,serif;\">D.U.A.</h1>\n    <p style=\"margin:0 0 28px;font-size:12px;letter-spacing:0.1em;color:#8a7a5a;text-transform:uppercase;\">The Ultimate Archive Mission</p>\n    <p style=\"margin:0 0 16px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      Your session has been created. Planned: <strong>{{2.datumTekst}}</strong>.\n    </p>\n    <p style=\"margin:0 0 16px;font-size:15px;line-height:1.7;color:#2b2620;font-weight:700;\">{{if(2.speltaal = \"nl\"; \"Please note: the game itself is in Dutch for now. An English version is on its way.\"; emptystring)}}</p>\n    <p style=\"margin:0 0 24px;font-size:15px;line-height:1.7;color:#2b2620;\">\n      {{switch(length(remove(split(2.ontvangersTekst; \",\"); emptystring)); 2; \"You are playing with <strong>2 people</strong>. Each era has one investigator. Before you start, agree who takes <strong>1934</strong> (the Writer &amp; the Runner) and who takes <strong>2034</strong> (the Archivist &amp; the Restorer). In the lobby you see both roles of your era.\"; 3; \"You are playing with <strong>3 people</strong>. One era gets two investigators, the other one. Before you start, agree how you split the eras: <strong>1934</strong> (Writer + Runner) and <strong>2034</strong> (Archivist + Restorer). Whoever plays alone sees both roles of their era.\"; \"You are playing with <strong>4 people</strong>. Each of you picks a role in the lobby: <strong>the Writer</strong> or <strong>the Runner</strong> in 1934, <strong>the Archivist</strong> or <strong>the Restorer</strong> in 2034. There must be at least one person in each era.\")}}\n    </p>\n    <div style=\"background:#1d3a2f;padding:16px 20px;margin:0 0 28px;\">\n      <p style=\"margin:0 0 4px;font-size:10px;letter-spacing:0.2em;color:#b9974e;text-transform:uppercase;\">Session code</p>\n      <p style=\"margin:0;font-size:22px;letter-spacing:0.22em;color:#f5f0e8;font-family:Georgia,serif;\">{{2.sessieCode}}</p>\n    </div>\n    <a href=\"https://bureau-x.be/experiences/dua/?sessie={{2.sessieCode}}{{if(2.speltaal = \"en\"; \"&taal=en\"; emptystring)}}\" style=\"display:inline-block;background:#b9974e;color:#1d3a2f;text-decoration:none;padding:13px 28px;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;font-family:'Courier New',Courier,monospace;\">Open the line →</a>\n    <p style=\"margin:28px 0 0;font-size:12px;line-height:1.7;color:#8a7a5a;\">\n      Everyone gets the same link. Open it on your own device.<br>\n      The session starts as soon as the first player claims a role in the lobby.\n    </p>\n    <p style=\"margin:20px 0 0;font-size:12px;line-height:1.7;color:#8a7a5a;\">\n      Afterwards: a review on <a href=\"https://escapetalk.nl/games/bureau-x/dua/\" style=\"color:#1d3a2f;\">escapetalk.nl</a> helps other players find D.U.A.\n    </p>\n    <hr style=\"margin:28px 0;border:none;border-top:1px solid #d4c9a8;\">\n    <p style=\"margin:0;font-size:11px;color:#b0a080;line-height:1.6;\">\n      Bureau X · <a href=\"https://bureau-x.be\" style=\"color:#b0a080;\">bureau-x.be</a><br>\n      Questions? Send an email to info@bureau-x.be\n    </p>\n  </div>\n</div>"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 2400,
+                                  "y": 250,
+                                  "name": "Mail D.U.A. (Engels)"
+                                }
+                              },
+                              "filter": {
+                                "name": "Engels",
+                                "conditions": [
+                                  [
+                                    {
+                                      "a": "{{2.taal}}",
+                                      "b": "en",
+                                      "o": "text:equal"
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "version": 1,
                       "metadata": {
                         "designer": {
                           "x": 2100,
                           "y": 150,
-                          "name": "Mail D.U.A."
+                          "name": "Taal van de mail"
                         }
                       }
                     }

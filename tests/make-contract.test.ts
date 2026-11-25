@@ -51,9 +51,13 @@ function experienceVan(pad: string): string | undefined {
 const voorbeeldCode = crypto.randomUUID().replace(/-/g, '').slice(0, 8).toUpperCase();
 
 /** Vervangt Make-expressies door voorbeeldwaarden, zodat de JSON-body te parsen is. */
-function invullen(tekst: string): string {
+function invullen(tekst: string, speltaal = 'nl'): string {
   return tekst
     .replace(/\{\{2\.sessieCode\}\}/g, voorbeeldCode)
+    .replace(/\{\{2\.speltaal\}\}/g, speltaal)
+    .replace(/\{\{if\(2\.speltaal = "en"; "([^"]*)"; emptystring\)\}\}/g, (_, en: string) =>
+      speltaal === 'en' ? en : '',
+    )
     .replace(/\{\{length\([^}]*\)\}\}/g, '3');
 }
 
@@ -73,8 +77,8 @@ describe('Make-blueprint: velden die Make leest, bestaan in de formulieren', () 
   );
   const kamer14 = formulierVelden('kamer-14/index.html');
   const dua = formulierVelden('dua/index.html');
-  // datumTekst maakt de browser zelf aan (zie koppelBoekformulier).
-  const doorJs = new Set(['datumTekst']);
+  // Deze velden voegt de browser zelf toe (zie vulBoekingAan in js/landing.ts).
+  const doorJs = new Set(['datumTekst', 'taal', 'speltaal']);
   const enkelDua = new Set(['email_speler_3', 'email_speler_4']);
 
   it('Make leest de verwachte velden', () => {
@@ -87,6 +91,8 @@ describe('Make-blueprint: velden die Make leest, bestaan in de formulieren', () 
         'email_speler_3',
         'email_speler_4',
         'datumTekst',
+        'taal',
+        'speltaal',
       ]),
     );
   });
@@ -102,8 +108,8 @@ describe('Make-blueprint: velden die Make leest, bestaan in de formulieren', () 
     },
   );
 
-  it('de browser voegt datumTekst toe', () => {
-    expect(lees('js/landing.ts')).toContain("velden.set('datumTekst'");
+  it.each(['datumTekst', 'taal', 'speltaal'])('de browser voegt %s toe', veld => {
+    expect(lees('js/landing.ts')).toContain(`velden.set('${veld}'`);
   });
 
   it('de experience-waarden in de filters zijn die van de pagina’s', () => {
@@ -129,8 +135,15 @@ describe('Make-blueprint: het antwoord past bij wat de site verwacht', () => {
   it('de response staat vóór de mail (de speler wacht niet op SMTP)', () => {
     const volgorde = (route: number) =>
       (module(4).routes?.[route]?.flow ?? []).map(m => m.module.split(':')[1]);
-    expect(volgorde(0)).toEqual(['MakeRequest', 'WebhookRespond', 'ActionSendEmail']);
-    expect(volgorde(1)).toEqual(['MakeRequest', 'WebhookRespond', 'ActionSendEmail']);
+    expect(volgorde(0)).toEqual(['MakeRequest', 'WebhookRespond', 'BasicRouter']);
+    expect(volgorde(1)).toEqual(['MakeRequest', 'WebhookRespond', 'BasicRouter']);
+  });
+
+  it('met speltaal en krijgt de D.U.A.-link een taalhint', () => {
+    const body = JSON.parse(invullen(String(module(9).mapper?.['body']), 'en'));
+    expect(leesBoekAntwoord(body).link).toBe(
+      `https://bureau-x.be/experiences/dua/?sessie=${voorbeeldCode}&taal=en`,
+    );
   });
 });
 
@@ -155,6 +168,43 @@ describe('Make-blueprint: de sessie die Make aanmaakt', () => {
 
   it('de voorbeeldcode voldoet aan de validatie van de site en de rules', () => {
     expect(voorbeeldCode).toMatch(/^[A-Z0-9-]{3,20}$/);
+  });
+});
+
+describe('Make-blueprint: taal van de mail en het spel', () => {
+  const variabelen = module(2).mapper?.['variables'] as { name: string; value: string }[];
+  const variabele = (naam: string) => variabelen.find(v => v.name === naam)?.value;
+
+  it('taal en speltaal worden alleen nl of en (de rules weigeren al de rest)', () => {
+    expect(variabele('taal')).toBe('{{if(1.taal = "en"; "en"; "nl")}}');
+    expect(variabele('speltaal')).toBe('{{if(1.speltaal = "en"; "en"; "nl")}}');
+  });
+
+  it('de D.U.A.-sessie krijgt de speltaal, Kamer 14 niet', () => {
+    const dua = JSON.parse(invullen(String(module(8).mapper?.['jsonStringBodyContent']), 'en'));
+    expect(dua.taal).toBe('en');
+    const k14 = JSON.parse(invullen(String(module(5).mapper?.['jsonStringBodyContent'])));
+    expect(k14).not.toHaveProperty('taal');
+  });
+
+  it.each([
+    [13, 'Kamer 14'],
+    [15, 'D.U.A.'],
+  ])('router %i stuurt precies één mail: Nederlands of Engels (%s)', id => {
+    const routes = module(id).routes ?? [];
+    expect(routes).toHaveLength(2);
+    const [nl, en] = routes.map(r => r.flow[0]!);
+    expect(nl.module).toBe('email:ActionSendEmail');
+    expect(en.module).toBe('email:ActionSendEmail');
+    expect(nl.filter?.conditions).toEqual([[{ a: '{{2.taal}}', o: 'text:notequal', b: 'en' }]]);
+    expect(en.filter?.conditions).toEqual([[{ a: '{{2.taal}}', o: 'text:equal', b: 'en' }]]);
+    expect(String(en.mapper?.['html'])).toMatch(/lang="en"|Session code/);
+    expect(en.mapper?.['to']).toEqual(nl.mapper?.['to']);
+  });
+
+  it('de Engelse mails melden dat het spel (nog) Nederlands is', () => {
+    expect(String(module(14).mapper?.['html'])).toContain('Kamer 14 is played in Dutch');
+    expect(String(module(16).mapper?.['html'])).toContain('if(2.speltaal = "nl"');
   });
 });
 

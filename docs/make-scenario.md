@@ -45,11 +45,15 @@ bewust **niet** in.
             ├─ filter "Kamer 14"  (experience = kamer-14)
             │   5.  HTTP     : PUT sessie (if-match: null_etag)
             │   6.  Webhooks : Webhook response   {sessieCode, link}
-            │   7.  Email    : mail naar speler 1 en 2
+            │   13. Router   "Taal van de mail"
+            │       ├─ 7.  Email : Nederlandse mail  (taal ≠ en)
+            │       └─ 14. Email : Engelse mail      (taal = en)
             └─ filter "D.U.A."    (experience = dua)
-                8.  HTTP     : PUT sessie met aantalSpelers (if-match: null_etag)
+                8.  HTTP     : PUT sessie met aantalSpelers en taal (if-match: null_etag)
                 9.  Webhooks : Webhook response   {sessieCode, link}
-                10. Email    : mail naar alle opgegeven spelers
+                15. Router   "Taal van de mail"
+                    ├─ 10. Email : Nederlandse mail  (taal ≠ en)
+                    └─ 16. Email : Engelse mail      (taal = en)
 ```
 
 Scheduling: **Immediately** (instant trigger). Een boeking kost ongeveer 6 credits,
@@ -80,6 +84,12 @@ Het formulier op `/kamer-14/` en `/dua/` post naar de webhook-URL (staat in het
 | `email_speler_1` t/m `_4` | `a@b.be`              | 3 en 4 enkel bij D.U.A., anders leeg           |
 | `_gotcha`                 | (leeg)                | honeypot: ingevuld = spam                      |
 | `aantal_spelers`          | `2`                   | enkel D.U.A., informatief (zie module 8)       |
+| `taal`                    | `nl` of `en`          | taal van de pagina, dus van de mail (browser)  |
+| `speltaal`                | `nl` of `en`          | taal van het spel, komt in de sessie (browser) |
+
+`datumTekst`, `taal` en `speltaal` voegt de browser toe (`vulBoekingAan` in
+`js/landing.ts`). De speltaal is die van de pagina als de experience in die taal
+bestaat (`SPELTALEN_PER_EXPERIENCE` in `shared/js/speltaal.ts`), anders `nl`.
 
 De website rekent een boeking pas als gelukt als het antwoord JSON is met een
 geldige `sessieCode` en een `link` die begint met
@@ -102,11 +112,17 @@ antwoordt dan zelf met "Accepted", wat de website als fout behandelt.
 
 Variabelen (levensduur: one cycle):
 
-| Naam              | Waarde                                                                                |
-| ----------------- | ------------------------------------------------------------------------------------- |
-| `sessieCode`      | `{{upper(substring(replace(uuid; "-"; emptystring); 0; 8))}}` (8 hex-tekens)          |
-| `ontvangersTekst` | `{{1.email_speler_1}},{{1.email_speler_2}},{{1.email_speler_3}},{{1.email_speler_4}}` |
-| `datumTekst`      | `{{ifempty(1.datumTekst; "zodra jullie klaar zijn")}}`                                |
+| Naam              | Waarde                                                                                              |
+| ----------------- | --------------------------------------------------------------------------------------------------- |
+| `sessieCode`      | `{{upper(substring(replace(uuid; "-"; emptystring); 0; 8))}}` (8 hex-tekens)                        |
+| `ontvangersTekst` | `{{1.email_speler_1}},{{1.email_speler_2}},{{1.email_speler_3}},{{1.email_speler_4}}`               |
+| `datumTekst`      | `{{ifempty(1.datumTekst; if(1.taal = "en"; "whenever you are ready"; "zodra jullie klaar zijn"))}}` |
+| `taal`            | `{{if(1.taal = "en"; "en"; "nl")}}`                                                                 |
+| `speltaal`        | `{{if(1.speltaal = "en"; "en"; "nl")}}`                                                             |
+
+`taal` en `speltaal` worden zo altijd `nl` of `en`. Een oude pagina zonder die
+velden, of een rare waarde, geeft gewoon Nederlands, en de database-rules
+weigeren nooit een boeking op een onbekende taal.
 
 De code voldoet aan de validatie in `session.ts` en de database-rules
 (`^[A-Z0-9-]{3,20}$`).
@@ -150,21 +166,31 @@ Het antwoord bevat `idToken` (een uur geldig). make@bureau-x.be staat in
 }
 ```
 
-- D.U.A.: zelfde vorm met `"ervaringsId": "dua"`, puzzels `p0` t/m `p5` en
+- D.U.A.: zelfde vorm met `"ervaringsId": "dua"`, `"taal": "{{2.speltaal}}"`,
+  puzzels `p0` t/m `p5` en
   `"aantalSpelers": {{length(remove(split(2.ontvangersTekst; ","); emptystring))}}`.
+  Het spel leest de taal uit de sessie (`bepaalSpeltaal` in `shared/js/session.ts`).
   Het aantal spelers telt dus de ingevulde e-mailadressen, niet het verborgen veld.
 
 ## Modules 6 en 9: Webhook response
 
 - Status 200
 - Body: `{"sessieCode":"{{2.sessieCode}}","link":"https://bureau-x.be/experiences/<kamer-14|dua>/?sessie={{2.sessieCode}}"}`
+- D.U.A. zet achter de link `{{if(2.speltaal = "en"; "&taal=en"; emptystring)}}`:
+  een hint voor het spel als de sessie niet te lezen is. De mail gebruikt dezelfde link.
 - Headers: `Content-Type: application/json`, `Access-Control-Allow-Origin: *`
 
 De response komt **vóór** de mail, zodat de speler niet op de SMTP-server wacht.
 
-## Modules 7 en 10: mail
+## Modules 7, 10, 14 en 16: mail
 
 - Connectie: Others (SMTP), info@bureau-x.be (Combell)
+- Per experience kiest een router (13, 15) de mail op `{{2.taal}}`: 7 en 10 zijn
+  Nederlands (filter `taal ≠ en`), 14 en 16 Engels (filter `taal = en`). Precies
+  één van de twee loopt.
+- Engels: `Your game link for Kamer 14` (met de melding dat Kamer 14 in het
+  Nederlands gespeeld wordt) en `Your assignment from Bureau X: D.U.A.` (met
+  dezelfde melding zolang `speltaal` `nl` is).
 - Kamer 14: onderwerp `Jouw spellink voor Kamer 14`, aan speler 1 en 2, link
   `https://bureau-x.be/experiences/kamer-14/?sessie={{2.sessieCode}}`.
 - D.U.A.: onderwerp `Jouw opdracht van Bureau X: D.U.A.`, aan
