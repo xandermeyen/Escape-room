@@ -28,6 +28,7 @@ import {
   luisterNaarStatus,
   luisterNaarRapport,
   maakSessie,
+  bepaalSpeltaal,
   bewaakSessieGesloten,
 } from '../shared/js/session.ts';
 import { KAMER14_PUZZELS } from '../experiences/kamer-14/js/kamer14-config.ts';
@@ -284,6 +285,39 @@ describe('maakSessie', () => {
       p4: false,
       p5: false,
     });
+  });
+  it('zet de speltaal alleen als die meegegeven wordt', async () => {
+    let updater: (h: unknown) => unknown = () => undefined;
+    runTransactionMock.mockImplementation(async (_ref: unknown, fn: (h: unknown) => unknown) => {
+      updater = fn;
+      return { committed: true };
+    });
+
+    await maakSessie('DUA-EN-1', { ervaringsId: 'dua', puzzelIds: ['p0'], taal: 'en' });
+    expect((updater(null) as Record<string, unknown>).taal).toBe('en');
+
+    await maakSessie('DUA-NL-1', { ervaringsId: 'dua', puzzelIds: ['p0'] });
+    expect(updater(null) as Record<string, unknown>).not.toHaveProperty('taal');
+  });
+});
+
+// ── bepaalSpeltaal ────────────────────────────────────────────────────────────
+
+describe('bepaalSpeltaal', () => {
+  it('leest het veld taal van de sessie', async () => {
+    getMock.mockResolvedValueOnce({ val: () => 'en' });
+    expect(await bepaalSpeltaal('ABC-123', null)).toBe('en');
+    expect(refMock).toHaveBeenCalledWith({}, 'sessions/ABC-123/taal');
+  });
+
+  it('een sessie zonder taal is Nederlands, ook met ?taal=en', async () => {
+    getMock.mockResolvedValueOnce({ val: () => null });
+    expect(await bepaalSpeltaal('ABC-123', 'en')).toBe('nl');
+  });
+
+  it('lukt het lezen niet, dan telt de hint', async () => {
+    getMock.mockRejectedValueOnce(new Error('offline'));
+    expect(await bepaalSpeltaal('ABC-123', 'en')).toBe('en');
   });
 });
 

@@ -176,6 +176,18 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       await assertFails(speler().ref(`sessions/${CODE}/aantalSpelers`).set(4));
     });
 
+    it('taal: alleen een beheerder zet ze, en alleen nl, en of fr', async () => {
+      await assertSucceeds(host().ref(`sessions/${CODE}/taal`).set('en'));
+      await assertSucceeds(
+        host()
+          .ref('sessions/A3F9C21')
+          .set({ ...basisSessie({ ervaringsId: 'dua' }), taal: 'en' }),
+      );
+      await assertFails(host().ref(`sessions/${CODE}/taal`).set('de'));
+      await assertFails(host().ref(`sessions/${CODE}/taal`).set(1));
+      await assertFails(speler().ref(`sessions/${CODE}/taal`).set('nl'));
+    });
+
     it('een speler mag een sessie sluiten, niet heropenen', async () => {
       await assertSucceeds(speler().ref(`sessions/${CODE}/actief`).set(false));
       await assertFails(speler().ref(`sessions/${CODE}/actief`).set(true));
