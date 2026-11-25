@@ -1,42 +1,90 @@
 <!doctype html>
-<html lang="nl">
+<html lang="nl" class="i18n-wacht">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>D.U.A. - De lijn valt stil</title>
+    <title data-i18n="dua-tijd.head.title">D.U.A. - De lijn valt stil</title>
     <link rel="stylesheet" href="/assets/fonts/fonts.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="css/dua.css" />
   </head>
   <body class="era-2034">
     <div class="lobby-wrap">
-      <span class="d-stempel">Onopgelost</span>
-      <h2 class="se">De lijn valt stil.</h2>
-      <p class="lobby-verhaal">
+      <span class="d-stempel" data-i18n="dua-tijd.body.d-stempel">Onopgelost</span>
+      <h2 class="se" data-i18n="dua-tijd.body.se">De lijn valt stil.</h2>
+      <p class="lobby-verhaal" data-i18n="dua-tijd.body.lobby-verhaal">
         Zestig minuten, en geen seconde meer. De lijn tussen 1934 en 2034 is dood, maar het spoor is
         niet koud: alles wat jullie vonden, hoort bij het verhaal.
       </p>
 
       <div class="stuk" id="oplossing-blok">
-        <h3>Hoe het had kunnen lopen</h3>
+        <h3 data-i18n="dua-tijd.oplossing-blok.h3">Hoe het had kunnen lopen</h3>
         <ol id="oplossing-lijst" class="oplossing-lijst"></ol>
       </div>
 
-      <p class="lobby-verhaal">
+      <p class="lobby-verhaal" data-i18n="dua-tijd.body.lobby-verhaal-2">
         Bedankt om mee te zoeken. Het echte onderzoek loopt al sinds 10 april 1934 en ook daar vond
         niemand het paneel. Jullie zitten in goed gezelschap.
       </p>
 
       <div class="stuk" id="einde-review">
-        <h3>Hoe was het?</h3>
-        <p class="hintje">Optioneel. We lezen elke review zelf.</p>
-        <div class="review-sterren" id="review-sterren" role="radiogroup" aria-label="Beoordeling">
-          <button type="button" class="ster" data-waarde="1" aria-label="1 ster">☆</button>
-          <button type="button" class="ster" data-waarde="2" aria-label="2 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="3" aria-label="3 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="4" aria-label="4 sterren">☆</button>
-          <button type="button" class="ster" data-waarde="5" aria-label="5 sterren">☆</button>
+        <h3 data-i18n="dua-tijd.einde-review.h3">Hoe was het?</h3>
+        <p class="hintje" data-i18n="dua-tijd.einde-review.hintje">
+          Optioneel. We lezen elke review zelf.
+        </p>
+        <div
+          class="review-sterren"
+          id="review-sterren"
+          role="radiogroup"
+          aria-label="Beoordeling"
+          data-i18n-aria-label="dua-tijd.einde-review.review-sterren@aria-label"
+        >
+          <button
+            type="button"
+            class="ster"
+            data-waarde="1"
+            aria-label="1 ster"
+            data-i18n-aria-label="dua-tijd.review-sterren.ster@aria-label"
+          >
+            ☆
+          </button>
+          <button
+            type="button"
+            class="ster"
+            data-waarde="2"
+            aria-label="2 sterren"
+            data-i18n-aria-label="dua-tijd.review-sterren.ster@aria-label-2"
+          >
+            ☆
+          </button>
+          <button
+            type="button"
+            class="ster"
+            data-waarde="3"
+            aria-label="3 sterren"
+            data-i18n-aria-label="dua-tijd.review-sterren.ster@aria-label-3"
+          >
+            ☆
+          </button>
+          <button
+            type="button"
+            class="ster"
+            data-waarde="4"
+            aria-label="4 sterren"
+            data-i18n-aria-label="dua-tijd.review-sterren.ster@aria-label-4"
+          >
+            ☆
+          </button>
+          <button
+            type="button"
+            class="ster"
+            data-waarde="5"
+            aria-label="5 sterren"
+            data-i18n-aria-label="dua-tijd.review-sterren.ster@aria-label-5"
+          >
+            ☆
+          </button>
         </div>
         <textarea
           id="review-tekst"
@@ -45,6 +93,8 @@
           maxlength="500"
           aria-label="Jullie review"
           placeholder="Wat vonden jullie van D.U.A.?"
+          data-i18n-placeholder="dua-tijd.einde-review.d-input@placeholder"
+          data-i18n-aria-label="dua-tijd.einde-review.d-input@aria-label"
         ></textarea>
         <input
           id="review-naam"
@@ -53,18 +103,28 @@
           maxlength="40"
           aria-label="Naam (optioneel)"
           placeholder="Naam (optioneel)"
+          data-i18n-placeholder="dua-tijd.einde-review.d-input@placeholder-2"
+          data-i18n-aria-label="dua-tijd.einde-review.d-input@aria-label-2"
         />
-        <p class="review-fout" id="review-fout">
+        <p class="review-fout" id="review-fout" data-i18n="dua-tijd.einde-review.review-fout">
           Kies een aantal sterren en schrijf een korte review.
         </p>
-        <button class="d-knop" id="btn-review-verstuur">Review versturen</button>
-        <p class="review-dank" id="review-dank">Bedankt voor jullie review!</p>
+        <button class="d-knop" id="btn-review-verstuur" data-i18n="dua-tijd.einde-review.d-knop">
+          Review versturen
+        </button>
+        <p class="review-dank" id="review-dank" data-i18n="dua-tijd.einde-review.review-dank">
+          Bedankt voor jullie review!
+        </p>
       </div>
 
-      <p class="lobby-verhaal hintje">Dossier 1934/RR · heropend en weer gesloten · Bureau X</p>
+      <p class="lobby-verhaal hintje" data-i18n="dua-tijd.body.lobby-verhaal-3">
+        Dossier 1934/RR · heropend en weer gesloten · Bureau X
+      </p>
       <p>
-        <a class="d-knop goud" href="/dua/#boek">Nog eens spelen? Boek een nieuwe sessie</a>
-        <a class="d-knop" href="/">← Terug naar de website</a>
+        <a class="d-knop goud" href="/dua/#boek" data-i18n="dua-tijd.body.d-knop"
+          >Nog eens spelen? Boek een nieuwe sessie</a
+        >
+        <a class="d-knop" href="/" data-i18n="dua-tijd.body.d-knop-2">← Terug naar de website</a>
       </p>
     </div>
     <script type="module" src="js/tijd-voorbij.ts"></script>

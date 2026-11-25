@@ -15,6 +15,9 @@
  * De build faalt bij tekst zonder sleutel, een ontbrekende of overbodige
  * vertaling. Verandert de Nederlandse tekst van een sleutel, dan staat de
  * vertaling als verouderd gemeld (vergeleken met i18n/paginas/<taal>.bron.json).
+ *
+ * Gamepagina's (SPELPAGINAS) krijgen dezelfde controle met i18n/spel/<spel>.<taal>.ts,
+ * maar worden niet gegenereerd: de browser vertaalt ze (shared/js/spelvertaling.ts).
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -26,6 +29,7 @@ import {
   OG_LOCALE,
   PAGINAS,
   SITE_URL,
+  SPELPAGINAS,
   STANDAARD_BUITENLAND,
   TALEN,
   bestandInTaal,
@@ -33,6 +37,7 @@ import {
   vindPagina,
   type Doeltaal,
   type Pagina,
+  type Spelpagina,
 } from '../i18n/config.ts';
 import { attribuutElementen, bronHash, isVast, normaliseer, tekstElementen } from './i18n-dom.ts';
 
@@ -189,89 +194,150 @@ export function maakSitemap(): string {
   return regels.join('\n');
 }
 
-async function laadWoordenboek(taal: Doeltaal): Promise<PaginaWoordenboek> {
-  const pad = resolve(ROOT, 'i18n/paginas', `${taal}.ts`);
-  // Vast pad binnen de repo, opgebouwd uit DOELTALEN.
+async function laadWoordenboek(pad: string): Promise<PaginaWoordenboek> {
+  // Vast pad binnen de repo, opgebouwd uit DOELTALEN en SPELPAGINAS.
   // eslint-disable-next-line no-unsanitized/method
   const module = (await import(pathToFileURL(pad).href)) as { default: PaginaWoordenboek };
   return module.default;
 }
 
-function bronPad(taal: Doeltaal): string {
-  return resolve(ROOT, 'i18n/paginas', `${taal}.bron.json`);
+/** Woordenboek van de publieke pagina's, of van een spel. */
+function woordenboekPad(taal: Doeltaal, spel?: string): string {
+  return spel
+    ? resolve(ROOT, 'i18n/spel', `${spel}.${taal}.ts`)
+    : resolve(ROOT, 'i18n/paginas', `${taal}.ts`);
+}
+
+function bronPad(taal: Doeltaal, spel?: string): string {
+  return woordenboekPad(taal, spel).replace(/\.ts$/, '.bron.json');
+}
+
+/** Een gamepagina als Pagina, enkel voor de controle (er wordt niets geschreven). */
+function alsPagina(p: Spelpagina): Pagina {
+  return { id: p.id, bron: p.bron, pad: `/${p.bron}`, sitemap: false };
+}
+
+interface Opties {
+  controle: boolean;
+  bevestig: boolean;
+  teBevestigen: string[];
+  fouten: string[];
+  waarschuwingen: string[];
+}
+
+/**
+ * Ongebruikte vertalingen, bevestigen en de drift-controle voor één woordenboek.
+ * `gebruikt`: per sleutel de vingerafdruk van de huidige Nederlandse tekst.
+ */
+function controleerWoordenboek(
+  naam: string,
+  pad: string,
+  woordenboek: PaginaWoordenboek,
+  gebruikt: Record<string, string>,
+  o: Opties,
+): void {
+  for (const sleutel of Object.keys(woordenboek)) {
+    if (!(sleutel in gebruikt))
+      o.fouten.push(`${naam}: vertaling "${sleutel}" wordt nergens gebruikt`);
+  }
+  const vastgelegd: Record<string, string> = existsSync(pad)
+    ? (JSON.parse(readFileSync(pad, 'utf8')) as Record<string, string>)
+    : {};
+
+  if (o.bevestig) {
+    // Zonder sleutels: alles bevestigen. Met sleutels: enkel die (in dit woordenboek).
+    const sleutels = o.teBevestigen.length
+      ? o.teBevestigen.filter(k => k in gebruikt)
+      : Object.keys(gebruikt);
+    const nieuw: Record<string, string> = {};
+    for (const [k, hash] of Object.entries(vastgelegd)) if (k in gebruikt) nieuw[k] = hash;
+    const gewijzigd = sleutels.filter(k => nieuw[k] !== gebruikt[k]);
+    for (const k of sleutels) nieuw[k] = gebruikt[k] ?? '';
+    const gesorteerd = Object.fromEntries(
+      Object.entries(nieuw).sort(([a], [b]) => a.localeCompare(b)),
+    );
+    writeFileSync(pad, `${JSON.stringify(gesorteerd, null, 2)}\n`);
+    for (const k of gewijzigd) console.log(`bevestigd: ${naam} "${k}"`);
+    console.log(`${naam}: ${gewijzigd.length} vertalingen bevestigd.`);
+    return;
+  }
+  for (const [sleutel, hash] of Object.entries(gebruikt)) {
+    if (vastgelegd[sleutel] === undefined)
+      o.waarschuwingen.push(`${naam}: "${sleutel}" is nieuw, nog niet bevestigd`);
+    else if (vastgelegd[sleutel] !== hash)
+      o.waarschuwingen.push(`${naam}: "${sleutel}" is verouderd, de Nederlandse tekst veranderde`);
+  }
 }
 
 export async function main(argv: readonly string[] = process.argv.slice(2)): Promise<void> {
-  const controle = argv.includes('--controle');
-  const bevestig = argv.includes('--bevestig');
-  const teBevestigen = argv.filter(a => !a.startsWith('--'));
-  const fouten: string[] = [];
-  const waarschuwingen: string[] = [];
+  const o: Opties = {
+    controle: argv.includes('--controle'),
+    bevestig: argv.includes('--bevestig'),
+    teBevestigen: argv.filter(a => !a.startsWith('--')),
+    fouten: [],
+    waarschuwingen: [],
+  };
+  const alleGebruikt = new Set<string>();
 
   for (const taal of DOELTALEN) {
-    const woordenboek = await laadWoordenboek(taal);
+    // Publieke pagina's: vertalen en wegschrijven onder /<taal>/.
+    const woordenboek = await laadWoordenboek(woordenboekPad(taal));
     const gebruikt: Record<string, string> = {};
     // Opnieuw beginnen, zodat er geen pagina's blijven staan die niet meer bestaan.
     rmSync(resolve(ROOT, taal), { recursive: true, force: true });
     for (const pagina of PAGINAS) {
       const bronHtml = readFileSync(resolve(ROOT, pagina.bron), 'utf8');
       const r = vertaalPagina(bronHtml, pagina, taal, woordenboek);
-      fouten.push(...r.fouten);
+      o.fouten.push(...r.fouten);
       Object.assign(gebruikt, r.bron);
       const doel = resolve(ROOT, bestandInTaal(pagina.bron, taal));
       mkdirSync(dirname(doel), { recursive: true });
       writeFileSync(doel, r.html);
     }
-    for (const sleutel of Object.keys(woordenboek)) {
-      if (!(sleutel in gebruikt))
-        fouten.push(`${taal}: vertaling "${sleutel}" wordt nergens gebruikt`);
-    }
+    Object.keys(gebruikt).forEach(k => alleGebruikt.add(k));
+    controleerWoordenboek(taal, bronPad(taal), woordenboek, gebruikt, o);
 
-    const vastgelegd: Record<string, string> = existsSync(bronPad(taal))
-      ? (JSON.parse(readFileSync(bronPad(taal), 'utf8')) as Record<string, string>)
-      : {};
-
-    if (bevestig) {
-      // Zonder sleutels: alles bevestigen. Met sleutels: enkel die.
-      const onbekend = teBevestigen.filter(k => !(k in gebruikt));
-      if (onbekend.length) {
-        fouten.push(`${taal}: onbekende sleutels om te bevestigen: ${onbekend.join(', ')}`);
+    // Gamepagina's: alleen controleren; de browser vertaalt (shared/js/spelvertaling.ts).
+    for (const spel of new Set(SPELPAGINAS.map(p => p.spel))) {
+      const pad = woordenboekPad(taal, spel);
+      if (!existsSync(pad)) continue;
+      const spelWoordenboek = await laadWoordenboek(pad);
+      const spelGebruikt: Record<string, string> = {};
+      for (const p of SPELPAGINAS.filter(x => x.spel === spel)) {
+        const bronHtml = readFileSync(resolve(ROOT, p.bron), 'utf8');
+        const r = vertaalPagina(bronHtml, alsPagina(p), taal, spelWoordenboek);
+        o.fouten.push(...r.fouten.map(f => (f.startsWith(`${taal}:`) ? `${spel}.${f}` : f)));
+        Object.assign(spelGebruikt, r.bron);
       }
-      const sleutels = teBevestigen.length
-        ? teBevestigen.filter(k => k in gebruikt)
-        : Object.keys(gebruikt);
-      const nieuw: Record<string, string> = {};
-      for (const [k, hash] of Object.entries(vastgelegd)) if (k in gebruikt) nieuw[k] = hash;
-      const gewijzigd = sleutels.filter(k => nieuw[k] !== gebruikt[k]);
-      for (const k of sleutels) nieuw[k] = gebruikt[k] ?? '';
-      const gesorteerd = Object.fromEntries(
-        Object.entries(nieuw).sort(([a], [b]) => a.localeCompare(b)),
+      Object.keys(spelGebruikt).forEach(k => alleGebruikt.add(k));
+      controleerWoordenboek(
+        `${spel}.${taal}`,
+        bronPad(taal, spel),
+        spelWoordenboek,
+        spelGebruikt,
+        o,
       );
-      writeFileSync(bronPad(taal), `${JSON.stringify(gesorteerd, null, 2)}\n`);
-      for (const k of gewijzigd) console.log(`bevestigd: ${taal} "${k}"`);
-      console.log(`${taal}: ${gewijzigd.length} vertalingen bevestigd.`);
-      continue;
     }
-    for (const [sleutel, hash] of Object.entries(gebruikt)) {
-      if (vastgelegd[sleutel] === undefined)
-        waarschuwingen.push(`${taal}: "${sleutel}" is nieuw, nog niet bevestigd`);
-      else if (vastgelegd[sleutel] !== hash)
-        waarschuwingen.push(`${taal}: "${sleutel}" is verouderd, de Nederlandse tekst veranderde`);
-    }
+  }
+
+  if (o.bevestig) {
+    const onbekend = o.teBevestigen.filter(k => !alleGebruikt.has(k));
+    if (onbekend.length)
+      o.fouten.push(`onbekende sleutels om te bevestigen: ${onbekend.join(', ')}`);
   }
 
   writeFileSync(resolve(ROOT, 'public/sitemap.xml'), maakSitemap());
 
-  for (const w of waarschuwingen) console.warn(`let op: ${w}`);
-  if (waarschuwingen.length) {
+  for (const w of o.waarschuwingen) console.warn(`let op: ${w}`);
+  if (o.waarschuwingen.length) {
     console.warn('Werk de vertalingen bij en draai daarna pnpm i18n:bevestig <sleutel...>.');
   }
-  if (fouten.length) {
-    for (const f of fouten) console.error(`fout: ${f}`);
+  if (o.fouten.length) {
+    for (const f of o.fouten) console.error(`fout: ${f}`);
     process.exit(1);
   }
-  if (controle && waarschuwingen.length) process.exit(1);
+  if (o.controle && o.waarschuwingen.length) process.exit(1);
   console.log(
-    `i18n: ${DOELTALEN.length * PAGINAS.length} pagina's gegenereerd (${DOELTALEN.join(', ')}).`,
+    `i18n: ${DOELTALEN.length * PAGINAS.length} pagina's gegenereerd (${DOELTALEN.join(', ')}), ${SPELPAGINAS.length} gamepagina's gecontroleerd.`,
   );
 }

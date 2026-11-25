@@ -15,6 +15,10 @@ import { fx } from './dua-audio.ts';
 import { speelStem } from './dua-stemmen.ts';
 import { haalDuren, percentielSneller, prestatieTekst } from '../../../shared/js/verdeling.ts';
 import { meetSpel } from '../../../shared/js/meet.ts';
+import { startSpeltaal } from '../../../shared/js/spelvertaling.ts';
+
+// Eerst de taal van de sessie en de vertaalde pagina, dan pas de rest (ADR-001, G1).
+await startSpeltaal('dua');
 
 /** Zo lang wachten we op de andere kant voor we de review toch tonen. */
 const MAX_WACHT_MS = 3 * 60 * 1000;

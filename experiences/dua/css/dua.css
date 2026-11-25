@@ -974,3 +974,16 @@ body.era-1934 .svg-kader {
   border-color: var(--d-goud);
   color: var(--d-goud);
 }
+
+/* Gamepagina's wachten op hun vertaling (shared/js/spelvertaling.ts). Lukt dat
+   niet, dan toont de pagina zich na twee seconden toch, in het Nederlands. */
+html.i18n-wacht body {
+  visibility: hidden;
+  animation: i18n-toon 0s 2s forwards;
+}
+
+@keyframes i18n-toon {
+  to {
+    visibility: visible;
+  }
+}
