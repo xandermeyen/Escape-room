@@ -38,15 +38,15 @@ Draai voor je klaar bent minstens: `lint`, `typecheck`, `test`, `format:check`,
 
 ## Structuur
 
-| Map                                | Wat                                                     |
-| ---------------------------------- | ------------------------------------------------------- |
-| `index.html`, `kamer-14/`, `dua/`  | Sitepagina's (Nederlands, de map bepaalt de URL)        |
-| `experiences/<naam>/`              | Spelpagina's met eigen `css/` en `js/`                  |
-| `shared/js/`                       | Gedeelde spellogica: sessie, timer, hulp, host, demo    |
-| `i18n/`, `scripts/`                | Vertalingen en de scripts die `en/` genereren           |
-| `firebase/database.rules.json`     | Database-rules, de echte beveiliging                    |
-| `tests/`, `e2e/`                   | Vitest en Playwright                                    |
-| `docs/`                            | Beveiliging, Make-scenario, ADR's                       |
+| Map                               | Wat                                                  |
+| --------------------------------- | ---------------------------------------------------- |
+| `index.html`, `kamer-14/`, `dua/` | Sitepagina's (Nederlands, de map bepaalt de URL)     |
+| `experiences/<naam>/`             | Spelpagina's met eigen `css/` en `js/`               |
+| `shared/js/`                      | Gedeelde spellogica: sessie, timer, hulp, host, demo |
+| `i18n/`, `scripts/`               | Vertalingen en de scripts die `en/` genereren        |
+| `firebase/database.rules.json`    | Database-rules, de echte beveiliging                 |
+| `tests/`, `e2e/`                  | Vitest en Playwright                                 |
+| `docs/`                           | Beveiliging, Make-scenario, ADR's                    |
 
 `en/` wordt gegenereerd. Bewerk het nooit met de hand.
 
