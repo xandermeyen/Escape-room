@@ -277,6 +277,7 @@ function kiesLetter(i: number): void {
     fx.typDiep();
   } else {
     fx.fout();
+    melding(vul(T.precies, { Aantal: P1.lettersVoluit }));
   }
   bouwTypvel();
   tekenBriefStatus();
@@ -498,7 +499,7 @@ document.querySelectorAll<SVGElement>('#kamer [data-plek]').forEach(el => {
     fx.lade();
     try {
       await verstopMapje(sessie, plek);
-      melding(T.kamerVerzegeld);
+      melding(puzzels['p2'] && puzzels['p3'] ? T.kamerVerzegeldOpen : T.kamerVerzegeld);
     } catch {
       /* schrijf() toont de verbindingsbalk */
     } finally {
@@ -562,7 +563,12 @@ document.getElementById('kaart-1934')?.addEventListener('click', async (e: Event
   melding(T.paneelVerstopt);
 });
 
+let vorigePin: string | null | undefined;
 function tekenPin(): void {
+  const pin = dua.pin1934 ?? null;
+  // 2034 vond de plek, maar daar bleef niets over: hun klik wiste de pin.
+  if (vorigePin && !pin && !puzzels['p5']) melding(T.pinVerloren);
+  vorigePin = pin;
   document.getElementById('s-pin')?.classList.toggle('klaar', !!dua.pin1934);
   requireEl('pin-status').textContent = dua.pin1934 ? T.pinStatus : '';
 }

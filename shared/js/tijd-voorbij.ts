@@ -22,7 +22,7 @@ const TOLERANTIE_MS = 5000;
 /**
  * Bepaalt of een sessie echt afgelopen is:
  *  - 'gesloten': al inactief (host, of de spelers rondden af);
- *  - 'verlopen': 60 min + opgebouwde tijdstraf is voorbij;
+ *  - 'verlopen': 60 min min de opgebouwde tijdstraf is voorbij (zoals de klok in het spel);
  *  - 'bezig': de klok loopt nog;
  *  - 'onbekend': de sessie bestaat niet.
  */
@@ -39,7 +39,8 @@ export async function beoordeelSessieEinde(sessie: string): Promise<SessieEinde>
   if (data.actief === false) return 'gesloten';
   if (typeof data.timerGestart !== 'number') return 'bezig';
   const straf = data.dua?.meta?.strafMs ?? 0;
-  const einde = data.timerGestart + TIJDSLIMIET_MS + straf;
+  // Een tijdstraf maakt de speeltijd korter, net als op de klok (dua-ui.ts) en het eindscherm.
+  const einde = data.timerGestart + TIJDSLIMIET_MS - straf;
   return serverNu() >= einde - TOLERANTIE_MS ? 'verlopen' : 'bezig';
 }
 

@@ -57,11 +57,12 @@ describe('beoordeelSessieEinde', () => {
     expect(await beoordeelSessieEinde('ABC')).toBe('verlopen');
   });
 
-  it('opgebouwde tijdstraf (D.U.A.) schuift het einde op', async () => {
+  it('opgebouwde tijdstraf (D.U.A.) maakt de speeltijd korter, zoals de klok in het spel', async () => {
     sessieData({ actief: true, timerGestart: START, dua: { meta: { strafMs: 5 * 60 * 1000 } } });
-    nuMock.mockReturnValue(START + UUR + 60 * 1000);
+    nuMock.mockReturnValue(START + UUR - 6 * 60 * 1000);
     expect(await beoordeelSessieEinde('ABC')).toBe('bezig');
-    nuMock.mockReturnValue(START + UUR + 5 * 60 * 1000 + 1000);
+    // De spelklok stuurt na 55 minuten door: dan moet de oplossing ook zichtbaar zijn.
+    nuMock.mockReturnValue(START + UUR - 5 * 60 * 1000 + 1000);
     expect(await beoordeelSessieEinde('ABC')).toBe('verlopen');
   });
 

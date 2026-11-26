@@ -88,6 +88,9 @@ export const nl = {
     geenBergplaats: 'Daar lag de sleutel. Geen bergplaats.',
     kamerVerzegeld:
       'De werkkamer is verzegeld in de tijd. 2034 kan zoeken zodra P2 en P3 rond zijn.',
+    kamerVerzegeldOpen: 'De werkkamer is verzegeld in de tijd. 2034 kan nu zoeken.',
+    pinVerloren:
+      '2034 vond de plek, maar daar bleef niets bewaard. Kies een plek die de eeuw overleeft.',
     mapjeVerstopt: 'Mapje verstopt: {plek}. Honderd jaar wachten maar.',
     nieuweRonde: 'Vind eerst de sleutel. "Waar het licht valt."',
     inBeslag:
