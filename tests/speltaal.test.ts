@@ -89,6 +89,7 @@ describe('vertaler', () => {
 describe('speltaalVoorBoeking', () => {
   it('neemt de paginataal als de experience in die taal bestaat', () => {
     expect(speltaalVoorBoeking('dua', 'nl')).toBe('nl');
+    expect(speltaalVoorBoeking('dua', 'en')).toBe('en');
   });
 
   it('valt terug op de standaard van de experience', () => {

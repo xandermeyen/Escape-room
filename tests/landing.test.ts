@@ -178,13 +178,13 @@ describe('vulBoekingAan', () => {
     expect(v.get('datumTekst')).toMatch(/November/);
   });
 
-  it('het spel blijft Nederlands zolang het niet in het Engels bestaat', () => {
+  it('een Engelse pagina boekt D.U.A. in het Engels, Kamer 14 blijft Nederlands', () => {
     const k14 = velden({ experience: 'kamer-14' });
     vulBoekingAan(k14, 'en');
     expect(k14.get('speltaal')).toBe('nl');
     const dua = velden({ experience: 'dua' });
     vulBoekingAan(dua, 'en');
-    expect(dua.get('speltaal')).toBe('nl');
+    expect(dua.get('speltaal')).toBe('en');
   });
 
   it('een Nederlandse pagina boekt alles in het Nederlands', () => {
