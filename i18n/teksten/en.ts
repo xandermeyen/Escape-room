@@ -61,7 +61,7 @@ export const en: Teksten = {
   demoAria: 'Demo mode: switch role',
   demoLabel: (rol: string): string => `Demo mode · ${rol}`,
   demoWissel: (rol: string): string => `Switch to ${rol}`,
-  lobbyEerdereRol: (rol: string): string => `You chose the role ${rol} earlier.`,
+  lobbyEerdereRol: (rol: string): string => `Earlier you chose ${rol}.`,
   lobbyVerder: 'Continue with this role →',
   lobbyGeenCode: 'Enter a valid session code.',
   lobbyControleren: 'Checking…',

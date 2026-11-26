@@ -42,6 +42,8 @@ export function meldInsigne(naam: Insigne, extra = ''): void {
 
 // ── Timer met tijdstraf uit dua/meta/strafMs ────────────────
 let strafMs = 0;
+/** Pas na de eerste meta-snapshot melden: anders klinkt een oude straf opnieuw bij elke herlaad. */
+let metaGeladen = false;
 let timerInterval: ReturnType<typeof setInterval> | null = null;
 let w10 = false;
 
@@ -86,10 +88,11 @@ export function koppelMeta(code: string, callback?: (meta: DuaMeta) => void): vo
     if (vul) vul.style.width = `${meta.verdenking || 0}%`;
     if (pct) pct.textContent = `${meta.verdenking || 0}%`;
 
-    if (strafMs > vorigeStraf) {
+    if (metaGeladen && strafMs > vorigeStraf) {
       fx.fluitje();
       melding(tekst().ui.straf);
     }
+    metaGeladen = true;
     callback?.(meta);
   });
 }

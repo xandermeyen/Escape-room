@@ -53,7 +53,7 @@ export const DUA_P1: Record<Speltaal, P1Taal> = {
     brief:
       'MONSEIGNEUR. LOOK AWAY NO LONGER. YOUR HESITATION WILL COST YOU MORE THAN MONEY. ' +
       'ONE LAST SIGN IS ON ITS WAY: SEEK WHERE TRAVELLERS WAIT. ' +
-      'THE NUMBER IS ONE MORE THAN OUR LETTERS YOU HAVE RECEIVED. - D.U.A.',
+      'THE NUMBER IS ONE MORE THAN THE COUNT OF OUR LETTERS IN YOUR HANDS. - D.U.A.',
     code: '11 · 15 · 24 · 34 · 25 · 43',
     letters: 6,
     lettersVoluit: 'Six',

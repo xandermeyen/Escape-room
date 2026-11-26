@@ -44,7 +44,7 @@ const en: PaginaWoordenboek = {
   'dua-lobby.rol-kaart-loper.rol-era': '1934 · BRUSSELS &amp; WETTEREN',
   'dua-lobby.rol-kaart-loper.rol-naam': 'The Runner',
   'dua-lobby.rol-kaart-loper.rol-info':
-    'Moves through stations and studies, dodges guards and hides what must survive a hundred years.',
+    'Slips through stations and studies, dodges guards and hides what must survive a hundred years.',
   'dua-lobby.rol-kaart-loper.rol-bezet-label': BEZET,
   'dua-lobby.rol-kaart-archivaris.rol-era': '2034 · BUREAU X',
   'dua-lobby.rol-kaart-archivaris.rol-naam': 'The Archivist',
@@ -73,18 +73,18 @@ const en: PaginaWoordenboek = {
   'dua-1934.s-zegel.d-knop': 'Press the seal',
   'dua-1934.s-hamers.h3': '① The typewriter has been sabotaged',
   'dua-1934.s-hamers.p':
-    'Someone swapped the type bars and scratched the letters off their slots. Each slot only has a number now. Click two type bars to swap them until every bar hangs in its own slot.',
+    'Someone swapped the type bars and scratched the letters off their slots. Each slot only has a number now. Click two type bars to swap them until every bar is back in its own slot.',
   'dua-1934.s-hamers.hintje':
     'Nobody here remembers which bar goes where. In 2034 this machine stands restored in a museum. Ask them what it looks like.',
   'dua-1934.s-hamers.hintje-2': 'Letter XII can only be typed once the machine is repaired.',
   'dua-1934.s-brief.h3': '① Letter XII to Bishop Coppieters',
   'dua-1934.s-brief.p':
-    'Writer. In letter XII, strike harder on the place where I leave the panel, as agreed. In our code:',
+    'Writer. As agreed: in letter XII, strike the name of the place where I am leaving the panel harder. In our code:',
   'dua-1934.s-brief.p-2': 'I burned the code card. No one may read this. - L.',
   'dua-1934.s-brief.p-3':
     'Strike exactly <b>six letters harder</b> (click them): the letters of the word from the note, in reading order. The carbon copy is all that remains.',
   'dua-1934.s-brief.hintje':
-    'You cannot read the code without the card. But the police keep everything, and 2034 has their archive, sorted by letter.',
+    'You cannot read the code without the card. But the police keep everything, and 2034 has their archive, filed by letter number.',
   'dua-1934.s-brief.d-knop': 'Strike and send',
   'dua-1934.s-brief.d-knop-2': 'New sheet',
   'dua-1934.s-brief.hintje-2': '6 letters left to choose.',
@@ -92,7 +92,7 @@ const en: PaginaWoordenboek = {
   'dua-1934.hint-p1a.hint-verder': NOG_HINT,
   'dua-1934.s-kluis.h3': '② Brussels North Station: the return',
   'dua-1934.s-kluis.p':
-    'The Runner stands by the luggage lockers, <em>John the Baptist</em> under one arm. The platform guard is doing his rounds. Only deposit when he is <b>out of sight</b>. Choose the locker number first; think of what the letter promises: <em>"one more than our letters you have received"</em>, and you never send letter XIII.',
+    'The Runner stands by the luggage lockers, <em>John the Baptist</em> under one arm. The platform guard is doing his rounds. Only deposit when he is <b>out of sight</b>. Choose the locker number first; think of what the letter promises: <em>"one more than the count of our letters in your hands"</em>, and you never send letter XIII.',
   'dua-1934.s-kluis.span': '◉ guard nearby: danger',
   'dua-1934.s-kluis.span-2': 'platform',
   'dua-1934.s-kluis.span-3': 'out of sight: safe',
@@ -103,7 +103,7 @@ const en: PaginaWoordenboek = {
   'dua-1934.hint-p2a.hint-verder': NOG_HINT,
   'dua-1934.s-route.h3': '③ What you saw that night',
   'dua-1934.s-route.p':
-    'You kept watch at the cathedral. The route of the carriers, in order: <b>sacristy → ambulatory → Vijd Chapel → side door</b>. Only 2034 has the police floor plan with zone numbers. Say what you saw, not what you do not know.',
+    "You kept watch at the cathedral. The route of the carriers, in order: <b>sacristy → ambulatory → Vijd Chapel → side door</b>. Only 2034 has the police floor plan with zone numbers. Tell them what you saw. Leave out what you don't know.",
   'dua-1934.s-kamer.h3': '④ Wetteren, 25 November 1934: the study',
   'dua-1934.s-kamer.p':
     'Goedertier is dying. The police are on their way: inside in <b>90 seconds</b>. First find the key (<em>"where the light falls"</em>), then hide the carbon copies and the last clue. But do not just pick any hiding place: 2034 has the search report and knows where the police will look. Ask them BEFORE you go in.',
@@ -113,7 +113,7 @@ const en: PaginaWoordenboek = {
   'dua-1934.hint-p4a.hint-verder': NOG_HINT,
   'dua-1934.s-pin.h3': '⑤ The hiding place',
   'dua-1934.s-pin.p':
-    'The moment of truth. One line may go down in history: <em>"in a place where neither I nor anyone else can remove it without drawing the attention of the public."</em> But think beyond the riddle: the place must also <b>survive a hundred years</b>. What does 2034 know about what happened to these buildings? Only click when you are sure. After that: silence about the place. Code of honour.',
+    'The moment of truth. One line may go down in history: <em>"in a place where neither I nor anyone else can remove it without attracting public attention."</em> But think beyond the riddle: the place must also <b>survive a hundred years</b>. What does 2034 know about what happened to these buildings? Only click when you are sure. After that: silence about the place. Code of honour.',
   'dua-1934.hint-p5a.hint-knop': HINT,
   'dua-1934.hint-p5a.hint-verder': NOG_HINT,
   'dua-1934.s-brief14.h3': 'The fourteenth letter',
@@ -126,7 +126,7 @@ const en: PaginaWoordenboek = {
   'dua-2034.head.title': 'D.U.A. - Bureau X, 2034',
   'dua-2034.body.sys-case': 'D.U.A. · loading…',
   'dua-2034.body.verdenking-label': 'SUSPICION',
-  'dua-2034.body.era-kop': 'Bureau X, 2034. The cold trail.',
+  'dua-2034.body.era-kop': 'Bureau X, 2034. A trail gone cold.',
   'dua-2034.body.era-sub':
     'The Archivist reads. The Restorer investigates. And do not forget: you know how the century turned out. That knowledge can save 1934, if you share it in time.',
   'dua-2034.s-zegel.h3':
@@ -137,7 +137,7 @@ const en: PaginaWoordenboek = {
   'dua-2034.s-verslag.h3':
     '① Restoration report: the typewriter of D.U.A. <span class="hintje">(P1)</span>',
   'dua-2034.s-verslag.p':
-    'MSK Ghent, inventory 2031/117. During the restoration, the six type bars were still in their original place. This is how they hang, from slot 1 to slot 6:',
+    'MSK Ghent, inventory no. 2031/117. At restoration the six type bars were found in their original positions. In order, from slot 1 to slot 6:',
   'dua-2034.typekoppen.label': 'slot 1',
   'dua-2034.typekoppen.sr-only': 'slot 1: T',
   'dua-2034.typekoppen.label-2': 'slot 2',
@@ -185,11 +185,11 @@ const en: PaginaWoordenboek = {
   'dua-2034.s-getuigen.p-2':
     '⏱ 00:40, Night watchman: "a glimmer of light in the <b>ambulatory</b>."',
   'dua-2034.s-getuigen.p-3':
-    '⏱ 01:05, Neighbour: "by the light of the <b>full moon</b> I saw two men at the <b>west portal</b>, sharp as anything."',
+    '⏱ 01:05, Neighbour: "by the light of the <b>full moon</b> I saw two men at the <b>west portal</b>, clear as day."',
   'dua-2034.s-getuigen.p-4':
     '⏱ 01:20, Milkman: "movement by the <b>Vijd Chapel</b>, then the <b>side door</b> slammed."',
   'dua-2034.s-getuigen.hintje':
-    'De Gentenaar, 11 April: "that night was heavily overcast and pitch dark; the street lights were out." So one witness is lying. And 1934 was there: ask them.',
+    'De Gentenaar (newspaper), 11 April: "that night was heavily overcast and pitch dark; the street lights were out." So one witness is lying. And 1934 was there: ask them.',
   'dua-2034.s-getuigen.p-5': 'Zone numbers of the route, in order:',
   'dua-2034.s-getuigen.d-input@aria-label': 'Zone numbers of the route',
   'dua-2034.s-getuigen.d-knop': 'Check',
@@ -216,7 +216,7 @@ const en: PaginaWoordenboek = {
   'dua-2034.s-pin.h3': '⑤ The city map <span class="hintje">(P5)</span>',
   'dua-2034.pin-slot.hintje': 'Locked until the study (P4) has given up its secret.',
   'dua-2034.pin-spel.p':
-    '"In a place where neither I nor anyone else can remove it without drawing the attention of the public." 1934 knows where. But may not say it. Ask the right questions and click the same place.',
+    '"In a place where neither I nor anyone else can remove it without attracting public attention." 1934 knows where, but may not say it. Ask the right questions and click the same place.',
   'dua-2034.hint-p5.hint-knop': HINT,
   'dua-2034.hint-p5.hint-verder': NOG_HINT,
   'dua-2034.brief13.h3': 'Letter XIII, RR-13 - never sent',
@@ -262,7 +262,7 @@ const en: PaginaWoordenboek = {
   'dua-einde.einde-review.review-dank': 'Thank you for your review!',
   'dua-einde.einde-onthulling.h3': 'And in real life?',
   'dua-einde.einde-onthulling.p':
-    'The theft of the night of 10 to 11 April 1934 was never solved. The thirteen letters of D.U.A. really exist, as do the deathbed words of Arsène Goedertier and the return of John the Baptist in a luggage locker at Brussels North Station. The panel has never been found. At the end of 2024 the Ghent public prosecutor was still searching in Oosterzele. Without result. Maybe someone in 1934 simply hid it too well.',
+    "The theft on the night of 10 to 11 April 1934 was never solved. The thirteen letters of D.U.A. really exist, as do the deathbed words of Arsène Goedertier and the return of John the Baptist via a luggage locker at Brussels North Station. The panel has never been found. As recently as late 2024, the Ghent public prosecutor's office was still searching in Oosterzele, without result. Maybe someone in 1934 simply hid it too well.",
   'dua-einde.einde-onthulling.hintje':
     'Want to know more? <a href="https://rechtvaardigerechters.be" target="_blank" rel="noopener">rechtvaardigerechters.be</a> · <a href="https://visit.gent.be/en" target="_blank" rel="noopener">visit.gent.be</a>',
   'dua-einde.body.d-knop-2': '← Back to the website',

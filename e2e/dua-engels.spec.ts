@@ -32,7 +32,7 @@ async function zaai(
 
 for (const [pagina, kop] of [
   ['speler-1934.html', 'Ghent, April 1934. You are D.U.A.'],
-  ['speler-2034.html', 'Bureau X, 2034. The cold trail.'],
+  ['speler-2034.html', 'Bureau X, 2034. A trail gone cold.'],
 ] as const) {
   test(`Engelse sessie: ${pagina} is Engels`, async ({ context }) => {
     await zaai(context, 'en');

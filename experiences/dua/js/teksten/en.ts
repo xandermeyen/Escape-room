@@ -24,7 +24,7 @@ export const en: DuaTeksten = {
     insigne: 'Badge found: {naam}',
     insignes: {
       'door-u-aangesteld': 'Duly Appointed',
-      'anno-verwisseld': 'Anno Swapped',
+      'anno-verwisseld': 'Eras Swapped',
       'de-dertiende-brief': 'The Thirteenth Letter',
       'het-lam-waakt': 'The Lamb Keeps Watch',
       'groeten-uit-geel': 'Greetings from Geel',
@@ -65,7 +65,7 @@ export const en: DuaTeksten = {
     allesGekozen: '{Aantal} letters chosen. Strike when you are sure.',
     eerstMachine: 'Repair the machine first.',
     precies: '{Aantal} letters. No more, no less.',
-    doorslagGemaakt: 'Carbon copy made. In 2034 there is now a letter in the archive.',
+    doorslagGemaakt: 'Carbon copy made. 2034 can now find the letter in their archive.',
     doorslagFout:
       'The carbon copy spells "{woord}". That is not what the Runner asked for. Take a new sheet and check the code with 2034 again.',
     briefGelezen: '2034 has already read the letter. A new sheet is no longer needed.',
@@ -73,9 +73,9 @@ export const en: DuaTeksten = {
     alInKluis: 'The panel is already in locker {nummer}.',
     tweeCijfers: 'Two digits.',
     kluisFout:
-      'That number does not match the promise in the letter. Read it again: one more than the letters the bishop has received.',
+      'That number does not match the promise in the letter. Read it again: one more than the number of letters the bishop has received.',
     betrapt: '⚠ The platform guard saw you fiddling with the lockers. Suspicion +15%',
-    betraptStatus: 'Caught. Wait until he is really out of sight (on the right of his track).',
+    betraptStatus: 'Caught. Wait until he is really out of sight (at the far right of his round).',
     gedeponeerd: 'Panel deposited in locker {nummer}. The ticket travels to 2034, half illegible.',
     kluisStatus: 'Panel deposited in locker {nummer}. Now it is up to 2034.',
     kamerStatus: 'Find the key first.',
@@ -85,6 +85,9 @@ export const en: DuaTeksten = {
     niets: 'Nothing. The seconds are ticking. "Where the light falls..."',
     geenBergplaats: 'That is where the key was. Not a hiding place.',
     kamerVerzegeld: 'The study is sealed in time. 2034 can search as soon as P2 and P3 are done.',
+    kamerVerzegeldOpen: 'The study is sealed in time. 2034 can search now.',
+    pinVerloren:
+      '2034 found the place, but nothing survived there. Choose a place that survives the century.',
     mapjeVerstopt: 'Folder hidden: {plek}. Now we wait a hundred years.',
     nieuweRonde: 'Find the key first. "Where the light falls."',
     inBeslag:
@@ -112,7 +115,7 @@ export const en: DuaTeksten = {
     geenTicket: 'Exhibit 7 (locker ticket) has not been found yet.',
     ticket: 'BRUSSELS NORTH STATION · LUGGAGE LOCKER No.',
     ticketUitleg:
-      'The second digit has faded. The letter says: one more than the letters the bishop has received. How many did 1934 actually send?',
+      'The second digit has faded. The letter says: one more than the number of letters the bishop has received. How many did 1934 actually send?',
     p2Opgelost: 'P2 solved: the locker swings open. John the Baptist, unharmed.',
     slotWeigert: 'The lock refuses. Wrong locker.',
     eerstP1: 'P1 first: without the letter, nobody knows what to look for.',
@@ -125,7 +128,7 @@ export const en: DuaTeksten = {
     p4Opgelost:
       'P4 solved: the folder survived the search. Carbon copies of thirteen letters and one last note.',
     nogNietVerstopt: '1934 has not hidden the panel yet. There is nothing to find.',
-    nietHier: 'Not here. Ask 1934 better questions. Without letting them give the place away.',
+    nietHier: 'Not here. Ask 1934 better questions, without letting them give the place away.',
     verloren:
       'You found the place… but nothing was preserved there: over the century it was all restored, cleared or rebuilt. The panel is lost. 1934 has to choose a better place. Suspicion +15%',
     gevonden: 'Found. A hundred years later, exactly where it was meant to be. In plain sight.',
@@ -149,8 +152,8 @@ export const en: DuaTeksten = {
       '» The type bars, from slot 1 to 6: T, K, S, U, N, R. The word is LOCKER: click L, O, C, K, E and R in reading order and send.',
     ],
     'hint-p2a': [
-      '» Choose the number first. Only deposit when the guard is on the right of his track, out of sight.',
-      '» The letter promises: one more than the letters the bishop has received. Letter XII is the last one to arrive.',
+      '» Choose the number first. Only deposit when the guard is at the far right of his round, out of sight.',
+      '» The letter promises: one more than the number of letters the bishop has received. Letter XII is the last one to arrive.',
       '» Twelve letters reached the bishop. Add one, and wait until the guard is all the way to the right.',
     ],
     'hint-p4a': [
@@ -159,7 +162,7 @@ export const en: DuaTeksten = {
       '» The key lies where the sunlight comes in. Hide the folder in a place that is not in the search report of 2034.',
     ],
     'hint-p5a': [
-      '» The sentence says: a place where the public always comes, so nobody can remove anything unnoticed.',
+      '» The sentence says: a place the public always visits, so nobody can remove anything unnoticed.',
       '» Ask 2034 what happened to the Belfry, the Gravensteen and the station in the twentieth century.',
       '» One building stayed open to the public for a hundred years and was never emptied. That is also where it all began, in April 1934.',
     ],
@@ -170,13 +173,13 @@ export const en: DuaTeksten = {
     ],
     'hint-p2': [
       '» The first digit is still on the ticket. The second is in the letter itself.',
-      '» "One more than our letters you have received." The bishop counted what arrived, and letter XIII never arrived.',
+      '» "One more than the count of our letters in your hands." The bishop counted what arrived, and letter XIII never arrived.',
       '» The bishop received letters I to XII. Add one. Turn each digit and confirm it separately.',
     ],
     'hint-p3': [
       '» Compare what the neighbour says with the weather report in the newspaper.',
       '» A full moon on a heavily overcast, pitch-dark night? The neighbour is lying; cross out the west portal. Ask 1934 for the real order.',
-      '» Cross out the neighbour. Take the other three witnesses in order of time and look up the number of each place on the floor plan. The last witness has two places.',
+      '» Cross out the neighbour. Take the other three witnesses in order of time and look up the number of each place on the floor plan. The last witness mentions two places.',
     ],
     'hint-p4b': [
       '» The report says where the police searched. So it is not (or no longer) there.',
@@ -184,8 +187,8 @@ export const en: DuaTeksten = {
       '» Click the same place 1934 chose. If 1934 chose a place from the search report, the folder is gone and 1934 has to go back inside.',
     ],
     'hint-p5': [
-      '» Reread the famous sentence. Where does the public come every day, without seeing anything?',
-      '» The city archive tells you which buildings were searched or rebuilt. One place always stayed open and was never cleared.',
+      '» Reread the famous sentence. Where do people come every day without noticing a thing?',
+      '» The city archive tells you which buildings were restored or rebuilt. One place always stayed open and was never cleared.',
       '» The place where it all began. Hidden in plain sight.',
     ],
   },
@@ -205,8 +208,8 @@ export const en: DuaTeksten = {
       '2034': {
         p0: 'The sheet stays blank as long as 1934 does nothing. Ask them to press the seal.',
         p1: '1934 is stuck with a broken typewriter and a note in code. You have the restoration report, and the code card is in the archive with letter XII.',
-        p2: 'The ticket is half illegible. The second digit is in the letter: one more than the letters the bishop has received.',
-        p3: 'One witness describes something that was impossible that night. Compare his story with De Gentenaar, and ask 1934 what they saw.',
+        p2: 'The ticket is half illegible. The second digit is in the letter: one more than the number of letters the bishop has received.',
+        p3: 'One witness describes something that was impossible that night. Compare his story with the newspaper report in De Gentenaar, and ask 1934 what they saw.',
         p4: 'Where did 1934 leave the folder? Just ask. If it is in a place from the search report, tell them.',
         p5: '1934 may not name the place. Ask yes-or-no questions and tell them what the century did to each building.',
       },
@@ -225,7 +228,7 @@ export const en: DuaTeksten = {
     nogRoute: 'Just the route (③) to go, then the study opens (④).',
     nogKluis: 'Just the locker (②) to go, then the study opens (④).',
     p1_1934:
-      '2034 read the letter. Now both at once: deposit the panel in the locker (②) and tell 2034 the route of the carriers (③).',
+      '2034 read the letter. Now two things at once: deposit the panel in the locker (②) and tell 2034 the route of the carriers (③).',
     p1_2034:
       'Now open: the luggage locker (②) and the witnesses (③). 1934 deposits the panel and knows the route.',
     handdrukTitel: 'The handshake worked',
@@ -266,11 +269,11 @@ export const en: DuaTeksten = {
   },
 
   einde: {
-    nogBezig: 'The other side is still busy. You can already read on and leave a review.',
+    nogBezig: 'The other side is still busy. You can read on in the meantime and leave a review.',
     wacht1934: 'Waiting for 1934: the fourteenth letter has not been sealed yet…',
     wacht2034: 'Waiting for 2034: the report has not been submitted yet…',
     samen:
-      'The letter from 1934 and the report from 2034 lie side by side. You were D.U.A. Both of you. All along.',
+      'The letter from 1934 and the report from 2034 lie side by side. You were D.U.A. Both sides. All along.',
     resttijd: 'Time left',
     hints: 'Hints used',
     verdenking: 'Final suspicion',
