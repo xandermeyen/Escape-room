@@ -15,8 +15,8 @@ Laatst bijgewerkt: november 2026
 
 - [x] Fase 1: i18n-structuur, taalknop, sitemap, controle in CI
 - [x] Fase 2: Engelse publieke site
-- [ ] Fase 3: Engelse D.U.A. (teksten naar `t()`, boekingsformulier met `speltaal`,
-      Make en rules aanpassen, twee volledige testspellen)
+- [x] Fase 3: Engelse D.U.A. (november 2026)
+- [ ] Engelse D.U.A. met echte spelers testen en feedback verwerken
 - [ ] Fase 4: Franse publieke site, nagelezen door een Franstalige moedertaalspreker
 - [ ] e2e-test per taal (lang, canonical, hreflang, boekingsvelden)
 
@@ -28,7 +28,6 @@ Laatst bijgewerkt: november 2026
 ### Onderhoud
 
 - [ ] Dependabot-PR's verwerken
-- [ ] `feature/navigatie-beveiliging` mergen of verwijderen
 - [ ] Gemergde branches opruimen, automatisch verwijderen van branches aanzetten
 
 ## Ideeën (nog niet gepland)
@@ -42,3 +41,4 @@ Laatst bijgewerkt: november 2026
 - Boekingen via Make-webhook met link meteen op het scherm
 - Engelse site live (november 2026)
 - D.U.A.-stemmen en sfeergeluiden (NL en EN)
+- D.U.A. volledig in het Engels: sessietaal, Engelse mails, vertaalde game (november 2026)

@@ -46,7 +46,7 @@ const en: PaginaWoordenboek = {
   'home.hero.hero-eyebrow': 'Free online escape rooms',
   'home.hero.hero-title': 'Real mysteries.<br><em>You solve them.</em>',
   'home.hero.sub':
-    'Online escape rooms built around real Belgian places and stories. Everyone plays on their own screen, together on a call. Free, no account needed. The games are in Dutch for now.',
+    'Online escape rooms built around real Belgian places and stories. Everyone plays on their own screen, together on a call. Free, no account needed. D.U.A. is in English and Dutch, Kamer 14 in Dutch.',
   'home.hero.speel': 'Play for free',
   'home.hero.wie': 'Who makes this?',
   'home.hero.foto-dua@alt': 'D.U.A.: the screen of the 1934 team, with the sabotaged typewriter',
@@ -78,7 +78,7 @@ const en: PaginaWoordenboek = {
     'D.U.A., team 2034: the Bureau X archive with the restoration report',
   'home.dossiers.dua-stempel': 'Unsolved since 1934',
   'home.dossiers.dua-desc':
-    'On the night of 10 to 11 April 1934, the panel <em>The Just Judges</em> by Jan van Eyck disappears from St Bavo’s Cathedral in Ghent. Part of your team plays in 1934, the rest a century later in the Bureau X archive. What one group knows, the other is missing. <strong>The game is in Dutch.</strong>',
+    'On the night of 10 to 11 April 1934, the panel <em>The Just Judges</em> by Jan van Eyck disappears from St Bavo’s Cathedral in Ghent. Part of your team plays in 1934, the rest a century later in the Bureau X archive. What one group knows, the other is missing. <strong>Play in English or Dutch.</strong>',
   'home.dossiers.dua-spelers': '2 to 4 players',
   'home.dossiers.dua-duur': '30 to 60 minutes',
   'home.dossiers.dua-niveau': 'Difficulty: beginner',
@@ -127,7 +127,7 @@ const en: PaginaWoordenboek = {
   'home.faq.nodig-v':
     'What do I need, and does it work on a phone? <span class="faq-arrow">▾</span>',
   'home.faq.nodig-a':
-    'A browser on your phone, tablet or computer, and a way to call your fellow players. The documents are easier to read on a bigger screen. Turn your sound on: Kamer 14 has recorded voices and D.U.A. has sound effects. The games are in Dutch.',
+    'A browser on your phone, tablet or computer, and a way to call your fellow players. The documents are easier to read on a bigger screen. Turn your sound on: Kamer 14 has recorded voices and D.U.A. has sound effects. D.U.A. is available in English; Kamer 14 is in Dutch.',
   'home.faq.plek-v': 'Do we need to be in the same place? <span class="faq-arrow">▾</span>',
   'home.faq.plek-a':
     'No. Everyone plays on their own screen, wherever they are. So you can easily play together with friends or family who live further away.',
@@ -275,7 +275,7 @@ const en: PaginaWoordenboek = {
   'kamer14.boek.label': 'Free · for two · from home',
   'kamer14.boek.heading': 'Start the investigation',
   'kamer14.boek.sub':
-    'Enter your two email addresses. You each get your own link to your own case file. No account, no download. Kamer 14 has no fixed time slot, you play whenever it suits you. The game and the confirmation email are in Dutch.',
+    'Enter your two email addresses. You each get your own link to your own case file. No account, no download. Kamer 14 has no fixed time slot, you play whenever it suits you. The game itself is in Dutch; your confirmation email is in English.',
   'kamer14.boekForm.form-label': 'Contact name <span class="form-req">*</span>',
   'kamer14.boekForm.form-input@placeholder': 'Jane Smith',
   'kamer14.boekForm.form-label-2': 'When will you play? <span class="form-opt">(optional)</span>',
@@ -315,12 +315,12 @@ const en: PaginaWoordenboek = {
     name: 'D.U.A.',
     brand: { '@type': 'Brand', name: 'Bureau X' },
     description:
-      'Online escape room about the unsolved theft of The Just Judges from St Bavo’s Cathedral (Ghent, 1934). Two teams play at the same time, one in 1934 and one in 2034. Together you solve the case, across time. 100% online, free. The game is currently in Dutch; an English version is coming.',
+      'Online escape room about the unsolved theft of The Just Judges from St Bavo’s Cathedral (Ghent, 1934). Two teams play at the same time, one in 1934 and one in 2034. Together you solve the case, across time. 100% online, free. In English and Dutch.',
     url: 'https://bureau-x.be/en/dua/',
     sameAs: ['https://escapetalk.nl/games/bureau-x/dua/'],
     image: 'https://bureau-x.be/assets/img/dua-preview.jpg',
     category: 'Online escape room',
-    inLanguage: NL_SPEL,
+    inLanguage: ['en', 'nl'],
     timeRequired: 'PT60M',
     numberOfPlayers: { '@type': 'QuantitativeValue', minValue: 2, maxValue: 4 },
     publisher: { '@id': 'https://bureau-x.be/#organisatie' },
@@ -349,7 +349,7 @@ const en: PaginaWoordenboek = {
   'dua.hero.img@alt': 'The Just Judges, Jan van Eyck (copy by Jef Van der Veken, 1939)',
   'dua.hero.hero-art-cred': 'The Just Judges · copy by Jef Van der Veken, 1939 · public domain',
   'dua.hero.case-stamp': 'Case 1934/RR<small>Ghent, Belgium · Unsolved</small>',
-  'dua.hero.dua-over': 'Free online escape room for 2 to 4 players · in Dutch, English coming soon',
+  'dua.hero.dua-over': 'Free online escape room for 2 to 4 players · in English',
   'dua.hero.dua-subtitle': 'Stolen in 1934 · still missing',
   'dua.hero.dua-kop': 'Two teams. Two times. One lost masterpiece. Solve it, from 1934 to 2034.',
   'dua.hero.coming-badge': '<span class="coming-dot"></span>Available now',
@@ -448,7 +448,7 @@ const en: PaginaWoordenboek = {
   'dua.boek.label': 'Free · 2 to 4 players · from home',
   'dua.boek.heading': 'Take the case',
   'dua.boek.sub':
-    'Arsène Goedertier died on 25 November 1934 as the only one who knew where the panel was. It is probably still there. Enter the email addresses of everyone who plays. Everyone gets their own game link and picks a role once you log in. D.U.A. is free. <strong>For now, the game and the confirmation email are in Dutch.</strong> An English version is on its way.',
+    'Arsène Goedertier died on 25 November 1934 as the only one who knew where the panel was. It is probably still there. Enter the email addresses of everyone who plays. Everyone gets their own game link and picks a role once you log in. D.U.A. is free. Booking here gets you the English version of the game and an English confirmation email.',
   'dua.boekForm.form-label': 'Contact name <span class="form-req">*</span>',
   'dua.boekForm.form-input@placeholder': 'Jane Smith',
   'dua.boekForm.form-label-2': 'When will you play? <span class="form-opt">(optional)</span>',

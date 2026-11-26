@@ -39,18 +39,17 @@ export function kiesSpeltaal({ gelezen, sessieTaal, hint }: SpeltaalBron): Spelt
 
 /**
  * In welke talen elke experience speelbaar is. De eerste is de standaard.
- * Stap 5 van ADR-001 fase 3 zet 'en' bij dua, zodra de Engelse game getest is.
+ * D.U.A. is sinds ADR-001 fase 3 ook Engels; Kamer 14 nog niet.
  */
 export const SPELTALEN_PER_EXPERIENCE: Readonly<Record<string, readonly Speltaal[]>> = {
   'kamer-14': ['nl'],
-  dua: ['nl'],
+  dua: ['nl', 'en'],
 };
 
 /**
  * Speltaal voor een nieuwe boeking: die van de pagina als de experience in
- * die taal bestaat, anders de standaard van de experience. Wie op /en/dua/
- * boekt zolang het spel alleen Nederlands is, krijgt dus een Nederlandse sessie
- * (de pagina meldt dat ook).
+ * die taal bestaat, anders de standaard van de experience. Wie op /en/kamer-14/
+ * boekt, krijgt dus een Nederlandse sessie (de pagina meldt dat ook).
  */
 export function speltaalVoorBoeking(experience: string, paginaTaal: string): Speltaal {
   const talen = SPELTALEN_PER_EXPERIENCE[experience] ?? [STANDAARD_SPELTAAL];
