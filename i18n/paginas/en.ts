@@ -13,6 +13,7 @@ const en: PaginaWoordenboek = {
   'home.head.description@content':
     'Bureau X makes online escape rooms based on real places, traditions and stories. Play Kamer 14 (Geel, 2 players) or D.U.A. (Ghent, 2 to 4 players) for free, from home in your browser.',
   'home.head.og-title@content': 'Bureau X - Online escape rooms',
+  'home.head.og-image@content': 'https://bureau-x.be/assets/img/bureau-x-preview-en.jpg',
   'home.head.og-description@content':
     'Online escape rooms based on real Belgian places and stories. Free to play, from home.',
   'home.jsonld.organization': {
