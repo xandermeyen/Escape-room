@@ -86,7 +86,7 @@ export const nl = {
   reviewBeterLabel: 'Wat kan beter? Optioneel, dit lezen enkel wij.',
   reviewBeterPlaceholder: 'Bv. een puzzel die onduidelijk was, of iets dat niet werkte',
   reviewDemo: 'Demomodus: reviews worden niet bewaard.',
-  reviewOnvolledig: 'Kies een aantal sterren en schrijf een korte review.',
+  reviewOnvolledig: 'Kies eerst een aantal sterren.',
   reviewBezig: 'Versturen…',
   reviewVersturen: 'Review versturen',
   reviewMislukt: 'Versturen mislukt. Probeer opnieuw.',

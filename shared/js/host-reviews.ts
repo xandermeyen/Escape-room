@@ -83,7 +83,11 @@ export function reviewKaartHtml(rij: ReviewRij): string {
       </div>
       ${actie}
     </div>
-    <p style="margin:0.6rem 0 0; color:#ddd; font-size:0.9rem;">${escHtml(data.tekst)}</p>
+    ${
+      data.tekst
+        ? `<p style="margin:0.6rem 0 0; color:#ddd; font-size:0.9rem;">${escHtml(data.tekst)}</p>`
+        : '<p style="margin:0.6rem 0 0; color:#888; font-size:0.85rem; font-style:italic;">Enkel sterren, geen tekst.</p>'
+    }
     ${verbeter}
   </div>`;
 }

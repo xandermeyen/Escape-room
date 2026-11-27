@@ -76,6 +76,22 @@ describe('reviewformulier', () => {
     expect(schrijfMock.mock.calls[0]?.[0].verbeter).toBeUndefined();
   });
 
+  it('een review met enkel sterren mag, zonder tekst', async () => {
+    koppelReviewFormulier('dua', 'ABC');
+    ster(4);
+    document.getElementById('btn-review-verstuur')!.click();
+    await vi.waitFor(() => expect(schrijfMock).toHaveBeenCalled());
+    expect(schrijfMock).toHaveBeenCalledWith(expect.objectContaining({ rating: 4, tekst: '' }));
+  });
+
+  it('zonder sterren: foutmelding en niets bewaard', () => {
+    koppelReviewFormulier('dua', 'ABC');
+    (document.getElementById('review-tekst') as HTMLTextAreaElement).value = 'Leuk!';
+    document.getElementById('btn-review-verstuur')!.click();
+    expect(document.getElementById('review-fout')!.style.display).toBe('block');
+    expect(schrijfMock).not.toHaveBeenCalled();
+  });
+
   it('sterren zijn radioknoppen voor schermlezers', () => {
     koppelReviewFormulier('kamer-14');
     ster(4);
@@ -134,6 +150,22 @@ describe('reviewformulier: uitnodiging voor escapetalk', () => {
     expect(document.getElementById('review-escapetalk')!.textContent).not.toContain('klembord');
   });
 
+  it('enkel sterren: niets naar het klembord', async () => {
+    const schrijf = vi.fn(() => Promise.resolve());
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: schrijf },
+      configurable: true,
+    });
+    koppelReviewFormulier('dua', 'ABC');
+    ster(5);
+    document.getElementById('btn-review-verstuur')!.click();
+    await vi.waitFor(() =>
+      expect(document.getElementById('review-escapetalk')!.textContent).toContain('Wil je hem ook'),
+    );
+    expect(schrijf).not.toHaveBeenCalled();
+    expect(document.getElementById('review-escapetalk')!.textContent).not.toContain('klembord');
+  });
+
   it('demosessie: geen uitnodiging', () => {
     koppelReviewFormulier('kamer-14', 'DEMO-K14');
     expect(document.getElementById('review-escapetalk')).toBeNull();
@@ -157,6 +189,18 @@ describe('Kamer 14: review pas na de briefkaart', () => {
   });
 });
 
+describe('D.U.A.: review na de onthulling', () => {
+  it.each(['experiences/dua/einde.html'])(
+    '%s: het reviewformulier komt na "En in het echt?"',
+    pad => {
+      const html = lees(pad);
+      expect(html.indexOf('id="einde-review"')).toBeGreaterThan(
+        html.indexOf('id="einde-onthulling"'),
+      );
+    },
+  );
+});
+
 // ── Host: alle reviews zichtbaar ──────────────────────────────────────────────
 
 describe('host-reviews', () => {
@@ -170,6 +214,12 @@ describe('host-reviews', () => {
     expect(html).toContain('3.7 ★');
     expect(html).toContain('1 met een lage score');
     expect(html).toContain('2 nog niet goedgekeurd');
+  });
+
+  it('een review zonder tekst toont dat het enkel sterren zijn', () => {
+    const html = reviewKaartHtml(review(4, { tekst: undefined as unknown as string }));
+    expect(html).toContain('Enkel sterren');
+    expect(html).not.toContain('undefined');
   });
 
   it('toont het verbeterpunt, ge-escaped', () => {

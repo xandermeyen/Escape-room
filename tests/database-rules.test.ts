@@ -521,6 +521,17 @@ describe.skipIf(!EMULATOR)('database.rules.json', () => {
       );
     });
 
+    it('een review met enkel sterren mag, een lege tekst niet', async () => {
+      const zonderTekst: Partial<typeof review> = { ...review };
+      delete zonderTekst.tekst;
+      await assertSucceeds(speler().ref('reviews/r4').set(zonderTekst));
+      await assertFails(
+        speler()
+          .ref('reviews/r5')
+          .set({ ...review, tekst: '' }),
+      );
+    });
+
     it('publiek ziet alleen goedgekeurde reviews', async () => {
       await seed('reviews/r1', review);
       await assertFails(anoniemLoos().ref('reviews').get());

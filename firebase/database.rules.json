@@ -221,7 +221,7 @@
       ".indexOn": ["goedgekeurd"],
       "$id": {
         ".write": "auth != null && !data.exists() && newData.exists()",
-        ".validate": "newData.hasChildren(['rating', 'tekst', 'ervaring', 'tijdstip'])",
+        ".validate": "newData.hasChildren(['rating', 'ervaring', 'tijdstip'])",
         "rating": {
           ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5"
         },

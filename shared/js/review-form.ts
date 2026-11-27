@@ -4,6 +4,9 @@
  * #review-tekst, #review-naam, #review-fout, #review-dank en
  * #btn-review-verstuur. Ontbreken die elementen, dan doet dit niets.
  *
+ * Alleen de sterren zijn verplicht. De tekst is optioneel: een review met
+ * enkel sterren telt mee in het gemiddelde, maar komt niet als kaart op de site.
+ *
  * Bij een lage score (1 tot 3 sterren) verschijnt een extra, optioneel veld
  * "Wat kan beter?". Dat komt enkel in het host-paneel, nooit op de site. De
  * review zelf wordt gewoon bewaard, ook als ze laag is.
@@ -11,7 +14,8 @@
  * Onder het formulier staat een uitnodiging om ook op escapetalk.nl een review
  * te schrijven. Bewust voor iedereen, ongeacht de score: alleen tevreden
  * spelers doorsturen ("review gating") maakt de score daar minder geloofwaardig.
- * Na het versturen gaat de reviewtekst naar het klembord, zodat plakken volstaat.
+ * Na het versturen gaat de reviewtekst (als die er is) naar het klembord,
+ * zodat plakken volstaat.
  */
 import { schrijfReview } from './reviews.ts';
 import { isDemoCode } from './demo.ts';
@@ -55,12 +59,14 @@ async function nodigUitNaVersturen(
 ): Promise<void> {
   const zin = blok?.querySelector('span');
   if (!blok || !zin) return;
-  let gekopieerd: boolean;
-  try {
-    await navigator.clipboard?.writeText(tekst);
-    gekopieerd = Boolean(navigator.clipboard);
-  } catch {
-    gekopieerd = false;
+  let gekopieerd = false;
+  if (tekst) {
+    try {
+      await navigator.clipboard?.writeText(tekst);
+      gekopieerd = Boolean(navigator.clipboard);
+    } catch {
+      gekopieerd = false;
+    }
   }
   zin.textContent = gekopieerd
     ? teksten().reviewOokEscapetalkKlembord
@@ -141,7 +147,7 @@ export function koppelReviewFormulier(ervaring: string, sessie?: string | null):
     const naam = naamVeld?.value.trim() ?? '';
     const verbeter = reviewRating <= LAGE_SCORE ? (verbeterVeld?.value.trim() ?? '') : '';
 
-    if (reviewRating < 1 || tekst.length < 3) {
+    if (reviewRating < 1) {
       if (fout) {
         fout.textContent = teksten().reviewOnvolledig;
         fout.style.display = 'block';
