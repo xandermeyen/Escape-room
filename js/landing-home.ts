@@ -110,9 +110,12 @@ async function laadReviews(): Promise<void> {
 
   injecteerRatingSchema(reviews);
 
+  // Kaarten enkel voor reviews met tekst. Reviews met alleen sterren tellen
+  // wel mee in het gemiddelde en de rich results.
+  const metTekst = reviews.filter(r => r.tekst.trim() !== '');
   // Veilig: reviewKaart haalt alle spelerteksten door escHtml.
   // eslint-disable-next-line no-unsanitized/property
-  grid.innerHTML = reviews.slice(0, 6).map(reviewKaart).join('');
+  grid.innerHTML = metTekst.slice(0, 6).map(reviewKaart).join('');
   sectie.style.display = '';
   const navReviews = document.getElementById('navReviews');
   if (navReviews) navReviews.style.display = '';

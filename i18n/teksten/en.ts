@@ -78,7 +78,7 @@ export const en: Teksten = {
   reviewBeterLabel: 'What could be better? Optional, only we read this.',
   reviewBeterPlaceholder: 'E.g. a puzzle that was unclear, or something that did not work',
   reviewDemo: 'Demo mode: reviews are not saved.',
-  reviewOnvolledig: 'Choose a number of stars and write a short review.',
+  reviewOnvolledig: 'Choose a number of stars first.',
   reviewBezig: 'Sending…',
   reviewVersturen: 'Send review',
   reviewMislukt: 'Sending failed. Please try again.',

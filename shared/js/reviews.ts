@@ -4,7 +4,7 @@ import { ref, push, query, orderByChild, equalTo, get, serverTimestamp } from 'f
 // Een review zoals een speler ze achterlaat op het eindscherm.
 export interface ReviewInzending {
   rating: number; // 1 t/m 5
-  tekst: string;
+  tekst: string; // mag leeg zijn: enkel sterren is ook een review
   naam?: string; // optioneel
   verbeter?: string; // optioneel, bij een lage score; enkel voor het host-paneel
   ervaring: string; // bv. 'kamer-14' of 'dua'
@@ -13,7 +13,7 @@ export interface ReviewInzending {
 // Een review zoals ze uit de database komt en op de site getoond wordt.
 export interface Review {
   rating: number;
-  tekst: string;
+  tekst: string; // '' bij een review met enkel sterren
   naam?: string;
   verbeter?: string;
   ervaring: string;
@@ -32,7 +32,6 @@ export async function schrijfReview(inzending: ReviewInzending): Promise<void> {
   await authReady;
   const data: Record<string, unknown> = {
     rating: Math.round(inzending.rating),
-    tekst: inzending.tekst.trim().slice(0, 500),
     ervaring: inzending.ervaring,
     // Servertijd: de rules weigeren een tijdstip in de toekomst, en een
     // scheve klok op het toestel van de speler mag daar niet op botsen.
@@ -40,6 +39,9 @@ export async function schrijfReview(inzending: ReviewInzending): Promise<void> {
     goedgekeurd: false,
   };
 
+  // Lege tekst laten we weg: de rules eisen minstens één teken als ze er is.
+  const tekst = inzending.tekst.trim().slice(0, 500);
+  if (tekst) data.tekst = tekst;
   const naam = inzending.naam?.trim().slice(0, 40);
   if (naam) data.naam = naam;
   const verbeter = inzending.verbeter?.trim().slice(0, 500);
@@ -56,9 +58,10 @@ export async function leesGoedgekeurdeReviews(max = 12): Promise<Review[]> {
 
   const reviews: Review[] = [];
   snapshot.forEach(kind => {
-    const v = kind.val() as Review;
-    if (v && typeof v.tekst === 'string' && typeof v.rating === 'number') {
-      reviews.push(v);
+    const v = kind.val() as Partial<Review> | null;
+    if (v && typeof v.rating === 'number') {
+      // Reviews met enkel sterren hebben geen tekst: maak er '' van.
+      reviews.push({ ...v, tekst: typeof v.tekst === 'string' ? v.tekst : '' } as Review);
     }
   });
 
